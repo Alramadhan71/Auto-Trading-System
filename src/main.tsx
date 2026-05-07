@@ -138,27 +138,27 @@ const defaultLedgerSimulationSettings: LedgerSimulationSettings = {
   startingCapitalUsdt: 100,
   spotCapitalUsdt: 50,
   futuresCapitalUsdt: 50,
-  reserveRatio: 10,
-  spotReserveRatio: 10,
-  futuresReserveRatio: 10,
-  maxOpenTrades: 10,
-  spotMaxOpenTrades: 5,
-  futuresMaxOpenTrades: 5,
+  reserveRatio: 0,
+  spotReserveRatio: 0,
+  futuresReserveRatio: 0,
+  maxOpenTrades: 1,
+  spotMaxOpenTrades: 1,
+  futuresMaxOpenTrades: 1,
   minNotionalUsdt: 5,
   spotMinNotionalUsdt: 5,
   futuresMinNotionalUsdt: 5,
-  spotMinQuoteVolumeUsdt: 1000000,
-  futuresMinQuoteVolumeUsdt: 5000000,
-  allocationMethod: 'equal',
-  riskPerTradePct: 2,
+  spotMinQuoteVolumeUsdt: 0,
+  futuresMinQuoteVolumeUsdt: 0,
+  allocationMethod: 'available',
+  riskPerTradePct: 100,
   spotFeePct: 0.2,
   futuresFeePct: 0.1,
-  slippagePct: 0.04,
+  slippagePct: 0,
   futuresLeverage: 1,
   marketScope: 'both',
   allowedDirection: 'both',
-  maxSameDirectionOpen: 8,
-  maxSameMarketDirectionOpen: 6,
+  maxSameDirectionOpen: 1,
+  maxSameMarketDirectionOpen: 1,
   maxSameBaseAssetOpen: 1
 };
 const defaultLedgerSimulationSnapshot = (settings = defaultLedgerSimulationSettings): LedgerSimulationSnapshot => {
@@ -465,7 +465,7 @@ const defaultLiveRuleToggles: LiveRulesPayload['ruleToggles'] = {
 
 type TradingVenue = MarketMode;
 const allTimeframes: Timeframe[] = ['5m', '10m', '15m', '1h', '2h', '4h', '1d'];
-const defaultSelectedTimeframes: Timeframe[] = ['5m', '10m', '15m'];
+const defaultSelectedTimeframes: Timeframe[] = allTimeframes;
 
 const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): BinanceConnection => ({
   connected: Boolean(value?.connected),
@@ -696,7 +696,7 @@ function App() {
     }
   });
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [timeframes, setTimeframes] = useState<Set<Timeframe>>(new Set(['5m', '10m', '15m']));
+  const [timeframes, setTimeframes] = useState<Set<Timeframe>>(new Set(allTimeframes));
   const [exitModes, setExitModes] = useState<Set<ExitMode>>(new Set(['strategy-defined']));
   const [strategyMarketScope, setStrategyMarketScope] = useState<StrategyMarketScope>('all');
   const [signals, setSignals] = useState<Signal[]>([]);
@@ -944,7 +944,7 @@ function App() {
   };
 
   const saveSelection = async (nextSelected = selected, nextTimeframes = timeframes, nextExitModes = exitModes, nextMarketScope = strategyMarketScope) => {
-    const safeTimeframes = nextTimeframes.size > 0 ? nextTimeframes : new Set(defaultSelectedTimeframes);
+    const safeTimeframes = new Set(defaultSelectedTimeframes);
     const safeExitModes = nextExitModes.size > 0 ? nextExitModes : new Set<ExitMode>(['strategy-defined']);
     setSelected(new Set(nextSelected));
     setTimeframes(new Set(safeTimeframes));
@@ -6514,7 +6514,6 @@ function PerformanceChart({
               <label><span>Reserve %</span><input type="number" min={0} max={95} step={1} value={ledgerSimulationDraft.spotReserveRatio} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotReserveRatio: Number(event.target.value) })} /></label>
               <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={ledgerSimulationDraft.spotMaxOpenTrades} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotMaxOpenTrades: Number(event.target.value) })} /></label>
               <label><span>Min Order</span><input type="number" min={1} step={1} value={ledgerSimulationDraft.spotMinNotionalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotMinNotionalUsdt: Number(event.target.value) })} /></label>
-              <label><span>Min 24h Vol</span><input type="number" min={0} step={100000} value={ledgerSimulationDraft.spotMinQuoteVolumeUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotMinQuoteVolumeUsdt: Number(event.target.value) })} /></label>
             </div>
           </section>
           <section className="ledger-wallet-panel ledger-wallet-futures">
@@ -6524,16 +6523,12 @@ function PerformanceChart({
               <label><span>Reserve %</span><input type="number" min={0} max={95} step={1} value={ledgerSimulationDraft.futuresReserveRatio} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresReserveRatio: Number(event.target.value) })} /></label>
               <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={ledgerSimulationDraft.futuresMaxOpenTrades} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresMaxOpenTrades: Number(event.target.value) })} /></label>
               <label><span>Min Order</span><input type="number" min={1} step={1} value={ledgerSimulationDraft.futuresMinNotionalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresMinNotionalUsdt: Number(event.target.value) })} /></label>
-              <label><span>Min 24h Vol</span><input type="number" min={0} step={100000} value={ledgerSimulationDraft.futuresMinQuoteVolumeUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresMinQuoteVolumeUsdt: Number(event.target.value) })} /></label>
               <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={ledgerSimulationDraft.futuresLeverage} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresLeverage: Number(event.target.value) })} /></label>
               <label><span>Direction</span><select value={ledgerSimulationDraft.allowedDirection} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection: event.target.value as LedgerSimulationSettings['allowedDirection'] })}><option value="both">Both</option><option value="long-only">Long only</option><option value="short-only">Short only</option></select></label>
             </div>
           </section>
         </div>
         <div className="ledger-simulation-grid ledger-shared-grid">
-          <label><span>Risk %</span><input type="number" min={0.1} max={20} step={0.1} value={ledgerSimulationDraft.riskPerTradePct} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, riskPerTradePct: Number(event.target.value) })} /></label>
-          <label><span>Slip %</span><input type="number" min={0} max={5} step={0.01} value={ledgerSimulationDraft.slippagePct} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, slippagePct: Number(event.target.value) })} /></label>
-          <label><span>Allocation</span><select value={ledgerSimulationDraft.allocationMethod} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allocationMethod: event.target.value as LedgerSimulationSettings['allocationMethod'] })}><option value="equal">Equal slots</option><option value="available">Use available</option></select></label>
           <label><span>Market Scope</span><select value={ledgerSimulationDraft.marketScope} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope: event.target.value as LedgerSimulationSettings['marketScope'] })}><option value="both">Spot + Futures</option><option value="spot">Spot only</option><option value="futures">Futures only</option></select></label>
         </div>
       </div>}
