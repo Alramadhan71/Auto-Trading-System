@@ -389,14 +389,29 @@ const CLIENT_PRICE_WATCH_TTL_MS = 2 * 60_000;
 const MAX_CLIENT_PRICE_WATCH_SYMBOLS = 80;
 const FEATURED_LIVE_SYMBOLS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT'];
 const SCAN_BATCH_SIZE: Record<Timeframe, number> = {
-  '5m': Number.MAX_SAFE_INTEGER,
-  '10m': Number.MAX_SAFE_INTEGER,
-  '15m': Number.MAX_SAFE_INTEGER,
-  '1h': Number.MAX_SAFE_INTEGER,
-  '2h': Number.MAX_SAFE_INTEGER,
-  '4h': Number.MAX_SAFE_INTEGER,
-  '1d': Number.MAX_SAFE_INTEGER
+  '5m': 72,
+  '10m': 60,
+  '15m': 54,
+  '1h': 42,
+  '2h': 34,
+  '4h': 28,
+  '1d': 20
 };
+const HOT_SCAN_SIZE: Record<Timeframe, number> = {
+  '5m': 24,
+  '10m': 20,
+  '15m': 18,
+  '1h': 14,
+  '2h': 12,
+  '4h': 10,
+  '1d': 8
+};
+const MIN_SCAN_QUOTE_VOLUME_USDT: Record<TradingVenue, number> = {
+  spot: 250_000,
+  futures: 750_000
+};
+const TICKER_SNAPSHOT_REFRESH_MS = 60_000;
+const SCAN_TICKER_STALE_MS = 90_000;
 const CANDLE_CACHE_TTL_MS: Record<Timeframe, number> = {
   '5m': 15_000,
   '10m': 18_000,
@@ -1075,6 +1090,9 @@ let clientPriceWatch = new Map<string, number>();
 let queuedSpotPriceUpdates = new Map<string, PriceTicker>();
 let queuedFuturesPriceUpdates = new Map<string, PriceTicker>();
 let priceBroadcastTimer: NodeJS.Timeout | null = null;
+let tickerSnapshotRefreshRunning = false;
+let lastSpotTickerSnapshotAt = 0;
+let lastFuturesTickerSnapshotAt = 0;
 let nextSignalId = 1;
 let scanVersion = 0;
 let scanRunning = false;
@@ -7009,6 +7027,8 @@ async function scanMarket() {
   scanRunning = true;
   const version = scanVersion;
   try {
+    await refreshTickerSnapshotsForScan();
+    if (version !== scanVersion || selectedStrategies.size === 0 || selectedTimeframes.size === 0) return;
     const cycleId = Date.now();
     const plan: { market: TradingVenue; source: Map<string, PriceTicker>; universe: PriceTicker[]; active: Strategy[] }[] = [];
     if (selectedMarketScope === 'spot' || selectedMarketScope === 'all') {
@@ -7019,7 +7039,11 @@ async function scanMarket() {
       const active = strategies.filter(strategy => selectedStrategies.has(strategy.id) && (strategy.marketScope === 'all' || strategy.marketScope === 'futures'));
       if (active.length > 0) plan.push({ market: 'futures', source: futuresTickers, universe: getRotatingScanUniverse(futuresTickers, 'futures'), active });
     }
-    const totalChecks = plan.reduce((sum, item) => sum + item.universe.length * selectedTimeframes.size, 0);
+    const totalChecks = plan.reduce((sum, item) => {
+      return sum + [...selectedTimeframes].reduce((timeframeSum, timeframe) => {
+        return timeframeSum + getAdaptiveScanBatch(item.universe, scanCursors[item.market][timeframe], timeframe).batch.length;
+      }, 0);
+    }, 0);
     scanProgress = normalizeScanProgress({
       ...emptyScanProgress(),
       running: true,
@@ -7051,7 +7075,7 @@ async function scanMarket() {
       const { active, universe } = planned;
       for (const timeframe of selectedTimeframes) {
         if (version !== scanVersion || selectedStrategies.size === 0) return;
-        const { batch, nextCursor } = getScanBatch(universe, scanCursors[market][timeframe], SCAN_BATCH_SIZE[timeframe]);
+        const { batch, nextCursor } = getAdaptiveScanBatch(universe, scanCursors[market][timeframe], timeframe);
         scanCursors[market][timeframe] = nextCursor;
         let evaluatedStrategies = 0;
         for (const ticker of batch) {
@@ -7113,8 +7137,26 @@ async function scanMarket() {
 function getRotatingScanUniverse(source: Map<string, PriceTicker>, market: TradingVenue) {
   const tradableSymbols = new Set((market === 'futures' ? futuresSymbols : symbols).map(symbol => symbol.symbol));
   return [...source.values()]
-    .filter(ticker => ticker.symbol.endsWith('USDT') && (tradableSymbols.size === 0 || tradableSymbols.has(ticker.symbol)))
-    .sort((left, right) => right.quoteVolume - left.quoteVolume || left.symbol.localeCompare(right.symbol));
+    .filter(ticker => {
+      const featured = FEATURED_LIVE_SYMBOLS.includes(ticker.symbol);
+      return ticker.symbol.endsWith('USDT')
+        && (tradableSymbols.size === 0 || tradableSymbols.has(ticker.symbol))
+        && ticker.price > 0
+        && (featured || ticker.quoteVolume >= MIN_SCAN_QUOTE_VOLUME_USDT[market]);
+    })
+    .sort((left, right) => scanPriorityScore(right, market) - scanPriorityScore(left, market) || left.symbol.localeCompare(right.symbol));
+}
+
+function scanPriorityScore(ticker: PriceTicker, market: TradingVenue) {
+  const volumeScore = Math.log10(Math.max(1, ticker.quoteVolume)) * 10;
+  const absoluteMove = Math.abs(ticker.change24h);
+  const movementScore = clamp(absoluteMove * 3.2, 0, 55);
+  const directionScore = ticker.change24h > 0 ? 7 : ticker.change24h < 0 ? 4 : 0;
+  const featuredScore = FEATURED_LIVE_SYMBOLS.includes(ticker.symbol) ? 22 : 0;
+  const liveSignalScore = signals.some(signal => signal.market === market && signal.symbol === ticker.symbol && signal.status === 'OPEN') ? 18 : 0;
+  const executionSignalScore = executionSignals.some(signal => signal.market === market && signal.symbol === ticker.symbol && signal.status === 'OPEN') ? 22 : 0;
+  const futuresBoost = market === 'futures' ? 4 : 0;
+  return volumeScore + movementScore + directionScore + featuredScore + liveSignalScore + executionSignalScore + futuresBoost;
 }
 
 function getScanBatch<T>(items: T[], cursor: number, size: number) {
@@ -7128,6 +7170,22 @@ function getScanBatch<T>(items: T[], cursor: number, size: number) {
   return {
     batch,
     nextCursor: (start + size) % items.length
+  };
+}
+
+function getAdaptiveScanBatch(items: PriceTicker[], cursor: number, timeframe: Timeframe) {
+  const size = SCAN_BATCH_SIZE[timeframe];
+  if (items.length <= size) return { batch: items, nextCursor: 0 };
+  const hotCount = Math.min(HOT_SCAN_SIZE[timeframe], size, items.length);
+  const hot = items.slice(0, hotCount);
+  const hotSymbols = new Set(hot.map(ticker => ticker.symbol));
+  const rotatingPool = items.filter(ticker => !hotSymbols.has(ticker.symbol));
+  const rotatingSize = Math.max(0, size - hot.length);
+  const rotating = getScanBatch(rotatingPool, cursor, rotatingSize);
+  const batch = [...hot, ...rotating.batch];
+  return {
+    batch,
+    nextCursor: rotating.nextCursor
   };
 }
 
@@ -7505,6 +7563,7 @@ async function pollTickersFallback() {
     applyMarketTickerUpdate('spot', ticker);
     updates.push(tickers.get(row.symbol) ?? ticker);
   }
+  lastSpotTickerSnapshotAt = Date.now();
   broadcast('prices', { ...buildPricesBroadcastPayload(), spotUpdates: updates });
   updateOpenSignals();
 }
@@ -7525,8 +7584,32 @@ async function pollFuturesTickersFallback() {
     applyMarketTickerUpdate('futures', ticker);
     updates.push(futuresTickers.get(row.symbol) ?? ticker);
   }
+  lastFuturesTickerSnapshotAt = Date.now();
   broadcast('prices', { ...buildPricesBroadcastPayload(), futuresUpdates: updates });
   updateOpenSignals();
+}
+
+async function refreshTickerSnapshots(reason = 'scheduled') {
+  if (tickerSnapshotRefreshRunning) return;
+  tickerSnapshotRefreshRunning = true;
+  try {
+    await Promise.all([
+      pollTickersFallback(),
+      pollFuturesTickersFallback()
+    ]);
+  } catch (error) {
+    console.warn(`[tickers] ${reason} snapshot refresh failed`, error instanceof Error ? error.message : error);
+  } finally {
+    tickerSnapshotRefreshRunning = false;
+  }
+}
+
+async function refreshTickerSnapshotsForScan() {
+  const now = Date.now();
+  const needsSpot = now - lastSpotTickerSnapshotAt > SCAN_TICKER_STALE_MS;
+  const needsFutures = now - lastFuturesTickerSnapshotAt > SCAN_TICKER_STALE_MS;
+  if (!needsSpot && !needsFutures) return;
+  await refreshTickerSnapshots('scan');
 }
 
 app.get('/api/symbols', (_req, res) => res.json({ symbols, count: symbols.length }));
@@ -8271,6 +8354,7 @@ async function initializeRuntime() {
   await runStartupStep('market scan', scanMarket);
   await runStartupStep('ledger execution sync', processLedgerExecutions);
   setInterval(syncLiveTradeStreams, 1000);
+  setInterval(() => void refreshTickerSnapshots('scheduled'), TICKER_SNAPSHOT_REFRESH_MS);
   setInterval(monitorLiveFuturesProtection, 5000);
   setInterval(() => processLedgerSelectionQueue(), 5000);
   setInterval(processLedgerExecutions, 5000);
