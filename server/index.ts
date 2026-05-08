@@ -124,6 +124,12 @@ type TradeSignal = SignalDraft & {
   ledgerNormalizedEntry?: number;
   ledgerNormalizedTakeProfit?: number;
   ledgerNormalizedStopLoss?: number;
+  ledgerSelectionState?: LedgerSelectionState;
+  ledgerSelectionScore?: number;
+  ledgerSelectionNotes?: string[];
+  ledgerSelectionQueuedAt?: number;
+  ledgerSelectionDecisionAt?: number;
+  ledgerSelectionWaitMs?: number;
   closedAt?: number;
   closePrice?: number;
   binanceCloseOrderId?: string;
@@ -258,6 +264,8 @@ type MarketRegimeSnapshot = {
   rangeVotes: number;
   checkedAt: number;
 };
+
+type LedgerSelectionState = 'queued' | 'selected' | 'bypassed' | 'expired' | 'blocked';
 
 type EntryQualityReview = {
   strategyFamily: StrategyFamily;
@@ -1107,6 +1115,7 @@ const signals: TradeSignal[] = [];
 const executionSignals: TradeSignal[] = [];
 const notifications: { id: number; time: number; title: string; message: string; level: 'info' | 'win' | 'loss' }[] = [];
 const candleCache = new Map<string, { fetchedAt: number; candles: Candle[] }>();
+const ledgerSelectionQueue = new Set<number>();
 const scanCursors: Record<TradingVenue, Record<Timeframe, number>> = {
   spot: { '5m': 0, '10m': 0, '15m': 0, '1h': 0, '2h': 0, '4h': 0, '1d': 0 },
   futures: { '5m': 0, '10m': 0, '15m': 0, '1h': 0, '2h': 0, '4h': 0, '1d': 0 }
@@ -2046,6 +2055,374 @@ function ledgerRecentStrategyPerformanceNotes(signal: TradeSignal, sourceSignals
   return notes;
 }
 
+function ledgerMarketPrice(signal: TradeSignal) {
+  const ticker = ledgerTickerSource(signal.market).get(signal.symbol);
+  return ticker?.price && Number.isFinite(ticker.price) && ticker.price > 0 ? ticker.price : undefined;
+}
+
+function ledgerSelectionWaitLabel(waitMs: number) {
+  const seconds = Math.max(0, Math.round(waitMs / 1000));
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return rest > 0 ? `${minutes}m ${rest}s` : `${minutes}m`;
+}
+
+function ledgerSignalRegimeSupportsSide(signal: TradeSignal) {
+  return signal.marketRegime === 'bull' || signal.marketRegime === 'bear'
+    ? regimeAllowsSide(signal.marketRegime, signal.side)
+    : true;
+}
+
+function ledgerTrendClarityScore(signal: TradeSignal) {
+  const confidence = clamp(signal.marketRegimeConfidence ?? 50, 0, 100);
+  if (signal.marketRegime === 'bull' || signal.marketRegime === 'bear') {
+    return ledgerSignalRegimeSupportsSide(signal)
+      ? clamp(68 + confidence * 0.28, 0, 100)
+      : clamp(32 - confidence * 0.12, 0, 100);
+  }
+  if (signal.marketRegime === 'range') {
+    return signal.strategyFamily === 'reversal' || signal.strategyFamily === 'breakout' ? 72 : 55;
+  }
+  if (signal.marketRegime === 'unclear') return 48;
+  return 58;
+}
+
+function ledgerEntryProximityScore(signal: TradeSignal, price: number) {
+  const entry = Math.max(signal.entry, 0.00000001);
+  const low = Math.min(signal.entryZoneLow ?? entry, signal.entryZoneHigh ?? entry);
+  const high = Math.max(signal.entryZoneLow ?? entry, signal.entryZoneHigh ?? entry);
+  if (price >= low && price <= high) return 100;
+  const distancePct = Math.abs(price - entry) / entry * 100;
+  const allowedDriftPct = Math.max(0.12, signal.riskPct * 0.55);
+  return Math.round(clamp(100 - (distancePct / allowedDriftPct) * 55, 0, 100));
+}
+
+function ledgerStopDistanceScore(signal: TradeSignal) {
+  const maxRisk = Math.max(getMaxPlannedRiskPct(signal.timeframe), 0.0001);
+  const ratio = signal.riskPct / maxRisk;
+  if (ratio <= 0.08) return 45;
+  if (ratio <= 0.2) return 72;
+  if (ratio <= 0.62) return 100;
+  if (ratio <= 0.82) return 82;
+  if (ratio <= 1) return 60;
+  return 20;
+}
+
+function ledgerTakeProfitRoomScore(signal: TradeSignal, price: number) {
+  const progress = signal.expectedProfitPct > 0
+    ? percent(signal.entry, price, signal.side) / signal.expectedProfitPct
+    : 1;
+  if (progress <= 0.12) return 100;
+  if (progress <= 0.28) return 86;
+  if (progress <= 0.45) return 65;
+  if (progress <= 0.62) return 38;
+  return 8;
+}
+
+function ledgerRiskRewardScore(signal: TradeSignal) {
+  const rewardMultiple = signal.riskPct > 0 ? signal.expectedProfitPct / signal.riskPct : signal.rr;
+  return Math.round(clamp(58 + (rewardMultiple - MIN_STRATEGY_DEFINED_RR) * 24, 0, 100));
+}
+
+function refreshLedgerSelectionReview(signal: TradeSignal, priceOverride?: number) {
+  const price = priceOverride && Number.isFinite(priceOverride) && priceOverride > 0
+    ? priceOverride
+    : ledgerMarketPrice(signal) ?? signal.entry;
+  const priceActionScore = Math.round(clamp(
+    ((signal.entryQualityScore ?? signal.confidence) * 0.45)
+    + ((signal.setupScore ?? 70) * 0.3)
+    + ((signal.structureScore ?? 70) * 0.25),
+    0,
+    100
+  ));
+  const entryScore = ledgerEntryProximityScore(signal, price);
+  const volumeScore = Math.round(clamp(signal.volumeScore ?? 65, 0, 100));
+  const trendScore = Math.round(ledgerTrendClarityScore(signal));
+  const rrScore = ledgerRiskRewardScore(signal);
+  const stopScore = ledgerStopDistanceScore(signal);
+  const tpRoomScore = ledgerTakeProfitRoomScore(signal, price);
+  const score = Math.round(clamp(
+    priceActionScore * 0.27
+    + entryScore * 0.15
+    + volumeScore * 0.15
+    + trendScore * 0.16
+    + rrScore * 0.14
+    + stopScore * 0.07
+    + tpRoomScore * 0.06,
+    0,
+    100
+  ));
+  signal.ledgerSelectionScore = score;
+  signal.ledgerSelectionNotes = [
+    `Score ${score}/100: PA ${priceActionScore}, entry ${entryScore}, volume ${volumeScore}, trend ${trendScore}, RR ${rrScore}.`,
+    `SL distance ${stopScore}/100, TP room ${tpRoomScore}/100.`
+  ];
+  return { score, price, notes: signal.ledgerSelectionNotes };
+}
+
+function ledgerLateEntryRejectNotes(signal: TradeSignal, price = ledgerMarketPrice(signal) ?? signal.entry) {
+  if (!price || !Number.isFinite(price) || price <= 0) return [];
+  const favorablePct = percent(signal.entry, price, signal.side);
+  const risk = Math.max(signal.riskPct, 0.0001);
+  const tpProgress = signal.expectedProfitPct > 0 ? favorablePct / signal.expectedProfitPct : 1;
+  const favorableR = favorablePct / risk;
+  const adverseR = Math.max(0, -favorablePct) / risk;
+  const notes: string[] = [];
+  if (tpProgress >= 0.62) notes.push('Late entry blocked: price is too close to TP');
+  if (favorableR >= 0.82) notes.push('Late entry blocked: price already moved too far from entry');
+  if (adverseR >= 0.52) notes.push('Late entry blocked: price moved too close to SL');
+  return Array.from(new Set(notes));
+}
+
+function ledgerSelectionThresholdAdjustment(signal: TradeSignal) {
+  let adjustment = 0;
+  if (signal.marketRegime === 'range') adjustment += 3;
+  if (signal.marketRegime === 'unclear') adjustment += 4;
+  if ((signal.marketRegime === 'bull' || signal.marketRegime === 'bear') && !ledgerSignalRegimeSupportsSide(signal)) adjustment += 7;
+  if ((signal.marketRegime === 'bull' || signal.marketRegime === 'bear') && ledgerSignalRegimeSupportsSide(signal) && (signal.marketRegimeConfidence ?? 0) >= 75) adjustment -= 2;
+  return adjustment;
+}
+
+function ledgerSelectionThreshold(signal: TradeSignal, waitMs: number, immediate = false) {
+  const relaxed = waitMs >= SMART_LEDGER_SELECTION.deepFallbackWaitMs
+    ? 5
+    : waitMs >= SMART_LEDGER_SELECTION.fallbackWaitMs
+      ? 3
+      : 0;
+  const stressedMarket = signal.marketRegime === 'range'
+    || signal.marketRegime === 'unclear'
+    || ((signal.marketRegime === 'bull' || signal.marketRegime === 'bear') && !ledgerSignalRegimeSupportsSide(signal));
+  const floor = stressedMarket ? 83 : SMART_LEDGER_SELECTION.minScore;
+  const base = immediate ? SMART_LEDGER_SELECTION.immediateScore : SMART_LEDGER_SELECTION.acceptScore;
+  return Math.round(clamp(base + ledgerSelectionThresholdAdjustment(signal) - relaxed, floor, 98));
+}
+
+function ledgerAcceptanceProfileForSelection(signal: TradeSignal, waitMs: number, lateNotes: string[] = []): LedgerAcceptanceProfile {
+  const relaxed = waitMs >= SMART_LEDGER_SELECTION.deepFallbackWaitMs
+    ? 3
+    : waitMs >= SMART_LEDGER_SELECTION.fallbackWaitMs
+      ? 2
+      : 0;
+  const stressedMarket = signal.marketRegime === 'range'
+    || signal.marketRegime === 'unclear'
+    || ((signal.marketRegime === 'bull' || signal.marketRegime === 'bear') && !ledgerSignalRegimeSupportsSide(signal));
+  const stressBoost = stressedMarket ? 1 : 0;
+  return {
+    minEntryQualityScore: Math.max(ENTRY_QUALITY_HARD_FLOOR + 2, ENTRY_QUALITY_ACCEPT_SCORE - relaxed + stressBoost),
+    minSetupScore: Math.max(78, 80 - relaxed + stressBoost),
+    minVolumeScore: Math.max(74, 76 - relaxed + stressBoost),
+    minStructureScore: Math.max(74, 76 - relaxed + stressBoost),
+    extraNotes: lateNotes,
+    softRejectNotes: ['Unclear price action regime']
+  };
+}
+
+function clearLedgerSelectionAccounting(signal: TradeSignal) {
+  signal.ledgerAllocationUsdt = 0;
+  signal.ledgerNotionalUsdt = 0;
+  signal.ledgerQuantity = 0;
+  signal.ledgerEstimatedFeeUsdt = 0;
+  signal.ledgerEstimatedSlippageUsdt = 0;
+  signal.ledgerRiskAmountUsdt = 0;
+  signal.ledgerRiskPctOfCapital = 0;
+}
+
+function rejectLedgerSelectionSignal(signal: TradeSignal, notes: string[], state: LedgerSelectionState, atTime = Date.now()) {
+  signal.ledgerSimulationStatus = 'rejected';
+  signal.ledgerSimulationNotes = Array.from(new Set(notes));
+  signal.ledgerPnlEligible = false;
+  signal.ledgerSelectionState = state;
+  signal.ledgerSelectionDecisionAt = atTime;
+  if (signal.ledgerSelectionQueuedAt) signal.ledgerSelectionWaitMs = Math.max(0, atTime - signal.ledgerSelectionQueuedAt);
+  clearLedgerSelectionAccounting(signal);
+  ledgerSelectionQueue.delete(signal.id);
+}
+
+function queueLedgerSelectionSignal(signal: TradeSignal, atTime = Date.now()) {
+  const review = refreshLedgerSelectionReview(signal);
+  signal.ledgerSelectionState = 'queued';
+  signal.ledgerSelectionQueuedAt = signal.ledgerSelectionQueuedAt ?? atTime;
+  delete signal.ledgerSelectionDecisionAt;
+  signal.ledgerSelectionWaitMs = 0;
+  signal.ledgerSimulationStatus = 'rejected';
+  signal.ledgerSimulationNotes = [
+    `Queued for smart Accepted Simulation selection with score ${review.score}/100.`,
+    `Waiting ${ledgerSelectionWaitLabel(SMART_LEDGER_SELECTION.settleWaitMs)} to compare stronger opportunities.`
+  ];
+  signal.ledgerPnlEligible = false;
+  clearLedgerSelectionAccounting(signal);
+  ledgerSelectionQueue.add(signal.id);
+}
+
+function markLedgerSelectionAccepted(signal: TradeSignal, atTime: number, reason: string) {
+  const waitMs = Math.max(0, atTime - (signal.ledgerSelectionQueuedAt ?? atTime));
+  signal.ledgerSelectionState = 'selected';
+  signal.ledgerSelectionDecisionAt = atTime;
+  signal.ledgerSelectionWaitMs = waitMs;
+  signal.ledgerPnlEligible = true;
+  signal.ledgerSimulationStatus = 'accepted';
+  signal.ledgerSimulationNotes = [
+    `Smart Accepted Simulation selected with score ${signal.ledgerSelectionScore ?? 0}/100 after ${ledgerSelectionWaitLabel(waitMs)} (${reason}).`,
+    ...(signal.ledgerSelectionNotes ?? []).slice(0, 2)
+  ];
+  ledgerSelectionQueue.delete(signal.id);
+}
+
+function hasActiveAcceptedLedgerSignal(sourceSignals = signals, atTime = Date.now()) {
+  return sourceSignals.some(signal => countsInLedgerSimulation(signal) && signalActiveAt(signal, atTime));
+}
+
+function stageLedgerSelectionCandidate(candidate: SignalCandidate) {
+  const signal = candidate.signal;
+  refreshLedgerSelectionReview(signal, signal.entry);
+  const lateNotes = ledgerLateEntryRejectNotes(signal, signal.entry);
+  applyLedgerSimulationToSignal(
+    signal,
+    signals,
+    signal.openedAt,
+    ledgerAcceptanceProfileForSelection(signal, SMART_LEDGER_SELECTION.deepFallbackWaitMs, lateNotes)
+  );
+  if (signal.ledgerSimulationStatus === 'rejected') {
+    signal.ledgerSelectionState = 'blocked';
+    signal.ledgerSelectionDecisionAt = signal.openedAt;
+    return signal;
+  }
+
+  const score = signal.ledgerSelectionScore ?? refreshLedgerSelectionReview(signal, signal.entry).score;
+  if (score < SMART_LEDGER_SELECTION.minScore) {
+    rejectLedgerSelectionSignal(signal, [`Smart selection score ${score}/100 below minimum ${SMART_LEDGER_SELECTION.minScore}.`], 'blocked', signal.openedAt);
+    return signal;
+  }
+
+  const waitMs = 0;
+  const immediateThreshold = ledgerSelectionThreshold(signal, waitMs, true);
+  if (score >= immediateThreshold) {
+    applyLedgerSimulationToSignal(signal, signals, signal.openedAt, ledgerAcceptanceProfileForSelection(signal, waitMs, lateNotes));
+    if (signal.ledgerSimulationStatus !== 'accepted') {
+      queueLedgerSelectionSignal(signal, signal.openedAt);
+      return signal;
+    }
+    markLedgerSelectionAccepted(signal, signal.openedAt, `immediate score >= ${immediateThreshold}`);
+    return signal;
+  }
+
+  queueLedgerSelectionSignal(signal, signal.openedAt);
+  return signal;
+}
+
+function queuedLedgerSelectionSignals(atTime = Date.now()) {
+  const queued: TradeSignal[] = [];
+  for (const id of [...ledgerSelectionQueue]) {
+    const signal = signals.find(item => item.id === id);
+    if (!signal || signal.ledgerSelectionState !== 'queued' || !signalActiveAt(signal, atTime)) {
+      ledgerSelectionQueue.delete(id);
+      continue;
+    }
+    queued.push(signal);
+  }
+  return queued;
+}
+
+function finalizeLedgerSelectionChanges(changed: TradeSignal[], acceptedSignal?: TradeSignal) {
+  if (changed.length === 0) return;
+  invalidateComputedCaches();
+  saveState();
+  for (const signal of changed) broadcast('signal', signal);
+  if (acceptedSignal) void processLedgerExecutions();
+}
+
+function processLedgerSelectionQueue(atTime = Date.now(), persistChanges = true) {
+  let changed: TradeSignal[] = [];
+  const activeAccepted = signals.find(signal => countsInLedgerSimulation(signal) && signalActiveAt(signal, atTime));
+  if (activeAccepted) {
+    for (const signal of queuedLedgerSelectionSignals(atTime)) {
+      rejectLedgerSelectionSignal(signal, [
+        `Bypassed by active Accepted Simulation trade ${formatTradeIdLabel(activeAccepted.id)}.`,
+        ...(signal.ledgerSelectionNotes ?? []).slice(0, 1)
+      ], 'bypassed', atTime);
+      changed.push(signal);
+    }
+    if (persistChanges) finalizeLedgerSelectionChanges(changed);
+    return changed;
+  }
+
+  const queued = queuedLedgerSelectionSignals(atTime);
+  if (queued.length === 0) return changed;
+
+  const viable: TradeSignal[] = [];
+  for (const signal of queued) {
+    const waitMs = Math.max(0, atTime - (signal.ledgerSelectionQueuedAt ?? signal.openedAt));
+    refreshLedgerSelectionReview(signal);
+    const lateNotes = ledgerLateEntryRejectNotes(signal);
+    if (waitMs >= SMART_LEDGER_SELECTION.maxQueueMs) {
+      rejectLedgerSelectionSignal(signal, [`Smart selection expired after ${ledgerSelectionWaitLabel(waitMs)}.`, ...lateNotes], 'expired', atTime);
+      changed.push(signal);
+      continue;
+    }
+    if (lateNotes.length > 0) {
+      rejectLedgerSelectionSignal(signal, lateNotes, 'expired', atTime);
+      changed.push(signal);
+      continue;
+    }
+    viable.push(signal);
+  }
+
+  if (viable.length === 0) {
+    if (persistChanges) finalizeLedgerSelectionChanges(changed);
+    return changed;
+  }
+
+  const oldestQueuedAt = Math.min(...viable.map(signal => signal.ledgerSelectionQueuedAt ?? signal.openedAt));
+  const poolWaitMs = Math.max(0, atTime - oldestQueuedAt);
+  const best = viable
+    .sort((left, right) =>
+      (right.ledgerSelectionScore ?? 0) - (left.ledgerSelectionScore ?? 0)
+      || right.confidence - left.confidence
+      || right.setupScore - left.setupScore
+      || right.structureScore - left.structureScore
+      || left.openedAt - right.openedAt
+    )[0]!;
+  const bestScore = best.ledgerSelectionScore ?? refreshLedgerSelectionReview(best).score;
+  const immediateThreshold = ledgerSelectionThreshold(best, poolWaitMs, true);
+  const acceptThreshold = ledgerSelectionThreshold(best, poolWaitMs, false);
+  const shouldAccept = bestScore >= immediateThreshold
+    || (poolWaitMs >= SMART_LEDGER_SELECTION.settleWaitMs && bestScore >= acceptThreshold);
+
+  if (!shouldAccept) {
+    if (persistChanges) finalizeLedgerSelectionChanges(changed);
+    return changed;
+  }
+
+  const bestWaitMs = Math.max(0, atTime - (best.ledgerSelectionQueuedAt ?? best.openedAt));
+  const lateNotes = ledgerLateEntryRejectNotes(best);
+  applyLedgerSimulationToSignal(best, signals, atTime, ledgerAcceptanceProfileForSelection(best, bestWaitMs, lateNotes));
+  if (best.ledgerSimulationStatus !== 'accepted') {
+    best.ledgerSelectionState = 'blocked';
+    best.ledgerSelectionDecisionAt = atTime;
+    best.ledgerSelectionWaitMs = bestWaitMs;
+    ledgerSelectionQueue.delete(best.id);
+    changed.push(best);
+    if (persistChanges) finalizeLedgerSelectionChanges(changed);
+    return changed;
+  }
+
+  markLedgerSelectionAccepted(best, atTime, bestScore >= immediateThreshold ? `score >= ${immediateThreshold}` : `waited ${ledgerSelectionWaitLabel(poolWaitMs)}, threshold ${acceptThreshold}`);
+  changed.push(best);
+
+  for (const signal of viable) {
+    if (signal.id === best.id) continue;
+    rejectLedgerSelectionSignal(signal, [
+      `Bypassed by stronger Accepted Simulation choice ${formatTradeIdLabel(best.id)} (${bestScore}/100).`,
+      ...(signal.ledgerSelectionNotes ?? []).slice(0, 1)
+    ], 'bypassed', atTime);
+    changed.push(signal);
+  }
+
+  if (persistChanges) finalizeLedgerSelectionChanges(changed, best);
+  return changed;
+}
+
 function decimalPlacesFromStep(stepSize?: number, quantityPrecision?: number) {
   if (typeof quantityPrecision === 'number' && Number.isFinite(quantityPrecision)) {
     return Math.max(0, Math.min(12, Math.floor(quantityPrecision)));
@@ -2113,10 +2490,24 @@ function clearLedgerSimulationState(signal: TradeSignal) {
   delete signal.ledgerNormalizedStopLoss;
 }
 
-function applyLedgerSimulationToSignal(signal: TradeSignal, sourceSignals = signals, atTime = signal.openedAt) {
+type LedgerAcceptanceProfile = {
+  minEntryQualityScore?: number;
+  minSetupScore?: number;
+  minVolumeScore?: number;
+  minStructureScore?: number;
+  extraNotes?: string[];
+  softRejectNotes?: string[];
+};
+
+function applyLedgerSimulationToSignal(signal: TradeSignal, sourceSignals = signals, atTime = signal.openedAt, profile: LedgerAcceptanceProfile = {}) {
   clearLedgerSimulationState(signal);
 
   const notes: string[] = [];
+  const minEntryQualityScore = profile.minEntryQualityScore ?? ENTRY_QUALITY_ACCEPT_SCORE;
+  const minSetupScore = profile.minSetupScore ?? 80;
+  const minVolumeScore = profile.minVolumeScore ?? 76;
+  const minStructureScore = profile.minStructureScore ?? 76;
+  const softRejectNotes = new Set(profile.softRejectNotes ?? []);
   const leverage = signal.market === 'futures' ? ledgerSimulationSettings.futuresLeverage : 1;
   const snapshot = ledgerVenueCapitalSnapshot(signal.market, signal.id, sourceSignals, atTime);
   const rules = getSymbolRules(signal.symbol, signal.market);
@@ -2152,15 +2543,18 @@ function applyLedgerSimulationToSignal(signal: TradeSignal, sourceSignals = sign
   if (signal.market === 'spot' && signal.side === 'SHORT') notes.push('Spot short not supported');
   if (signal.market === 'futures' && ledgerSimulationSettings.allowedDirection === 'long-only' && signal.side === 'SHORT') notes.push('Direction not allowed');
   if (signal.market === 'futures' && ledgerSimulationSettings.allowedDirection === 'short-only' && signal.side === 'LONG') notes.push('Direction not allowed');
-  for (const note of signal.entryQualityRejectNotes ?? []) notes.push(note);
-  if (typeof signal.entryQualityScore === 'number' && signal.entryQualityScore < ENTRY_QUALITY_ACCEPT_SCORE) {
-    notes.push(`Quality score ${signal.entryQualityScore} below ${ENTRY_QUALITY_ACCEPT_SCORE}`);
+  for (const note of signal.entryQualityRejectNotes ?? []) {
+    if (!softRejectNotes.has(note)) notes.push(note);
+  }
+  for (const note of profile.extraNotes ?? []) notes.push(note);
+  if (typeof signal.entryQualityScore === 'number' && signal.entryQualityScore < minEntryQualityScore) {
+    notes.push(`Quality score ${signal.entryQualityScore} below ${minEntryQualityScore}`);
   }
   const rewardMultiple = signal.riskPct > 0 ? signal.expectedProfitPct / signal.riskPct : 0;
   if (rewardMultiple < MIN_STRATEGY_DEFINED_RR) notes.push(`Strategy plan RR below ${MIN_STRATEGY_DEFINED_RR}R`);
-  if (typeof signal.setupScore === 'number' && signal.setupScore < 80) notes.push('Setup score below 80');
-  if (typeof signal.volumeScore === 'number' && signal.volumeScore < 76) notes.push('Price action impulse score too low');
-  if (typeof signal.structureScore === 'number' && signal.structureScore < 76) notes.push('Structure score too low');
+  if (typeof signal.setupScore === 'number' && signal.setupScore < minSetupScore) notes.push(`Setup score below ${minSetupScore}`);
+  if (typeof signal.volumeScore === 'number' && signal.volumeScore < minVolumeScore) notes.push(`Price action impulse score below ${minVolumeScore}`);
+  if (typeof signal.structureScore === 'number' && signal.structureScore < minStructureScore) notes.push(`Structure score below ${minStructureScore}`);
   for (const note of ledgerRecentStrategyPerformanceNotes(signal, sourceSignals, atTime)) notes.push(note);
   if (duplicateOpen) notes.push('Duplicate symbol open');
   if (activeAccepted.length >= 1) notes.push('One active accepted trade limit');
@@ -2197,9 +2591,11 @@ function applyLedgerSimulationToSignal(signal: TradeSignal, sourceSignals = sign
 
   signal.ledgerSimulationStatus = 'accepted';
   signal.ledgerSimulationNotes = [
-    typeof signal.entryQualityScore === 'number'
-      ? `Accepted by ledger simulation with quality score ${signal.entryQualityScore}.`
-      : 'Accepted by ledger simulation.'
+    typeof signal.ledgerSelectionScore === 'number'
+      ? `Smart accepted selection score ${signal.ledgerSelectionScore}/100.`
+      : typeof signal.entryQualityScore === 'number'
+        ? `Accepted by ledger simulation with quality score ${signal.entryQualityScore}.`
+        : 'Accepted by ledger simulation.'
   ];
   signal.ledgerPnlEligible = true;
   return signal;
@@ -2211,6 +2607,7 @@ function applyLedgerSimulation(candidate: SignalCandidate) {
 
 function replayDashboardLedgerSimulation() {
   let changed = false;
+  ledgerSelectionQueue.clear();
   const chronological = [...signals].sort((a, b) => a.openedAt - b.openedAt || a.id - b.id);
   const simulated: TradeSignal[] = [];
   for (const signal of chronological) {
@@ -2228,9 +2625,32 @@ function replayDashboardLedgerSimulation() {
       ledgerEstimatedSlippageUsdt: signal.ledgerEstimatedSlippageUsdt,
       ledgerRiskAmountUsdt: signal.ledgerRiskAmountUsdt,
       ledgerRiskPctOfCapital: signal.ledgerRiskPctOfCapital,
-      ledgerMinNotionalUsdt: signal.ledgerMinNotionalUsdt
+      ledgerMinNotionalUsdt: signal.ledgerMinNotionalUsdt,
+      ledgerSelectionState: signal.ledgerSelectionState,
+      ledgerSelectionScore: signal.ledgerSelectionScore,
+      ledgerSelectionNotes: signal.ledgerSelectionNotes,
+      ledgerSelectionQueuedAt: signal.ledgerSelectionQueuedAt,
+      ledgerSelectionDecisionAt: signal.ledgerSelectionDecisionAt,
+      ledgerSelectionWaitMs: signal.ledgerSelectionWaitMs
     });
-    applyLedgerSimulationToSignal(signal, simulated, signal.openedAt);
+
+    if (signal.ledgerSelectionState === 'queued') {
+      queueLedgerSelectionSignal(signal, signal.ledgerSelectionQueuedAt ?? signal.openedAt);
+    } else if (signal.ledgerSelectionState === 'bypassed' || signal.ledgerSelectionState === 'expired' || signal.ledgerSelectionState === 'blocked') {
+      signal.ledgerSimulationStatus = 'rejected';
+      signal.ledgerPnlEligible = false;
+      clearLedgerSelectionAccounting(signal);
+    } else {
+      const waitMs = signal.ledgerSelectionWaitMs ?? 0;
+      const profile = signal.ledgerSelectionState === 'selected'
+        ? ledgerAcceptanceProfileForSelection(signal, waitMs)
+        : {};
+      applyLedgerSimulationToSignal(signal, simulated, signal.openedAt, profile);
+      if (signal.ledgerSimulationStatus === 'accepted' && signal.ledgerSelectionState === 'selected') {
+        markLedgerSelectionAccepted(signal, signal.ledgerSelectionDecisionAt ?? signal.openedAt, 'replayed smart selection');
+      }
+    }
+
     const after = JSON.stringify({
       ledgerSimulationStatus: signal.ledgerSimulationStatus,
       ledgerSimulationNotes: signal.ledgerSimulationNotes,
@@ -2245,7 +2665,13 @@ function replayDashboardLedgerSimulation() {
       ledgerEstimatedSlippageUsdt: signal.ledgerEstimatedSlippageUsdt,
       ledgerRiskAmountUsdt: signal.ledgerRiskAmountUsdt,
       ledgerRiskPctOfCapital: signal.ledgerRiskPctOfCapital,
-      ledgerMinNotionalUsdt: signal.ledgerMinNotionalUsdt
+      ledgerMinNotionalUsdt: signal.ledgerMinNotionalUsdt,
+      ledgerSelectionState: signal.ledgerSelectionState,
+      ledgerSelectionScore: signal.ledgerSelectionScore,
+      ledgerSelectionNotes: signal.ledgerSelectionNotes,
+      ledgerSelectionQueuedAt: signal.ledgerSelectionQueuedAt,
+      ledgerSelectionDecisionAt: signal.ledgerSelectionDecisionAt,
+      ledgerSelectionWaitMs: signal.ledgerSelectionWaitMs
     });
     if (before !== after) changed = true;
     simulated.push(signal);
@@ -2388,13 +2814,13 @@ function applyBinanceClosedPnl(signal: TradeSignal, reading: Awaited<ReturnType<
   ]));
 }
 
+function signalOpenPnlPct(signal: TradeSignal, price: number) {
+  return Number.isFinite(price) && price > 0 ? percent(signal.entry, price, signal.side) : 0;
+}
+
 function clampNumber(value: number, min: number, max: number) {
   if (!Number.isFinite(value)) return min;
   return Math.max(min, Math.min(max, value));
-}
-
-function signalOpenPnlPct(signal: TradeSignal, price: number) {
-  return Number.isFinite(price) && price > 0 ? percent(signal.entry, price, signal.side) : 0;
 }
 
 function signalOpenR(signal: TradeSignal, price: number) {
@@ -3361,6 +3787,12 @@ function stripExecutionLedgerState(signal: TradeSignal) {
   delete signal.ledgerNormalizedEntry;
   delete signal.ledgerNormalizedTakeProfit;
   delete signal.ledgerNormalizedStopLoss;
+  delete signal.ledgerSelectionState;
+  delete signal.ledgerSelectionScore;
+  delete signal.ledgerSelectionNotes;
+  delete signal.ledgerSelectionQueuedAt;
+  delete signal.ledgerSelectionDecisionAt;
+  delete signal.ledgerSelectionWaitMs;
 }
 
 function createExecutionRecordFromDashboardSignal(signal: TradeSignal): TradeSignal {
@@ -3745,6 +4177,15 @@ const ENTRY_QUALITY_ACCEPT_SCORE = 85;
 const ENTRY_QUALITY_HARD_FLOOR = 78;
 const MARKET_REGIME_CACHE_MS = 3 * 60_000;
 const MIN_STRATEGY_DEFINED_RR = 1.8;
+const SMART_LEDGER_SELECTION = {
+  settleWaitMs: 45_000,
+  fallbackWaitMs: 10 * 60_000,
+  deepFallbackWaitMs: 15 * 60_000,
+  maxQueueMs: 20 * 60_000,
+  immediateScore: 94,
+  acceptScore: 87,
+  minScore: 80
+};
 const LEDGER_RECENT_STRATEGY_GATE = {
   minClosedTrades: 4,
   lookbackTrades: 8,
@@ -6542,11 +6983,12 @@ async function scanMarket() {
     });
     publishScanProgress(true);
     const publishCandidate = async (candidate: SignalCandidate) => {
-      applyLedgerSimulation(candidate);
+      stageLedgerSelectionCandidate(candidate);
       signals.unshift(candidate.signal);
       invalidateComputedCaches();
       saveState();
       broadcast('signal', candidate.signal);
+      processLedgerSelectionQueue();
       setScanProgress({
         generated: scanProgress.generated + 1,
         accepted: scanProgress.accepted + (candidate.signal.ledgerSimulationStatus === 'accepted' ? 1 : 0),
@@ -6744,42 +7186,15 @@ function updateOpenSignals() {
         notify: countsForAcceptedSimulation,
         pauseSymbol: countsForAcceptedSimulation
       });
-    const currentPnl = percent(signal.entry, ticker.price, signal.side);
-    signal.maxFavorablePnlPct = Math.max(signal.maxFavorablePnlPct ?? 0, currentPnl);
-    signal.profitLockPct = Math.max(signal.profitLockPct ?? 0, profitLockFromPeak(signal));
-
     const hitStop = signal.side === 'LONG' ? ticker.price <= signal.stopLoss : ticker.price >= signal.stopLoss;
     const hitTarget = signal.side === 'LONG' ? ticker.price >= signal.takeProfit : ticker.price <= signal.takeProfit;
     if (hitTarget) {
       closeOpenSignal('WIN', signal.takeProfit, 'with profit');
       continue;
     }
-
-    const risk = Math.max(signal.riskPct, 0.0001);
-    const breakEvenPrice = breakEvenStopPrice(signal, signal.entry);
-    const breakEvenArmed = (signal.maxFavorablePnlPct ?? 0) >= risk;
-    const hitBreakEven = breakEvenArmed && (signal.side === 'LONG' ? ticker.price <= breakEvenPrice : ticker.price >= breakEvenPrice);
-    if (hitBreakEven) {
-      closeOpenSignal('WIN', breakEvenPrice, 'at breakeven protection');
-      continue;
-    }
-
-    const lockedPnl = signal.profitLockPct ?? 0;
-    if (lockedPnl > 0 && currentPnl <= lockedPnl) {
-      closeOpenSignal(currentPnl >= 0 ? 'WIN' : 'LOSS', ticker.price, 'by trailing profit lock');
-      continue;
-    }
-
     if (hitStop) {
       closeOpenSignal('LOSS', signal.stopLoss, 'with loss');
       continue;
-    }
-
-    const plannedDuration = Math.max(60_000, (signal.plannedExitAt ?? Date.now()) - signal.openedAt);
-    const enoughTimeElapsed = Date.now() - signal.openedAt >= plannedDuration * 0.35;
-    const failedBeforeWorking = enoughTimeElapsed && currentPnl <= -risk * 0.65 && (signal.maxFavorablePnlPct ?? 0) < risk * 0.35;
-    if (failedBeforeWorking) {
-      closeOpenSignal('LOSS', ticker.price, 'setup failure exit');
     }
   }
 }
@@ -7671,11 +8086,13 @@ async function initializeRuntime() {
   await runStartupStep('futures ticker poll', pollFuturesTickersFallback);
   ensureSymbolUniversesFromTickers();
   if (replayDashboardLedgerSimulation()) saveState();
+  processLedgerSelectionQueue();
   await runStartupStep('market scan', scanMarket);
   await runStartupStep('ledger execution sync', processLedgerExecutions);
   setInterval(pollTickersFallback, 5000);
   setInterval(pollFuturesTickersFallback, 5000);
   setInterval(monitorLiveFuturesProtection, 5000);
+  setInterval(() => processLedgerSelectionQueue(), 5000);
   setInterval(processLedgerExecutions, 5000);
   setInterval(scanMarket, 60_000);
   setInterval(syncTelegramSubscribersFromBot, 15000);
