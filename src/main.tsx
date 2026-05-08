@@ -2,6 +2,7 @@ import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'r
 import { createRoot } from 'react-dom/client';
 import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Newspaper, Search, Send, ShieldAlert, Sparkles, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { CandlestickSeries, createChart, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
 
 type Risk = 'medium' | 'high';
@@ -10,6 +11,7 @@ type Side = 'LONG' | 'SHORT';
 type ExitMode = 'strategy-defined' | 'balanced' | 'quick' | 'extended';
 type TradeSetupType = 'compression-breakout' | 'liquidity-sweep-reversal' | 'vwap-reclaim' | 'trend-pullback' | 'momentum-ignition';
 type Ticker = { symbol: string; price: number; change24h: number; quoteVolume: number; eventTime: number };
+type ChartCandle = { openTime: number; open: number; high: number; low: number; close: number; volume: number; closeTime: number };
 type SymbolInfo = { symbol: string; baseAsset: string; quoteAsset: string };
 type MarketMode = 'spot' | 'futures';
 type ExecutionVenueMode = MarketMode | 'both';
@@ -802,6 +804,14 @@ function App() {
   const [chartMarket, setChartMarket] = useState<MarketMode>('spot');
   const [chartTimeframe, setChartTimeframe] = useState<Timeframe>('15m');
   const [chartOpen, setChartOpen] = useState(false);
+  const priceSocketRef = useRef<WebSocket | null>(null);
+  const priceWatchPayloadRef = useRef<{ spotSymbols: string[]; futuresSymbols: string[] }>({ spotSymbols: [], futuresSymbols: [] });
+
+  const sendPriceWatchRequest = () => {
+    const socket = priceSocketRef.current;
+    if (!socket || socket.readyState !== WebSocket.OPEN) return;
+    socket.send(JSON.stringify({ type: 'watchPrices', payload: priceWatchPayloadRef.current }));
+  };
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -883,57 +893,60 @@ function App() {
 
     const connectSocket = () => {
       socket = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/stream`);
-        socket.onmessage = event => {
-          const { type, payload } = JSON.parse(event.data);
-          if (type === 'prices') {
-            applyTickerUpdates(payload.spotUpdates, payload.futuresUpdates);
-            setSpotTop(payload.spotTop ?? []);
-            setFuturesTop(payload.futuresTop ?? []);
-            setSpotGainers(payload.spotGainers ?? []);
-            setSpotLosers(payload.spotLosers ?? []);
-            setFuturesGainers(payload.futuresGainers ?? []);
-            setFuturesLosers(payload.futuresLosers ?? []);
-            setHomeIntel(prev => prev ? ({
-              ...prev,
-              binance: {
-                ...prev.binance,
-                spotGainers: payload.spotGainers ?? prev.binance.spotGainers,
-                spotLosers: payload.spotLosers ?? prev.binance.spotLosers,
-                futuresGainers: payload.futuresGainers ?? prev.binance.futuresGainers,
-                futuresLosers: payload.futuresLosers ?? prev.binance.futuresLosers
-              },
-              updatedAt: payload.updatedAt ?? prev.updatedAt
-            }) : prev);
-          }
-          if (type === 'signal') {
-            setSignals(prev => [payload, ...prev.filter(item => item.id !== payload.id)]);
-          }
-          if (type === 'signalClosed') {
-            setSignals(prev => prev.map(s => s.id === payload.id ? payload : s));
-          }
-          if (type === 'executionSignal') {
-            setExecutionSignals(prev => [payload, ...prev.filter(item => item.id !== payload.id)]);
-            window.dispatchEvent(new CustomEvent(livePortfolioRefreshEvent));
-          }
-          if (type === 'executionSignalClosed') {
-            setExecutionSignals(prev => prev.map(s => s.id === payload.id ? payload : s));
-            window.dispatchEvent(new CustomEvent(livePortfolioRefreshEvent));
-          }
-          if (type === 'notification') {
-            setNotifications(prev => [payload, ...prev.filter(item => item.id !== payload.id)].slice(0, 100));
-            if (alertsEnabled) {
-              setToasts(prev => [payload, ...prev].slice(0, 4));
+      priceSocketRef.current = socket;
+      socket.onopen = () => sendPriceWatchRequest();
+      socket.onmessage = event => {
+        const { type, payload } = JSON.parse(event.data);
+        if (type === 'prices') {
+          applyTickerUpdates(payload.spotUpdates, payload.futuresUpdates);
+          setSpotTop(payload.spotTop ?? []);
+          setFuturesTop(payload.futuresTop ?? []);
+          setSpotGainers(payload.spotGainers ?? []);
+          setSpotLosers(payload.spotLosers ?? []);
+          setFuturesGainers(payload.futuresGainers ?? []);
+          setFuturesLosers(payload.futuresLosers ?? []);
+          setHomeIntel(prev => prev ? ({
+            ...prev,
+            binance: {
+              ...prev.binance,
+              spotGainers: payload.spotGainers ?? prev.binance.spotGainers,
+              spotLosers: payload.spotLosers ?? prev.binance.spotLosers,
+              futuresGainers: payload.futuresGainers ?? prev.binance.futuresGainers,
+              futuresLosers: payload.futuresLosers ?? prev.binance.futuresLosers
+            },
+            updatedAt: payload.updatedAt ?? prev.updatedAt
+          }) : prev);
+        }
+        if (type === 'signal') {
+          setSignals(prev => [payload, ...prev.filter(item => item.id !== payload.id)]);
+        }
+        if (type === 'signalClosed') {
+          setSignals(prev => prev.map(s => s.id === payload.id ? payload : s));
+        }
+        if (type === 'executionSignal') {
+          setExecutionSignals(prev => [payload, ...prev.filter(item => item.id !== payload.id)]);
+          window.dispatchEvent(new CustomEvent(livePortfolioRefreshEvent));
+        }
+        if (type === 'executionSignalClosed') {
+          setExecutionSignals(prev => prev.map(s => s.id === payload.id ? payload : s));
+          window.dispatchEvent(new CustomEvent(livePortfolioRefreshEvent));
+        }
+        if (type === 'notification') {
+          setNotifications(prev => [payload, ...prev.filter(item => item.id !== payload.id)].slice(0, 100));
+          if (alertsEnabled) {
+            setToasts(prev => [payload, ...prev].slice(0, 4));
             window.setTimeout(() => {
               setToasts(prev => prev.filter(item => item.id !== payload.id));
             }, toastDuration);
           }
-          }
-          if (type === 'dashboard') {
-            setDashboard(prev => normalizeDashboardPayload({ ...prev, ...payload }));
-            setStats(payload.stats);
-          }
-        };
+        }
+        if (type === 'dashboard') {
+          setDashboard(prev => normalizeDashboardPayload({ ...prev, ...payload }));
+          setStats(payload.stats);
+        }
+      };
       socket.onclose = () => {
+        if (priceSocketRef.current === socket) priceSocketRef.current = null;
         if (closed) return;
         reconnectTimeout = window.setTimeout(connectSocket, 1200);
       };
@@ -968,20 +981,18 @@ function App() {
     }, 60000);
     const liveLedgerRefresh = setInterval(() => {
       Promise.all([
-        api<{ spotUpdates: Ticker[]; futuresUpdates: Ticker[] }>('/api/open-signal-prices'),
         api<{ signals: Signal[] }>('/api/signals'),
         api<{ signals: Signal[] }>('/api/execution-signals'),
         api<DashboardPayload>('/api/dashboard')
       ])
-        .then(([priceResponse, signalResponse, executionSignalResponse, dashboardResponse]) => {
-          applyTickerUpdates(priceResponse.spotUpdates, priceResponse.futuresUpdates);
+        .then(([signalResponse, executionSignalResponse, dashboardResponse]) => {
           setSignals(signalResponse.signals);
           setExecutionSignals(executionSignalResponse.signals);
           setDashboard(normalizeDashboardPayload(dashboardResponse));
           setStats(dashboardResponse.stats);
         })
         .catch(() => undefined);
-    }, 1000);
+    }, 2500);
     return () => {
       closed = true;
       if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
@@ -1006,6 +1017,48 @@ function App() {
     setChartMarket(market);
     setChartOpen(true);
   };
+  const priceWatchPayload = useMemo(() => {
+    const spotSymbols = new Set<string>();
+    const futuresSymbolsToWatch = new Set<string>();
+    for (const item of spotTop.slice(0, 4)) spotSymbols.add(item.symbol);
+    for (const item of futuresTop.slice(0, 4)) futuresSymbolsToWatch.add(item.symbol);
+    for (const item of searchResults.slice(0, 12)) {
+      if (marketMode === 'spot') spotSymbols.add(item.symbol);
+      else futuresSymbolsToWatch.add(item.symbol);
+    }
+    if (chartOpen && chartSymbol) {
+      if (chartMarket === 'spot') spotSymbols.add(chartSymbol);
+      else futuresSymbolsToWatch.add(chartSymbol);
+    }
+    for (const signal of signals) {
+      if (signal.status !== 'OPEN') continue;
+      if (signal.market === 'spot') spotSymbols.add(signal.symbol);
+      else futuresSymbolsToWatch.add(signal.symbol);
+    }
+    for (const signal of signals.slice(0, 80)) {
+      if (signal.market === 'spot') spotSymbols.add(signal.symbol);
+      else futuresSymbolsToWatch.add(signal.symbol);
+    }
+    for (const signal of executionSignals) {
+      if (signal.status !== 'OPEN') continue;
+      if (signal.market === 'spot') spotSymbols.add(signal.symbol);
+      else futuresSymbolsToWatch.add(signal.symbol);
+    }
+    for (const signal of executionSignals.slice(0, 80)) {
+      if (signal.market === 'spot') spotSymbols.add(signal.symbol);
+      else futuresSymbolsToWatch.add(signal.symbol);
+    }
+    return {
+      spotSymbols: [...spotSymbols].slice(0, 80),
+      futuresSymbols: [...futuresSymbolsToWatch].slice(0, 80)
+    };
+  }, [spotTop, futuresTop, searchResults, marketMode, chartOpen, chartSymbol, chartMarket, signals, executionSignals]);
+
+  useEffect(() => {
+    priceWatchPayloadRef.current = priceWatchPayload;
+    sendPriceWatchRequest();
+  }, [priceWatchPayload]);
+
   const deferredSignals = useDeferredValue(signals);
   const deferredExecutionSignals = useDeferredValue(executionSignals);
   const deferredNotifications = useDeferredValue(notifications);
@@ -1098,6 +1151,7 @@ function App() {
         symbol={chartSymbol}
         market={chartMarket}
         timeframe={chartTimeframe}
+        latestTicker={chartMarket === 'futures' ? futuresTickers.get(chartSymbol) : tickers.get(chartSymbol)}
         onTimeframeChange={setChartTimeframe}
         onClose={() => setChartOpen(false)}
       />}
@@ -1263,108 +1317,178 @@ function getTradeChartLevels(trade: TradeChartTrade) {
   return { entry: trade.entry, takeProfit, stopLoss };
 }
 
-function tradingViewSymbolForTrade(trade: TradeChartTrade) {
-  const suffix = trade.market === 'futures' ? '.P' : '';
-  return `BINANCE:${trade.symbol}${suffix}`;
+const timeframeSeconds: Record<Timeframe, number> = {
+  '5m': 5 * 60,
+  '10m': 10 * 60,
+  '15m': 15 * 60,
+  '1h': 60 * 60,
+  '2h': 2 * 60 * 60,
+  '4h': 4 * 60 * 60,
+  '1d': 24 * 60 * 60
+};
+
+const chartTime = (stamp: number) => Math.floor(stamp / 1000) as UTCTimestamp;
+
+function candleToChartData(candle: ChartCandle): CandlestickData<UTCTimestamp> {
+  return {
+    time: chartTime(candle.openTime),
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close
+  };
 }
 
-function tradingViewInterval(timeframe: Timeframe) {
-  return ({
-    '5m': '5',
-    '10m': '10',
-    '15m': '15',
-    '1h': '60',
-    '2h': '120',
-    '4h': '240',
-    '1d': 'D'
-  } as Record<Timeframe, string>)[timeframe];
+function pricePrecisionFor(value: number) {
+  const absValue = Math.abs(value);
+  if (absValue >= 1000) return 2;
+  if (absValue >= 1) return 4;
+  return 8;
 }
 
-let tradingViewWidgetScriptPromise: Promise<void> | null = null;
-
-function loadTradingViewWidgetScript() {
-  if (tradingViewWidgetScriptPromise) return tradingViewWidgetScriptPromise;
-  tradingViewWidgetScriptPromise = new Promise((resolve, reject) => {
-    if ((window as any).TradingView?.widget) {
-      resolve();
-      return;
-    }
-    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://s3.tradingview.com/tv.js"]');
-    if (existingScript) {
-      existingScript.addEventListener('load', () => resolve(), { once: true });
-      existingScript.addEventListener('error', () => reject(new Error('TradingView script failed')), { once: true });
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://s3.tradingview.com/tv.js';
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('TradingView script failed'));
-    document.head.appendChild(script);
-  });
-  return tradingViewWidgetScriptPromise;
+function mergeTickerIntoCandle(
+  current: CandlestickData<UTCTimestamp> | null,
+  ticker: Ticker,
+  timeframe: Timeframe
+): CandlestickData<UTCTimestamp> {
+  const bucket = (Math.floor((ticker.eventTime / 1000) / timeframeSeconds[timeframe]) * timeframeSeconds[timeframe]) as UTCTimestamp;
+  if (!current || bucket > current.time) {
+    const open = current?.close ?? ticker.price;
+    return {
+      time: bucket,
+      open,
+      high: Math.max(open, ticker.price),
+      low: Math.min(open, ticker.price),
+      close: ticker.price
+    };
+  }
+  if (bucket < current.time) return current;
+  return {
+    ...current,
+    high: Math.max(current.high, ticker.price),
+    low: Math.min(current.low, ticker.price),
+    close: ticker.price
+  };
 }
 
-function TradingViewTradeChart({ trade }: { trade: TradeChartTrade }) {
-  const [error, setError] = useState('');
-  const containerId = useMemo(() => `tradingview_trade_${String(trade.id).replace(/[^a-zA-Z0-9_-]/g, '_')}`, [trade.id]);
+function BinanceLiveChart({
+  symbol,
+  market,
+  timeframe,
+  latestTicker
+}: {
+  symbol: string;
+  market: MarketMode;
+  timeframe: Timeframe;
+  latestTicker?: Ticker;
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
+  const lastCandleRef = useRef<CandlestickData<UTCTimestamp> | null>(null);
+  const [chartState, setChartState] = useState<'loading' | 'ready' | 'error'>('loading');
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return undefined;
     let cancelled = false;
-    setError('');
-    const container = document.getElementById(containerId);
-    if (container) container.innerHTML = '';
-
-    loadTradingViewWidgetScript()
-      .then(() => {
+    setChartState('loading');
+    lastCandleRef.current = null;
+    chartRef.current?.remove();
+    const chart = createChart(container, {
+      width: container.clientWidth,
+      height: container.clientHeight,
+      layout: {
+        background: { color: '#131722' },
+        textColor: '#d1d5db'
+      },
+      grid: {
+        vertLines: { color: 'rgba(148, 163, 184, 0.12)' },
+        horzLines: { color: 'rgba(148, 163, 184, 0.12)' }
+      },
+      rightPriceScale: {
+        borderColor: 'rgba(148, 163, 184, 0.25)'
+      },
+      timeScale: {
+        borderColor: 'rgba(148, 163, 184, 0.25)',
+        timeVisible: true,
+        secondsVisible: false
+      },
+      crosshair: {
+        mode: 0
+      }
+    });
+    const series = chart.addSeries(CandlestickSeries, {
+      upColor: '#00b894',
+      downColor: '#ff4d5a',
+      borderUpColor: '#00b894',
+      borderDownColor: '#ff4d5a',
+      wickUpColor: '#00b894',
+      wickDownColor: '#ff4d5a',
+      priceFormat: {
+        type: 'price',
+        precision: pricePrecisionFor(latestTicker?.price ?? 1),
+        minMove: 0.00000001
+      }
+    });
+    chartRef.current = chart;
+    seriesRef.current = series;
+    const resizeObserver = new ResizeObserver(entries => {
+      const rect = entries[0]?.contentRect;
+      if (!rect) return;
+      chart.applyOptions({ width: rect.width, height: rect.height });
+    });
+    resizeObserver.observe(container);
+    api<{ candles: ChartCandle[] }>(`/api/chart?symbol=${encodeURIComponent(symbol)}&market=${market}&interval=${timeframe}&limit=240`)
+      .then(response => {
         if (cancelled) return;
-        const TradingView = (window as any).TradingView;
-        if (!TradingView?.widget) throw new Error('TradingView widget unavailable');
-        new TradingView.widget({
-          autosize: true,
-          symbol: tradingViewSymbolForTrade(trade),
-          interval: tradingViewInterval(trade.timeframe),
-          timezone: 'Etc/UTC',
-          theme: 'dark',
-          style: '1',
-          locale: 'en',
-          enable_publishing: false,
-          withdateranges: true,
-          hide_side_toolbar: false,
-          allow_symbol_change: true,
-          save_image: true,
-          details: true,
-          hotlist: false,
-          calendar: false,
-          studies: [],
-          enabled_features: ['side_toolbar_in_fullscreen_mode'],
-          disabled_features: [],
-          support_host: 'https://www.tradingview.com',
-          container_id: containerId
-        });
+        const data = response.candles.map(candleToChartData);
+        series.setData(data);
+        lastCandleRef.current = data.at(-1) ?? null;
+        chart.timeScale().fitContent();
+        setChartState('ready');
       })
       .catch(() => {
-        if (!cancelled) setError('Unable to load TradingView drawing tools.');
+        if (!cancelled) setChartState('error');
       });
-
     return () => {
       cancelled = true;
-      const currentContainer = document.getElementById(containerId);
-      if (currentContainer) currentContainer.innerHTML = '';
+      resizeObserver.disconnect();
+      chart.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+      lastCandleRef.current = null;
     };
-  }, [containerId, trade]);
+  }, [symbol, market, timeframe]);
 
-  return <>
-    <div id={containerId} className="tradingview-chart-widget" />
-    {error && <div className="trade-chart-state error">{error}</div>}
-  </>;
+  useEffect(() => {
+    if (!latestTicker || chartState === 'error') return;
+    const series = seriesRef.current;
+    if (!series) return;
+    series.applyOptions({
+      priceFormat: {
+        type: 'price',
+        precision: pricePrecisionFor(latestTicker.price),
+        minMove: 0.00000001
+      }
+    });
+    const nextCandle = mergeTickerIntoCandle(lastCandleRef.current, latestTicker, timeframe);
+    lastCandleRef.current = nextCandle;
+    series.update(nextCandle);
+  }, [latestTicker, timeframe, chartState]);
+
+  return <div className="binance-chart-stage">
+    <div ref={containerRef} className="binance-live-chart" />
+    {chartState === 'loading' && <div className="trade-chart-state">Loading Binance stream...</div>}
+    {chartState === 'error' && <div className="trade-chart-state error">Unable to load Binance chart.</div>}
+  </div>;
 }
 
-function TradeChartModal({ trade, onClose }: { trade: TradeChartTrade | null; onClose: () => void }) {
+function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTrade | null; latestTicker?: Ticker; onClose: () => void }) {
   if (!trade) return null;
   const levels = getTradeChartLevels(trade);
   const pnl = trade.pnlLabel ?? (typeof trade.pnl === 'number' ? `${trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)}%` : '--');
-  const tvSymbol = tradingViewSymbolForTrade(trade);
+  const feedLabel = trade.market === 'futures' ? `${trade.symbol}.P` : trade.symbol;
   return <div className="trade-chart-overlay" role="dialog" aria-modal="true" onMouseDown={event => {
     if (event.target === event.currentTarget) onClose();
   }}>
@@ -1384,10 +1508,10 @@ function TradeChartModal({ trade, onClose }: { trade: TradeChartTrade | null; on
         <span><b>Entry</b><em>{fmt(levels.entry)}</em></span>
         <span><b>TP</b><em>{fmt(levels.takeProfit)}</em></span>
         <span><b>SL</b><em>{fmt(levels.stopLoss)}</em></span>
-        <span><b>TradingView</b><em>{tvSymbol}</em></span>
+        <span><b>Live</b><em>{latestTicker ? fmt(latestTicker.price) : '-'}</em></span>
       </div>
-      <div className="trade-chart-canvas tradingview-chart-canvas">
-        <TradingViewTradeChart key={`${trade.id}:${tvSymbol}:${trade.timeframe}`} trade={trade} />
+      <div className="trade-chart-canvas binance-chart-canvas">
+        <BinanceLiveChart key={`${trade.id}:${feedLabel}:${trade.timeframe}`} symbol={trade.symbol} market={trade.market} timeframe={trade.timeframe} latestTicker={latestTicker} />
       </div>
     </section>
   </div>;
@@ -4843,7 +4967,7 @@ function AutoTradePage({
                       id={`portfolio-trade-row-${row.id}`}
                       className={`${focusedPortfolioTradeId === row.id ? 'focused' : ''} chartable-row`}
                       onClick={() => setChartTrade(row)}
-                      title="Open TradingView chart"
+                      title="Open Binance live chart"
                     >
                       <td>{formatTradeLabel(row.id)}</td>
                       <td><strong>{row.symbol}</strong></td>
@@ -5445,7 +5569,7 @@ function AutoTradePage({
         </div>
       </div>}
     </div>
-    <TradeChartModal trade={chartTrade} onClose={() => setChartTrade(null)} />
+    <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
 }
 
@@ -6682,7 +6806,7 @@ function PerformanceChart({
             <tbody>
               {acceptedTradeRows.length === 0 && <tr><td colSpan={13} className="empty">No Accepted Simulation trades matched this selection.</td></tr>}
               {ledgerTopSpacerHeight > 0 && <tr aria-hidden="true" className="ledger-spacer-row"><td colSpan={13} style={{ height: `${ledgerTopSpacerHeight}px` }} /></tr>}
-              {visibleAcceptedTradeRows.map(row => <tr key={row.id} id={`trade-row-${row.id}`} className={`${focusedTradeId === row.id ? 'focused' : ''} chartable-row`} onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open TradingView chart'}>
+              {visibleAcceptedTradeRows.map(row => <tr key={row.id} id={`trade-row-${row.id}`} className={`${focusedTradeId === row.id ? 'focused' : ''} chartable-row`} onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
                 <td>{formatTradeLabel(row.id)}</td>
                 <td><strong>{row.symbol}</strong></td>
                 <td><span className="strategy-cell">{row.strategyName}</span></td>
@@ -6744,7 +6868,7 @@ function PerformanceChart({
             </thead>
             <tbody>
               {rejectedTradeRows.length === 0 && <tr><td colSpan={7} className="empty">No Rejected Simulation trades matched this selection.</td></tr>}
-              {rejectedTradeRows.map(row => <tr key={`rejected-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open TradingView chart'}>
+              {rejectedTradeRows.map(row => <tr key={`rejected-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
                 <td>{formatTradeLabel(row.id)}</td>
                 <td><strong>{row.symbol}</strong></td>
                 <td><span className="strategy-cell">{row.strategyName}</span></td>
@@ -6784,7 +6908,7 @@ function PerformanceChart({
               </thead>
               <tbody>
                 {allStrategyTradeRows.length === 0 && <tr><td colSpan={12} className="empty">No All Strategy trades matched this selection.</td></tr>}
-                {allStrategyTradeRows.map(row => <tr key={`strategy-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open TradingView chart'}>
+                {allStrategyTradeRows.map(row => <tr key={`strategy-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
                   <td>{row.label}</td>
                   <td><strong>{row.symbol}</strong></td>
                   <td><span className="strategy-cell">{row.strategyName}</span></td>
@@ -6813,7 +6937,7 @@ function PerformanceChart({
     </div>
 
     {!compact && <NotificationsPanel notifications={notifications} signals={signals} onSelectTrade={focusTrade} />}
-    <TradeChartModal trade={chartTrade} onClose={() => setChartTrade(null)} />
+    <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
 }
 
@@ -7328,61 +7452,18 @@ function SymbolChartPanel({
   symbol,
   market,
   timeframe,
+  latestTicker,
   onTimeframeChange,
   onClose
 }: {
   symbol: string;
   market: MarketMode;
   timeframe: Timeframe;
+  latestTicker?: Ticker;
   onTimeframeChange: (value: Timeframe) => void;
   onClose: () => void;
 }) {
-  const widgetHostRef = useRef<HTMLDivElement | null>(null);
   const timeframeOptions: Timeframe[] = ['5m', '10m', '15m', '1h', '2h', '4h', '1d'];
-  const intervalMap: Record<Timeframe, string> = {
-    '5m': '5',
-    '10m': '10',
-    '15m': '15',
-    '1h': '60',
-    '2h': '120',
-    '4h': '240',
-    '1d': '1D'
-  };
-  const tvSymbol = market === 'futures' ? `BINANCE:${symbol}PERP` : `BINANCE:${symbol}`;
-
-  useEffect(() => {
-    if (!widgetHostRef.current) return undefined;
-    widgetHostRef.current.innerHTML = '';
-    const script = document.createElement('script');
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    script.type = 'text/javascript';
-    script.async = true;
-    script.innerHTML = JSON.stringify({
-      autosize: true,
-      symbol: tvSymbol,
-      interval: intervalMap[timeframe],
-      timezone: 'Asia/Riyadh',
-      theme: 'dark',
-      style: '1',
-      locale: 'en',
-      enable_publishing: false,
-      allow_symbol_change: true,
-      hide_top_toolbar: false,
-      hide_side_toolbar: false,
-      hide_legend: false,
-      save_image: true,
-      withdateranges: true,
-      details: false,
-      hotlist: false,
-      calendar: false,
-      studies: [],
-      support_host: 'https://www.tradingview.com'
-    });
-    widgetHostRef.current.appendChild(script);
-    return () => {
-      if (widgetHostRef.current) widgetHostRef.current.innerHTML = '';
-    };
-  }, [tvSymbol, timeframe]);
 
   return <div className="chart-modal-backdrop" onClick={onClose}>
     <section className="chart-modal" onClick={event => event.stopPropagation()}>
@@ -7390,7 +7471,7 @@ function SymbolChartPanel({
         <div>
           <span>{market === 'futures' ? 'Futures live chart' : 'Spot live chart'}</span>
           <strong>{symbol}</strong>
-          <small>TradingView live embed</small>
+          <small>{latestTicker ? `Live ${fmt(latestTicker.price)}` : 'Waiting for Binance stream'}</small>
         </div>
         <div className="chart-modal-actions">
           <div className="chart-toolbar-group">
@@ -7404,7 +7485,7 @@ function SymbolChartPanel({
       <div className="chart-modal-grid">
         <article>
           <span>Feed</span>
-          <strong>TradingView</strong>
+          <strong>Binance Stream</strong>
         </article>
         <article>
           <span>Source</span>
@@ -7421,8 +7502,8 @@ function SymbolChartPanel({
       </div>
       <div className="chart-modal-body">
         <div className="chart-block wide advanced">
-          <div className="chart-live-stage tradingview-stage">
-            <div className="tradingview-widget-container" ref={widgetHostRef} />
+          <div className="chart-live-stage binance-stage">
+            <BinanceLiveChart symbol={symbol} market={market} timeframe={timeframe} latestTicker={latestTicker} />
           </div>
         </div>
       </div>

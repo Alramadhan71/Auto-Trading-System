@@ -369,6 +369,8 @@ const BINANCE_REST = 'https://api.binance.com';
 const BINANCE_FUTURES_REST = 'https://fapi.binance.com';
 const BINANCE_WS = 'wss://stream.binance.com:9443/ws/!ticker@arr';
 const BINANCE_FUTURES_WS = 'wss://fstream.binance.com/ws/!ticker@arr';
+const BINANCE_SPOT_TRADE_WS = 'wss://stream.binance.com:9443/stream?streams=';
+const BINANCE_FUTURES_TRADE_WS = 'wss://fstream.binance.com/stream?streams=';
 const PORT = Number(process.env.PORT ?? 8787);
 const ROOT_DIR = process.cwd();
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
@@ -383,6 +385,9 @@ const AUTH_SESSION_KEY_FILE = path.join(DATA_DIR, 'auth-session.key');
 const SIGNAL_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 const CANDLE_LIMIT_DEFAULT = 80;
 const CANDLE_LIMIT_CHART = 240;
+const CLIENT_PRICE_WATCH_TTL_MS = 2 * 60_000;
+const MAX_CLIENT_PRICE_WATCH_SYMBOLS = 80;
+const FEATURED_LIVE_SYMBOLS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT'];
 const SCAN_BATCH_SIZE: Record<Timeframe, number> = {
   '5m': Number.MAX_SAFE_INTEGER,
   '10m': Number.MAX_SAFE_INTEGER,
@@ -1060,6 +1065,16 @@ let portfolioFloorPeakR = 0;
 let scannerUniverse: string[] = [];
 let ws: WebSocket | null = null;
 let futuresWs: WebSocket | null = null;
+let spotTradeWs: WebSocket | null = null;
+let futuresTradeWs: WebSocket | null = null;
+let spotTradeStreamKey = '';
+let futuresTradeStreamKey = '';
+let spotLiveTradeSymbols = new Set<string>();
+let futuresLiveTradeSymbols = new Set<string>();
+let clientPriceWatch = new Map<string, number>();
+let queuedSpotPriceUpdates = new Map<string, PriceTicker>();
+let queuedFuturesPriceUpdates = new Map<string, PriceTicker>();
+let priceBroadcastTimer: NodeJS.Timeout | null = null;
 let nextSignalId = 1;
 let scanVersion = 0;
 let scanRunning = false;
@@ -4986,8 +5001,40 @@ function broadcast(type: string, payload: unknown) {
   wss.clients.forEach(client => client.readyState === WebSocket.OPEN && client.send(data));
 }
 
+function isValidPriceWatchSymbol(symbol: string) {
+  return /^[A-Z0-9]{2,30}$/.test(symbol);
+}
+
+function rememberClientPriceWatch(symbols: unknown, market: TradingVenue) {
+  if (!Array.isArray(symbols)) return;
+  const expiresAt = Date.now() + CLIENT_PRICE_WATCH_TTL_MS;
+  for (const rawSymbol of symbols.slice(0, MAX_CLIENT_PRICE_WATCH_SYMBOLS)) {
+    const symbol = String(rawSymbol ?? '').trim().toUpperCase();
+    if (!isValidPriceWatchSymbol(symbol)) continue;
+    clientPriceWatch.set(`${market}:${symbol}`, expiresAt);
+  }
+  syncLiveTradeStreams();
+}
+
+function pruneClientPriceWatch() {
+  const now = Date.now();
+  for (const [key, expiresAt] of clientPriceWatch) {
+    if (expiresAt <= now) clientPriceWatch.delete(key);
+  }
+}
+
 wss.on('connection', client => {
   if (client.readyState !== WebSocket.OPEN) return;
+  client.on('message', raw => {
+    try {
+      const message = JSON.parse(raw.toString()) as { type?: string; payload?: { spotSymbols?: unknown; futuresSymbols?: unknown } };
+      if (message.type !== 'watchPrices') return;
+      rememberClientPriceWatch(message.payload?.spotSymbols, 'spot');
+      rememberClientPriceWatch(message.payload?.futuresSymbols, 'futures');
+    } catch {
+      // Ignore malformed client messages.
+    }
+  });
   client.send(JSON.stringify({
     type: 'prices',
     payload: {
@@ -7257,6 +7304,149 @@ function getDashboardPayload() {
   return dashboardCache;
 }
 
+function tickerSourceForMarket(market: TradingVenue) {
+  return market === 'futures' ? futuresTickers : tickers;
+}
+
+function liveTradeSymbolsForMarket(market: TradingVenue) {
+  return market === 'futures' ? futuresLiveTradeSymbols : spotLiveTradeSymbols;
+}
+
+function applyMarketTickerUpdate(market: TradingVenue, ticker: PriceTicker) {
+  const source = tickerSourceForMarket(market);
+  const previous = source.get(ticker.symbol);
+  const liveSymbols = liveTradeSymbolsForMarket(market);
+  source.set(ticker.symbol, liveSymbols.has(ticker.symbol) && previous
+    ? {
+      ...ticker,
+      price: previous.price,
+      eventTime: previous.eventTime
+    }
+    : ticker);
+}
+
+function queueLivePriceBroadcast(market: TradingVenue, ticker: PriceTicker) {
+  const queue = market === 'futures' ? queuedFuturesPriceUpdates : queuedSpotPriceUpdates;
+  queue.set(ticker.symbol, ticker);
+  if (priceBroadcastTimer) return;
+  priceBroadcastTimer = setTimeout(() => {
+    priceBroadcastTimer = null;
+    const spotUpdates = [...queuedSpotPriceUpdates.values()];
+    const futuresUpdates = [...queuedFuturesPriceUpdates.values()];
+    queuedSpotPriceUpdates.clear();
+    queuedFuturesPriceUpdates.clear();
+    updateOpenSignals();
+    broadcast('prices', {
+      ...buildPricesBroadcastPayload(),
+      spotUpdates,
+      futuresUpdates
+    });
+    syncLiveTradeStreams();
+  }, 200);
+}
+
+function applyLiveTradePrice(market: TradingVenue, symbol: string, price: number, eventTime: number) {
+  if (!Number.isFinite(price) || price <= 0) return;
+  const source = tickerSourceForMarket(market);
+  const previous = source.get(symbol);
+  const ticker: PriceTicker = {
+    symbol,
+    price,
+    change24h: previous?.change24h ?? 0,
+    quoteVolume: previous?.quoteVolume ?? 0,
+    eventTime: Number.isFinite(eventTime) && eventTime > 0 ? eventTime : Date.now()
+  };
+  source.set(symbol, ticker);
+  queueLivePriceBroadcast(market, ticker);
+}
+
+function watchedTradeSymbols(market: TradingVenue) {
+  pruneClientPriceWatch();
+  const watched = new Set(FEATURED_LIVE_SYMBOLS);
+  const openSignals = signals.filter(signal =>
+    signal.market === market
+    && signal.status === 'OPEN'
+    && (countsInLedgerSimulation(signal) || countsInStrategyLedger(signal))
+  );
+  for (const signal of openSignals) watched.add(signal.symbol);
+  const openExecutionSignals = executionSignals.filter(signal =>
+    signal.market === market
+    && signal.status === 'OPEN'
+    && countsAsOpenExecution(signal.executionStatus)
+  );
+  for (const signal of openExecutionSignals) watched.add(signal.symbol);
+  for (const [key] of clientPriceWatch) {
+    const [watchMarket, symbol] = key.split(':');
+    if (watchMarket === market && symbol) watched.add(symbol);
+  }
+  return watched;
+}
+
+function liveTradeUrl(market: TradingVenue, symbols: string[]) {
+  const baseUrl = market === 'futures' ? BINANCE_FUTURES_TRADE_WS : BINANCE_SPOT_TRADE_WS;
+  const streams = symbols.map(symbol => `${symbol.toLowerCase()}@trade`).join('/');
+  return `${baseUrl}${streams}`;
+}
+
+function syncLiveTradeStream(market: TradingVenue) {
+  const symbols = [...watchedTradeSymbols(market)].filter(isValidPriceWatchSymbol).sort();
+  const key = symbols.join('/');
+  if (market === 'futures') {
+    futuresLiveTradeSymbols = new Set(symbols);
+    if (key === futuresTradeStreamKey) return;
+    futuresTradeStreamKey = key;
+    futuresTradeWs?.close();
+    futuresTradeWs = null;
+  } else {
+    spotLiveTradeSymbols = new Set(symbols);
+    if (key === spotTradeStreamKey) return;
+    spotTradeStreamKey = key;
+    spotTradeWs?.close();
+    spotTradeWs = null;
+  }
+  if (symbols.length === 0) return;
+  const socket = new WebSocket(liveTradeUrl(market, symbols));
+  if (market === 'futures') futuresTradeWs = socket;
+  else spotTradeWs = socket;
+  socket.on('message', raw => {
+    try {
+      const message = JSON.parse(raw.toString()) as { data?: { s?: string; p?: string; T?: number; E?: number } };
+      const row = message.data;
+      const symbol = String(row?.s ?? '').toUpperCase();
+      const price = Number(row?.p);
+      if (!symbol) return;
+      applyLiveTradePrice(market, symbol, price, Number(row?.T ?? row?.E ?? Date.now()));
+    } catch {
+      // Ignore malformed exchange messages.
+    }
+  });
+  socket.on('close', () => {
+    if (market === 'futures') {
+      if (futuresTradeWs === socket) {
+        futuresTradeWs = null;
+        const reconnectKey = futuresTradeStreamKey;
+        futuresTradeStreamKey = '';
+        setTimeout(() => {
+          if (reconnectKey) syncLiveTradeStream('futures');
+        }, 1000);
+      }
+    } else if (spotTradeWs === socket) {
+      spotTradeWs = null;
+      const reconnectKey = spotTradeStreamKey;
+      spotTradeStreamKey = '';
+      setTimeout(() => {
+        if (reconnectKey) syncLiveTradeStream('spot');
+      }, 1000);
+    }
+  });
+  socket.on('error', () => socket.close());
+}
+
+function syncLiveTradeStreams() {
+  syncLiveTradeStream('spot');
+  syncLiveTradeStream('futures');
+}
+
 function connectBinance() {
   ws?.close();
   ws = new WebSocket(BINANCE_WS);
@@ -7265,8 +7455,8 @@ function connectBinance() {
     const updates: PriceTicker[] = [];
     for (const row of rows) {
       const ticker = { symbol: row.s, price: Number(row.c), change24h: Number(row.P), quoteVolume: Number(row.q), eventTime: row.E };
-      tickers.set(row.s, ticker);
-      updates.push(ticker);
+      applyMarketTickerUpdate('spot', ticker);
+      updates.push(tickers.get(row.s) ?? ticker);
     }
     broadcast('prices', { ...buildPricesBroadcastPayload(), spotUpdates: updates });
     updateOpenSignals();
@@ -7289,8 +7479,8 @@ function connectBinanceFutures() {
         quoteVolume: Number(row.q),
         eventTime: row.E
       };
-      futuresTickers.set(row.s, ticker);
-      updates.push(ticker);
+      applyMarketTickerUpdate('futures', ticker);
+      updates.push(futuresTickers.get(row.s) ?? ticker);
     }
     broadcast('prices', { ...buildPricesBroadcastPayload(), futuresUpdates: updates });
     updateOpenSignals();
@@ -7312,8 +7502,8 @@ async function pollTickersFallback() {
       quoteVolume: Number(row.quoteVolume),
       eventTime: row.closeTime
     };
-    tickers.set(row.symbol, ticker);
-    updates.push(ticker);
+    applyMarketTickerUpdate('spot', ticker);
+    updates.push(tickers.get(row.symbol) ?? ticker);
   }
   broadcast('prices', { ...buildPricesBroadcastPayload(), spotUpdates: updates });
   updateOpenSignals();
@@ -7332,60 +7522,17 @@ async function pollFuturesTickersFallback() {
       quoteVolume: Number(row.quoteVolume),
       eventTime: row.closeTime
     };
-    futuresTickers.set(row.symbol, ticker);
-    updates.push(ticker);
+    applyMarketTickerUpdate('futures', ticker);
+    updates.push(futuresTickers.get(row.symbol) ?? ticker);
   }
   broadcast('prices', { ...buildPricesBroadcastPayload(), futuresUpdates: updates });
   updateOpenSignals();
-}
-
-async function refreshOpenTickerPrice(symbol: string, market: TradingVenue) {
-  const source = market === 'futures' ? futuresTickers : tickers;
-  const baseUrl = market === 'futures' ? BINANCE_FUTURES_REST : BINANCE_REST;
-  const route = market === 'futures' ? '/fapi/v1/ticker/price' : '/api/v3/ticker/price';
-  const row = await fetchJsonDirect<{ symbol?: string; price?: string; time?: number }>(
-    `${baseUrl}${route}?symbol=${encodeURIComponent(symbol)}`
-  ).catch(() => null);
-  const price = Number(row?.price);
-  if (!row?.symbol || !Number.isFinite(price) || price <= 0) return source.get(symbol) ?? null;
-  const previous = source.get(row.symbol);
-  const ticker: PriceTicker = {
-    symbol: row.symbol,
-    price,
-    change24h: previous?.change24h ?? 0,
-    quoteVolume: previous?.quoteVolume ?? 0,
-    eventTime: Number(row.time ?? Date.now())
-  };
-  source.set(row.symbol, ticker);
-  return ticker;
-}
-
-async function refreshOpenTickerPrices(symbols: Set<string>, market: TradingVenue) {
-  const source = market === 'futures' ? futuresTickers : tickers;
-  if (symbols.size === 0) return [];
-  const updates = await Promise.all([...symbols].map(symbol => refreshOpenTickerPrice(symbol, market)));
-  return [...symbols].map((symbol, index) => updates[index] ?? source.get(symbol)).filter(Boolean) as PriceTicker[];
 }
 
 app.get('/api/symbols', (_req, res) => res.json({ symbols, count: symbols.length }));
 app.get('/api/tickers', (_req, res) => res.json({ tickers: [...tickers.values()], count: tickers.size }));
 app.get('/api/futures-symbols', (_req, res) => res.json({ symbols: futuresSymbols, count: futuresSymbols.length }));
 app.get('/api/futures-tickers', (_req, res) => res.json({ tickers: [...futuresTickers.values()], count: futuresTickers.size }));
-app.get('/api/open-signal-prices', async (_req, res) => {
-  const open = signals.filter(signal => signal.status === 'OPEN' && (countsInLedgerSimulation(signal) || countsInStrategyLedger(signal)));
-  const spotSymbols = new Set(open.filter(signal => signal.market === 'spot').map(signal => signal.symbol));
-  const futuresSymbols = new Set(open.filter(signal => signal.market === 'futures').map(signal => signal.symbol));
-  const [spotUpdates, futuresUpdates] = await Promise.all([
-    refreshOpenTickerPrices(spotSymbols, 'spot'),
-    refreshOpenTickerPrices(futuresSymbols, 'futures')
-  ]);
-  updateOpenSignals();
-  res.json({
-    spotUpdates,
-    futuresUpdates,
-    updatedAt: Date.now()
-  });
-});
 app.get('/api/chart', async (req, res) => {
   try {
     const symbol = String(req.query.symbol ?? '').trim().toUpperCase();
@@ -8115,15 +8262,15 @@ async function initializeRuntime() {
   await runStartupStep('futures symbols load', loadFuturesSymbols);
   connectBinance();
   connectBinanceFutures();
-  await runStartupStep('spot ticker poll', pollTickersFallback);
-  await runStartupStep('futures ticker poll', pollFuturesTickersFallback);
+  await runStartupStep('spot ticker snapshot', pollTickersFallback);
+  await runStartupStep('futures ticker snapshot', pollFuturesTickersFallback);
   ensureSymbolUniversesFromTickers();
+  syncLiveTradeStreams();
   if (replayDashboardLedgerSimulation()) saveState();
   processLedgerSelectionQueue();
   await runStartupStep('market scan', scanMarket);
   await runStartupStep('ledger execution sync', processLedgerExecutions);
-  setInterval(pollTickersFallback, 5000);
-  setInterval(pollFuturesTickersFallback, 5000);
+  setInterval(syncLiveTradeStreams, 1000);
   setInterval(monitorLiveFuturesProtection, 5000);
   setInterval(() => processLedgerSelectionQueue(), 5000);
   setInterval(processLedgerExecutions, 5000);
