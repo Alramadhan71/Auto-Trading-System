@@ -2,7 +2,7 @@ import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'r
 import { createRoot } from 'react-dom/client';
 import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Newspaper, Search, Send, ShieldAlert, Sparkles, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { CandlestickSeries, createChart, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
+import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
 
 type Risk = 'medium' | 'high';
@@ -1371,16 +1371,44 @@ function mergeTickerIntoCandle(
   };
 }
 
+type ChartLevelLines = {
+  entry?: number;
+  takeProfit?: number;
+  stopLoss?: number;
+};
+
+function addTradeLevelLine(
+  series: ISeriesApi<'Candlestick'>,
+  price: number | undefined,
+  title: string,
+  color: string
+) {
+  if (typeof price !== 'number' || !Number.isFinite(price) || price <= 0) return;
+  series.createPriceLine({
+    price,
+    color,
+    lineWidth: 2,
+    lineStyle: LineStyle.Solid,
+    lineVisible: true,
+    axisLabelVisible: true,
+    title,
+    axisLabelColor: color,
+    axisLabelTextColor: '#ffffff'
+  });
+}
+
 function BinanceLiveChart({
   symbol,
   market,
   timeframe,
-  latestTicker
+  latestTicker,
+  levels
 }: {
   symbol: string;
   market: MarketMode;
   timeframe: Timeframe;
   latestTicker?: Ticker;
+  levels?: ChartLevelLines;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<IChartApi | null>(null);
@@ -1431,6 +1459,9 @@ function BinanceLiveChart({
         minMove: 0.00000001
       }
     });
+    addTradeLevelLine(series, levels?.entry, 'Entry', '#3b82f6');
+    addTradeLevelLine(series, levels?.takeProfit, 'TP', '#22c55e');
+    addTradeLevelLine(series, levels?.stopLoss, 'SL', '#ef4444');
     chartRef.current = chart;
     seriesRef.current = series;
     const resizeObserver = new ResizeObserver(entries => {
@@ -1459,7 +1490,7 @@ function BinanceLiveChart({
       seriesRef.current = null;
       lastCandleRef.current = null;
     };
-  }, [symbol, market, timeframe]);
+  }, [symbol, market, timeframe, levels?.entry, levels?.takeProfit, levels?.stopLoss]);
 
   useEffect(() => {
     if (!latestTicker || chartState === 'error') return;
@@ -1511,7 +1542,14 @@ function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTr
         <span><b>Live</b><em>{latestTicker ? fmt(latestTicker.price) : '-'}</em></span>
       </div>
       <div className="trade-chart-canvas binance-chart-canvas">
-        <BinanceLiveChart key={`${trade.id}:${feedLabel}:${trade.timeframe}`} symbol={trade.symbol} market={trade.market} timeframe={trade.timeframe} latestTicker={latestTicker} />
+        <BinanceLiveChart
+          key={`${trade.id}:${feedLabel}:${trade.timeframe}`}
+          symbol={trade.symbol}
+          market={trade.market}
+          timeframe={trade.timeframe}
+          latestTicker={latestTicker}
+          levels={levels}
+        />
       </div>
     </section>
   </div>;
