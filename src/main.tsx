@@ -5477,6 +5477,7 @@ function DashboardPage({
         </div>
       </div>
     </section>
+    <ScanProgressCard dashboard={dashboard} />
     <PerformanceChart
       stats={filteredStats}
       signals={filteredSignals}
@@ -5490,9 +5491,30 @@ function DashboardPage({
       onCommandCustomFromChange={setCommandCustomFrom}
       onCommandCustomToChange={setCommandCustomTo}
       selected={filteredSelected}
-      dashboard={dashboard}
     />
   </>;
+}
+
+function ScanProgressCard({ dashboard }: { dashboard: DashboardPayload }) {
+  const scanProgress = dashboard.scanProgress ?? defaultScanProgress;
+  const scanPercent = Math.max(0, Math.min(100, scanProgress.percent ?? 0));
+  const scanStatusLabel = scanProgress.running
+    ? `${scanProgress.currentMarket ? scanProgress.currentMarket.toUpperCase() : 'SCAN'} ${scanProgress.currentTimeframe ?? ''}`.trim()
+    : scanProgress.completedAt ? 'Cycle Complete' : 'Waiting';
+  const scanDetail = scanProgress.running
+    ? `${scanProgress.completed.toLocaleString('en-US')} / ${scanProgress.total.toLocaleString('en-US')} checks`
+    : `${scanProgress.generated.toLocaleString('en-US')} generated last cycle`;
+  return <section className="dashboard-scan-top">
+    <article className="scan-progress-card">
+      <div className="scan-progress-head">
+        <Activity size={18} />
+        <span>Scanner</span>
+      </div>
+      <strong>{`${scanPercent}%`}</strong>
+      <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
+      <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
+    </article>
+  </section>;
 }
 
 function SignalFilterBar({
@@ -6083,8 +6105,7 @@ function PerformanceChart({
   commandCustomTo,
   onCommandCustomFromChange,
   onCommandCustomToChange,
-  selected,
-  dashboard
+  selected
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -6099,7 +6120,6 @@ function PerformanceChart({
   onCommandCustomFromChange?: (value: string) => void;
   onCommandCustomToChange?: (value: string) => void;
   selected?: Set<string>;
-  dashboard?: DashboardPayload;
 }) {
   const performanceCommandRef = useRef<HTMLElement | null>(null);
   const tradeLedgerRef = useRef<HTMLDivElement | null>(null);
@@ -6273,14 +6293,6 @@ function PerformanceChart({
   const wins = selectedInsight ? selectedInsight.wins : rangedPortfolioTotals.wins;
   const losses = selectedInsight ? selectedInsight.losses : rangedPortfolioTotals.losses;
   const winRate = wins + losses ? Math.round((wins / (wins + losses)) * 100) : 0;
-  const scanProgress = dashboard?.scanProgress ?? defaultScanProgress;
-  const scanPercent = Math.max(0, Math.min(100, scanProgress.percent ?? 0));
-  const scanStatusLabel = scanProgress.running
-    ? `${scanProgress.currentMarket ? scanProgress.currentMarket.toUpperCase() : 'SCAN'} ${scanProgress.currentTimeframe ?? ''}`.trim()
-    : scanProgress.completedAt ? 'Cycle Complete' : 'Waiting';
-  const scanDetail = scanProgress.running
-    ? `${scanProgress.completed.toLocaleString('en-US')} / ${scanProgress.total.toLocaleString('en-US')} checks`
-    : `${scanProgress.generated.toLocaleString('en-US')} generated last cycle`;
   useEffect(() => {
     if (focusedTradeId == null) return;
     if (handledFocusedTradeIdRef.current === focusedTradeId) return;
@@ -6441,18 +6453,6 @@ function PerformanceChart({
         </div>}
       </div>}
     </div>
-
-    {!compact && <section className="dashboard-scan-top">
-      <article className="scan-progress-card">
-        <div className="scan-progress-head">
-          <Activity size={18} />
-          <span>Scanner</span>
-        </div>
-        <strong>{`${scanPercent}%`}</strong>
-        <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
-        <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
-      </article>
-    </section>}
 
     {!compact && <div className="strategy-scorecards">
       <button className={selectedStrategyId === 'all' ? 'scorecard active' : 'scorecard'} onClick={() => setSelectedStrategyId('all')}>
