@@ -6867,6 +6867,27 @@ video {
   font-weight: 800;
   letter-spacing: .08em;
 }
+.ledger-price-stack {
+  display: inline-grid;
+  gap: 2px;
+  min-width: 86px;
+}
+.ledger-price-stack b {
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-price-stack small,
+.ledger-price-stack em {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.1;
+  font-style: normal;
+}
+.ledger-price-stack em {
+  color: var(--soft-text);
+}
 .portfolio-ledger-shell .trade-ledger-scroll {
   height: 320px;
   max-height: 320px;

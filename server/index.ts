@@ -6658,16 +6658,25 @@ function priceFromLockedPnl(signal: TradeSignal, lockedPnlPct: number) {
     : signal.entry * (1 - lockedPnlPct / 100);
 }
 
-function closeLedgerSignal(signal: TradeSignal, status: TradeSignal['status'], closePrice: number, closeText: string) {
+function closeLedgerSignal(
+  signal: TradeSignal,
+  status: TradeSignal['status'],
+  closePrice: number,
+  closeText: string,
+  options: { notify?: boolean; pauseSymbol?: boolean } = {}
+) {
+  const shouldNotify = options.notify ?? countsInLedgerSimulation(signal);
+  const shouldPauseSymbol = options.pauseSymbol ?? countsInLedgerSimulation(signal);
   signal.status = status;
   signal.closedAt = Date.now();
   signal.closePrice = closePrice;
-  if (status === 'LOSS') {
+  if (status === 'LOSS' && shouldPauseSymbol) {
     symbolPauseUntil.set(signal.symbol, Date.now() + 6 * 60 * 60_000);
   }
   invalidateComputedCaches();
   saveState();
   broadcast('signalClosed', signal);
+  if (!shouldNotify) return;
   const payload = buildSignalCloseNotificationPayload(signal, closeText);
   void notify(payload.title, payload.message, payload.level);
   void deliverPrivateTelegramSignalClose(signal, closeText);
@@ -6726,9 +6735,15 @@ async function resetPrivateTelegramWebhook() {
 }
 
 function updateOpenSignals() {
-  for (const signal of signals.filter(s => s.status === 'OPEN' && countsInLedgerSimulation(s))) {
+  for (const signal of signals.filter(s => s.status === 'OPEN' && (countsInLedgerSimulation(s) || countsInStrategyLedger(s)))) {
     const ticker = (signal.market === 'futures' ? futuresTickers : tickers).get(signal.symbol);
     if (!ticker) continue;
+    const countsForAcceptedSimulation = countsInLedgerSimulation(signal);
+    const closeOpenSignal = (status: TradeSignal['status'], closePrice: number, closeText: string) =>
+      closeLedgerSignal(signal, status, closePrice, closeText, {
+        notify: countsForAcceptedSimulation,
+        pauseSymbol: countsForAcceptedSimulation
+      });
     const currentPnl = percent(signal.entry, ticker.price, signal.side);
     signal.maxFavorablePnlPct = Math.max(signal.maxFavorablePnlPct ?? 0, currentPnl);
     signal.profitLockPct = Math.max(signal.profitLockPct ?? 0, profitLockFromPeak(signal));
@@ -6736,7 +6751,7 @@ function updateOpenSignals() {
     const hitStop = signal.side === 'LONG' ? ticker.price <= signal.stopLoss : ticker.price >= signal.stopLoss;
     const hitTarget = signal.side === 'LONG' ? ticker.price >= signal.takeProfit : ticker.price <= signal.takeProfit;
     if (hitTarget) {
-      closeLedgerSignal(signal, 'WIN', signal.takeProfit, 'with profit');
+      closeOpenSignal('WIN', signal.takeProfit, 'with profit');
       continue;
     }
 
@@ -6745,18 +6760,18 @@ function updateOpenSignals() {
     const breakEvenArmed = (signal.maxFavorablePnlPct ?? 0) >= risk;
     const hitBreakEven = breakEvenArmed && (signal.side === 'LONG' ? ticker.price <= breakEvenPrice : ticker.price >= breakEvenPrice);
     if (hitBreakEven) {
-      closeLedgerSignal(signal, 'WIN', breakEvenPrice, 'at breakeven protection');
+      closeOpenSignal('WIN', breakEvenPrice, 'at breakeven protection');
       continue;
     }
 
     const lockedPnl = signal.profitLockPct ?? 0;
     if (lockedPnl > 0 && currentPnl <= lockedPnl) {
-      closeLedgerSignal(signal, currentPnl >= 0 ? 'WIN' : 'LOSS', ticker.price, 'by trailing profit lock');
+      closeOpenSignal(currentPnl >= 0 ? 'WIN' : 'LOSS', ticker.price, 'by trailing profit lock');
       continue;
     }
 
     if (hitStop) {
-      closeLedgerSignal(signal, 'LOSS', signal.stopLoss, 'with loss');
+      closeOpenSignal('LOSS', signal.stopLoss, 'with loss');
       continue;
     }
 
@@ -6764,7 +6779,7 @@ function updateOpenSignals() {
     const enoughTimeElapsed = Date.now() - signal.openedAt >= plannedDuration * 0.35;
     const failedBeforeWorking = enoughTimeElapsed && currentPnl <= -risk * 0.65 && (signal.maxFavorablePnlPct ?? 0) < risk * 0.35;
     if (failedBeforeWorking) {
-      closeLedgerSignal(signal, 'LOSS', ticker.price, 'setup failure exit');
+      closeOpenSignal('LOSS', ticker.price, 'setup failure exit');
     }
   }
 }
@@ -6914,7 +6929,7 @@ app.get('/api/tickers', (_req, res) => res.json({ tickers: [...tickers.values()]
 app.get('/api/futures-symbols', (_req, res) => res.json({ symbols: futuresSymbols, count: futuresSymbols.length }));
 app.get('/api/futures-tickers', (_req, res) => res.json({ tickers: [...futuresTickers.values()], count: futuresTickers.size }));
 app.get('/api/open-signal-prices', (_req, res) => {
-  const open = signals.filter(signal => signal.status === 'OPEN' && countsInLedgerSimulation(signal));
+  const open = signals.filter(signal => signal.status === 'OPEN' && (countsInLedgerSimulation(signal) || countsInStrategyLedger(signal)));
   const spotSymbols = new Set(open.filter(signal => signal.market === 'spot').map(signal => signal.symbol));
   const futuresSymbols = new Set(open.filter(signal => signal.market === 'futures').map(signal => signal.symbol));
   res.json({

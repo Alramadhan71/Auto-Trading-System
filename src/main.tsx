@@ -670,7 +670,7 @@ const acceptedTradeLedgerColumns = [
   'Venue',
   'TF',
   'Entry',
-  'Market',
+  'Live / Exit',
   'TP / SL',
   'Allocation',
   'Duration',
@@ -696,7 +696,7 @@ const allStrategyTradeLedgerColumns = [
   'Venue',
   'TF',
   'Entry',
-  'Market',
+  'Live / Exit',
   'TP / SL',
   'Duration',
   'PnL'
@@ -6244,13 +6244,17 @@ function PerformanceChart({
       && (ledgerExecutionProfileFilter === 'all' || signal.exitMode === ledgerExecutionProfileFilter);
   }), [ledgerRangeSignals, ledgerStatusFilter, ledgerSideFilter, ledgerMarketFilter, ledgerTimeframeFilter, ledgerExecutionProfileFilter]);
   const tradeRows = useMemo(() => ledgerSignals.map(signal => {
-    const marketPrice = signal.status === 'OPEN'
-      ? signal.market === 'futures' ? futuresTickers.get(signal.symbol)?.price : tickers.get(signal.symbol)?.price
-      : signal.closePrice;
+    const liveMarketPrice = signal.market === 'futures' ? futuresTickers.get(signal.symbol)?.price : tickers.get(signal.symbol)?.price;
+    const exitPrice = signal.status === 'OPEN'
+      ? undefined
+      : signal.closePrice ?? (signal.status === 'WIN' ? signal.takeProfit : signal.status === 'LOSS' ? signal.stopLoss : undefined);
+    const marketPrice = signal.status === 'OPEN' ? liveMarketPrice : exitPrice;
     const grossPnl = getSignalPnl(signal, marketPrice);
     const row = {
       ...signal,
       marketPrice,
+      liveMarketPrice,
+      exitPrice,
       label: formatTradeLabel(signal.id),
       pnl: grossPnl,
       grossPnl,
@@ -6681,7 +6685,7 @@ function PerformanceChart({
                 </td>
                 <td>{row.timeframe}</td>
                 <td>{fmt(row.entry)}</td>
-                <td>{row.marketPrice ? fmt(row.marketPrice) : '-'}</td>
+                <td><LedgerPriceCell row={row} /></td>
                 <td>{formatTargetRiskRatio(row)}</td>
                 <td className="ledger-allocation-cell">{`${(row.ledgerAllocationUsdt ?? 0).toFixed(2)} USDT`}</td>
                 <td>{formatDuration(row.openedAt, row.status === 'OPEN' ? undefined : row.closedAt)}</td>
@@ -6779,7 +6783,7 @@ function PerformanceChart({
                   <td><span className="ledger-venue-cell"><strong>{formatPrivateVenueLabel(row)}</strong></span></td>
                   <td>{row.timeframe}</td>
                   <td>{fmt(row.entry)}</td>
-                  <td>{row.marketPrice ? fmt(row.marketPrice) : '-'}</td>
+                  <td><LedgerPriceCell row={row} /></td>
                   <td>{formatTargetRiskRatio(row)}</td>
                   <td>{formatDuration(row.openedAt, row.status === 'OPEN' ? undefined : row.closedAt)}</td>
                   <td className="ledger-pnl-cell"><span className="portfolio-pnl-stack sim-pnl-stack"><b className={`ledger-pnl-value ${row.pnl >= 0 ? 'good' : 'bad'}`}>{row.pnlLabel}</b></span></td>
@@ -7035,6 +7039,8 @@ type SignalTradeRow = Signal & {
   grossPnl?: number;
   pnlLabel: string;
   marketPrice?: number;
+  liveMarketPrice?: number;
+  exitPrice?: number;
   liquidationPrice?: number | null;
   pnlUsdt?: number | null;
   roiPct?: number | null;
@@ -7044,6 +7050,19 @@ type SignalTradeRow = Signal & {
   allocationPct?: number;
   venueLabel?: string;
 };
+
+function LedgerPriceCell({ row }: { row: SignalTradeRow }) {
+  const livePrice = row.liveMarketPrice;
+  const exitPrice = row.exitPrice ?? (row.status === 'OPEN' ? undefined : row.closePrice);
+  const primaryPrice = row.status === 'OPEN' ? livePrice : exitPrice;
+  const hasPrimaryPrice = typeof primaryPrice === 'number' && Number.isFinite(primaryPrice);
+  const hasLivePrice = typeof livePrice === 'number' && Number.isFinite(livePrice);
+  return <span className="ledger-price-stack">
+    <b>{hasPrimaryPrice ? fmt(primaryPrice) : '-'}</b>
+    <small>{row.status === 'OPEN' ? 'Live' : 'Exit'}</small>
+    {row.status !== 'OPEN' && hasLivePrice && <em>{`Live ${fmt(livePrice)}`}</em>}
+  </span>;
+}
 
 function getTradeRowNotional(row: SignalTradeRow) {
   return Math.max(0, row.ledgerNotionalUsdt ?? row.ledgerAllocationUsdt ?? row.allocationAmount ?? 0);
