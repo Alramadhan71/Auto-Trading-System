@@ -7064,13 +7064,17 @@ type SignalTradeRow = Signal & {
 function LedgerPriceCell({ row }: { row: SignalTradeRow }) {
   const livePrice = row.liveMarketPrice;
   const exitPrice = row.exitPrice ?? (row.status === 'OPEN' ? undefined : row.closePrice);
-  const primaryPrice = row.status === 'OPEN' ? livePrice : exitPrice;
-  const hasPrimaryPrice = typeof primaryPrice === 'number' && Number.isFinite(primaryPrice);
   const hasLivePrice = typeof livePrice === 'number' && Number.isFinite(livePrice);
+  const hasExitPrice = typeof exitPrice === 'number' && Number.isFinite(exitPrice);
   return <span className="ledger-price-stack">
-    <b>{hasPrimaryPrice ? fmt(primaryPrice) : '-'}</b>
-    <small>{row.status === 'OPEN' ? 'Live' : 'Exit'}</small>
-    {row.status !== 'OPEN' && hasLivePrice && <em>{`Live ${fmt(livePrice)}`}</em>}
+    <span className="ledger-price-line">
+      <small>Live</small>
+      <b>{hasLivePrice ? fmt(livePrice) : '-'}</b>
+    </span>
+    <span className="ledger-price-line">
+      <small>Exit</small>
+      <b>{hasExitPrice ? fmt(exitPrice) : ''}</b>
+    </span>
   </span>;
 }
 

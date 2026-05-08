@@ -6869,24 +6869,29 @@ video {
 }
 .ledger-price-stack {
   display: inline-grid;
-  gap: 2px;
-  min-width: 86px;
+  gap: 4px;
+  min-width: 106px;
+}
+.ledger-price-line {
+  display: grid;
+  grid-template-columns: 28px minmax(64px, 1fr);
+  align-items: baseline;
+  gap: 6px;
 }
 .ledger-price-stack b {
   color: var(--text);
   font-size: 12px;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  min-height: 13px;
+  text-align: right;
 }
-.ledger-price-stack small,
-.ledger-price-stack em {
+.ledger-price-stack small {
   color: var(--muted);
   font-size: 10px;
   line-height: 1.1;
   font-style: normal;
-}
-.ledger-price-stack em {
-  color: var(--soft-text);
+  text-transform: uppercase;
 }
 .ledger-target-stack {
   display: inline-grid;
