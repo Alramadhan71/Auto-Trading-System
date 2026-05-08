@@ -6442,6 +6442,18 @@ function PerformanceChart({
       </div>}
     </div>
 
+    {!compact && <section className="dashboard-scan-top">
+      <article className="scan-progress-card">
+        <div className="scan-progress-head">
+          <Activity size={18} />
+          <span>Scanner</span>
+        </div>
+        <strong>{`${scanPercent}%`}</strong>
+        <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
+        <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
+      </article>
+    </section>}
+
     {!compact && <div className="strategy-scorecards">
       <button className={selectedStrategyId === 'all' ? 'scorecard active' : 'scorecard'} onClick={() => setSelectedStrategyId('all')}>
         <span>Portfolio</span>
@@ -6464,15 +6476,6 @@ function PerformanceChart({
           <span>Selected</span>
           <strong>{selectedName}</strong>
           <small>{selectedInsight ? `${selectedInsight.risk === 'high' ? 'High Risk' : 'Medium Risk'} strategy` : 'Complete strategy portfolio'}</small>
-        </article>
-        <article className="scan-progress-card">
-          <div className="scan-progress-head">
-            <Activity size={18} />
-            <span>Scanner</span>
-          </div>
-          <strong>{`${scanPercent}%`}</strong>
-          <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
-          <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
         </article>
         <Metric icon={<Bell />} label="Total" value={selectedInsight ? selectedInsight.total : rangedPortfolioTotals.total} />
         <Metric icon={<Activity />} label="Open" value={openCount} />

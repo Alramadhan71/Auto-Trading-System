@@ -6096,8 +6096,12 @@ video {
 .strategy-switch.off { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 48%, var(--border)); }
 .scoreline { height: 7px; border-radius: 999px; background: var(--panel); border: 1px solid var(--border); overflow: hidden; }
 .scoreline i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--success)); }
-.command-summary { display: grid; grid-template-columns: 1.55fr 1.25fr repeat(7, 1fr); gap: 12px; }
+.command-summary { display: grid; grid-template-columns: 1.55fr repeat(7, 1fr); gap: 12px; }
 .performance-summary { display: grid; gap: 12px; }
+.dashboard-scan-top {
+  display: grid;
+  margin: 0 0 14px;
+}
 .snapshot-panel { display: grid; gap: 12px; }
 .snapshot-toggle {
   display: flex;
@@ -6164,7 +6168,26 @@ video {
 .command-summary strong { font-size: 24px; letter-spacing: -.03em; }
 .command-summary svg { color: var(--accent); }
 .selected-brief strong { font-size: 24px; }
-.scan-progress-card { align-content: start; }
+.scan-progress-card {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 78%, transparent), color-mix(in srgb, var(--panel-strong) 98%, black));
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+  border-radius: 20px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: minmax(140px, .4fr) auto minmax(180px, 1fr) minmax(180px, .65fr);
+  align-items: center;
+  align-content: center;
+  gap: 12px;
+  box-shadow: 0 16px 32px rgba(0,0,0,.14);
+}
+.scan-progress-card strong {
+  color: var(--text);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
 .scan-progress-head {
   display: flex;
   align-items: center;
@@ -6193,6 +6216,14 @@ video {
 .scan-progress-card small {
   overflow-wrap: anywhere;
   font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+@media (max-width: 760px) {
+  .scan-progress-card {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
 }
 .ledger-simulation-panel {
   border: 1px solid var(--border);
