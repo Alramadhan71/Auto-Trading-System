@@ -641,6 +641,16 @@ const formatExitModeLabel = (mode: ExitMode) =>
 const formatTargetRiskRatio = (signal: Pick<Signal, 'expectedProfitPct' | 'riskPct'>) =>
   `${signal.expectedProfitPct >= 0 ? '+' : ''}${signal.expectedProfitPct.toFixed(2)}% / -${Math.abs(signal.riskPct).toFixed(2)}%`;
 
+function LedgerTargetRiskCell({ row }: { row: Pick<Signal, 'expectedProfitPct' | 'riskPct' | 'takeProfit' | 'stopLoss'> }) {
+  return <span className="ledger-target-stack">
+    <b>{formatTargetRiskRatio(row)}</b>
+    <small className="ledger-target-prices">
+      <span className="good">TP {fmt(row.takeProfit)}</span>
+      <span className="bad">SL {fmt(row.stopLoss)}</span>
+    </small>
+  </span>;
+}
+
 const formatTradeLabel = (id: number) => `T-${Math.max(0, id).toString(36).toUpperCase().padStart(6, '0')}`;
 
 const ledgerRejectReason = (signal: Pick<Signal, 'ledgerSimulationNotes' | 'ledgerSimulationStatus'>) =>
@@ -6686,7 +6696,7 @@ function PerformanceChart({
                 <td>{row.timeframe}</td>
                 <td>{fmt(row.entry)}</td>
                 <td><LedgerPriceCell row={row} /></td>
-                <td>{formatTargetRiskRatio(row)}</td>
+                <td><LedgerTargetRiskCell row={row} /></td>
                 <td className="ledger-allocation-cell">{`${(row.ledgerAllocationUsdt ?? 0).toFixed(2)} USDT`}</td>
                 <td>{formatDuration(row.openedAt, row.status === 'OPEN' ? undefined : row.closedAt)}</td>
                 <td className="ledger-pnl-cell">
@@ -6784,7 +6794,7 @@ function PerformanceChart({
                   <td>{row.timeframe}</td>
                   <td>{fmt(row.entry)}</td>
                   <td><LedgerPriceCell row={row} /></td>
-                  <td>{formatTargetRiskRatio(row)}</td>
+                  <td><LedgerTargetRiskCell row={row} /></td>
                   <td>{formatDuration(row.openedAt, row.status === 'OPEN' ? undefined : row.closedAt)}</td>
                   <td className="ledger-pnl-cell"><span className="portfolio-pnl-stack sim-pnl-stack"><b className={`ledger-pnl-value ${row.pnl >= 0 ? 'good' : 'bad'}`}>{row.pnlLabel}</b></span></td>
                 </tr>)}

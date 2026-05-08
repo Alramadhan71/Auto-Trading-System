@@ -6888,6 +6888,33 @@ video {
 .ledger-price-stack em {
   color: var(--soft-text);
 }
+.ledger-target-stack {
+  display: inline-grid;
+  gap: 3px;
+  min-width: 118px;
+  vertical-align: middle;
+}
+.ledger-target-stack b {
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-target-prices {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 10px;
+  line-height: 1.1;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-target-prices span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .portfolio-ledger-shell .trade-ledger-scroll {
   height: 320px;
   max-height: 320px;
