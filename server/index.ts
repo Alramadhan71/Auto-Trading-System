@@ -231,6 +231,24 @@ type StrategyStats = {
   openShort: number;
 };
 
+type ScanProgress = {
+  running: boolean;
+  cycleId: number;
+  startedAt: number | null;
+  updatedAt: number | null;
+  completedAt: number | null;
+  total: number;
+  completed: number;
+  percent: number;
+  remainingPercent: number;
+  currentMarket: TradingVenue | null;
+  currentTimeframe: Timeframe | null;
+  currentSymbol: string | null;
+  generated: number;
+  accepted: number;
+  rejected: number;
+};
+
 type MarketRegimeSnapshot = {
   market: TradingVenue;
   regime: MarketRegime;
@@ -1037,6 +1055,25 @@ let futuresWs: WebSocket | null = null;
 let nextSignalId = 1;
 let scanVersion = 0;
 let scanRunning = false;
+let lastScanProgressBroadcastAt = 0;
+const emptyScanProgress = (): ScanProgress => ({
+  running: false,
+  cycleId: 0,
+  startedAt: null,
+  updatedAt: null,
+  completedAt: null,
+  total: 0,
+  completed: 0,
+  percent: 0,
+  remainingPercent: 100,
+  currentMarket: null,
+  currentTimeframe: null,
+  currentSymbol: null,
+  generated: 0,
+  accepted: 0,
+  rejected: 0
+});
+let scanProgress: ScanProgress = emptyScanProgress();
 let ledgerExecutionRunning = false;
 let dashboardCache: {
   stats: StrategyStats[];
@@ -1050,6 +1087,7 @@ let dashboardCache: {
   selectedStrategies: number;
   marketScope: StrategyMarketScope;
   exchange: string;
+  scanProgress: ScanProgress;
 } | null = null;
 let dashboardCacheDirty = true;
 const marketRegimeCache = new Map<TradingVenue, { checkedAt: number; snapshot: MarketRegimeSnapshot }>();
@@ -1847,6 +1885,32 @@ function countsInLedgerSimulation(signal: TradeSignal) {
 
 function countsInStrategyLedger(signal: TradeSignal) {
   return signal.ledgerStrategyLedgerEligible !== false;
+}
+
+function normalizeScanProgress(progress: ScanProgress): ScanProgress {
+  const percent = progress.total > 0
+    ? Math.min(100, Math.max(0, Math.round((progress.completed / progress.total) * 100)))
+    : progress.running ? 0 : 100;
+  return {
+    ...progress,
+    completed: Math.min(progress.completed, progress.total),
+    percent,
+    remainingPercent: Math.max(0, 100 - percent),
+    updatedAt: Date.now()
+  };
+}
+
+function publishScanProgress(force = false) {
+  dashboardCacheDirty = true;
+  const now = Date.now();
+  if (!force && now - lastScanProgressBroadcastAt < 1500) return;
+  lastScanProgressBroadcastAt = now;
+  broadcast('dashboard', getDashboardPayload());
+}
+
+function setScanProgress(patch: Partial<ScanProgress>, forceBroadcast = false) {
+  scanProgress = normalizeScanProgress({ ...scanProgress, ...patch });
+  publishScanProgress(forceBroadcast);
 }
 
 function ledgerFeeRatePct(market: TradingVenue) {
@@ -6457,25 +6521,60 @@ async function scanMarket() {
   scanRunning = true;
   const version = scanVersion;
   try {
-    const allCandidates: SignalCandidate[] = [];
+    const cycleId = Date.now();
+    const plan: { market: TradingVenue; source: Map<string, PriceTicker>; universe: PriceTicker[]; active: Strategy[] }[] = [];
+    if (selectedMarketScope === 'spot' || selectedMarketScope === 'all') {
+      const active = strategies.filter(strategy => selectedStrategies.has(strategy.id) && (strategy.marketScope === 'all' || strategy.marketScope === 'spot'));
+      if (active.length > 0) plan.push({ market: 'spot', source: tickers, universe: getRotatingScanUniverse(tickers, 'spot'), active });
+    }
+    if (selectedMarketScope === 'futures' || selectedMarketScope === 'all') {
+      const active = strategies.filter(strategy => selectedStrategies.has(strategy.id) && (strategy.marketScope === 'all' || strategy.marketScope === 'futures'));
+      if (active.length > 0) plan.push({ market: 'futures', source: futuresTickers, universe: getRotatingScanUniverse(futuresTickers, 'futures'), active });
+    }
+    const totalChecks = plan.reduce((sum, item) => sum + item.universe.length * selectedTimeframes.size, 0);
+    scanProgress = normalizeScanProgress({
+      ...emptyScanProgress(),
+      running: true,
+      cycleId,
+      startedAt: cycleId,
+      total: totalChecks,
+      remainingPercent: totalChecks > 0 ? 100 : 0
+    });
+    publishScanProgress(true);
+    const publishCandidate = async (candidate: SignalCandidate) => {
+      applyLedgerSimulation(candidate);
+      signals.unshift(candidate.signal);
+      invalidateComputedCaches();
+      saveState();
+      broadcast('signal', candidate.signal);
+      setScanProgress({
+        generated: scanProgress.generated + 1,
+        accepted: scanProgress.accepted + (candidate.signal.ledgerSimulationStatus === 'accepted' ? 1 : 0),
+        rejected: scanProgress.rejected + (candidate.signal.ledgerSimulationStatus === 'rejected' ? 1 : 0)
+      });
+      const payload = buildSignalNotificationPayload(candidate.signal);
+      await notify(payload.title, payload.message, 'info');
+      void processLedgerExecutions();
+    };
     const scanVenue = async (market: TradingVenue, source: Map<string, PriceTicker>) => {
-      const active = strategies.filter(strategy =>
-        selectedStrategies.has(strategy.id)
-        && (strategy.marketScope === 'all' || strategy.marketScope === market)
-      );
-      if (active.length === 0) return;
-      const universe = getRotatingScanUniverse(source, market);
+      const planned = plan.find(item => item.market === market);
+      if (!planned || planned.active.length === 0) return;
+      const { active, universe } = planned;
       for (const timeframe of selectedTimeframes) {
         if (version !== scanVersion || selectedStrategies.size === 0) return;
         const { batch, nextCursor } = getScanBatch(universe, scanCursors[market][timeframe], SCAN_BATCH_SIZE[timeframe]);
         scanCursors[market][timeframe] = nextCursor;
-        const rawCandidates: SignalCandidate[] = [];
         let evaluatedStrategies = 0;
         for (const ticker of batch) {
           if (version !== scanVersion || selectedStrategies.size === 0) return;
+          setScanProgress({ currentMarket: market, currentTimeframe: timeframe, currentSymbol: ticker.symbol });
           const candles = await fetchCandles(ticker.symbol, timeframe, market).catch(() => []);
           if (version !== scanVersion || selectedStrategies.size === 0) return;
-          if (candles.length < 50) continue;
+          if (candles.length < 50) {
+            setScanProgress({ completed: scanProgress.completed + 1 });
+            continue;
+          }
+          const rawCandidates: SignalCandidate[] = [];
           for (const strategy of active) {
             if (version !== scanVersion || selectedStrategies.size === 0 || !selectedStrategies.has(strategy.id)) return;
             if (isStrategyTemporarilyPaused(strategy.id)) continue;
@@ -6494,31 +6593,30 @@ async function scanMarket() {
             applyEntryQualityReview(signal, await reviewEntryQuality(candidate));
             rawCandidates.push(candidate);
           }
+          rawCandidates.sort((left, right) =>
+            (right.signal.entryQualityScore ?? 0) - (left.signal.entryQualityScore ?? 0)
+            || right.signal.confidence - left.signal.confidence
+            || right.signal.setupScore - left.signal.setupScore
+            || right.signal.structureScore - left.signal.structureScore
+            || right.signal.rr - left.signal.rr
+          );
+          for (const candidate of rawCandidates) await publishCandidate(candidate);
+          setScanProgress({ completed: scanProgress.completed + 1 });
         }
-        console.log(`[scan] market=${market} timeframe=${timeframe} batch=${batch.length} strategies=${evaluatedStrategies} generated=${rawCandidates.length}`);
-        allCandidates.push(...rawCandidates);
+        console.log(`[scan] market=${market} timeframe=${timeframe} batch=${batch.length} strategies=${evaluatedStrategies} generated=${scanProgress.generated}`);
       }
     };
     if (selectedMarketScope === 'spot' || selectedMarketScope === 'all') await scanVenue('spot', tickers);
     if (selectedMarketScope === 'futures' || selectedMarketScope === 'all') await scanVenue('futures', futuresTickers);
-    allCandidates.sort((left, right) =>
-      (right.signal.entryQualityScore ?? 0) - (left.signal.entryQualityScore ?? 0)
-      || right.signal.confidence - left.signal.confidence
-      || right.signal.setupScore - left.signal.setupScore
-      || right.signal.structureScore - left.signal.structureScore
-      || right.signal.rr - left.signal.rr
-    );
-    for (const candidate of allCandidates) {
-      applyLedgerSimulation(candidate);
-      signals.unshift(candidate.signal);
-      invalidateComputedCaches();
-      saveState();
-      broadcast('signal', candidate.signal);
-      const payload = buildSignalNotificationPayload(candidate.signal);
-      await notify(payload.title, payload.message, 'info');
-      void processLedgerExecutions();
-    }
   } finally {
+    setScanProgress({
+      running: false,
+      completed: scanProgress.total,
+      completedAt: Date.now(),
+      currentMarket: null,
+      currentTimeframe: null,
+      currentSymbol: null
+    }, true);
     scanRunning = false;
   }
 }
@@ -6722,7 +6820,8 @@ function getDashboardPayload() {
       ? 'Binance Spot live stream'
       : selectedMarketScope === 'futures'
         ? 'Binance Futures live stream'
-        : 'Binance Spot + Futures live stream'
+        : 'Binance Spot + Futures live stream',
+    scanProgress
   };
   dashboardCacheDirty = false;
   return dashboardCache;

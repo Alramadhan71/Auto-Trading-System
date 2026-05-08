@@ -15,6 +15,37 @@ type MarketMode = 'spot' | 'futures';
 type ExecutionVenueMode = MarketMode | 'both';
 type StrategyMarketScope = 'spot' | 'futures' | 'all';
 type Strategy = { id: string; name: string; risk: Risk; marketScope?: StrategyMarketScope; description: string };
+type ScanProgress = {
+  running: boolean;
+  cycleId: number;
+  startedAt: number | null;
+  updatedAt: number | null;
+  completedAt: number | null;
+  total: number;
+  completed: number;
+  percent: number;
+  remainingPercent: number;
+  currentMarket: MarketMode | null;
+  currentTimeframe: Timeframe | null;
+  currentSymbol: string | null;
+  generated: number;
+  accepted: number;
+  rejected: number;
+};
+type DashboardPayload = {
+  stats: Stat[];
+  liveSignals: number;
+  totalSignals: number;
+  monitored: number;
+  monitoredSpot: number;
+  monitoredFutures: number;
+  availableSpot: number;
+  availableFutures: number;
+  selectedStrategies: number;
+  marketScope: StrategyMarketScope;
+  exchange: string;
+  scanProgress: ScanProgress;
+};
 type Signal = {
   id: number;
   sourceSignalId?: number;
@@ -466,6 +497,43 @@ const defaultLiveRuleToggles: LiveRulesPayload['ruleToggles'] = {
 type TradingVenue = MarketMode;
 const allTimeframes: Timeframe[] = ['5m', '10m', '15m', '1h', '2h', '4h', '1d'];
 const defaultSelectedTimeframes: Timeframe[] = allTimeframes;
+const defaultScanProgress: ScanProgress = {
+  running: false,
+  cycleId: 0,
+  startedAt: null,
+  updatedAt: null,
+  completedAt: null,
+  total: 0,
+  completed: 0,
+  percent: 0,
+  remainingPercent: 100,
+  currentMarket: null,
+  currentTimeframe: null,
+  currentSymbol: null,
+  generated: 0,
+  accepted: 0,
+  rejected: 0
+};
+const defaultDashboardPayload: DashboardPayload = {
+  stats: [],
+  liveSignals: 0,
+  totalSignals: 0,
+  monitored: 0,
+  monitoredSpot: 0,
+  monitoredFutures: 0,
+  availableSpot: 0,
+  availableFutures: 0,
+  selectedStrategies: 0,
+  marketScope: 'all',
+  exchange: 'Binance',
+  scanProgress: defaultScanProgress
+};
+const normalizeDashboardPayload = (payload: Partial<DashboardPayload>): DashboardPayload => ({
+  ...defaultDashboardPayload,
+  ...payload,
+  stats: payload.stats ?? [],
+  scanProgress: payload.scanProgress ?? defaultScanProgress
+});
 
 const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): BinanceConnection => ({
   connected: Boolean(value?.connected),
@@ -718,7 +786,7 @@ function App() {
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
   const [themePanelOpen, setThemePanelOpen] = useState(false);
   const [alertsPanelOpen, setAlertsPanelOpen] = useState(false);
-  const [dashboard, setDashboard] = useState({ liveSignals: 0, totalSignals: 0, monitored: 0, monitoredSpot: 0, monitoredFutures: 0, availableSpot: 0, availableFutures: 0, selectedStrategies: 0, marketScope: 'all' as StrategyMarketScope, exchange: 'Binance' });
+  const [dashboard, setDashboard] = useState<DashboardPayload>(defaultDashboardPayload);
   const [homeIntel, setHomeIntel] = useState<HomeIntelResponse | null>(null);
   const [chartSymbol, setChartSymbol] = useState('');
   const [chartMarket, setChartMarket] = useState<MarketMode>('spot');
@@ -753,7 +821,7 @@ function App() {
       api<{ signals: Signal[] }>('/api/signals'),
       api<{ signals: Signal[] }>('/api/execution-signals'),
       api<{ notifications: Notification[] }>('/api/notifications'),
-      api<{ stats: Stat[]; liveSignals: number; totalSignals: number; monitored: number; monitoredSpot: number; monitoredFutures: number; availableSpot: number; availableFutures: number; selectedStrategies: number; marketScope: StrategyMarketScope; exchange: string }>('/api/dashboard'),
+      api<DashboardPayload>('/api/dashboard'),
       api<HomeIntelResponse>('/api/home-intel')
     ]).then(([s, t, fs, ft, st, sig, execSig, n, d, intel]) => {
       const spotMap = new Map(t.tickers.map(x => [x.symbol, x]));
@@ -777,7 +845,7 @@ function App() {
       setExecutionSignals(execSig.signals);
       setNotifications(n.notifications);
       setStats(d.stats);
-      setDashboard(d);
+      setDashboard(normalizeDashboardPayload(d));
       setHomeIntel(intel);
     });
   }, [toastDuration]);
@@ -851,7 +919,7 @@ function App() {
           }
           }
           if (type === 'dashboard') {
-            setDashboard(prev => ({ ...prev, ...payload }));
+            setDashboard(prev => normalizeDashboardPayload({ ...prev, ...payload }));
             setStats(payload.stats);
           }
         };
@@ -873,7 +941,7 @@ function App() {
         api<{ signals: Signal[] }>('/api/signals'),
         api<{ signals: Signal[] }>('/api/execution-signals'),
         api<{ notifications: Notification[] }>('/api/notifications'),
-        api<{ stats: Stat[]; liveSignals: number; totalSignals: number; monitored: number; monitoredSpot: number; monitoredFutures: number; availableSpot: number; availableFutures: number; selectedStrategies: number; marketScope: StrategyMarketScope; exchange: string }>('/api/dashboard'),
+        api<DashboardPayload>('/api/dashboard'),
         api<HomeIntelResponse>('/api/home-intel')
       ])
         .then(([spotResponse, futuresResponse, signalResponse, executionSignalResponse, notificationResponse, dashboardResponse, intelResponse]) => {
@@ -882,7 +950,7 @@ function App() {
           setSignals(signalResponse.signals);
           setExecutionSignals(executionSignalResponse.signals);
           setNotifications(notificationResponse.notifications);
-          setDashboard(dashboardResponse);
+          setDashboard(normalizeDashboardPayload(dashboardResponse));
           setStats(dashboardResponse.stats);
           setHomeIntel(intelResponse);
         })
@@ -893,13 +961,13 @@ function App() {
         api<{ spotUpdates: Ticker[]; futuresUpdates: Ticker[] }>('/api/open-signal-prices'),
         api<{ signals: Signal[] }>('/api/signals'),
         api<{ signals: Signal[] }>('/api/execution-signals'),
-        api<{ stats: Stat[]; liveSignals: number; totalSignals: number; monitored: number; monitoredSpot: number; monitoredFutures: number; availableSpot: number; availableFutures: number; selectedStrategies: number; marketScope: StrategyMarketScope; exchange: string }>('/api/dashboard')
+        api<DashboardPayload>('/api/dashboard')
       ])
         .then(([priceResponse, signalResponse, executionSignalResponse, dashboardResponse]) => {
           applyTickerUpdates(priceResponse.spotUpdates, priceResponse.futuresUpdates);
           setSignals(signalResponse.signals);
           setExecutionSignals(executionSignalResponse.signals);
-          setDashboard(dashboardResponse);
+          setDashboard(normalizeDashboardPayload(dashboardResponse));
           setStats(dashboardResponse.stats);
         })
         .catch(() => undefined);
@@ -1011,6 +1079,7 @@ function App() {
           notifications={deferredNotifications}
           selected={selected}
           labStrategyIds={labStrategyIds}
+          dashboard={dashboard}
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} />}
       </main>
@@ -5377,7 +5446,8 @@ function DashboardPage({
   futuresTickers,
   notifications,
   selected,
-  labStrategyIds
+  labStrategyIds,
+  dashboard
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -5386,6 +5456,7 @@ function DashboardPage({
   notifications: Notification[];
   selected: Set<string>;
   labStrategyIds: string[];
+  dashboard: DashboardPayload;
 }) {
   const [strategyBoardView, setStrategyBoardView] = useState<'public' | 'lab'>('public');
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
@@ -5419,6 +5490,7 @@ function DashboardPage({
       onCommandCustomFromChange={setCommandCustomFrom}
       onCommandCustomToChange={setCommandCustomTo}
       selected={filteredSelected}
+      dashboard={dashboard}
     />
   </>;
 }
@@ -6011,7 +6083,8 @@ function PerformanceChart({
   commandCustomTo,
   onCommandCustomFromChange,
   onCommandCustomToChange,
-  selected
+  selected,
+  dashboard
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -6026,6 +6099,7 @@ function PerformanceChart({
   onCommandCustomFromChange?: (value: string) => void;
   onCommandCustomToChange?: (value: string) => void;
   selected?: Set<string>;
+  dashboard?: DashboardPayload;
 }) {
   const performanceCommandRef = useRef<HTMLElement | null>(null);
   const tradeLedgerRef = useRef<HTMLDivElement | null>(null);
@@ -6199,6 +6273,14 @@ function PerformanceChart({
   const wins = selectedInsight ? selectedInsight.wins : rangedPortfolioTotals.wins;
   const losses = selectedInsight ? selectedInsight.losses : rangedPortfolioTotals.losses;
   const winRate = wins + losses ? Math.round((wins / (wins + losses)) * 100) : 0;
+  const scanProgress = dashboard?.scanProgress ?? defaultScanProgress;
+  const scanPercent = Math.max(0, Math.min(100, scanProgress.percent ?? 0));
+  const scanStatusLabel = scanProgress.running
+    ? `${scanProgress.currentMarket ? scanProgress.currentMarket.toUpperCase() : 'SCAN'} ${scanProgress.currentTimeframe ?? ''}`.trim()
+    : scanProgress.completedAt ? 'Cycle Complete' : 'Waiting';
+  const scanDetail = scanProgress.running
+    ? `${scanProgress.completed.toLocaleString('en-US')} / ${scanProgress.total.toLocaleString('en-US')} checks`
+    : `${scanProgress.generated.toLocaleString('en-US')} generated last cycle`;
   useEffect(() => {
     if (focusedTradeId == null) return;
     if (handledFocusedTradeIdRef.current === focusedTradeId) return;
@@ -6382,6 +6464,15 @@ function PerformanceChart({
           <span>Selected</span>
           <strong>{selectedName}</strong>
           <small>{selectedInsight ? `${selectedInsight.risk === 'high' ? 'High Risk' : 'Medium Risk'} strategy` : 'Complete strategy portfolio'}</small>
+        </article>
+        <article className="scan-progress-card">
+          <div className="scan-progress-head">
+            <Activity size={18} />
+            <span>Scanner</span>
+          </div>
+          <strong>{`${scanPercent}%`}</strong>
+          <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
+          <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
         </article>
         <Metric icon={<Bell />} label="Total" value={selectedInsight ? selectedInsight.total : rangedPortfolioTotals.total} />
         <Metric icon={<Activity />} label="Open" value={openCount} />

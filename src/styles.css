@@ -6096,7 +6096,7 @@ video {
 .strategy-switch.off { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 48%, var(--border)); }
 .scoreline { height: 7px; border-radius: 999px; background: var(--panel); border: 1px solid var(--border); overflow: hidden; }
 .scoreline i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--success)); }
-.command-summary { display: grid; grid-template-columns: 1.55fr repeat(7, 1fr); gap: 12px; }
+.command-summary { display: grid; grid-template-columns: 1.55fr 1.25fr repeat(7, 1fr); gap: 12px; }
 .performance-summary { display: grid; gap: 12px; }
 .snapshot-panel { display: grid; gap: 12px; }
 .snapshot-toggle {
@@ -6164,6 +6164,36 @@ video {
 .command-summary strong { font-size: 24px; letter-spacing: -.03em; }
 .command-summary svg { color: var(--accent); }
 .selected-brief strong { font-size: 24px; }
+.scan-progress-card { align-content: start; }
+.scan-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.scan-progress-head span {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.scan-progress-track {
+  height: 7px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel-soft) 70%, black);
+}
+.scan-progress-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+}
+.scan-progress-card small {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
 .ledger-simulation-panel {
   border: 1px solid var(--border);
   border-radius: 16px;
