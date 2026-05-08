@@ -6870,13 +6870,12 @@ video {
 .ledger-price-stack {
   display: inline-grid;
   gap: 4px;
-  min-width: 106px;
+  min-width: 82px;
 }
 .ledger-price-line {
-  display: grid;
-  grid-template-columns: 28px minmax(64px, 1fr);
+  display: inline-flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
 }
 .ledger-price-stack b {
   color: var(--text);
@@ -6884,7 +6883,7 @@ video {
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
   min-height: 13px;
-  text-align: right;
+  text-align: left;
 }
 .ledger-price-stack small {
   color: var(--muted);

@@ -7339,17 +7339,50 @@ async function pollFuturesTickersFallback() {
   updateOpenSignals();
 }
 
+async function refreshOpenTickerPrice(symbol: string, market: TradingVenue) {
+  const source = market === 'futures' ? futuresTickers : tickers;
+  const baseUrl = market === 'futures' ? BINANCE_FUTURES_REST : BINANCE_REST;
+  const route = market === 'futures' ? '/fapi/v1/ticker/price' : '/api/v3/ticker/price';
+  const row = await fetchJsonDirect<{ symbol?: string; price?: string; time?: number }>(
+    `${baseUrl}${route}?symbol=${encodeURIComponent(symbol)}`
+  ).catch(() => null);
+  const price = Number(row?.price);
+  if (!row?.symbol || !Number.isFinite(price) || price <= 0) return source.get(symbol) ?? null;
+  const previous = source.get(row.symbol);
+  const ticker: PriceTicker = {
+    symbol: row.symbol,
+    price,
+    change24h: previous?.change24h ?? 0,
+    quoteVolume: previous?.quoteVolume ?? 0,
+    eventTime: Number(row.time ?? Date.now())
+  };
+  source.set(row.symbol, ticker);
+  return ticker;
+}
+
+async function refreshOpenTickerPrices(symbols: Set<string>, market: TradingVenue) {
+  const source = market === 'futures' ? futuresTickers : tickers;
+  if (symbols.size === 0) return [];
+  const updates = await Promise.all([...symbols].map(symbol => refreshOpenTickerPrice(symbol, market)));
+  return [...symbols].map((symbol, index) => updates[index] ?? source.get(symbol)).filter(Boolean) as PriceTicker[];
+}
+
 app.get('/api/symbols', (_req, res) => res.json({ symbols, count: symbols.length }));
 app.get('/api/tickers', (_req, res) => res.json({ tickers: [...tickers.values()], count: tickers.size }));
 app.get('/api/futures-symbols', (_req, res) => res.json({ symbols: futuresSymbols, count: futuresSymbols.length }));
 app.get('/api/futures-tickers', (_req, res) => res.json({ tickers: [...futuresTickers.values()], count: futuresTickers.size }));
-app.get('/api/open-signal-prices', (_req, res) => {
+app.get('/api/open-signal-prices', async (_req, res) => {
   const open = signals.filter(signal => signal.status === 'OPEN' && (countsInLedgerSimulation(signal) || countsInStrategyLedger(signal)));
   const spotSymbols = new Set(open.filter(signal => signal.market === 'spot').map(signal => signal.symbol));
   const futuresSymbols = new Set(open.filter(signal => signal.market === 'futures').map(signal => signal.symbol));
+  const [spotUpdates, futuresUpdates] = await Promise.all([
+    refreshOpenTickerPrices(spotSymbols, 'spot'),
+    refreshOpenTickerPrices(futuresSymbols, 'futures')
+  ]);
+  updateOpenSignals();
   res.json({
-    spotUpdates: [...spotSymbols].map(symbol => tickers.get(symbol)).filter(Boolean),
-    futuresUpdates: [...futuresSymbols].map(symbol => futuresTickers.get(symbol)).filter(Boolean),
+    spotUpdates,
+    futuresUpdates,
     updatedAt: Date.now()
   });
 });

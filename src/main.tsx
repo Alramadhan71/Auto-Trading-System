@@ -981,7 +981,7 @@ function App() {
           setStats(dashboardResponse.stats);
         })
         .catch(() => undefined);
-    }, 2500);
+    }, 1000);
     return () => {
       closed = true;
       if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
