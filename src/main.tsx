@@ -1865,43 +1865,21 @@ function HomePage({
   return <>
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
-        <span className="home-kicker">14 days free</span>
         <h1>Auto Trading System</h1>
         <p className="home-launchpad-summary">by Muslim Alramadhan</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
             <span>
-              <strong>Login / Start Free Trial</strong>
-              <small>Dashboard and Auto Trading access</small>
+              <strong>Join Auto Trading System</strong>
             </span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noreferrer">
             <Send size={22} />
             <span>
-              <strong>Join Free Trade Alerts</strong>
-              <small>Telegram market broadcast</small>
+              <strong>Join Free Telegram</strong>
             </span>
           </a>
-        </div>
-      </div>
-      <div className="home-command-preview home-trial-preview" aria-label="Trading dashboard preview">
-        <div className="preview-terminal-top">
-          <span>Access includes</span>
-          <b>Trial</b>
-        </div>
-        <div className="preview-signal-row active">
-          <div><small>Free Trial</small><strong>14 days</strong></div>
-          <span className="good">Active</span>
-        </div>
-        <div className="preview-signal-row">
-          <div><small>Private tools</small><strong>Dashboard + Auto Trading</strong></div>
-          <span>Login</span>
-        </div>
-        <div className="preview-lock-strip">
-          <span><BarChart3 size={15} /> Dashboard</span>
-          <span><Bot size={15} /> Auto Trading</span>
-          <span><ShieldAlert size={15} /> Risk Control</span>
         </div>
       </div>
     </section>
