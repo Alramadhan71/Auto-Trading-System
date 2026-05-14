@@ -785,6 +785,7 @@ function App() {
   const [toasts, setToasts] = useState<Notification[]>([]);
   const [stats, setStats] = useState<Stat[]>([]);
   const [page, setPage] = useState<Page>('home');
+  const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme | null;
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
@@ -830,6 +831,12 @@ function App() {
   useEffect(() => {
     localStorage.setItem('autoTrade.labStrategyIds', JSON.stringify(labStrategyIds));
   }, [labStrategyIds]);
+
+  useEffect(() => {
+    api<{ ok: boolean; user: AuthSessionUser | null }>('/api/auth/session')
+      .then(response => setAppSessionUser(response.user))
+      .catch(() => setAppSessionUser(null));
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -1121,9 +1128,24 @@ function App() {
   const deferredStats = useDeferredValue(stats);
   const deferredTickers = useDeferredValue(tickers);
   const deferredFuturesTickers = useDeferredValue(futuresTickers);
+  const isAuthenticated = Boolean(appSessionUser);
+
+  const navigateToPage = (nextPage: Page) => {
+    if (nextPage !== 'home' && !isAuthenticated) {
+      try {
+        localStorage.setItem('autoTrade.portalView', 'login');
+      } catch {
+        // Keep navigation working even if storage is unavailable.
+      }
+      setPage('auto-trade');
+      return;
+    }
+    setPage(nextPage);
+  };
+
   const openAutoTradeLogin = () => {
     try {
-      localStorage.setItem('autoTrade.portalView', 'login');
+      if (!isAuthenticated) localStorage.setItem('autoTrade.portalView', 'login');
     } catch {
       // Keep navigation working even if storage is unavailable.
     }
@@ -1146,7 +1168,7 @@ function App() {
 
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
-      <header className="shell-header">
+      <header className={`shell-header ${page === 'home' ? 'home-header' : 'app-header'}`}>
         <div className="shell-brand" aria-label="Auto Trading System">
           <span className="shell-brand-mark"><TrendingUp size={20} /></span>
           <div>
@@ -1154,8 +1176,8 @@ function App() {
           </div>
         </div>
         <nav className="shell-nav" aria-label="Primary navigation">
-          <button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}><Home size={17} /> <span>Home</span></button>
-          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => setPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
+          <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>Home</span></button>
+          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
         </nav>
         <div className="shell-tools">
@@ -1175,26 +1197,8 @@ function App() {
         </div>
       </header>
       <main className={`page-frame page-${page}`}>
-        {page === 'home' && <HomePage
-          spotTop={spotTop}
-          futuresTop={futuresTop}
-          marketMode={marketMode}
-          setMarketMode={setMarketMode}
-          query={query}
-          setQuery={setQuery}
-          symbols={symbols}
-          futuresSymbols={futuresSymbols}
-          searchResults={searchResults}
-          dashboard={dashboard}
-          homeIntel={homeIntel}
-          spotGainers={spotGainers}
-          spotLosers={spotLosers}
-          futuresGainers={futuresGainers}
-          futuresLosers={futuresLosers}
-          openAutoTradeLogin={openAutoTradeLogin}
-          openSymbolChart={openSymbolChart}
-        />}
-        {page === 'dashboard' && <DashboardPage
+        {page === 'home' && <HomePage openAutoTradeLogin={openAutoTradeLogin} />}
+        {page === 'dashboard' && isAuthenticated && <DashboardPage
           stats={deferredStats}
           signals={deferredSignals}
           tickers={tickers}
@@ -1204,7 +1208,7 @@ function App() {
           labStrategyIds={labStrategyIds}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} onAuthChange={setAppSessionUser} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -1784,43 +1788,21 @@ function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; on
   </div>;
 }
 
-function HomePage({
-  spotTop,
-  futuresTop,
-  marketMode,
-  setMarketMode,
-  query,
-  setQuery,
-  symbols,
-  futuresSymbols,
-  searchResults,
-  dashboard,
-  homeIntel,
-  spotGainers,
-  spotLosers,
-  futuresGainers,
-  futuresLosers,
-  openAutoTradeLogin,
-  openSymbolChart
-}: {
-  spotTop: Ticker[];
-  futuresTop: Ticker[];
-  marketMode: MarketMode;
-  setMarketMode: (value: MarketMode) => void;
-  query: string;
-  setQuery: (value: string) => void;
-  symbols: SymbolInfo[];
-  futuresSymbols: SymbolInfo[];
-  searchResults: (SymbolInfo & { ticker?: Ticker })[];
-  dashboard: { liveSignals: number; totalSignals: number; monitored: number; monitoredSpot: number; monitoredFutures: number; availableSpot: number; availableFutures: number; selectedStrategies: number; marketScope: StrategyMarketScope; exchange: string };
-  homeIntel: HomeIntelResponse | null;
-  spotGainers: Ticker[];
-  spotLosers: Ticker[];
-  futuresGainers: Ticker[];
-  futuresLosers: Ticker[];
-  openAutoTradeLogin: () => void;
-  openSymbolChart: (symbol: string, market: MarketMode) => void;
-}) {
+function HomePage({ openAutoTradeLogin }: { openAutoTradeLogin: () => void }) {
+  return <section className="minimal-home">
+    <div className="minimal-home-inner">
+      <span className="minimal-home-kicker">Private trading workspace</span>
+      <h1>Auto Trading System</h1>
+      <p>by Muslim Alramadhan</p>
+      <button type="button" className="minimal-home-action" onClick={openAutoTradeLogin}>
+        <Bot size={18} />
+        <span>Login / Start Free Trial</span>
+      </button>
+    </div>
+  </section>;
+}
+
+/*
   const [leaderMarketMode, setLeaderMarketMode] = useState<MarketMode>('spot');
   const fallbackSpotCount = symbols.length;
   const fallbackFuturesCount = futuresSymbols.length;
@@ -2138,6 +2120,7 @@ function HomePage({
 
   </>;
 }
+*/
 
 function FieldHint({ label, hint }: { label: string; hint: string }) {
   const [open, setOpen] = useState(false);
@@ -2367,7 +2350,8 @@ function AutoTradePage({
   futuresTickers,
   selected,
   timeframes,
-  saveSelection
+  saveSelection,
+  onAuthChange
 }: {
   signals: Signal[];
   strategies: Strategy[];
@@ -2379,6 +2363,7 @@ function AutoTradePage({
   selected: Set<string>;
   timeframes: Set<Timeframe>;
   saveSelection: (nextSelected?: Set<string>, nextTimeframes?: Set<Timeframe>, nextExitModes?: Set<ExitMode>, nextMarketScope?: StrategyMarketScope) => Promise<void>;
+  onAuthChange?: (user: AuthSessionUser | null) => void;
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [capital] = useState(() => readAutoTradeSetting('autoTrade.capital', '25000'));
@@ -3066,6 +3051,7 @@ function AutoTradePage({
         body: JSON.stringify({ username, password, role: loginRole })
       });
       setSessionUser(response.user);
+      onAuthChange?.(response.user);
       if (rememberLogin) localStorage.setItem(loginStorageKey(loginRole), JSON.stringify({ username }));
       else localStorage.removeItem(loginStorageKey(loginRole));
       setLoginPassword('');
@@ -3838,6 +3824,7 @@ function AutoTradePage({
   useEffect(() => {
     api<{ ok: boolean; user: AuthSessionUser | null }>('/api/auth/session')
       .then(response => {
+        onAuthChange?.(response.user);
         if (!response.user) return;
         setSessionUser(response.user);
         if (response.user.role === 'admin') {
@@ -4318,43 +4305,43 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <span className="home-kicker">Trial gateway</span>
-          <h1>Open the trading desk for 14 days free.</h1>
-          <p>Login or request access to unlock the dashboard, auto-trading controls, portfolio ledger, and strategy monitoring workspace.</p>
+          <span className="home-kicker">14 days free</span>
+          <h1>Simple access. Clear tools.</h1>
+          <p>Login to use the dashboard and auto trading workspace.</p>
           <div className="auth-value-grid">
             <article>
               <BarChart3 size={20} />
               <strong>Dashboard</strong>
-              <span>Performance, live signals, PnL, and strategy health in one command view.</span>
+              <span>Track signals, trades, and performance.</span>
             </article>
             <article>
               <Bot size={20} />
               <strong>Auto Trading</strong>
-              <span>Execution mode, risk gates, capital rules, and kill switch controls.</span>
+              <span>Control automated trading settings.</span>
             </article>
             <article>
               <ShieldAlert size={20} />
-              <strong>Risk Layer</strong>
-              <span>Trade filters, stop logic, allocation limits, and market-scope controls.</span>
+              <strong>Risk Control</strong>
+              <span>Manage limits and protection rules.</span>
             </article>
             <article>
               <Bell size={20} />
               <strong>Alerts</strong>
-              <span>Telegram signals, private notifications, and live trade updates.</span>
+              <span>Receive trade updates and notifications.</span>
             </article>
           </div>
           <div className="trial-proof-strip">
             <span><strong>14</strong> days free</span>
-            <span><strong>0</strong> commitment</span>
-            <span><strong>24/7</strong> market scan</span>
+            <span><strong>2</strong> main tools</span>
+            <span><strong>1</strong> private workspace</span>
           </div>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
             <p className="eyebrow">Premium Access</p>
-            <h1>Enter Command Center</h1>
-            <small>Use your approved credentials or request trial access below.</small>
+            <h1>Login</h1>
+            <small>Access is required for Dashboard and Auto Trading.</small>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
@@ -4373,7 +4360,7 @@ function AutoTradePage({
               <span>Remember login</span>
             </label>
             <small className="password-policy-note">8+ characters, uppercase, lowercase, number, and special character.</small>
-            <button type="submit">Unlock Dashboard</button>
+            <button type="submit">Login</button>
           </div>
           <div className="register-prompt">
             <span>Forgot password?</span>
