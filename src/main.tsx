@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, KeyRound, Newspaper, Search, Send, ShieldAlert, Sparkles, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Newspaper, Search, Send, ShieldAlert, Sparkles, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -437,18 +437,6 @@ type HomeIntelResponse = {
 
 const livePortfolioRefreshEvent = 'live-portfolio-refresh';
 
-const pageFromPath = (path: string): Page => {
-  if (path === '/app/auto-trade' || path === '/app/auto-trading') return 'auto-trade';
-  if (path === '/app' || path === '/app/' || path === '/app/dashboard') return 'dashboard';
-  return 'home';
-};
-
-const pathFromPage = (page: Page) => {
-  if (page === 'dashboard') return '/app/dashboard';
-  if (page === 'auto-trade') return '/app/auto-trade';
-  return '/';
-};
-
 
 type TelegramConfig = {
   ok: boolean;
@@ -796,7 +784,7 @@ function App() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [toasts, setToasts] = useState<Notification[]>([]);
   const [stats, setStats] = useState<Stat[]>([]);
-  const [page, setPage] = useState<Page>(() => pageFromPath(window.location.pathname));
+  const [page, setPage] = useState<Page>('home');
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme | null;
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
@@ -842,12 +830,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('autoTrade.labStrategyIds', JSON.stringify(labStrategyIds));
   }, [labStrategyIds]);
-
-  useEffect(() => {
-    const onPopState = () => setPage(pageFromPath(window.location.pathname));
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -1083,22 +1065,13 @@ function App() {
   const deferredStats = useDeferredValue(stats);
   const deferredTickers = useDeferredValue(tickers);
   const deferredFuturesTickers = useDeferredValue(futuresTickers);
-
-  const navigateToPage = (nextPage: Page) => {
-    setPage(nextPage);
-    const nextPath = pathFromPage(nextPage);
-    if (window.location.pathname !== nextPath) {
-      window.history.pushState(null, '', nextPath);
-    }
-  };
-
   const openAutoTradeLogin = () => {
     try {
       localStorage.setItem('autoTrade.portalView', 'login');
     } catch {
       // Keep navigation working even if storage is unavailable.
     }
-    navigateToPage('auto-trade');
+    setPage('auto-trade');
   };
 
   const saveSelection = async (nextSelected = selected, nextTimeframes = timeframes, nextExitModes = exitModes, nextMarketScope = strategyMarketScope) => {
@@ -1117,17 +1090,18 @@ function App() {
 
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
-      <header className={`shell-header ${page === 'home' ? 'home-header' : 'app-header'}`}>
-        <button type="button" className="shell-brand shell-brand-button" aria-label="Go to home" onClick={() => navigateToPage('home')}>
+      <header className="shell-header">
+        <div className="shell-brand" aria-label="Auto Trading System">
           <span className="shell-brand-mark"><TrendingUp size={20} /></span>
           <div>
             <strong>Auto Trading</strong>
           </div>
-        </button>
-        {page !== 'home' && <nav className="shell-nav" aria-label="App navigation">
-          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
+        </div>
+        <nav className="shell-nav" aria-label="Primary navigation">
+          <button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}><Home size={17} /> <span>Home</span></button>
+          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => setPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
-        </nav>}
+        </nav>
         <div className="shell-tools">
           <ThemeStudio currentTheme={theme} onOpen={() => setThemePanelOpen(true)} />
           <NotificationSettings
