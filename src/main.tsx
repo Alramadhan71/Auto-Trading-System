@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Newspaper, Search, Send, ShieldAlert, Sparkles, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -274,7 +274,7 @@ type TelegramSubscriber = {
   linked: boolean;
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
-type Theme = 'executive' | 'navy' | 'emerald' | 'graphite' | 'light';
+type Theme = 'dark' | 'light';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
   connected: boolean;
@@ -551,11 +551,8 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'graphite', name: 'Graphite Desk' },
-  { id: 'executive', name: 'Executive Slate' },
-  { id: 'navy', name: 'Institutional Navy' },
-  { id: 'emerald', name: 'Market Emerald' },
-  { id: 'light', name: 'Light Terminal' }
+  { id: 'dark', name: 'Dark' },
+  { id: 'light', name: 'Light' }
 ];
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
@@ -787,13 +784,13 @@ function App() {
   const [page, setPage] = useState<Page>('home');
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('theme') as Theme | null;
+    const saved = localStorage.getItem('theme');
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
     if (!migratedDefault && (!saved || saved === 'executive')) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
-      return 'graphite';
+      return 'dark';
     }
-    return themes.some(item => item.id === saved) ? saved! : 'graphite';
+    return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
@@ -1185,7 +1182,7 @@ function App() {
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
-          <ThemeStudio currentTheme={theme} onOpen={() => setThemePanelOpen(true)} />
+          <ThemeStudio currentTheme={theme} onPick={setTheme} />
           <NotificationSettings
             duration={toastDuration}
             enabled={alertsEnabled}
@@ -1734,28 +1731,17 @@ function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTr
   </div>;
 }
 
-function ThemeStudio({ currentTheme, onOpen }: { currentTheme: Theme; onOpen: () => void }) {
-  return <section
-    className={`theme-studio ${currentTheme}`}
-    role="button"
-    tabIndex={0}
-    onClick={onOpen}
-    onKeyDown={event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        onOpen();
-      }
-    }}
+function ThemeStudio({ currentTheme, onPick }: { currentTheme: Theme; onPick: (theme: Theme) => void }) {
+  const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+  return <button
+    type="button"
+    className={`theme-studio theme-toggle ${currentTheme}`}
+    onClick={() => onPick(nextTheme)}
+    aria-label={`Switch to ${nextTheme} theme`}
   >
-    <div>
-      <span>Theme</span>
-      <strong>Theme</strong>
-    </div>
-    <button onClick={event => {
-      event.stopPropagation();
-      onOpen();
-    }}>Customize</button>
-  </section>;
+    <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+    <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
+  </button>;
 }
 
 function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; onPick: (theme: Theme) => void; onClose: () => void }) {
@@ -1877,7 +1863,7 @@ function HomePage({
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noreferrer">
             <Send size={22} />
             <span>
-              <strong>Join Free Telegram</strong>
+              <strong>Join Free Trades on Telegram</strong>
             </span>
           </a>
         </div>
