@@ -846,6 +846,8 @@ function App() {
     ]).then(([s, t, fs, ft, st, sig, execSig, n, d, intel]) => {
       const spotMap = new Map(t.tickers.map(x => [x.symbol, x]));
       const futuresMap = new Map(ft.tickers.map(x => [x.symbol, x]));
+      publishLiveTickers('spot', t.tickers);
+      publishLiveTickers('futures', ft.tickers);
       setSymbols(s.symbols);
       setTickers(spotMap);
       setFuturesSymbols(fs.symbols);
@@ -873,22 +875,90 @@ function App() {
   useEffect(() => {
     let socket: WebSocket | null = null;
     let reconnectTimeout = 0;
+    let priceUiFlushTimer = 0;
+    let queuedSpotUpdates = new Map<string, Ticker>();
+    let queuedFuturesUpdates = new Map<string, Ticker>();
+    let queuedPricePayload: {
+      spotTop?: Ticker[];
+      futuresTop?: Ticker[];
+      spotGainers?: Ticker[];
+      spotLosers?: Ticker[];
+      futuresGainers?: Ticker[];
+      futuresLosers?: Ticker[];
+      updatedAt?: number;
+    } | null = null;
     let closed = false;
-    const applyTickerUpdates = (spotUpdates?: Ticker[], futuresUpdates?: Ticker[]) => {
-      if (Array.isArray(spotUpdates)) {
+    const flushPriceUiUpdates = () => {
+      priceUiFlushTimer = 0;
+      const spotUpdates = [...queuedSpotUpdates.values()];
+      const futuresUpdates = [...queuedFuturesUpdates.values()];
+      const pricePayload = queuedPricePayload;
+      queuedSpotUpdates = new Map();
+      queuedFuturesUpdates = new Map();
+      queuedPricePayload = null;
+      if (spotUpdates.length > 0) {
         setTickers(prev => {
           const next = new Map(prev);
           for (const ticker of spotUpdates) next.set(ticker.symbol, ticker);
           return next;
         });
       }
-      if (Array.isArray(futuresUpdates)) {
+      if (futuresUpdates.length > 0) {
         setFuturesTickers(prev => {
           const next = new Map(prev);
           for (const ticker of futuresUpdates) next.set(ticker.symbol, ticker);
           return next;
         });
       }
+      if (pricePayload) {
+        setSpotTop(pricePayload.spotTop ?? []);
+        setFuturesTop(pricePayload.futuresTop ?? []);
+        setSpotGainers(pricePayload.spotGainers ?? []);
+        setSpotLosers(pricePayload.spotLosers ?? []);
+        setFuturesGainers(pricePayload.futuresGainers ?? []);
+        setFuturesLosers(pricePayload.futuresLosers ?? []);
+        setHomeIntel(prev => prev ? ({
+          ...prev,
+          binance: {
+            ...prev.binance,
+            spotGainers: pricePayload.spotGainers ?? prev.binance.spotGainers,
+            spotLosers: pricePayload.spotLosers ?? prev.binance.spotLosers,
+            futuresGainers: pricePayload.futuresGainers ?? prev.binance.futuresGainers,
+            futuresLosers: pricePayload.futuresLosers ?? prev.binance.futuresLosers
+          },
+          updatedAt: pricePayload.updatedAt ?? prev.updatedAt
+        }) : prev);
+      }
+    };
+    const queuePriceUiUpdates = (payload: {
+      spotUpdates?: Ticker[];
+      futuresUpdates?: Ticker[];
+      spotTop?: Ticker[];
+      futuresTop?: Ticker[];
+      spotGainers?: Ticker[];
+      spotLosers?: Ticker[];
+      futuresGainers?: Ticker[];
+      futuresLosers?: Ticker[];
+      updatedAt?: number;
+    }) => {
+      publishLiveTickers('spot', payload.spotUpdates);
+      publishLiveTickers('futures', payload.futuresUpdates);
+      if (Array.isArray(payload.spotUpdates)) {
+        for (const ticker of payload.spotUpdates) queuedSpotUpdates.set(ticker.symbol, ticker);
+      }
+      if (Array.isArray(payload.futuresUpdates)) {
+        for (const ticker of payload.futuresUpdates) queuedFuturesUpdates.set(ticker.symbol, ticker);
+      }
+      queuedPricePayload = {
+        spotTop: payload.spotTop,
+        futuresTop: payload.futuresTop,
+        spotGainers: payload.spotGainers,
+        spotLosers: payload.spotLosers,
+        futuresGainers: payload.futuresGainers,
+        futuresLosers: payload.futuresLosers,
+        updatedAt: payload.updatedAt
+      };
+      if (!priceUiFlushTimer) priceUiFlushTimer = window.setTimeout(flushPriceUiUpdates, priceUiFlushMs);
     };
 
     const connectSocket = () => {
@@ -898,24 +968,7 @@ function App() {
       socket.onmessage = event => {
         const { type, payload } = JSON.parse(event.data);
         if (type === 'prices') {
-          applyTickerUpdates(payload.spotUpdates, payload.futuresUpdates);
-          setSpotTop(payload.spotTop ?? []);
-          setFuturesTop(payload.futuresTop ?? []);
-          setSpotGainers(payload.spotGainers ?? []);
-          setSpotLosers(payload.spotLosers ?? []);
-          setFuturesGainers(payload.futuresGainers ?? []);
-          setFuturesLosers(payload.futuresLosers ?? []);
-          setHomeIntel(prev => prev ? ({
-            ...prev,
-            binance: {
-              ...prev.binance,
-              spotGainers: payload.spotGainers ?? prev.binance.spotGainers,
-              spotLosers: payload.spotLosers ?? prev.binance.spotLosers,
-              futuresGainers: payload.futuresGainers ?? prev.binance.futuresGainers,
-              futuresLosers: payload.futuresLosers ?? prev.binance.futuresLosers
-            },
-            updatedAt: payload.updatedAt ?? prev.updatedAt
-          }) : prev);
+          queuePriceUiUpdates(payload);
         }
         if (type === 'signal') {
           setSignals(prev => [payload, ...prev.filter(item => item.id !== payload.id)]);
@@ -968,6 +1021,8 @@ function App() {
         api<HomeIntelResponse>('/api/home-intel')
       ])
         .then(([spotResponse, futuresResponse, signalResponse, executionSignalResponse, notificationResponse, dashboardResponse, intelResponse]) => {
+          publishLiveTickers('spot', spotResponse.tickers);
+          publishLiveTickers('futures', futuresResponse.tickers);
           setTickers(new Map(spotResponse.tickers.map(x => [x.symbol, x])));
           setFuturesTickers(new Map(futuresResponse.tickers.map(x => [x.symbol, x])));
           setSignals(signalResponse.signals);
@@ -996,6 +1051,7 @@ function App() {
     return () => {
       closed = true;
       if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
+      if (priceUiFlushTimer) window.clearTimeout(priceUiFlushTimer);
       socket?.close();
       clearInterval(refresh);
       clearInterval(liveLedgerRefresh);
@@ -1103,6 +1159,10 @@ function App() {
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
         </nav>
         <div className="shell-tools">
+          {page === 'home' && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
+            <Bot size={16} />
+            <span>Start free trial</span>
+          </button>}
           <ThemeStudio currentTheme={theme} onOpen={() => setThemePanelOpen(true)} />
           <NotificationSettings
             duration={toastDuration}
@@ -1327,6 +1387,38 @@ const timeframeSeconds: Record<Timeframe, number> = {
   '1d': 24 * 60 * 60
 };
 
+const priceUiFlushMs = 250;
+
+type LivePriceListener = (ticker: Ticker) => void;
+const livePriceSnapshots = new Map<string, Ticker>();
+const livePriceListeners = new Map<string, Set<LivePriceListener>>();
+
+const livePriceKey = (market: MarketMode, symbol: string) => `${market}:${symbol}`;
+
+function publishLiveTicker(market: MarketMode, ticker: Ticker) {
+  const key = livePriceKey(market, ticker.symbol);
+  livePriceSnapshots.set(key, ticker);
+  livePriceListeners.get(key)?.forEach(listener => listener(ticker));
+}
+
+function publishLiveTickers(market: MarketMode, updates?: Ticker[]) {
+  if (!Array.isArray(updates)) return;
+  for (const ticker of updates) publishLiveTicker(market, ticker);
+}
+
+function subscribeLiveTicker(market: MarketMode, symbol: string, listener: LivePriceListener) {
+  const key = livePriceKey(market, symbol);
+  const listeners = livePriceListeners.get(key) ?? new Set<LivePriceListener>();
+  listeners.add(listener);
+  livePriceListeners.set(key, listeners);
+  const snapshot = livePriceSnapshots.get(key);
+  if (snapshot) listener(snapshot);
+  return () => {
+    listeners.delete(listener);
+    if (listeners.size === 0) livePriceListeners.delete(key);
+  };
+}
+
 const chartTime = (stamp: number) => Math.floor(stamp / 1000) as UTCTimestamp;
 
 function candleToChartData(candle: ChartCandle): CandlestickData<UTCTimestamp> {
@@ -1414,13 +1506,41 @@ function BinanceLiveChart({
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const lastCandleRef = useRef<CandlestickData<UTCTimestamp> | null>(null);
+  const pricePrecisionRef = useRef(pricePrecisionFor(latestTicker?.price ?? 1));
+  const timeframeRef = useRef(timeframe);
+  const chartReadyRef = useRef(false);
   const [chartState, setChartState] = useState<'loading' | 'ready' | 'error'>('loading');
+
+  const applyLiveTicker = (ticker: Ticker) => {
+    if (!chartReadyRef.current) return;
+    const series = seriesRef.current;
+    if (!series) return;
+    const nextPrecision = pricePrecisionFor(ticker.price);
+    if (pricePrecisionRef.current !== nextPrecision) {
+      pricePrecisionRef.current = nextPrecision;
+      series.applyOptions({
+        priceFormat: {
+          type: 'price',
+          precision: nextPrecision,
+          minMove: 0.00000001
+        }
+      });
+    }
+    const nextCandle = mergeTickerIntoCandle(lastCandleRef.current, ticker, timeframeRef.current);
+    lastCandleRef.current = nextCandle;
+    series.update(nextCandle);
+  };
+
+  useEffect(() => {
+    timeframeRef.current = timeframe;
+  }, [timeframe]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return undefined;
     let cancelled = false;
     setChartState('loading');
+    chartReadyRef.current = false;
     lastCandleRef.current = null;
     chartRef.current?.remove();
     const chart = createChart(container, {
@@ -1446,6 +1566,8 @@ function BinanceLiveChart({
         mode: 0
       }
     });
+    const initialPrecision = pricePrecisionFor(latestTicker?.price ?? 1);
+    pricePrecisionRef.current = initialPrecision;
     const series = chart.addSeries(CandlestickSeries, {
       upColor: '#00b894',
       downColor: '#ff4d5a',
@@ -1455,7 +1577,7 @@ function BinanceLiveChart({
       wickDownColor: '#ff4d5a',
       priceFormat: {
         type: 'price',
-        precision: pricePrecisionFor(latestTicker?.price ?? 1),
+        precision: initialPrecision,
         minMove: 0.00000001
       }
     });
@@ -1477,6 +1599,8 @@ function BinanceLiveChart({
         series.setData(data);
         lastCandleRef.current = data.at(-1) ?? null;
         chart.timeScale().fitContent();
+        chartReadyRef.current = true;
+        if (latestTicker) applyLiveTicker(latestTicker);
         setChartState('ready');
       })
       .catch(() => {
@@ -1486,27 +1610,60 @@ function BinanceLiveChart({
       cancelled = true;
       resizeObserver.disconnect();
       chart.remove();
+      chartReadyRef.current = false;
       chartRef.current = null;
       seriesRef.current = null;
       lastCandleRef.current = null;
     };
   }, [symbol, market, timeframe, levels?.entry, levels?.takeProfit, levels?.stopLoss]);
 
+  useEffect(() => subscribeLiveTicker(market, symbol, applyLiveTicker), [market, symbol]);
+
   useEffect(() => {
-    if (!latestTicker || chartState === 'error') return;
-    const series = seriesRef.current;
-    if (!series) return;
-    series.applyOptions({
-      priceFormat: {
-        type: 'price',
-        precision: pricePrecisionFor(latestTicker.price),
-        minMove: 0.00000001
-      }
-    });
-    const nextCandle = mergeTickerIntoCandle(lastCandleRef.current, latestTicker, timeframe);
-    lastCandleRef.current = nextCandle;
-    series.update(nextCandle);
-  }, [latestTicker, timeframe, chartState]);
+    let socket: WebSocket | null = null;
+    let reconnectTimeout = 0;
+    let closed = false;
+    const sendChartWatch = () => {
+      if (!socket || socket.readyState !== WebSocket.OPEN) return;
+      socket.send(JSON.stringify({
+        type: 'watchPrices',
+        payload: market === 'spot'
+          ? { spotSymbols: [symbol], futuresSymbols: [] }
+          : { spotSymbols: [], futuresSymbols: [symbol] }
+      }));
+    };
+    const connect = () => {
+      socket = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/stream`);
+      socket.onopen = sendChartWatch;
+      socket.onmessage = event => {
+        try {
+          const { type, payload } = JSON.parse(event.data);
+          if (type !== 'prices') return;
+          const updates = market === 'spot' ? payload?.spotUpdates : payload?.futuresUpdates;
+          if (!Array.isArray(updates)) return;
+          const ticker = updates.find((item: Ticker) => item.symbol === symbol);
+          if (!ticker) return;
+          publishLiveTicker(market, ticker);
+          applyLiveTicker(ticker);
+        } catch {
+          // Keep the chart stream isolated from malformed messages.
+        }
+      };
+      socket.onclose = () => {
+        if (closed) return;
+        reconnectTimeout = window.setTimeout(connect, 1200);
+      };
+      socket.onerror = () => {
+        socket?.close();
+      };
+    };
+    connect();
+    return () => {
+      closed = true;
+      if (reconnectTimeout) window.clearTimeout(reconnectTimeout);
+      socket?.close();
+    };
+  }, [market, symbol]);
 
   return <div className="binance-chart-stage">
     <div ref={containerRef} className="binance-live-chart" />
@@ -1686,21 +1843,46 @@ function HomePage({
   return <>
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
+        <span className="home-kicker">14-day free access to the trading command center</span>
         <h1>Auto Trading System</h1>
-        <p className="home-launchpad-summary">by Muslim Alramadhan</p>
+        <p className="home-launchpad-summary">Live market intelligence, signal tracking, and automated execution controls in one focused trading workspace.</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
             <span>
-              <strong>Join Auto Trading</strong>
+              <strong>Start 14 Days Free</strong>
+              <small>Unlock dashboard + auto trading</small>
             </span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noreferrer">
             <Send size={22} />
             <span>
               <strong>Join Free Trade Alerts</strong>
+              <small>Telegram market broadcast</small>
             </span>
           </a>
+        </div>
+      </div>
+      <div className="home-command-preview" aria-label="Trading dashboard preview">
+        <div className="preview-terminal-top">
+          <span>Live Command Preview</span>
+          <b>{dashboard.exchange}</b>
+        </div>
+        <div className="preview-signal-row active">
+          <div><small>Active Signals</small><strong>{dashboard.liveSignals.toLocaleString('en-US')}</strong></div>
+          <span className="good">+2.84%</span>
+        </div>
+        <div className="preview-signal-row">
+          <div><small>Markets Scanned</small><strong>{dashboard.monitored.toLocaleString('en-US')}</strong></div>
+          <span>{dashboard.marketScope.toUpperCase()}</span>
+        </div>
+        <div className="preview-chart" aria-hidden="true">
+          {[44, 64, 51, 78, 58, 86, 72, 94].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}
+        </div>
+        <div className="preview-lock-strip">
+          <span><Gauge size={15} /> Risk engine</span>
+          <span><ShieldAlert size={15} /> Execution gates</span>
+          <span><Activity size={15} /> Live ledger</span>
         </div>
       </div>
     </section>
@@ -4135,11 +4317,44 @@ function AutoTradePage({
   if (portalView === 'login') {
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
+        <div className="auto-auth-marketing">
+          <span className="home-kicker">Trial gateway</span>
+          <h1>Open the trading desk for 14 days free.</h1>
+          <p>Login or request access to unlock the dashboard, auto-trading controls, portfolio ledger, and strategy monitoring workspace.</p>
+          <div className="auth-value-grid">
+            <article>
+              <BarChart3 size={20} />
+              <strong>Dashboard</strong>
+              <span>Performance, live signals, PnL, and strategy health in one command view.</span>
+            </article>
+            <article>
+              <Bot size={20} />
+              <strong>Auto Trading</strong>
+              <span>Execution mode, risk gates, capital rules, and kill switch controls.</span>
+            </article>
+            <article>
+              <ShieldAlert size={20} />
+              <strong>Risk Layer</strong>
+              <span>Trade filters, stop logic, allocation limits, and market-scope controls.</span>
+            </article>
+            <article>
+              <Bell size={20} />
+              <strong>Alerts</strong>
+              <span>Telegram signals, private notifications, and live trade updates.</span>
+            </article>
+          </div>
+          <div className="trial-proof-strip">
+            <span><strong>14</strong> days free</span>
+            <span><strong>0</strong> commitment</span>
+            <span><strong>24/7</strong> market scan</span>
+          </div>
+        </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
             <p className="eyebrow">Premium Access</p>
-            <h1>Auto Trading System</h1>
+            <h1>Enter Command Center</h1>
+            <small>Use your approved credentials or request trial access below.</small>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
@@ -4158,7 +4373,7 @@ function AutoTradePage({
               <span>Remember login</span>
             </label>
             <small className="password-policy-note">8+ characters, uppercase, lowercase, number, and special character.</small>
-            <button type="submit">Login</button>
+            <button type="submit">Unlock Dashboard</button>
           </div>
           <div className="register-prompt">
             <span>Forgot password?</span>
@@ -6320,6 +6535,8 @@ function PerformanceChart({
   const ledgerScrollRef = useRef<HTMLDivElement | null>(null);
   const handledFocusedTradeIdRef = useRef<number | null>(null);
   const [ledgerScrollTop, setLedgerScrollTop] = useState(0);
+  const [rejectedLedgerScrollTop, setRejectedLedgerScrollTop] = useState(0);
+  const [allStrategyLedgerScrollTop, setAllStrategyLedgerScrollTop] = useState(0);
   const [ledgerViewportHeight, setLedgerViewportHeight] = useState(560);
   const effectiveCommandRange = commandRange ?? performanceRange;
   const setEffectiveCommandRange = onCommandRangeChange ?? setPerformanceRange;
@@ -6532,10 +6749,22 @@ function PerformanceChart({
   const visibleAcceptedTradeRows = useMemo(() => acceptedTradeRows.slice(visibleLedgerStart, visibleLedgerEnd), [acceptedTradeRows, visibleLedgerStart, visibleLedgerEnd]);
   const ledgerTopSpacerHeight = visibleLedgerStart * ledgerRowHeight;
   const ledgerBottomSpacerHeight = Math.max(0, (acceptedTradeRows.length - visibleLedgerEnd) * ledgerRowHeight);
+  const visibleRejectedStart = Math.max(0, Math.floor(rejectedLedgerScrollTop / ledgerRowHeight) - ledgerOverscan);
+  const visibleRejectedEnd = Math.min(rejectedTradeRows.length, visibleRejectedStart + visibleLedgerCount);
+  const visibleRejectedTradeRows = useMemo(() => rejectedTradeRows.slice(visibleRejectedStart, visibleRejectedEnd), [rejectedTradeRows, visibleRejectedStart, visibleRejectedEnd]);
+  const rejectedLedgerTopSpacerHeight = visibleRejectedStart * ledgerRowHeight;
+  const rejectedLedgerBottomSpacerHeight = Math.max(0, (rejectedTradeRows.length - visibleRejectedEnd) * ledgerRowHeight);
+  const visibleAllStrategyStart = Math.max(0, Math.floor(allStrategyLedgerScrollTop / ledgerRowHeight) - ledgerOverscan);
+  const visibleAllStrategyEnd = Math.min(allStrategyTradeRows.length, visibleAllStrategyStart + visibleLedgerCount);
+  const visibleAllStrategyTradeRows = useMemo(() => allStrategyTradeRows.slice(visibleAllStrategyStart, visibleAllStrategyEnd), [allStrategyTradeRows, visibleAllStrategyStart, visibleAllStrategyEnd]);
+  const allStrategyLedgerTopSpacerHeight = visibleAllStrategyStart * ledgerRowHeight;
+  const allStrategyLedgerBottomSpacerHeight = Math.max(0, (allStrategyTradeRows.length - visibleAllStrategyEnd) * ledgerRowHeight);
 
   const resetLedgerScroll = () => {
     ledgerScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     setLedgerScrollTop(0);
+    setRejectedLedgerScrollTop(0);
+    setAllStrategyLedgerScrollTop(0);
   };
 
   const focusTrade = (tradeId: number | null) => {
@@ -6889,15 +7118,21 @@ function PerformanceChart({
               id="rejected-ledger-trade-search"
               type="search"
               value={rejectedLedgerTradeQuery}
-              onChange={event => setRejectedLedgerTradeQuery(event.target.value)}
+              onChange={event => {
+                setRejectedLedgerTradeQuery(event.target.value);
+                setRejectedLedgerScrollTop(0);
+              }}
               placeholder="Search rejected: T-0002B, symbol, strategy"
               spellCheck={false}
               autoComplete="off"
             />
-            {rejectedLedgerTradeQuery && <button type="button" className="ledger-search-clear" onClick={() => setRejectedLedgerTradeQuery('')}>Clear</button>}
+            {rejectedLedgerTradeQuery && <button type="button" className="ledger-search-clear" onClick={() => {
+              setRejectedLedgerTradeQuery('');
+              setRejectedLedgerScrollTop(0);
+            }}>Clear</button>}
           </div>
         </div>
-        <div className="trade-ledger-scroll rejected-ledger-scroll">
+        <div className="trade-ledger-scroll rejected-ledger-scroll" onScroll={event => setRejectedLedgerScrollTop(event.currentTarget.scrollTop)}>
           <table className="trade-ledger trade-ledger-body sim-rejected-table">
             <thead>
               <tr>
@@ -6906,7 +7141,8 @@ function PerformanceChart({
             </thead>
             <tbody>
               {rejectedTradeRows.length === 0 && <tr><td colSpan={7} className="empty">No Rejected Simulation trades matched this selection.</td></tr>}
-              {rejectedTradeRows.map(row => <tr key={`rejected-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
+              {rejectedLedgerTopSpacerHeight > 0 && <tr aria-hidden="true" className="ledger-spacer-row"><td colSpan={7} style={{ height: `${rejectedLedgerTopSpacerHeight}px` }} /></tr>}
+              {visibleRejectedTradeRows.map(row => <tr key={`rejected-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
                 <td>{formatTradeLabel(row.id)}</td>
                 <td><strong>{row.symbol}</strong></td>
                 <td><span className="strategy-cell">{row.strategyName}</span></td>
@@ -6915,6 +7151,7 @@ function PerformanceChart({
                 <td><span className="ledger-venue-cell"><strong>{row.market === 'futures' ? 'Futures x1' : 'Spot'}</strong></span></td>
                 <td>{row.timeframe}</td>
               </tr>)}
+              {rejectedLedgerBottomSpacerHeight > 0 && <tr aria-hidden="true" className="ledger-spacer-row"><td colSpan={7} style={{ height: `${rejectedLedgerBottomSpacerHeight}px` }} /></tr>}
             </tbody>
           </table>
         </div>
@@ -6929,15 +7166,21 @@ function PerformanceChart({
                 id="all-strategy-ledger-trade-search"
                 type="search"
                 value={allStrategyLedgerTradeQuery}
-                onChange={event => setAllStrategyLedgerTradeQuery(event.target.value)}
+                onChange={event => {
+                  setAllStrategyLedgerTradeQuery(event.target.value);
+                  setAllStrategyLedgerScrollTop(0);
+                }}
                 placeholder="Search strategies: T-0002B, symbol, strategy"
                 spellCheck={false}
                 autoComplete="off"
               />
-              {allStrategyLedgerTradeQuery && <button type="button" className="ledger-search-clear" onClick={() => setAllStrategyLedgerTradeQuery('')}>Clear</button>}
+              {allStrategyLedgerTradeQuery && <button type="button" className="ledger-search-clear" onClick={() => {
+                setAllStrategyLedgerTradeQuery('');
+                setAllStrategyLedgerScrollTop(0);
+              }}>Clear</button>}
             </div>
           </div>
-          <div className="trade-ledger-scroll all-strategy-ledger-scroll">
+          <div className="trade-ledger-scroll all-strategy-ledger-scroll" onScroll={event => setAllStrategyLedgerScrollTop(event.currentTarget.scrollTop)}>
             <table className="trade-ledger trade-ledger-body all-strategy-table">
               <thead>
                 <tr>
@@ -6946,7 +7189,8 @@ function PerformanceChart({
               </thead>
               <tbody>
                 {allStrategyTradeRows.length === 0 && <tr><td colSpan={12} className="empty">No All Strategy trades matched this selection.</td></tr>}
-                {allStrategyTradeRows.map(row => <tr key={`strategy-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
+                {allStrategyLedgerTopSpacerHeight > 0 && <tr aria-hidden="true" className="ledger-spacer-row"><td colSpan={12} style={{ height: `${allStrategyLedgerTopSpacerHeight}px` }} /></tr>}
+                {visibleAllStrategyTradeRows.map(row => <tr key={`strategy-${row.id}`} className="chartable-row" onClick={() => setChartTrade(row)} title={row.ledgerSimulationNotes?.join(' | ') || 'Open Binance live chart'}>
                   <td>{row.label}</td>
                   <td><strong>{row.symbol}</strong></td>
                   <td><span className="strategy-cell">{row.strategyName}</span></td>
@@ -6960,6 +7204,7 @@ function PerformanceChart({
                   <td>{formatDuration(row.openedAt, row.status === 'OPEN' ? undefined : row.closedAt)}</td>
                   <td className="ledger-pnl-cell"><span className="portfolio-pnl-stack sim-pnl-stack"><b className={`ledger-pnl-value ${row.pnl >= 0 ? 'good' : 'bad'}`}>{row.pnlLabel}</b></span></td>
                 </tr>)}
+                {allStrategyLedgerBottomSpacerHeight > 0 && <tr aria-hidden="true" className="ledger-spacer-row"><td colSpan={12} style={{ height: `${allStrategyLedgerBottomSpacerHeight}px` }} /></tr>}
               </tbody>
             </table>
           </div>
