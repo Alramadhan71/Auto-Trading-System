@@ -1197,7 +1197,25 @@ function App() {
         </div>
       </header>
       <main className={`page-frame page-${page}`}>
-        {page === 'home' && <HomePage openAutoTradeLogin={openAutoTradeLogin} />}
+        {page === 'home' && <HomePage
+          spotTop={spotTop}
+          futuresTop={futuresTop}
+          marketMode={marketMode}
+          setMarketMode={setMarketMode}
+          query={query}
+          setQuery={setQuery}
+          symbols={symbols}
+          futuresSymbols={futuresSymbols}
+          searchResults={searchResults}
+          dashboard={dashboard}
+          homeIntel={homeIntel}
+          spotGainers={spotGainers}
+          spotLosers={spotLosers}
+          futuresGainers={futuresGainers}
+          futuresLosers={futuresLosers}
+          openAutoTradeLogin={openAutoTradeLogin}
+          openSymbolChart={openSymbolChart}
+        />}
         {page === 'dashboard' && isAuthenticated && <DashboardPage
           stats={deferredStats}
           signals={deferredSignals}
@@ -1788,21 +1806,43 @@ function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; on
   </div>;
 }
 
-function HomePage({ openAutoTradeLogin }: { openAutoTradeLogin: () => void }) {
-  return <section className="minimal-home">
-    <div className="minimal-home-inner">
-      <span className="minimal-home-kicker">Private trading workspace</span>
-      <h1>Auto Trading System</h1>
-      <p>by Muslim Alramadhan</p>
-      <button type="button" className="minimal-home-action" onClick={openAutoTradeLogin}>
-        <Bot size={18} />
-        <span>Login / Start Free Trial</span>
-      </button>
-    </div>
-  </section>;
-}
-
-/*
+function HomePage({
+  spotTop,
+  futuresTop,
+  marketMode,
+  setMarketMode,
+  query,
+  setQuery,
+  symbols,
+  futuresSymbols,
+  searchResults,
+  dashboard,
+  homeIntel,
+  spotGainers,
+  spotLosers,
+  futuresGainers,
+  futuresLosers,
+  openAutoTradeLogin,
+  openSymbolChart
+}: {
+  spotTop: Ticker[];
+  futuresTop: Ticker[];
+  marketMode: MarketMode;
+  setMarketMode: (value: MarketMode) => void;
+  query: string;
+  setQuery: (value: string) => void;
+  symbols: SymbolInfo[];
+  futuresSymbols: SymbolInfo[];
+  searchResults: (SymbolInfo & { ticker?: Ticker })[];
+  dashboard: { liveSignals: number; totalSignals: number; monitored: number; monitoredSpot: number; monitoredFutures: number; availableSpot: number; availableFutures: number; selectedStrategies: number; marketScope: StrategyMarketScope; exchange: string };
+  homeIntel: HomeIntelResponse | null;
+  spotGainers: Ticker[];
+  spotLosers: Ticker[];
+  futuresGainers: Ticker[];
+  futuresLosers: Ticker[];
+  openAutoTradeLogin: () => void;
+  openSymbolChart: (symbol: string, market: MarketMode) => void;
+}) {
   const [leaderMarketMode, setLeaderMarketMode] = useState<MarketMode>('spot');
   const fallbackSpotCount = symbols.length;
   const fallbackFuturesCount = futuresSymbols.length;
@@ -1825,15 +1865,15 @@ function HomePage({ openAutoTradeLogin }: { openAutoTradeLogin: () => void }) {
   return <>
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
-        <span className="home-kicker">14-day free access to the trading command center</span>
+        <span className="home-kicker">14 days free</span>
         <h1>Auto Trading System</h1>
-        <p className="home-launchpad-summary">Live market intelligence, signal tracking, and automated execution controls in one focused trading workspace.</p>
+        <p className="home-launchpad-summary">by Muslim Alramadhan</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
             <span>
-              <strong>Start 14 Days Free</strong>
-              <small>Unlock dashboard + auto trading</small>
+              <strong>Login / Start Free Trial</strong>
+              <small>Dashboard and Auto Trading access</small>
             </span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noreferrer">
@@ -1845,26 +1885,23 @@ function HomePage({ openAutoTradeLogin }: { openAutoTradeLogin: () => void }) {
           </a>
         </div>
       </div>
-      <div className="home-command-preview" aria-label="Trading dashboard preview">
+      <div className="home-command-preview home-trial-preview" aria-label="Trading dashboard preview">
         <div className="preview-terminal-top">
-          <span>Live Command Preview</span>
-          <b>{dashboard.exchange}</b>
+          <span>Access includes</span>
+          <b>Trial</b>
         </div>
         <div className="preview-signal-row active">
-          <div><small>Active Signals</small><strong>{dashboard.liveSignals.toLocaleString('en-US')}</strong></div>
-          <span className="good">+2.84%</span>
+          <div><small>Free Trial</small><strong>14 days</strong></div>
+          <span className="good">Active</span>
         </div>
         <div className="preview-signal-row">
-          <div><small>Markets Scanned</small><strong>{dashboard.monitored.toLocaleString('en-US')}</strong></div>
-          <span>{dashboard.marketScope.toUpperCase()}</span>
-        </div>
-        <div className="preview-chart" aria-hidden="true">
-          {[44, 64, 51, 78, 58, 86, 72, 94].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}
+          <div><small>Private tools</small><strong>Dashboard + Auto Trading</strong></div>
+          <span>Login</span>
         </div>
         <div className="preview-lock-strip">
-          <span><Gauge size={15} /> Risk engine</span>
-          <span><ShieldAlert size={15} /> Execution gates</span>
-          <span><Activity size={15} /> Live ledger</span>
+          <span><BarChart3 size={15} /> Dashboard</span>
+          <span><Bot size={15} /> Auto Trading</span>
+          <span><ShieldAlert size={15} /> Risk Control</span>
         </div>
       </div>
     </section>
@@ -2120,7 +2157,6 @@ function HomePage({ openAutoTradeLogin }: { openAutoTradeLogin: () => void }) {
 
   </>;
 }
-*/
 
 function FieldHint({ label, hint }: { label: string; hint: string }) {
   const [open, setOpen] = useState(false);
