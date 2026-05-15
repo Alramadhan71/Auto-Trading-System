@@ -274,7 +274,9 @@ type TelegramSubscriber = {
   linked: boolean;
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
-type Theme = 'dark' | 'light';
+type ThemeMode = 'dark' | 'light';
+type ThemePaletteId = 'palette-1' | 'palette-2' | 'palette-3';
+type Theme = `${ThemePaletteId}-${ThemeMode}`;
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
   connected: boolean;
@@ -550,10 +552,31 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
-const themes: { id: Theme; name: string }[] = [
-  { id: 'dark', name: 'Dark' },
-  { id: 'light', name: 'Light' }
+const themePalettes: { id: ThemePaletteId; number: number; name: string; dark: string; light: string }[] = [
+  { id: 'palette-1', number: 1, name: 'Global Neutral', dark: '#111827', light: '#F8FAFC' },
+  { id: 'palette-2', number: 2, name: 'Modern Slate', dark: '#0F172A', light: '#F9FAFB' },
+  { id: 'palette-3', number: 3, name: 'Quiet Graphite', dark: '#18181B', light: '#FAFAFA' }
 ];
+
+const themes = themePalettes.flatMap(palette => [
+  { id: `${palette.id}-dark` as Theme, paletteId: palette.id, mode: 'dark' as const },
+  { id: `${palette.id}-light` as Theme, paletteId: palette.id, mode: 'light' as const }
+]);
+
+const getThemeParts = (theme: Theme) => {
+  const mode: ThemeMode = theme.endsWith('-light') ? 'light' : 'dark';
+  const paletteId = theme.replace(/-(dark|light)$/, '') as ThemePaletteId;
+  const palette = themePalettes.find(item => item.id === paletteId) ?? themePalettes[0];
+  return { mode, palette, paletteId: palette.id };
+};
+
+const makeTheme = (paletteId: ThemePaletteId, mode: ThemeMode): Theme => `${paletteId}-${mode}`;
+
+const normalizeSavedTheme = (saved: string | null): Theme => {
+  if (saved === 'light') return 'palette-1-light';
+  if (saved === 'dark' || saved === 'executive' || saved === 'navy' || saved === 'emerald' || saved === 'graphite') return 'palette-1-dark';
+  return themes.some(item => item.id === saved) ? saved as Theme : 'palette-1-dark';
+};
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
   const response = await fetch(url, { credentials: 'include', ...init });
@@ -788,9 +811,9 @@ function App() {
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
     if (!migratedDefault && (!saved || saved === 'executive')) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
-      return 'dark';
+      return 'palette-1-dark';
     }
-    return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
+    return normalizeSavedTheme(saved);
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
@@ -1182,7 +1205,7 @@ function App() {
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
-          <ThemeStudio currentTheme={theme} onPick={setTheme} />
+          <ThemeStudio currentTheme={theme} onOpenPalette={() => setThemePanelOpen(true)} />
           <NotificationSettings
             duration={toastDuration}
             enabled={alertsEnabled}
@@ -1731,37 +1754,58 @@ function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTr
   </div>;
 }
 
-function ThemeStudio({ currentTheme, onPick }: { currentTheme: Theme; onPick: (theme: Theme) => void }) {
-  const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+function ThemeStudio({ currentTheme, onOpenPalette }: { currentTheme: Theme; onOpenPalette: () => void }) {
+  const { mode, palette, paletteId } = getThemeParts(currentTheme);
   return <button
     type="button"
     className={`theme-studio theme-toggle ${currentTheme}`}
-    onClick={() => onPick(nextTheme)}
-    aria-label={`Switch to ${nextTheme} theme`}
+    onClick={onOpenPalette}
+    aria-label="Open numbered color palettes"
   >
-    <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
-    <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
+    <span className="theme-toggle-icon">{mode === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+    <span>{`#${palette.number} ${mode === 'light' ? 'Light' : 'Dark'}`}</span>
   </button>;
 }
 
 function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; onPick: (theme: Theme) => void; onClose: () => void }) {
+  const current = getThemeParts(currentTheme);
   return <div className="theme-overlay" role="presentation" onClick={onClose}>
     <section className="theme-modal" role="dialog" aria-modal="true" onClick={event => event.stopPropagation()}>
       <header>
         <div>
           <p className="eyebrow">Theme Studio</p>
-          <h2>Choose Your Trading Desk</h2>
+          <h2>Choose Numbered Palette</h2>
         </div>
         <button onClick={onClose}>Close</button>
       </header>
       <div className="theme-showcase">
-        {themes.map(item => <button key={item.id} className={currentTheme === item.id ? `theme-showcase-card ${item.id} active` : `theme-showcase-card ${item.id}`} onClick={() => {
-          onPick(item.id);
+        {themePalettes.map(item => {
+          const id = makeTheme(item.id, current.mode);
+          const active = current.paletteId === item.id;
+          return <button key={item.id} className={active ? `theme-showcase-card ${item.id} active` : `theme-showcase-card ${item.id}`} onClick={() => {
+          onPick(id);
           onClose();
         }}>
           <div className="showcase-top">
-            <span>{item.name}</span>
-            <b>{currentTheme === item.id ? 'ACTIVE' : 'SELECT'}</b>
+            <span>{`#${item.number} ${item.name}`}</span>
+            <b>{active ? 'ACTIVE' : 'SELECT'}</b>
+          </div>
+          <p className="showcase-theme-values">{`Dark ${item.dark} / Light ${item.light}`}</p>
+          <div className="showcase-mode-actions">
+            {(['dark', 'light'] as ThemeMode[]).map(mode => {
+              const themeId = makeTheme(item.id, mode);
+              return <span
+                key={themeId}
+                className={currentTheme === themeId ? 'active' : ''}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onPick(themeId);
+                  onClose();
+                }}
+              >
+                {mode}
+              </span>;
+            })}
           </div>
           <div className="showcase-screen">
             <aside>
@@ -1780,13 +1824,18 @@ function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; on
               <b />
             </main>
           </div>
+          <div className="showcase-price-row">
+            <strong className="good">+2.64%</strong>
+            <strong className="bad">-1.18%</strong>
+          </div>
           <div className="showcase-palette">
             <i />
             <i />
             <i />
             <i />
           </div>
-        </button>)}
+        </button>;
+        })}
       </div>
     </section>
   </div>;
