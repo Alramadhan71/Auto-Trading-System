@@ -18319,3 +18319,65 @@ body {
   border-color: color-mix(in srgb, var(--semantic-green) 42%, var(--border)) !important;
   color: color-mix(in srgb, var(--semantic-green) 74%, var(--text)) !important;
 }
+
+/* Remove decorative edge tinting while preserving meaningful in-content colors. */
+.home-launchpad,
+.home-live-board,
+.price-card,
+.home-top-market-card,
+.home-intel-card,
+.home-fear-card,
+.home-fear-history-card,
+.home-signal-shell,
+.home-signal-card,
+.home-leader-shell,
+.home-leader-card,
+.home-leader-row,
+.home-marketcap-shell,
+.home-marketcap-row,
+.home-news-shell,
+.home-news-card,
+.home-cta-primary,
+.home-cta-secondary,
+.home-news-badge,
+.home-market-switch,
+.search-panel,
+.home-search-panel,
+.panel,
+.chart-block,
+.trade-list,
+.notification-card,
+.scorecard,
+.strategy,
+.leader-item,
+.trade-ledger-shell,
+.premium-panel,
+.binance-connect-panel,
+.auto-auth-card {
+  border-color: var(--border) !important;
+}
+
+.home-live-card:has(.good),
+.home-live-card:has(.bad),
+.home-top-market-card:has(.good),
+.home-top-market-card:has(.bad),
+.price-card:has(.good),
+.price-card:has(.bad),
+.home-leader-card.gainers,
+.home-leader-card.losers,
+.home-fear-card.tone-cold,
+.home-fear-card.tone-neutral,
+.home-fear-card.tone-warm,
+.home-fear-card.tone-hot {
+  border-color: var(--border) !important;
+}
+
+.home-fear-history-row,
+.home-fear-history-row.sentiment-extreme,
+.home-fear-history-row.sentiment-fear,
+.home-fear-history-row.sentiment-neutral,
+.home-fear-history-row.sentiment-optimism,
+.home-fear-history-row.sentiment-greed {
+  border-color: var(--card-hairline) !important;
+  border-left-color: var(--card-hairline) !important;
+}
