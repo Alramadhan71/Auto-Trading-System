@@ -791,6 +791,7 @@ function App() {
   const [stats, setStats] = useState<Stat[]>([]);
   const [page, setPage] = useState<Page>('home');
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
+  const [autoTradePortalView, setAutoTradePortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme');
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
@@ -1141,6 +1142,7 @@ function App() {
       } catch {
         // Keep navigation working even if storage is unavailable.
       }
+      setAutoTradePortalView('login');
       setPage('auto-trade');
       return;
     }
@@ -1153,6 +1155,7 @@ function App() {
     } catch {
       // Keep navigation working even if storage is unavailable.
     }
+    if (!isAuthenticated) setAutoTradePortalView('login');
     setPage('auto-trade');
   };
 
@@ -1170,7 +1173,7 @@ function App() {
     });
   };
 
-  const authEntryPage = page === 'auto-trade' && !isAuthenticated;
+  const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
@@ -1235,7 +1238,7 @@ function App() {
           labStrategyIds={labStrategyIds}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} onAuthChange={setAppSessionUser} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -2426,7 +2429,8 @@ function AutoTradePage({
   selected,
   timeframes,
   saveSelection,
-  onAuthChange
+  onAuthChange,
+  onPortalViewChange
 }: {
   signals: Signal[];
   strategies: Strategy[];
@@ -2439,8 +2443,12 @@ function AutoTradePage({
   timeframes: Set<Timeframe>;
   saveSelection: (nextSelected?: Set<string>, nextTimeframes?: Set<Timeframe>, nextExitModes?: Set<ExitMode>, nextMarketScope?: StrategyMarketScope) => Promise<void>;
   onAuthChange?: (user: AuthSessionUser | null) => void;
+  onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
+  useEffect(() => {
+    onPortalViewChange?.(portalView);
+  }, [onPortalViewChange, portalView]);
   const [capital] = useState(() => readAutoTradeSetting('autoTrade.capital', '25000'));
   const [venueMode, setVenueMode] = useState<ExecutionVenueMode>(() => {
     const savedVenue = readAutoTradeSetting('autoTrade.venueMode', 'spot');
@@ -4386,29 +4394,33 @@ function AutoTradePage({
           <div className="auth-value-grid">
             <article>
               <BarChart3 size={20} />
-              <strong>Live Market Scanning</strong>
-              <span>Track Binance spot and futures markets from one focused workspace.</span>
-            </article>
-            <article>
-              <Bot size={20} />
-              <strong>Auto Trading Rules</strong>
-              <span>Control capital, risk, leverage, and execution settings before trades run.</span>
+              <b>10+ STRATEGIES</b>
+              <strong>Multi-strategy engine</strong>
+              <span>Every symbol is checked against a stack of independent trading strategies.</span>
             </article>
             <article>
               <ShieldAlert size={20} />
-              <strong>Strategy Dashboard</strong>
-              <span>Review signals, wins, losses, rejected trades, and performance clearly.</span>
+              <b>MULTI-STAGE CHECK</b>
+              <strong>Signals must pass gates</strong>
+              <span>Trend, risk, liquidity, market type, and execution rules are reviewed before approval.</span>
             </article>
             <article>
-              <Bell size={20} />
-              <strong>Telegram Alerts</strong>
-              <span>Receive important trade updates and account notifications when it matters.</span>
+              <Sparkles size={20} />
+              <b>AI LOSS REVIEW</b>
+              <strong>Learns from losing trades</strong>
+              <span>Losses are analyzed so the system can improve filters and strategy behavior.</span>
+            </article>
+            <article>
+              <Target size={20} />
+              <b>BACKTESTED FIRST</b>
+              <strong>Tested before release</strong>
+              <span>Each strategy is backtested before it becomes available in the workspace.</span>
             </article>
           </div>
           <div className="trial-proof-strip">
             <span><strong>14</strong> days free</span>
-            <span><strong>2</strong> trading tools</span>
-            <span><strong>1</strong> private workspace</span>
+            <span><strong>10+</strong> strategies</span>
+            <span><strong>AI</strong> loss review</span>
           </div>
           <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
             Start with 14 days free

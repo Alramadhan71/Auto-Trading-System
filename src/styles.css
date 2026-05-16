@@ -18146,6 +18146,540 @@ body {
   box-shadow: 0 8px 18px var(--shadow-soft) !important;
 }
 
+/* Absolute final auth landing override. Keep this after global cleanup rules. */
+.page-auto-trade:has(.auto-auth-shell) {
+  padding: 18px 24px !important;
+  min-height: calc(100vh - 72px) !important;
+  overflow: hidden !important;
+}
+
+.shell-header.auth-header {
+  min-height: 72px !important;
+  padding: 0 28px !important;
+}
+
+.shell-header.auth-header .shell-nav {
+  display: none !important;
+}
+
+.auth-return-home {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  color: var(--text) !important;
+  background: var(--card-surface) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .auto-auth-shell {
+  width: min(1180px, calc(100vw - 56px)) !important;
+  height: min(730px, calc(100vh - 112px)) !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px) !important;
+  align-items: center !important;
+  gap: clamp(20px, 2.2vw, 30px) !important;
+  overflow: hidden !important;
+}
+
+.auto-auth-marketing {
+  max-width: 650px !important;
+  gap: 12px !important;
+}
+
+.auto-auth-marketing h1 {
+  max-width: 610px !important;
+  margin: 0 !important;
+  font-size: clamp(42px, 4.4vw, 64px) !important;
+  line-height: .94 !important;
+  letter-spacing: 0 !important;
+}
+
+.auto-auth-marketing p {
+  max-width: 580px !important;
+  margin: 0 !important;
+  font-size: clamp(15px, 1.05vw, 18px) !important;
+  line-height: 1.45 !important;
+}
+
+.auth-value-grid {
+  max-width: 650px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.auth-value-grid article {
+  min-height: 96px !important;
+  padding: 11px 12px !important;
+  grid-template-columns: 30px minmax(0, 1fr) !important;
+  gap: 3px 10px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 6px 14px var(--shadow-soft) !important;
+}
+
+.auth-value-grid b {
+  display: block !important;
+  color: var(--muted) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+  font-weight: 850 !important;
+  letter-spacing: .06em !important;
+}
+
+.auth-value-grid strong {
+  font-size: 14px !important;
+  line-height: 1.15 !important;
+}
+
+.auth-value-grid span {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.trial-proof-strip {
+  max-width: 650px !important;
+  gap: 9px !important;
+}
+
+.trial-proof-strip span {
+  min-height: 48px !important;
+  padding: 8px 12px !important;
+}
+
+.auth-marketing-cta {
+  min-height: 38px !important;
+  padding: 0 15px !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+}
+
+.page-auto-trade .auto-auth-card {
+  max-width: 430px !important;
+  padding: 20px 22px !important;
+}
+
+.page-auto-trade .auto-auth-head {
+  margin-bottom: 12px !important;
+}
+
+.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(34px, 3vw, 44px) !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .auto-auth-form {
+  gap: 10px !important;
+}
+
+.page-auto-trade .auto-auth-form input,
+.page-auto-trade .password-field {
+  min-height: 46px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+}
+
+@media (max-height: 790px) and (min-width: 981px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    padding-block: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    height: calc(100vh - 96px) !important;
+    padding: 16px 20px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
+    gap: 18px !important;
+  }
+
+  .auto-auth-marketing {
+    gap: 9px !important;
+  }
+
+  .auto-auth-marketing h1 {
+    font-size: clamp(38px, 4vw, 56px) !important;
+  }
+
+  .auto-auth-marketing p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .auth-value-grid article {
+    min-height: 84px !important;
+    padding: 9px 10px !important;
+  }
+
+  .auth-value-grid strong {
+    font-size: 13px !important;
+  }
+
+  .auth-value-grid span {
+    font-size: 11px !important;
+    line-height: 1.28 !important;
+  }
+
+  .trial-proof-strip span {
+    min-height: 42px !important;
+    padding: 7px 10px !important;
+  }
+
+  .auth-marketing-cta {
+    min-height: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-card {
+    padding: 16px 18px !important;
+  }
+
+  .page-auto-trade .auto-auth-head h1 {
+    font-size: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-form input,
+  .page-auto-trade .password-field {
+    min-height: 42px !important;
+  }
+
+  .page-auto-trade .auto-auth-form > button[type="submit"] {
+    min-height: 44px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    overflow: visible !important;
+    padding: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    width: 100% !important;
+    height: auto !important;
+    grid-template-columns: 1fr !important;
+    overflow: visible !important;
+  }
+}
+
+/* Login landing final pass: no gated nav, compact desktop fit, clearer product proof. */
+.page-auto-trade:has(.auto-auth-shell) {
+  padding: 18px 24px !important;
+  min-height: calc(100vh - 72px) !important;
+  overflow: hidden !important;
+}
+
+.shell-header.auth-header {
+  min-height: 72px !important;
+  padding: 0 28px !important;
+}
+
+.shell-header.auth-header .shell-nav {
+  display: none !important;
+}
+
+.auth-return-home {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  background: var(--card-surface) !important;
+  box-shadow: 0 8px 18px var(--shadow-soft) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .auto-auth-shell {
+  width: min(1180px, calc(100vw - 56px)) !important;
+  height: min(730px, calc(100vh - 112px)) !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px) !important;
+  align-items: center !important;
+  gap: clamp(20px, 2.2vw, 30px) !important;
+  overflow: hidden !important;
+  background: color-mix(in srgb, var(--section-surface) 90%, var(--bg)) !important;
+  border-color: color-mix(in srgb, var(--border-strong) 50%, var(--border)) !important;
+  box-shadow: 0 10px 24px var(--shadow-soft) !important;
+}
+
+.auto-auth-marketing {
+  max-width: 650px !important;
+  display: grid !important;
+  gap: 12px !important;
+  align-content: center !important;
+}
+
+.auto-auth-marketing .home-kicker {
+  width: fit-content !important;
+  min-height: 28px !important;
+  padding: 0 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  background: var(--card-surface-raised) !important;
+  color: var(--text) !important;
+}
+
+.auto-auth-marketing h1 {
+  max-width: 610px !important;
+  margin: 0 !important;
+  font-size: clamp(42px, 4.4vw, 64px) !important;
+  line-height: .94 !important;
+  letter-spacing: 0 !important;
+}
+
+.auto-auth-marketing p {
+  max-width: 580px !important;
+  margin: 0 !important;
+  font-size: clamp(15px, 1.05vw, 18px) !important;
+  line-height: 1.45 !important;
+  color: var(--soft-text) !important;
+}
+
+.auth-value-grid {
+  max-width: 650px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.auth-value-grid article {
+  min-height: 96px !important;
+  padding: 11px 12px !important;
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) !important;
+  gap: 3px 10px !important;
+  align-items: start !important;
+  border: 1px solid var(--border) !important;
+  border-left: 3px solid var(--border-strong) !important;
+  border-radius: 8px !important;
+  background: color-mix(in srgb, var(--card-surface) 86%, var(--section-surface)) !important;
+  box-shadow: 0 6px 14px var(--shadow-soft) !important;
+}
+
+.auth-value-grid article:nth-child(1) {
+  border-left-color: var(--semantic-blue) !important;
+}
+
+.auth-value-grid article:nth-child(2) {
+  border-left-color: var(--semantic-amber) !important;
+}
+
+.auth-value-grid article:nth-child(3) {
+  border-left-color: var(--success) !important;
+}
+
+.auth-value-grid article:nth-child(4) {
+  border-left-color: var(--muted) !important;
+}
+
+.auth-value-grid svg {
+  grid-row: span 3 !important;
+  width: 22px !important;
+  height: 22px !important;
+  margin-top: 2px !important;
+  color: var(--soft-text) !important;
+}
+
+.auth-value-grid b {
+  display: block !important;
+  color: var(--muted) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+  font-weight: 850 !important;
+  letter-spacing: .06em !important;
+}
+
+.auth-value-grid strong {
+  display: block !important;
+  color: var(--text) !important;
+  font-size: 14px !important;
+  line-height: 1.15 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+}
+
+.auth-value-grid span {
+  grid-column: 2 !important;
+  color: var(--soft-text) !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.trial-proof-strip {
+  max-width: 650px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.trial-proof-strip span {
+  min-height: 48px !important;
+  padding: 8px 12px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  background: var(--card-surface-raised) !important;
+  color: var(--soft-text) !important;
+}
+
+.trial-proof-strip strong {
+  font-size: 22px !important;
+  line-height: 1 !important;
+}
+
+.auth-marketing-cta {
+  width: fit-content !important;
+  min-height: 38px !important;
+  padding: 0 15px !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 999px !important;
+  color: var(--text) !important;
+  background: var(--card-surface) !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .auto-auth-card {
+  width: 100% !important;
+  max-width: 430px !important;
+  padding: 20px 22px !important;
+  border-color: color-mix(in srgb, var(--border-strong) 52%, var(--border)) !important;
+  background: color-mix(in srgb, var(--card-surface) 88%, var(--section-surface)) !important;
+  box-shadow: 0 10px 24px var(--shadow-soft) !important;
+}
+
+.page-auto-trade .auto-auth-head {
+  margin-bottom: 12px !important;
+}
+
+.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(34px, 3vw, 44px) !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .auto-auth-head small {
+  line-height: 1.35 !important;
+}
+
+.role-switch {
+  min-height: 50px !important;
+}
+
+.page-auto-trade .auto-auth-form {
+  gap: 10px !important;
+}
+
+.page-auto-trade .auto-auth-form input,
+.page-auto-trade .password-field {
+  min-height: 46px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+}
+
+.password-policy-note,
+.register-prompt,
+.auth-message,
+.auto-auth-help,
+.auto-auth-card > p:last-child {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+@media (max-height: 790px) and (min-width: 981px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    padding-block: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    height: calc(100vh - 96px) !important;
+    padding: 16px 20px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
+    gap: 18px !important;
+  }
+
+  .auto-auth-marketing {
+    gap: 9px !important;
+  }
+
+  .auto-auth-marketing h1 {
+    font-size: clamp(38px, 4vw, 56px) !important;
+  }
+
+  .auto-auth-marketing p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .auth-value-grid article {
+    min-height: 84px !important;
+    padding: 9px 10px !important;
+  }
+
+  .auth-value-grid strong {
+    font-size: 13px !important;
+  }
+
+  .auth-value-grid span {
+    font-size: 11px !important;
+    line-height: 1.28 !important;
+  }
+
+  .trial-proof-strip span {
+    min-height: 42px !important;
+    padding: 7px 10px !important;
+  }
+
+  .auth-marketing-cta {
+    min-height: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-card {
+    padding: 16px 18px !important;
+  }
+
+  .page-auto-trade .auto-auth-head h1 {
+    font-size: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-form input,
+  .page-auto-trade .password-field {
+    min-height: 42px !important;
+  }
+
+  .page-auto-trade .auto-auth-form > button[type="submit"] {
+    min-height: 44px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    overflow: visible !important;
+    padding: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    width: 100% !important;
+    height: auto !important;
+    grid-template-columns: 1fr !important;
+    overflow: visible !important;
+  }
+}
+
 /* Final auth landing balance: compact layout with distinct, theme-native surfaces. */
 .page-auto-trade .auto-auth-shell {
   width: min(1280px, calc(100vw - 48px)) !important;
@@ -19009,4 +19543,224 @@ textarea,
   background: var(--card-surface-raised) !important;
   border-color: color-mix(in srgb, var(--semantic-amber) 38%, var(--border)) !important;
   box-shadow: 0 8px 18px var(--shadow-soft) !important;
+}
+
+/* Absolute final auth landing override. Keep this after global cleanup rules. */
+.page-auto-trade:has(.auto-auth-shell) {
+  padding: 18px 24px !important;
+  min-height: calc(100vh - 72px) !important;
+  overflow: hidden !important;
+}
+
+.shell-header.auth-header {
+  min-height: 72px !important;
+  padding: 0 28px !important;
+}
+
+.shell-header.auth-header .shell-nav {
+  display: none !important;
+}
+
+.auth-return-home {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  color: var(--text) !important;
+  background: var(--card-surface) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .auto-auth-shell {
+  width: min(1180px, calc(100vw - 56px)) !important;
+  height: min(730px, calc(100vh - 112px)) !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px) !important;
+  align-items: center !important;
+  gap: clamp(20px, 2.2vw, 30px) !important;
+  overflow: hidden !important;
+}
+
+.auto-auth-marketing {
+  max-width: 650px !important;
+  gap: 12px !important;
+}
+
+.auto-auth-marketing h1 {
+  max-width: 610px !important;
+  margin: 0 !important;
+  font-size: clamp(42px, 4.4vw, 64px) !important;
+  line-height: .94 !important;
+  letter-spacing: 0 !important;
+}
+
+.auto-auth-marketing p {
+  max-width: 580px !important;
+  margin: 0 !important;
+  font-size: clamp(15px, 1.05vw, 18px) !important;
+  line-height: 1.45 !important;
+}
+
+.auth-value-grid {
+  max-width: 650px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.auth-value-grid article {
+  min-height: 96px !important;
+  padding: 11px 12px !important;
+  grid-template-columns: 30px minmax(0, 1fr) !important;
+  gap: 3px 10px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 6px 14px var(--shadow-soft) !important;
+}
+
+.auth-value-grid b {
+  display: block !important;
+  color: var(--muted) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+  font-weight: 850 !important;
+  letter-spacing: .06em !important;
+}
+
+.auth-value-grid strong {
+  font-size: 14px !important;
+  line-height: 1.15 !important;
+}
+
+.auth-value-grid span {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.trial-proof-strip {
+  max-width: 650px !important;
+  gap: 9px !important;
+}
+
+.trial-proof-strip span {
+  min-height: 48px !important;
+  padding: 8px 12px !important;
+}
+
+.auth-marketing-cta {
+  min-height: 38px !important;
+  padding: 0 15px !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+}
+
+.page-auto-trade .auto-auth-card {
+  max-width: 430px !important;
+  padding: 20px 22px !important;
+}
+
+.page-auto-trade .auto-auth-head {
+  margin-bottom: 12px !important;
+}
+
+.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(34px, 3vw, 44px) !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .auto-auth-form {
+  gap: 10px !important;
+}
+
+.page-auto-trade .auto-auth-form input,
+.page-auto-trade .password-field {
+  min-height: 46px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+}
+
+@media (max-height: 790px) and (min-width: 981px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    padding-block: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    height: calc(100vh - 96px) !important;
+    padding: 16px 20px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
+    gap: 18px !important;
+  }
+
+  .auto-auth-marketing {
+    gap: 9px !important;
+  }
+
+  .auto-auth-marketing h1 {
+    font-size: clamp(38px, 4vw, 56px) !important;
+  }
+
+  .auto-auth-marketing p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .auth-value-grid article {
+    min-height: 84px !important;
+    padding: 9px 10px !important;
+  }
+
+  .auth-value-grid strong {
+    font-size: 13px !important;
+  }
+
+  .auth-value-grid span {
+    font-size: 11px !important;
+    line-height: 1.28 !important;
+  }
+
+  .trial-proof-strip span {
+    min-height: 42px !important;
+    padding: 7px 10px !important;
+  }
+
+  .auth-marketing-cta {
+    min-height: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-card {
+    padding: 16px 18px !important;
+  }
+
+  .page-auto-trade .auto-auth-head h1 {
+    font-size: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-form input,
+  .page-auto-trade .password-field {
+    min-height: 42px !important;
+  }
+
+  .page-auto-trade .auto-auth-form > button[type="submit"] {
+    min-height: 44px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-auto-trade:has(.auto-auth-shell) {
+    overflow: visible !important;
+    padding: 12px !important;
+  }
+
+  .page-auto-trade .auto-auth-shell {
+    width: 100% !important;
+    height: auto !important;
+    grid-template-columns: 1fr !important;
+    overflow: visible !important;
+  }
 }
