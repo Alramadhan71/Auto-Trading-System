@@ -4391,37 +4391,38 @@ function AutoTradePage({
           <span className="home-kicker">14 days free</span>
           <h1>Trade with a system, not emotions.</h1>
           <p>A private execution workspace where every market idea moves through strategy, risk, learning, and testing gates before it reaches the trader.</p>
-          <div className="auth-system-pipeline" aria-label="System approval pipeline">
-            <article>
-              <span className="auth-pipeline-step">01</span>
-              <BarChart3 size={18} />
-              <strong>Market scan</strong>
-              <small>Spot and futures symbols are scanned continuously.</small>
+          <div className="auth-story-board" aria-label="System approval process">
+            <article className="auth-decision-card">
+              <span>Decision engine</span>
+              <strong>10+ strategies review every setup before it becomes a signal.</strong>
+              <p>A coin is not accepted from one rule. It has to pass strategy agreement, market quality, risk limits, and execution readiness.</p>
             </article>
-            <article>
-              <span className="auth-pipeline-step">02</span>
-              <Target size={18} />
-              <strong>10+ strategies</strong>
-              <small>The coin must match more than one professional strategy layer.</small>
-            </article>
-            <article>
-              <span className="auth-pipeline-step">03</span>
-              <ShieldAlert size={18} />
-              <strong>Approval gates</strong>
-              <small>Risk, liquidity, trend, and execution rules filter weak setups.</small>
-            </article>
-            <article>
-              <span className="auth-pipeline-step">04</span>
-              <Sparkles size={18} />
-              <strong>AI loss review</strong>
-              <small>Losing trades feed back into filters and strategy behavior.</small>
-            </article>
-            <article>
-              <span className="auth-pipeline-step">05</span>
-              <Gauge size={18} />
-              <strong>Backtest first</strong>
-              <small>Each strategy is tested before being released to the workspace.</small>
-            </article>
+            <div className="auth-stage-list">
+              <article>
+                <BarChart3 size={18} />
+                <span>01</span>
+                <strong>Scan</strong>
+                <small>Spot and futures markets are watched continuously.</small>
+              </article>
+              <article>
+                <ShieldAlert size={18} />
+                <span>02</span>
+                <strong>Gate</strong>
+                <small>Trend, liquidity, risk, and execution filters reject weak setups.</small>
+              </article>
+              <article>
+                <Sparkles size={18} />
+                <span>03</span>
+                <strong>Learn</strong>
+                <small>AI reviews losing trades and improves the filters.</small>
+              </article>
+              <article>
+                <Gauge size={18} />
+                <span>04</span>
+                <strong>Test</strong>
+                <small>Strategies are backtested before release.</small>
+              </article>
+            </div>
           </div>
           <div className="trial-proof-strip">
             <span><strong>14</strong><small>days free</small></span>
