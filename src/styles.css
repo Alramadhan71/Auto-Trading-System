@@ -66,106 +66,106 @@
 
 :root[data-theme-style="1"][data-theme="dark"] {
   color-scheme: dark;
-  --bg: #101318;
-  --sidebar: #141821;
-  --panel: #191e27;
-  --panel-strong: #151922;
+  --bg: #0f1115;
+  --sidebar: #12151b;
+  --panel: #181c23;
+  --panel-strong: #11141a;
   --panel-soft: #202631;
-  --border: #343b48;
-  --border-strong: #627da6;
-  --text: #eef2f7;
-  --muted: #9ea8b6;
-  --soft-text: #c7ced8;
-  --accent: #7794bf;
-  --accent-strong: #627da6;
-  --success: #76a989;
-  --danger: #bd7a80;
-  --warning: #b89b66;
-  --hover: rgba(119, 148, 191, 0.1);
+  --border: #313844;
+  --border-strong: #4f8cff;
+  --text: #f4f7fb;
+  --muted: #a8b1bf;
+  --soft-text: #d7dde7;
+  --accent: #4f8cff;
+  --accent-strong: #2f6fe6;
+  --success: #35c77f;
+  --danger: #ef6672;
+  --warning: #d8ad5f;
+  --hover: rgba(79, 140, 255, 0.13);
   --brand-text: #ffffff;
 }
 
 :root[data-theme-style="1"][data-theme="light"] {
   color-scheme: light;
-  --bg: #f7f8fa;
+  --bg: #f6f8fb;
   --sidebar: #ffffff;
   --panel: #ffffff;
-  --panel-strong: #f1f3f6;
-  --panel-soft: #f6f7f9;
-  --border: #d8dee7;
-  --border-strong: #6f88ad;
-  --text: #1f2935;
-  --muted: #667384;
-  --soft-text: #465364;
-  --accent: #6f88ad;
-  --accent-strong: #566f94;
-  --success: #4f8767;
-  --danger: #a85f69;
-  --warning: #8e7547;
-  --hover: rgba(111, 136, 173, 0.1);
+  --panel-strong: #eef2f7;
+  --panel-soft: #f3f6fa;
+  --border: #d8dee8;
+  --border-strong: #2f6fe6;
+  --text: #17202c;
+  --muted: #667285;
+  --soft-text: #3d4858;
+  --accent: #2f6fe6;
+  --accent-strong: #1f57bd;
+  --success: #178f5f;
+  --danger: #cf4c5c;
+  --warning: #a97524;
+  --hover: rgba(47, 111, 230, 0.1);
   --brand-text: #17202c;
 }
 
 :root[data-theme-style="2"][data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0b0d11;
-  --sidebar: #10141b;
-  --panel: #171c24;
-  --panel-strong: #121720;
-  --panel-soft: #202733;
-  --border: #3d4655;
-  --border-strong: #7b8da6;
-  --text: #f6f8fb;
-  --muted: #b1bac7;
-  --soft-text: #d5dbe4;
-  --accent: #8ba0bc;
-  --accent-strong: #7288a5;
-  --success: #7eb28c;
-  --danger: #c47880;
-  --warning: #c3a56b;
-  --hover: rgba(139, 160, 188, 0.11);
+  --bg: #07090d;
+  --sidebar: #0a0d13;
+  --panel: #151b25;
+  --panel-strong: #0f141d;
+  --panel-soft: #202936;
+  --border: #435064;
+  --border-strong: #67a8ff;
+  --text: #ffffff;
+  --muted: #bdc7d6;
+  --soft-text: #e2e8f2;
+  --accent: #67a8ff;
+  --accent-strong: #2d7ff0;
+  --success: #24d17e;
+  --danger: #ff5967;
+  --warning: #f0ba55;
+  --hover: rgba(103, 168, 255, 0.18);
   --brand-text: #ffffff;
 }
 
 :root[data-theme-style="2"][data-theme="light"] {
   color-scheme: light;
-  --bg: #f2f4f7;
+  --bg: #f0f3f8;
   --sidebar: #ffffff;
   --panel: #ffffff;
-  --panel-strong: #e9edf2;
-  --panel-soft: #f7f8fa;
-  --border: #c9d0db;
-  --border-strong: #61748f;
-  --text: #111923;
-  --muted: #526173;
-  --soft-text: #2f3c4d;
-  --accent: #61748f;
-  --accent-strong: #4b5e77;
-  --success: #3d7b58;
-  --danger: #9d5260;
-  --warning: #806842;
-  --hover: rgba(97, 116, 143, 0.11);
+  --panel-strong: #e8edf5;
+  --panel-soft: #f7f9fc;
+  --border: #c1cad8;
+  --border-strong: #125fd2;
+  --text: #0d1622;
+  --muted: #4d5d70;
+  --soft-text: #273548;
+  --accent: #125fd2;
+  --accent-strong: #0b47a4;
+  --success: #087a4f;
+  --danger: #b92f44;
+  --warning: #8d5d10;
+  --hover: rgba(18, 95, 210, 0.13);
   --brand-text: #0d1622;
 }
 
 :root[data-theme-style="3"][data-theme="dark"] {
   color-scheme: dark;
-  --bg: #121314;
-  --sidebar: #161819;
-  --panel: #1d1f21;
-  --panel-strong: #181a1c;
-  --panel-soft: #24272a;
-  --border: #373b40;
-  --border-strong: #747d89;
+  --bg: #111316;
+  --sidebar: #14171b;
+  --panel: #1b1f24;
+  --panel-strong: #15181d;
+  --panel-soft: #22272e;
+  --border: #343a43;
+  --border-strong: #8ab4f8;
   --text: #f1f3f6;
-  --muted: #a5abb2;
-  --soft-text: #d0d4d9;
-  --accent: #88919e;
-  --accent-strong: #747d89;
-  --success: #789a83;
-  --danger: #aa7478;
-  --warning: #a39168;
-  --hover: rgba(136, 145, 158, 0.1);
+  --muted: #a5acb7;
+  --soft-text: #d0d5dd;
+  --accent: #8ab4f8;
+  --accent-strong: #5f8fdb;
+  --success: #49b87d;
+  --danger: #dc6a70;
+  --warning: #c8a15b;
+  --hover: rgba(138, 180, 248, 0.12);
   --brand-text: #f1f3f6;
 }
 
@@ -177,58 +177,58 @@
   --panel-strong: #f1f2f4;
   --panel-soft: #f6f7f8;
   --border: #dddddf;
-  --border-strong: #747d89;
+  --border-strong: #5d7faf;
   --text: #202327;
   --muted: #6b717a;
   --soft-text: #464d55;
-  --accent: #747d89;
-  --accent-strong: #5e6671;
-  --success: #557b63;
-  --danger: #99616a;
-  --warning: #7e6e4f;
-  --hover: rgba(116, 125, 137, 0.1);
+  --accent: #5d7faf;
+  --accent-strong: #45638d;
+  --success: #2f855a;
+  --danger: #c24f57;
+  --warning: #8a681f;
+  --hover: rgba(93, 127, 175, 0.1);
   --brand-text: #202327;
 }
 
 :root[data-theme-style="4"][data-theme="dark"] {
   color-scheme: dark;
-  --bg: #101419;
-  --sidebar: #151b22;
-  --panel: #1b232c;
-  --panel-strong: #161d25;
-  --panel-soft: #232d37;
-  --border: #3a4653;
-  --border-strong: #8f8066;
-  --text: #f2efe8;
-  --muted: #b1b6bf;
-  --soft-text: #d4d8df;
-  --accent: #8d9daf;
-  --accent-strong: #77889b;
-  --success: #789b7d;
-  --danger: #b07176;
-  --warning: #a69068;
-  --hover: rgba(141, 157, 175, 0.1);
+  --bg: #0b1016;
+  --sidebar: #0f1720;
+  --panel: #17212c;
+  --panel-strong: #111923;
+  --panel-soft: #1e2b38;
+  --border: #334557;
+  --border-strong: #b58a3c;
+  --text: #f4f0e8;
+  --muted: #b7bdc5;
+  --soft-text: #d9dee5;
+  --accent: #5b93d3;
+  --accent-strong: #3e73ad;
+  --success: #3bb273;
+  --danger: #d8656b;
+  --warning: #b58a3c;
+  --hover: rgba(91, 147, 211, 0.12);
   --brand-text: #f4f0e8;
 }
 
 :root[data-theme-style="4"][data-theme="light"] {
   color-scheme: light;
-  --bg: #f4f3f1;
+  --bg: #f3f4f6;
   --sidebar: #fbfbfc;
   --panel: #ffffff;
-  --panel-strong: #eeece8;
-  --panel-soft: #f8f7f5;
-  --border: #d7d2ca;
-  --border-strong: #8f8066;
+  --panel-strong: #eceff3;
+  --panel-soft: #f7f8fa;
+  --border: #d2d7df;
+  --border-strong: #9a6b20;
   --text: #1c2430;
   --muted: #647083;
   --soft-text: #3f4b5a;
-  --accent: #7d8da0;
-  --accent-strong: #66778a;
-  --success: #527c5c;
-  --danger: #9e5d65;
-  --warning: #806f4d;
-  --hover: rgba(125, 141, 160, 0.1);
+  --accent: #2f6fae;
+  --accent-strong: #235582;
+  --success: #227a52;
+  --danger: #bb4853;
+  --warning: #9a6b20;
+  --hover: rgba(47, 111, 174, 0.1);
   --brand-text: #1c2430;
 }
 
@@ -17174,171 +17174,4 @@ video {
 :root[data-theme-style="4"] .notification-card,
 :root[data-theme-style="4"] .theme-modal {
   box-shadow: 0 16px 38px rgba(18, 28, 40, .16);
-}
-
-/* Quiet theme review mode: the four options are palette studies, not visual effects. */
-:root[data-theme-style] *,
-:root[data-theme-style] *::before,
-:root[data-theme-style] *::after {
-  background-image: none !important;
-  box-shadow: none !important;
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-:root[data-theme-style] body,
-:root[data-theme-style] .app-shell,
-:root[data-theme-style] .page-frame {
-  background: var(--bg) !important;
-  color: var(--text);
-}
-
-:root[data-theme-style] .shell-header {
-  background: var(--sidebar) !important;
-  border-bottom: 1px solid var(--border) !important;
-  backdrop-filter: none !important;
-}
-
-:root[data-theme-style] .shell-nav button,
-:root[data-theme-style] .theme-studio,
-:root[data-theme-style] .theme-studio button,
-:root[data-theme-style] .notification-settings,
-:root[data-theme-style] .notification-settings-trigger,
-:root[data-theme-style] .home-header-cta,
-:root[data-theme-style] .home-cta-primary,
-:root[data-theme-style] .home-cta-secondary,
-:root[data-theme-style] .minimal-home-action,
-:root[data-theme-style] .range-pills button,
-:root[data-theme-style] .access-filter-pills button,
-:root[data-theme-style] .signal-filters button,
-:root[data-theme-style] .toast-duration-grid button,
-:root[data-theme-style] .calendar-header button,
-:root[data-theme-style] .custom-date-trigger,
-:root[data-theme-style] .duration-picker-trigger,
-:root[data-theme-style] .snapshot-toggle,
-:root[data-theme-style] .leader-toggle {
-  background: var(--panel-strong) !important;
-  border-color: var(--border) !important;
-  color: var(--text) !important;
-}
-
-:root[data-theme-style] .shell-nav button.active,
-:root[data-theme-style] .theme-mode-switch button.active,
-:root[data-theme-style] .theme-showcase-card.active,
-:root[data-theme-style] .range-pills button.active,
-:root[data-theme-style] .access-filter-pills button.active,
-:root[data-theme-style] .signal-filters button.active,
-:root[data-theme-style] .toast-duration-grid button.active,
-:root[data-theme-style] .calendar-day.selected,
-:root[data-theme-style] .scorecard.active,
-:root[data-theme-style] .snapshot-panel.open .snapshot-toggle {
-  background: var(--panel-soft) !important;
-  border-color: var(--border-strong) !important;
-  color: var(--text) !important;
-}
-
-:root[data-theme-style] .panel,
-:root[data-theme-style] .chart,
-:root[data-theme-style] .chart-block,
-:root[data-theme-style] .trade-list,
-:root[data-theme-style] .signals article,
-:root[data-theme-style] .notification-card,
-:root[data-theme-style] .toast,
-:root[data-theme-style] .theme-modal,
-:root[data-theme-style] .theme-showcase-card,
-:root[data-theme-style] .showcase-screen,
-:root[data-theme-style] .showcase-screen aside,
-:root[data-theme-style] .showcase-screen main,
-:root[data-theme-style] .notification-settings-popover,
-:root[data-theme-style] .confirm-modal,
-:root[data-theme-style] .home-launchpad,
-:root[data-theme-style] .minimal-home,
-:root[data-theme-style] .home-live-board,
-:root[data-theme-style] .home-live-card,
-:root[data-theme-style] .home-intel-card,
-:root[data-theme-style] .home-leader-card,
-:root[data-theme-style] .home-news-shell,
-:root[data-theme-style] .home-leader-shell,
-:root[data-theme-style] .home-live-pulse,
-:root[data-theme-style] .market-card,
-:root[data-theme-style] .home-conversion-card,
-:root[data-theme-style] .auto-auth-shell,
-:root[data-theme-style] .auto-auth-card,
-:root[data-theme-style] .auto-trade-headbar,
-:root[data-theme-style] .premium-panel,
-:root[data-theme-style] .premium-summary-card,
-:root[data-theme-style] .queue-config-bar,
-:root[data-theme-style] .performance-command,
-:root[data-theme-style] .command-summary article,
-:root[data-theme-style] .scorecard,
-:root[data-theme-style] .snapshot-list article,
-:root[data-theme-style] .leader-item,
-:root[data-theme-style] .trade-ledger-shell,
-:root[data-theme-style] .ledger-simulation-panel,
-:root[data-theme-style] .custom-date-field,
-:root[data-theme-style] .custom-calendar-popover,
-:root[data-theme-style] .duration-picker-menu {
-  background: var(--panel) !important;
-  border-color: var(--border) !important;
-}
-
-:root[data-theme-style] .signal-grid span,
-:root[data-theme-style] .trade-ledger th,
-:root[data-theme-style] .calendar-day,
-:root[data-theme-style] input,
-:root[data-theme-style] select,
-:root[data-theme-style] textarea {
-  background: var(--panel-strong) !important;
-  border-color: var(--border) !important;
-  color: var(--text) !important;
-}
-
-:root[data-theme-style] .good,
-:root[data-theme-style] .strategy-bar.win,
-:root[data-theme-style] .strategy-chart-legend .win,
-:root[data-theme-style] .side-badge.long {
-  color: var(--success) !important;
-}
-
-:root[data-theme-style] .bad,
-:root[data-theme-style] .strategy-bar.loss,
-:root[data-theme-style] .strategy-chart-legend .loss,
-:root[data-theme-style] .side-badge.short {
-  color: var(--danger) !important;
-}
-
-:root[data-theme-style] .strategy-bar.win,
-:root[data-theme-style] .strategy-chart-legend .win {
-  background: var(--success) !important;
-}
-
-:root[data-theme-style] .strategy-bar.loss,
-:root[data-theme-style] .strategy-chart-legend .loss {
-  background: var(--danger) !important;
-}
-
-:root[data-theme-style] .strategy-bar.open,
-:root[data-theme-style] .strategy-chart-legend .open,
-:root[data-theme-style] .scoreline i,
-:root[data-theme-style] .scan-progress-track i,
-:root[data-theme-style] .strategy-winrate-line i,
-:root[data-theme-style] .preview-chart i {
-  background: var(--accent) !important;
-}
-
-:root[data-theme-style] .preview-chart i:nth-child(2n) {
-  background: var(--border-strong) !important;
-}
-
-:root[data-theme-style] .scoreline,
-:root[data-theme-style] .scan-progress-track,
-:root[data-theme-style] .strategy-winrate-line {
-  background: var(--panel-strong) !important;
-  border-color: var(--border) !important;
-}
-
-:root[data-theme-style] .shell-nav button:hover,
-:root[data-theme-style] button:hover {
-  border-color: var(--border-strong) !important;
-  transform: none !important;
 }
