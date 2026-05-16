@@ -18264,3 +18264,58 @@ body {
 .home-top-market-card:has(.good)::after {
   background: var(--success) !important;
 }
+
+/* Search and sentiment badge polish. */
+.search-panel,
+.home-search-panel {
+  overflow: hidden !important;
+}
+
+.search-panel input,
+.home-search-panel input {
+  min-height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+.search-panel input:focus,
+.home-search-panel input:focus {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+.home-fear-history-row b {
+  background: color-mix(in srgb, var(--semantic-orange) 22%, var(--card-surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--semantic-orange) 42%, var(--border)) !important;
+  color: var(--text) !important;
+}
+
+.home-fear-history-row.sentiment-extreme b {
+  background: color-mix(in srgb, var(--danger) 24%, var(--card-surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--danger) 44%, var(--border)) !important;
+  color: color-mix(in srgb, var(--danger) 74%, var(--text)) !important;
+}
+
+.home-fear-history-row.sentiment-fear b {
+  background: color-mix(in srgb, var(--semantic-orange) 24%, var(--card-surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--semantic-orange) 44%, var(--border)) !important;
+  color: color-mix(in srgb, var(--semantic-orange) 74%, var(--text)) !important;
+}
+
+.home-fear-history-row.sentiment-neutral b,
+.home-fear-history-row.sentiment-optimism b {
+  background: color-mix(in srgb, var(--semantic-yellow) 24%, var(--card-surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--semantic-yellow) 44%, var(--border)) !important;
+  color: color-mix(in srgb, var(--semantic-yellow) 74%, var(--text)) !important;
+}
+
+.home-fear-history-row.sentiment-greed b {
+  background: color-mix(in srgb, var(--semantic-green) 22%, var(--card-surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--semantic-green) 42%, var(--border)) !important;
+  color: color-mix(in srgb, var(--semantic-green) 74%, var(--text)) !important;
+}
