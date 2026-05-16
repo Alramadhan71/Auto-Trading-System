@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -274,7 +274,7 @@ type TelegramSubscriber = {
   linked: boolean;
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
-type Theme = 'dark' | 'light';
+type Theme = 'light' | 'dark' | 'black';
 type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
@@ -552,8 +552,9 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'dark', name: 'Dark' },
-  { id: 'light', name: 'Light' }
+  { id: 'light', name: 'Light' },
+  { id: 'dark', name: 'Midnight' },
+  { id: 'black', name: 'Black' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
@@ -1764,17 +1765,18 @@ function ThemeStudio({
   currentTheme: Theme;
   onPick: (theme: Theme) => void;
 }) {
-  const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
   return <div className={`theme-studio theme-control ${currentTheme}`}>
-    <button
+    {themes.map(item => <button
+      key={item.id}
       type="button"
-      className="theme-toggle"
-      onClick={() => onPick(nextTheme)}
-      aria-label={`Switch to ${nextTheme} theme`}
+      className={currentTheme === item.id ? 'theme-toggle active' : 'theme-toggle'}
+      onClick={() => onPick(item.id)}
+      aria-label={`Switch to ${item.name} theme`}
+      aria-pressed={currentTheme === item.id}
     >
-      <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
-      <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
-    </button>
+      <span className="theme-toggle-icon">{item.id === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+      <span>{item.name}</span>
+    </button>)}
   </div>;
 }
 
@@ -1926,6 +1928,14 @@ function HomePage({
               <strong>Join Free Trades on Telegram</strong>
             </span>
           </a>
+        </div>
+        <div className="home-login-row">
+          <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
+            <LogIn size={20} />
+            <span>
+              <strong>Log In to Account</strong>
+            </span>
+          </button>
         </div>
       </div>
     </section>

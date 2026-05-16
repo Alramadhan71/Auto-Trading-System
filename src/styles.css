@@ -18444,6 +18444,41 @@ body {
   box-shadow: 0 10px 24px var(--shadow-soft) !important;
 }
 
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark;
+  --bg: #050505;
+  --sidebar: #080808;
+  --panel: #0d0d0d;
+  --panel-strong: #090909;
+  --panel-soft: #141414;
+  --border: #242424;
+  --border-strong: #3a3a3a;
+  --text: #f1f3f5;
+  --muted: #a1a1aa;
+  --soft-text: #d4d4d8;
+  --accent: #b8bcc4;
+  --accent-strong: #f2f4f7;
+  --success: #35c77f;
+  --danger: #ef5f67;
+  --warning: #c9ccd2;
+  --hover: rgba(255, 255, 255, .06);
+  --brand-text: #ffffff;
+  --shadow-soft: rgba(0, 0, 0, .28);
+  --shadow-lift: rgba(0, 0, 0, .4);
+  --semantic-amber: #d8a24d;
+  --semantic-amber-soft: rgba(216, 162, 77, .12);
+  --semantic-orange: #dc7c48;
+  --semantic-yellow: #d7bd54;
+  --semantic-green: #65c761;
+  --semantic-blue: #8f99a8;
+  --semantic-blue-soft: rgba(143, 153, 168, .12);
+  --section-surface: #0b0b0b;
+  --card-surface: #111111;
+  --card-surface-raised: #171717;
+  --card-hairline: #282828;
+}
+
 /* Global gradient removal pass for home, auto trading, dashboard, and shared chrome. */
 body,
 .app-shell {
@@ -18487,6 +18522,7 @@ body,
 .premium-nav-button.active,
 .home-cta-primary,
 .home-cta-secondary,
+.home-cta-login,
 .minimal-home-action,
 .auto-trade-head-actions button,
 .auto-auth-form button,
@@ -18535,6 +18571,7 @@ body,
 .home-leader-row,
 .home-marketcap-row,
 .home-news-card,
+.home-cta-login,
 .search-panel,
 .home-search-panel,
 .notification-card,
@@ -18613,6 +18650,99 @@ textarea,
 .live-leverage-spectrum-rail::before,
 .live-leverage-spectrum-rail::after {
   background: var(--border-strong) !important;
+}
+
+.home-login-row {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100%;
+  margin-top: -4px;
+}
+
+.home-cta-login {
+  width: min(360px, 100%);
+  min-height: 62px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--border) !important;
+  border-radius: 22px;
+  color: var(--text) !important;
+  background: var(--card-surface) !important;
+  box-shadow: 0 8px 18px var(--shadow-soft) !important;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.home-cta-login:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong) !important;
+  box-shadow: 0 12px 28px var(--shadow-lift) !important;
+}
+
+.home-cta-login svg {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px;
+  color: var(--soft-text) !important;
+  background: var(--card-surface-raised) !important;
+  box-shadow: none !important;
+}
+
+.home-cta-login strong {
+  font-size: 18px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.theme-control {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  width: auto !important;
+}
+
+.theme-control .theme-toggle {
+  min-width: 86px !important;
+  min-height: 38px !important;
+  padding: 5px 9px !important;
+  border: 1px solid transparent !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+}
+
+.theme-control .theme-toggle.active {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  background: var(--card-surface) !important;
+}
+
+.theme-control .theme-toggle-icon {
+  width: 26px;
+  height: 26px;
+  color: inherit !important;
+}
+
+@media (max-width: 640px) {
+  .home-login-row {
+    margin-top: 0;
+  }
+
+  .home-cta-login {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 18px;
+  }
+
+  .home-cta-login svg {
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    border-radius: 12px;
+  }
 }
 
 *,
