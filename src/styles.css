@@ -17175,3 +17175,451 @@ video {
 :root[data-theme-style="4"] .theme-modal {
   box-shadow: 0 16px 38px rgba(18, 28, 40, .16);
 }
+
+/* Professional two-theme design system: neutral UI, green/red reserved for market movement. */
+:root,
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1115;
+  --sidebar: #11151b;
+  --panel: #171c26;
+  --panel-strong: #121722;
+  --panel-soft: #1e2430;
+  --border: #2a3240;
+  --border-strong: #465160;
+  --text: #e6eaf0;
+  --muted: #a7b0bf;
+  --soft-text: #c8ced8;
+  --accent: #a7b0bf;
+  --accent-strong: #d2d8e2;
+  --success: #35c77f;
+  --danger: #ef5f67;
+  --warning: #a7b0bf;
+  --hover: rgba(255, 255, 255, .055);
+  --brand-text: #f3f6fb;
+  --shadow-soft: rgba(0, 0, 0, .22);
+  --shadow-lift: rgba(0, 0, 0, .3);
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --sidebar: #ffffff;
+  --panel: #ffffff;
+  --panel-strong: #f1f3f6;
+  --panel-soft: #f7f8fa;
+  --border: #dde2ea;
+  --border-strong: #aeb7c4;
+  --text: #20242b;
+  --muted: #5f6875;
+  --soft-text: #3d4652;
+  --accent: #6d7684;
+  --accent-strong: #20242b;
+  --success: #168a5b;
+  --danger: #c93c45;
+  --warning: #6d7684;
+  --hover: rgba(0, 0, 0, .045);
+  --brand-text: #20242b;
+  --shadow-soft: rgba(24, 34, 48, .08);
+  --shadow-lift: rgba(24, 34, 48, .14);
+}
+
+body {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--sidebar) 86%, var(--bg)), var(--bg) 340px),
+    var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Inter, Arial, sans-serif;
+}
+
+main {
+  padding: 22px clamp(14px, 2vw, 28px) 40px;
+}
+
+.theme-style-trigger,
+.theme-overlay {
+  display: none !important;
+}
+
+.theme-studio,
+.theme-control {
+  gap: 0 !important;
+  padding: 4px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, var(--panel-soft), var(--panel-strong)) !important;
+  box-shadow: 0 10px 24px var(--shadow-soft) !important;
+}
+
+.theme-toggle,
+.theme-studio button,
+.shell-nav button,
+.home-market-switch,
+.home-market-switch button,
+.range-pills button,
+.signal-filters button,
+.access-filter-pills button,
+.duration-picker-trigger,
+.duration-picker-menu button,
+.custom-date-trigger,
+.home-cta-primary,
+.home-cta-secondary,
+.minimal-home-action {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  background: linear-gradient(180deg, var(--panel-soft), var(--panel-strong)) !important;
+  box-shadow: none !important;
+}
+
+.theme-toggle:hover,
+.shell-nav button:hover,
+.home-market-switch button:hover,
+.range-pills button:hover,
+.signal-filters button:hover,
+.access-filter-pills button:hover,
+.home-cta-primary:hover,
+.home-cta-secondary:hover,
+.minimal-home-action:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 90%, var(--text)), var(--panel-strong)) !important;
+}
+
+.shell-nav button.active,
+.shell-nav button.premium.active,
+.home-market-switch button.active,
+.theme-mode-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.access-filter-pills button.active {
+  color: var(--text) !important;
+  border-color: var(--border-strong) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 88%, var(--text)), var(--panel-strong)) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--border-strong) 42%, transparent) !important;
+}
+
+.shell-header,
+.notification-settings,
+.notification-settings-popover,
+.theme-modal,
+.home-launchpad,
+.home-live-board,
+.home-live-card,
+.home-live-pulse,
+.market-card,
+.home-conversion-card,
+.home-intel-card,
+.home-signal-shell,
+.home-signal-card,
+.home-marketcap-shell,
+.home-marketcap-row,
+.home-leader-shell,
+.home-leader-card,
+.home-leader-row,
+.home-news-shell,
+.home-news-card,
+.home-strategy-showcase,
+.home-strategy-showcase-note,
+.strategy,
+.panel,
+.chart-block,
+.trade-list,
+.notification-card,
+.performance-command,
+.scorecard,
+.snapshot-toggle,
+.snapshot-list article,
+.command-summary article,
+.scan-progress-card,
+.leader-toggle,
+.leader-item,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.trade-ledger-shell,
+.capital-group,
+.premium-panel,
+.binance-connect-panel,
+.auto-auth-card,
+.minimal-home {
+  border-color: var(--border) !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 95%, var(--text)), var(--panel-strong)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 14px 34px var(--shadow-soft) !important;
+}
+
+.home-live-card,
+.home-signal-card,
+.home-marketcap-row,
+.home-leader-row,
+.home-news-card,
+.strategy,
+.scorecard,
+.notification-card,
+.leader-item,
+.trade-ledger-shell {
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.home-live-card:hover,
+.home-signal-card:hover,
+.home-marketcap-row:hover,
+.home-leader-row:hover,
+.home-news-card:hover,
+.strategy:hover,
+.scorecard:hover,
+.notification-card:hover,
+.leader-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong) !important;
+  box-shadow: 0 18px 42px var(--shadow-lift) !important;
+}
+
+.home-intel-grid,
+.home-news-grid,
+.home-signal-grid,
+.home-leader-columns,
+.strategies,
+.strategy-scorecards,
+.snapshot-list,
+.command-summary {
+  gap: clamp(10px, 1.4vw, 16px) !important;
+}
+
+.home-signal-shell,
+.home-marketcap-shell,
+.home-leader-shell,
+.home-news-shell,
+.performance-command,
+.panel {
+  padding: clamp(16px, 1.6vw, 22px) !important;
+  border-radius: 14px !important;
+}
+
+.home-live-board,
+.home-intel-card,
+.home-leader-card,
+.home-news-card,
+.home-signal-card,
+.home-marketcap-row,
+.home-leader-row,
+.strategy,
+.scorecard {
+  border-radius: 10px !important;
+}
+
+.home-launchpad {
+  border-radius: 18px !important;
+  box-shadow: 0 24px 70px var(--shadow-lift) !important;
+}
+
+.page-home .home-launchpad-summary,
+.auto-auth-marketing p,
+.home-live-board-head p,
+.home-signal-card small,
+.home-marketcap-copy small,
+.home-marketcap-values small,
+.home-leader-row small,
+.home-news-top small,
+.home-news-tags b,
+.strategy small,
+.scorecard span,
+.scorecard small,
+.notifications span,
+.notifications small,
+.trade-tooltip span,
+.trade-tooltip small {
+  color: var(--muted) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+.home-launchpad-copy h1,
+.home-intel-head h3,
+.section-title h2,
+.dashboard-heading-copy h1,
+.auto-auth-marketing h1 {
+  color: var(--text) !important;
+  letter-spacing: 0 !important;
+}
+
+.home-launchpad-copy h1,
+.dashboard-heading-copy h1 {
+  font-weight: 800 !important;
+}
+
+.home-intel-head h3,
+.section-title h2,
+.chart-block h3,
+.trade-list h3 {
+  font-weight: 750 !important;
+}
+
+.home-kicker,
+.minimal-home-kicker,
+.nav-badge,
+.nav-badge.subtle,
+.nav-badge.glow,
+.home-news-badge,
+.home-marketcap-rank,
+.risk-badge,
+.side-badge,
+.strategy-switch,
+.status-pill,
+.duration-section-badge {
+  color: var(--soft-text) !important;
+  border-color: var(--border) !important;
+  background: color-mix(in srgb, var(--panel-soft) 82%, transparent) !important;
+  box-shadow: none !important;
+}
+
+.good,
+.up,
+.market-card.active strong,
+.home-leader-values .good,
+.leader-copy strong.good,
+.snapshot-list strong.good,
+.trade-list .win,
+.status-pill.win,
+.side-badge.long,
+.strategy-switch.on,
+.duration-section-badge.priority,
+.decision-signal-row strong.good,
+.duration-detail-row strong.good {
+  color: var(--success) !important;
+}
+
+.bad,
+.down,
+.home-leader-values .bad,
+.leader-copy strong.bad,
+.snapshot-list strong.bad,
+.trade-list .loss,
+.status-pill.loss,
+.side-badge.short,
+.strategy-switch.off,
+.decision-signal-row strong.bad,
+.duration-detail-row strong.bad {
+  color: var(--danger) !important;
+}
+
+.home-leader-card.gainers,
+.notifications .notification-card.win,
+.trade-chart-modal.win {
+  border-color: color-mix(in srgb, var(--success) 34%, var(--border)) !important;
+}
+
+.home-leader-card.losers,
+.notifications .notification-card.loss,
+.trade-chart-modal.loss {
+  border-color: color-mix(in srgb, var(--danger) 34%, var(--border)) !important;
+}
+
+.home-fear-gauge-arc,
+.home-fear-gauge-needle,
+.preview-chart i,
+.preview-chart i:nth-child(2n),
+.strategy-winrate-line i,
+.scoreline i,
+.showcase-screen main b {
+  background: linear-gradient(90deg, var(--border), var(--accent)) !important;
+  box-shadow: none !important;
+}
+
+.home-fear-gauge-core,
+.home-fear-history-row b {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  background: var(--panel-soft) !important;
+}
+
+.home-fear-card.tone-cold,
+.home-fear-card.tone-hot,
+.home-fear-card.tone-warm,
+.ledger-wallet-spot,
+.ledger-wallet-futures {
+  border-color: var(--border) !important;
+}
+
+.trade-ledger,
+table {
+  border-color: var(--border) !important;
+}
+
+.trade-ledger th,
+th {
+  color: var(--muted) !important;
+  background: linear-gradient(180deg, var(--panel-soft), var(--panel-strong)) !important;
+  font-weight: 700 !important;
+}
+
+.trade-ledger td,
+td {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.trade-ledger tr.chartable-row:hover td,
+tbody tr:hover td {
+  background: var(--hover) !important;
+}
+
+input,
+select,
+textarea,
+.search-panel input,
+.auto-auth-form input,
+.password-field {
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  background: var(--panel-strong) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 74%, transparent) !important;
+}
+
+.shell-brand strong,
+.shell-brand span,
+.theme-studio strong,
+.theme-studio span,
+.home-news-top span,
+.preview-terminal-top b,
+.market-card:not(.active) strong,
+.risk-badge.medium,
+.status-pill.open,
+.decision-signal-row strong.warn,
+.duration-detail-row strong.warn,
+.duration-insight-item.emphasis strong,
+.duration-picker-menu button span {
+  color: var(--soft-text) !important;
+}
+
+.command-summary svg,
+.notification-card svg,
+.custom-date-trigger svg,
+.detail-cards svg,
+.theme-toggle-icon,
+.auth-value-grid svg {
+  color: var(--muted) !important;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding-inline: 12px !important;
+  }
+
+  .home-signal-shell,
+  .home-marketcap-shell,
+  .home-leader-shell,
+  .home-news-shell,
+  .performance-command,
+  .panel {
+    padding: 12px !important;
+  }
+}

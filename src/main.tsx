@@ -799,13 +799,8 @@ function App() {
     }
     return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
   });
-  const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
-    const saved = localStorage.getItem('themeStyle');
-    return themeStyles.some(item => item.id === saved) ? saved as ThemeStyle : '1';
-  });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
-  const [themePanelOpen, setThemePanelOpen] = useState(false);
   const [alertsPanelOpen, setAlertsPanelOpen] = useState(false);
   const [dashboard, setDashboard] = useState<DashboardPayload>(defaultDashboardPayload);
   const [homeIntel, setHomeIntel] = useState<HomeIntelResponse | null>(null);
@@ -826,11 +821,6 @@ function App() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
-
-  useEffect(() => {
-    document.documentElement.dataset.themeStyle = themeStyle;
-    localStorage.setItem('themeStyle', themeStyle);
-  }, [themeStyle]);
 
   useEffect(() => {
     localStorage.setItem('toastDuration', String(toastDuration));
@@ -1198,7 +1188,7 @@ function App() {
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
-          <ThemeStudio currentTheme={theme} themeStyle={themeStyle} onPick={setTheme} onOpen={() => setThemePanelOpen(true)} />
+          <ThemeStudio currentTheme={theme} onPick={setTheme} />
           <NotificationSettings
             duration={toastDuration}
             enabled={alertsEnabled}
@@ -1250,7 +1240,6 @@ function App() {
         onTimeframeChange={setChartTimeframe}
         onClose={() => setChartOpen(false)}
       />}
-      {themePanelOpen && <ThemePanel currentTheme={theme} currentStyle={themeStyle} onPick={setTheme} onPickStyle={setThemeStyle} onClose={() => setThemePanelOpen(false)} />}
     </div>
   );
 
@@ -1770,17 +1759,13 @@ function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTr
 
 function ThemeStudio({
   currentTheme,
-  themeStyle,
-  onPick,
-  onOpen
+  onPick
 }: {
   currentTheme: Theme;
-  themeStyle: ThemeStyle;
   onPick: (theme: Theme) => void;
-  onOpen: () => void;
 }) {
   const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-  return <div className={`theme-studio theme-control ${currentTheme} style-${themeStyle}`}>
+  return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
       className="theme-toggle"
@@ -1789,14 +1774,6 @@ function ThemeStudio({
     >
       <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
       <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
-    </button>
-    <button
-      type="button"
-      className="theme-style-trigger"
-      onClick={onOpen}
-      aria-label="Open numbered theme options"
-    >
-      Style {themeStyle}
     </button>
   </div>;
 }
