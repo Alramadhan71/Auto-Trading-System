@@ -79,7 +79,15 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s' "$VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/trading71_vps
           chmod 600 ~/.ssh/trading71_vps
-          ssh-keyscan -p "$PORT" -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          for attempt in 1 2 3 4 5; do
+            if ssh-keyscan -T 20 -p "$PORT" -H "$VPS_HOST" >> ~/.ssh/known_hosts; then
+              exit 0
+            fi
+            echo "ssh-keyscan failed on attempt $attempt; retrying..."
+            sleep 5
+          done
+          echo "Unable to read SSH host key from VPS_HOST on port $PORT." >&2
+          exit 1
 
       - name: Deploy on VPS
         run: |
