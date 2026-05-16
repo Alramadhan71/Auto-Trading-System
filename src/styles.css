@@ -18443,3 +18443,182 @@ body {
   background: var(--section-surface) !important;
   box-shadow: 0 10px 24px var(--shadow-soft) !important;
 }
+
+/* Global gradient removal pass for home, auto trading, dashboard, and shared chrome. */
+body,
+.app-shell {
+  background: var(--bg) !important;
+}
+
+.shell-header {
+  background: var(--sidebar) !important;
+}
+
+.shell-brand-mark,
+.theme-toggle,
+.theme-toggle-icon,
+.theme-studio,
+.theme-control,
+.theme-studio button,
+.shell-nav button,
+.home-market-switch,
+.home-market-switch button,
+.range-pills button,
+.signal-filters button,
+.access-filter-pills button,
+.duration-picker-trigger,
+.duration-picker-menu,
+.duration-picker-menu button,
+.custom-date-trigger,
+.snapshot-toggle,
+.leader-toggle,
+.market-card,
+.status-pill,
+.risk-badge,
+.side-badge,
+.nav-badge {
+  background: var(--card-surface-raised) !important;
+}
+
+.shell-nav button.active,
+.shell-nav button.premium,
+.shell-nav button.premium.active,
+.premium-nav-button,
+.premium-nav-button.active,
+.home-cta-primary,
+.home-cta-secondary,
+.minimal-home-action,
+.auto-trade-head-actions button,
+.auto-auth-form button,
+.register-panel button,
+.confirm-modal-actions button,
+.theme-mode-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.access-filter-pills button.active {
+  background: var(--card-surface) !important;
+}
+
+.home-launchpad,
+.home-live-board,
+.dashboard-hero,
+.performance-command,
+.auto-auth-shell,
+.auto-auth-card,
+.auto-trade-hero,
+.auto-trade-headbar,
+.home-intel-card,
+.home-fear-card,
+.home-fear-history-card,
+.home-signal-shell,
+.home-leader-shell,
+.home-marketcap-shell,
+.home-news-shell,
+.panel,
+.chart-block,
+.trade-list,
+.premium-panel,
+.binance-connect-panel,
+.minimal-home,
+.theme-modal,
+.confirm-modal,
+.notification-settings,
+.notification-settings-popover {
+  background: var(--section-surface) !important;
+}
+
+.price-card,
+.home-top-market-card,
+.home-live-card,
+.home-signal-card,
+.home-leader-card,
+.home-leader-row,
+.home-marketcap-row,
+.home-news-card,
+.search-panel,
+.home-search-panel,
+.notification-card,
+.scorecard,
+.strategy,
+.leader-item,
+.trade-ledger-shell,
+.snapshot-list article,
+.command-summary article,
+.allocation-grid article,
+.automation-grid article,
+.scenario-band article,
+.auto-login-card,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.capital-group,
+.trade-extreme-card,
+.duration-insight-item,
+.theme-showcase-card,
+.showcase-screen,
+.toast,
+.toast-duration-grid button,
+.public-strategy-card,
+.public-strategy-card.lab > button:first-child {
+  background: var(--card-surface) !important;
+}
+
+.home-marketcap-row:nth-child(even),
+.home-fear-history-row,
+.home-news-tags b,
+.home-marketcap-rank,
+.home-fear-history-row b,
+.trade-ledger th,
+th,
+input,
+select,
+textarea,
+.search-panel input,
+.auto-auth-form input,
+.password-field {
+  background: var(--card-surface-raised) !important;
+}
+
+.home-top-market-card::after,
+.price-card::after,
+.home-top-market-card:has(.bad)::after,
+.price-card:has(.bad)::after {
+  background: var(--danger) !important;
+}
+
+.home-top-market-card:has(.good)::after,
+.price-card:has(.good)::after {
+  background: var(--success) !important;
+}
+
+.good,
+.up {
+  color: var(--success) !important;
+}
+
+.bad,
+.down {
+  color: var(--danger) !important;
+}
+
+.home-fear-gauge-arc,
+.home-fear-gauge-needle,
+.preview-chart i,
+.preview-chart i:nth-child(2n),
+.strategy-winrate-line i,
+.scoreline i,
+.showcase-screen main b,
+.strategy-bar,
+.strategy-bar i,
+.live-leverage-progress,
+.live-leverage-spectrum-rail::before,
+.live-leverage-spectrum-rail::after {
+  background: var(--border-strong) !important;
+}
+
+*,
+*::before,
+*::after {
+  background-image: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
