@@ -20408,10 +20408,10 @@ textarea,
   height: 100% !important;
   min-height: 0 !important;
   margin: 0 !important;
-  padding: clamp(24px, 3.1vw, 58px) clamp(34px, 5vw, 96px) !important;
+  padding: clamp(18px, 2.2vw, 38px) clamp(42px, 5vw, 96px) !important;
   display: grid !important;
-  grid-template-columns: minmax(620px, 1fr) minmax(390px, 470px) !important;
-  gap: clamp(36px, 5vw, 96px) !important;
+  grid-template-columns: minmax(640px, 1fr) minmax(390px, 470px) !important;
+  gap: clamp(42px, 6vw, 110px) !important;
   align-items: center !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -20426,13 +20426,13 @@ textarea,
   height: 100% !important;
   display: grid !important;
   align-content: center !important;
-  gap: clamp(14px, 1.8vh, 22px) !important;
+  gap: clamp(9px, 1.25vh, 14px) !important;
   overflow: hidden !important;
 }
 
 .page-frame.page-auto-trade .auto-auth-marketing .home-kicker {
   width: fit-content !important;
-  min-height: 30px !important;
+  min-height: 28px !important;
   padding: 0 13px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -20444,10 +20444,10 @@ textarea,
 
 .page-frame.page-auto-trade .auto-auth-marketing h1 {
   width: min(100%, 760px) !important;
-  max-width: 760px !important;
+  max-width: 680px !important;
   margin: 0 !important;
-  font-size: clamp(58px, 5.6vw, 104px) !important;
-  line-height: .88 !important;
+  font-size: clamp(50px, 4.15vw, 78px) !important;
+  line-height: .9 !important;
   letter-spacing: 0 !important;
 }
 
@@ -20456,22 +20456,23 @@ textarea,
   max-width: 780px !important;
   margin: 0 !important;
   color: var(--soft-text) !important;
-  font-size: clamp(16px, 1.15vw, 22px) !important;
-  line-height: 1.45 !important;
+  font-size: clamp(15px, 1.02vw, 19px) !important;
+  line-height: 1.38 !important;
 }
 
 .auth-story-board {
   width: min(100%, 900px) !important;
   display: grid !important;
-  grid-template-columns: minmax(280px, .95fr) minmax(360px, 1.05fr) !important;
-  gap: 12px !important;
+  grid-template-columns: minmax(310px, .92fr) minmax(430px, 1.08fr) !important;
+  gap: 10px !important;
 }
 
 .auth-decision-card {
-  min-height: 248px !important;
-  padding: clamp(18px, 1.7vw, 26px) !important;
+  min-height: 214px !important;
+  padding: 16px 18px !important;
   display: grid !important;
-  align-content: space-between !important;
+  align-content: center !important;
+  gap: 13px !important;
   border: 1px solid var(--border) !important;
   border-radius: 16px !important;
   background: var(--card-surface) !important;
@@ -20485,7 +20486,7 @@ textarea,
   border-radius: 999px !important;
   color: var(--muted) !important;
   background: var(--card-surface-raised) !important;
-  font-size: 11px !important;
+  font-size: 10.5px !important;
   line-height: 1 !important;
   font-weight: 850 !important;
   letter-spacing: .05em !important;
@@ -20494,8 +20495,8 @@ textarea,
 
 .auth-decision-card strong {
   color: var(--text) !important;
-  font-size: clamp(24px, 2.1vw, 36px) !important;
-  line-height: 1.04 !important;
+  font-size: clamp(24px, 1.75vw, 32px) !important;
+  line-height: 1.05 !important;
   font-weight: 900 !important;
   letter-spacing: 0 !important;
 }
@@ -20503,22 +20504,22 @@ textarea,
 .auth-decision-card p {
   width: 100% !important;
   color: var(--soft-text) !important;
-  font-size: clamp(13px, .95vw, 15px) !important;
-  line-height: 1.45 !important;
+  font-size: 13px !important;
+  line-height: 1.38 !important;
 }
 
 .auth-stage-list {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 12px !important;
+  gap: 10px !important;
 }
 
 .auth-stage-list article {
-  min-height: 118px !important;
-  padding: 14px !important;
+  min-height: 102px !important;
+  padding: 12px !important;
   display: grid !important;
-  grid-template-columns: 34px 1fr !important;
-  gap: 4px 10px !important;
+  grid-template-columns: 30px 1fr !important;
+  gap: 3px 9px !important;
   align-content: start !important;
   border: 1px solid var(--border) !important;
   border-radius: 14px !important;
@@ -20528,8 +20529,8 @@ textarea,
 
 .auth-stage-list svg {
   grid-row: span 3 !important;
-  width: 30px !important;
-  height: 30px !important;
+  width: 28px !important;
+  height: 28px !important;
   padding: 6px !important;
   border: 1px solid var(--border) !important;
   border-radius: 10px !important;
@@ -20547,7 +20548,7 @@ textarea,
 
 .auth-stage-list strong {
   color: var(--text) !important;
-  font-size: 17px !important;
+  font-size: 15px !important;
   line-height: 1.05 !important;
   font-weight: 900 !important;
   letter-spacing: 0 !important;
@@ -20555,8 +20556,8 @@ textarea,
 
 .auth-stage-list small {
   color: var(--soft-text) !important;
-  font-size: 12px !important;
-  line-height: 1.35 !important;
+  font-size: 10.5px !important;
+  line-height: 1.25 !important;
 }
 
 .page-frame.page-auto-trade .trial-proof-strip {
@@ -20569,10 +20570,11 @@ textarea,
 
 .page-frame.page-auto-trade .trial-proof-strip span {
   min-width: 0 !important;
-  min-height: 62px !important;
-  padding: 10px 14px !important;
+  min-height: 50px !important;
+  padding: 8px 12px !important;
   display: grid !important;
   align-content: center !important;
+  gap: 2px !important;
   border: 1px solid var(--border) !important;
   border-radius: 12px !important;
   color: var(--text) !important;
@@ -20581,27 +20583,27 @@ textarea,
 }
 
 .page-frame.page-auto-trade .trial-proof-strip strong {
-  font-size: clamp(24px, 1.9vw, 34px) !important;
+  font-size: clamp(22px, 1.55vw, 30px) !important;
   line-height: .95 !important;
   font-weight: 900 !important;
 }
 
 .page-frame.page-auto-trade .trial-proof-strip small {
   color: var(--soft-text) !important;
-  font-size: 12px !important;
+  font-size: 10.5px !important;
   line-height: 1.2 !important;
   font-weight: 800 !important;
 }
 
 .page-frame.page-auto-trade .auth-marketing-cta {
   width: fit-content !important;
-  min-height: 42px !important;
-  padding: 0 18px !important;
+  min-height: 36px !important;
+  padding: 0 16px !important;
   border: 1px solid var(--border-strong) !important;
   border-radius: 999px !important;
   color: var(--text) !important;
   background: var(--card-surface-raised) !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   font-weight: 850 !important;
   letter-spacing: 0 !important;
 }
@@ -20623,8 +20625,8 @@ textarea,
 
 @media (max-height: 820px) and (min-width: 981px) {
   .page-frame.page-auto-trade .auto-auth-shell {
-    padding-block: 18px !important;
-    grid-template-columns: minmax(600px, 1fr) minmax(370px, 450px) !important;
+    padding-block: 16px !important;
+    grid-template-columns: minmax(610px, 1fr) minmax(370px, 450px) !important;
     gap: clamp(28px, 4vw, 64px) !important;
   }
 
@@ -20633,7 +20635,7 @@ textarea,
   }
 
   .page-frame.page-auto-trade .auto-auth-marketing h1 {
-    font-size: clamp(48px, 4.7vw, 78px) !important;
+    font-size: clamp(46px, 3.85vw, 70px) !important;
   }
 
   .page-frame.page-auto-trade .auto-auth-marketing p {
@@ -20642,16 +20644,16 @@ textarea,
   }
 
   .auth-decision-card {
-    min-height: 210px !important;
+    min-height: 188px !important;
     padding: 16px !important;
   }
 
   .auth-decision-card strong {
-    font-size: clamp(22px, 1.8vw, 30px) !important;
+    font-size: clamp(22px, 1.55vw, 28px) !important;
   }
 
   .auth-stage-list article {
-    min-height: 99px !important;
+    min-height: 89px !important;
     padding: 12px !important;
   }
 
@@ -20660,7 +20662,7 @@ textarea,
   }
 
   .auth-stage-list small {
-    font-size: 11px !important;
+    font-size: 10.5px !important;
     line-height: 1.25 !important;
   }
 
