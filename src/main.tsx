@@ -4390,37 +4390,44 @@ function AutoTradePage({
         <div className="auto-auth-marketing">
           <span className="home-kicker">14 days free</span>
           <h1>Trade with a system, not emotions.</h1>
-          <p>Access a private crypto trading workspace for market scanning, signal review, risk control, and automated execution rules.</p>
-          <div className="auth-value-grid">
+          <p>A private execution workspace where every market idea moves through strategy, risk, learning, and testing gates before it reaches the trader.</p>
+          <div className="auth-system-pipeline" aria-label="System approval pipeline">
             <article>
-              <BarChart3 size={20} />
-              <b>10+ STRATEGIES</b>
-              <strong>Multi-strategy engine</strong>
-              <span>Every symbol is checked against a stack of independent trading strategies.</span>
+              <span className="auth-pipeline-step">01</span>
+              <BarChart3 size={18} />
+              <strong>Market scan</strong>
+              <small>Spot and futures symbols are scanned continuously.</small>
             </article>
             <article>
-              <ShieldAlert size={20} />
-              <b>MULTI-STAGE CHECK</b>
-              <strong>Signals must pass gates</strong>
-              <span>Trend, risk, liquidity, market type, and execution rules are reviewed before approval.</span>
+              <span className="auth-pipeline-step">02</span>
+              <Target size={18} />
+              <strong>10+ strategies</strong>
+              <small>The coin must match more than one professional strategy layer.</small>
             </article>
             <article>
-              <Sparkles size={20} />
-              <b>AI LOSS REVIEW</b>
-              <strong>Learns from losing trades</strong>
-              <span>Losses are analyzed so the system can improve filters and strategy behavior.</span>
+              <span className="auth-pipeline-step">03</span>
+              <ShieldAlert size={18} />
+              <strong>Approval gates</strong>
+              <small>Risk, liquidity, trend, and execution rules filter weak setups.</small>
             </article>
             <article>
-              <Target size={20} />
-              <b>BACKTESTED FIRST</b>
-              <strong>Tested before release</strong>
-              <span>Each strategy is backtested before it becomes available in the workspace.</span>
+              <span className="auth-pipeline-step">04</span>
+              <Sparkles size={18} />
+              <strong>AI loss review</strong>
+              <small>Losing trades feed back into filters and strategy behavior.</small>
+            </article>
+            <article>
+              <span className="auth-pipeline-step">05</span>
+              <Gauge size={18} />
+              <strong>Backtest first</strong>
+              <small>Each strategy is tested before being released to the workspace.</small>
             </article>
           </div>
           <div className="trial-proof-strip">
-            <span><strong>14</strong> days free</span>
-            <span><strong>10+</strong> strategies</span>
-            <span><strong>AI</strong> loss review</span>
+            <span><strong>14</strong><small>days free</small></span>
+            <span><strong>10+</strong><small>strategies</small></span>
+            <span><strong>AI</strong><small>loss learning</small></span>
+            <span><strong>BT</strong><small>backtested</small></span>
           </div>
           <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
             Start with 14 days free
