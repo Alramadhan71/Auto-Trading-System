@@ -1170,34 +1170,39 @@ function App() {
     });
   };
 
+  const authEntryPage = page === 'auto-trade' && !isAuthenticated;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
-      <header className={`shell-header ${page === 'home' ? 'home-header' : 'app-header'}`}>
+      <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <div className="shell-brand" aria-label="Auto Trading System">
           <span className="shell-brand-mark"><TrendingUp size={20} /></span>
           <div>
             <strong>Auto Trading</strong>
           </div>
         </div>
-        <nav className="shell-nav" aria-label="Primary navigation">
+        {!authEntryPage && <nav className="shell-nav" aria-label="Primary navigation">
           <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>Home</span></button>
           <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
-        </nav>
+        </nav>}
         <div className="shell-tools">
+          {authEntryPage && <button type="button" className="auth-return-home" onClick={() => setPage('home')}>
+            <Home size={16} />
+            <span>Back to Home</span>
+          </button>}
           {page === 'home' && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
           <ThemeStudio currentTheme={theme} onPick={setTheme} />
-          <NotificationSettings
+          {!authEntryPage && <NotificationSettings
             duration={toastDuration}
             enabled={alertsEnabled}
             onChange={setToastDuration}
             open={alertsPanelOpen}
             onToggle={() => setAlertsEnabled(value => !value)}
             onClose={() => setAlertsPanelOpen(false)}
-          />
+          />}
         </div>
       </header>
       <main className={`page-frame page-${page}`}>
@@ -4376,42 +4381,45 @@ function AutoTradePage({
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
           <span className="home-kicker">14 days free</span>
-          <h1>Simple access. Clear tools.</h1>
-          <p>Login to use the dashboard and auto trading workspace.</p>
+          <h1>Trade with a system, not emotions.</h1>
+          <p>Access a private crypto trading workspace for market scanning, signal review, risk control, and automated execution rules.</p>
           <div className="auth-value-grid">
             <article>
               <BarChart3 size={20} />
-              <strong>Dashboard</strong>
-              <span>Track signals, trades, and performance.</span>
+              <strong>Live Market Scanning</strong>
+              <span>Track Binance spot and futures markets from one focused workspace.</span>
             </article>
             <article>
               <Bot size={20} />
-              <strong>Auto Trading</strong>
-              <span>Control automated trading settings.</span>
+              <strong>Auto Trading Rules</strong>
+              <span>Control capital, risk, leverage, and execution settings before trades run.</span>
             </article>
             <article>
               <ShieldAlert size={20} />
-              <strong>Risk Control</strong>
-              <span>Manage limits and protection rules.</span>
+              <strong>Strategy Dashboard</strong>
+              <span>Review signals, wins, losses, rejected trades, and performance clearly.</span>
             </article>
             <article>
               <Bell size={20} />
-              <strong>Alerts</strong>
-              <span>Receive trade updates and notifications.</span>
+              <strong>Telegram Alerts</strong>
+              <span>Receive important trade updates and account notifications when it matters.</span>
             </article>
           </div>
           <div className="trial-proof-strip">
             <span><strong>14</strong> days free</span>
-            <span><strong>2</strong> main tools</span>
+            <span><strong>2</strong> trading tools</span>
             <span><strong>1</strong> private workspace</span>
           </div>
+          <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
+            Start with 14 days free
+          </button>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
             <p className="eyebrow">Premium Access</p>
             <h1>Login</h1>
-            <small>Access is required for Dashboard and Auto Trading.</small>
+            <small>Access your private trading dashboard and automated execution workspace.</small>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
@@ -4437,7 +4445,7 @@ function AutoTradePage({
             <button type="button" onClick={() => setPasswordResetOpen(value => !value)}>{passwordResetOpen ? 'Close reset' : 'Reset password'}</button>
           </div>
           {authMessage && <p className="auth-message">{authMessage}</p>}
-          {loginRole === 'user' && <div className="register-prompt">
+          {loginRole === 'user' && <div className="register-prompt access-request-prompt">
             <span>Don't have an account?</span>
             <button type="button" onClick={() => setRegisterOpen(value => !value)}>{registerOpen ? 'Close request' : 'Request access'}</button>
           </div>}
