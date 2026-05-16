@@ -4389,46 +4389,44 @@ function AutoTradePage({
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
           <span className="home-kicker">14 days free</span>
-          <h1>Trade with a system, not emotions.</h1>
-          <p>A private execution workspace where every market idea moves through strategy, risk, learning, and testing gates before it reaches the trader.</p>
-          <div className="auth-story-board" aria-label="System approval process">
+          <h1>Stop chasing signals. Let the system qualify them.</h1>
+          <p>AI-powered trading workspace that scans, filters, tests, and learns before a setup reaches execution.</p>
+          <div className="auth-proof-row" aria-label="Trading system highlights">
+            <span><BarChart3 size={15} /> 10+ Strategies</span>
+            <span><ShieldAlert size={15} /> Risk Gates</span>
+            <span><Gauge size={15} /> Backtested</span>
+            <span><Sparkles size={15} /> Loss Learning</span>
+          </div>
+          <div className="auth-flow-line" aria-label="System approval process">
+            {[
+              ['Scan', 'Markets watched continuously.'],
+              ['Filter', 'Weak setups rejected early.'],
+              ['Test', 'Strategies checked before release.'],
+              ['Execute', 'Only qualified ideas move forward.'],
+              ['Learn', 'Losses improve future filters.']
+            ].map(([title, copy], index) => <article key={title}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{title}</strong>
+              <small>{copy}</small>
+            </article>)}
+          </div>
+          <div className="auth-story-board" aria-label="Decision engine promise">
             <article className="auth-decision-card">
               <span>Decision engine</span>
-              <strong>10+ strategies review every setup before it becomes a signal.</strong>
-              <p>A coin is not accepted from one rule. It has to pass strategy agreement, market quality, risk limits, and execution readiness.</p>
+              <strong>Every setup must pass strategy agreement, market quality, and risk limits.</strong>
+              <p>Built to reduce impulsive entries, weak setups, and emotional decisions.</p>
             </article>
-            <div className="auth-stage-list">
-              <article>
-                <BarChart3 size={18} />
-                <span>01</span>
-                <strong>Scan</strong>
-                <small>Spot and futures markets are watched continuously.</small>
-              </article>
-              <article>
-                <ShieldAlert size={18} />
-                <span>02</span>
-                <strong>Gate</strong>
-                <small>Trend, liquidity, risk, and execution filters reject weak setups.</small>
-              </article>
-              <article>
-                <Sparkles size={18} />
-                <span>03</span>
-                <strong>Learn</strong>
-                <small>AI reviews losing trades and improves the filters.</small>
-              </article>
-              <article>
-                <Gauge size={18} />
-                <span>04</span>
-                <strong>Test</strong>
-                <small>Strategies are backtested before release.</small>
-              </article>
+            <div className="auth-mini-terminal" aria-label="System snapshot">
+              <div><span>Signals screened today</span><strong>128</strong></div>
+              <div><span>Weak setups rejected</span><strong>91</strong></div>
+              <div><span>Strategies active</span><strong>10</strong></div>
             </div>
           </div>
           <div className="trial-proof-strip">
             <span><strong>14</strong><small>days free</small></span>
             <span><strong>10+</strong><small>strategies</small></span>
-            <span><strong>AI</strong><small>loss learning</small></span>
-            <span><strong>BT</strong><small>backtested</small></span>
+            <span><strong>91</strong><small>weak setups rejected</small></span>
+            <span><strong>AI</strong><small>learning loop</small></span>
           </div>
           <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
             Start with 14 days free
@@ -4437,32 +4435,52 @@ function AutoTradePage({
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
-            <p className="eyebrow">Premium Access</p>
-            <h1>Login</h1>
-            <small>Access your private trading dashboard and automated execution workspace.</small>
+            <p className="eyebrow">Private Access Only</p>
+            <h1>Your trading desk is ready</h1>
+            <small>Monitor signals, risk gates, execution, and learning feedback.</small>
+          </div>
+          <div className="auth-desk-preview" aria-label="Trading workspace preview">
+            <article>
+              <span>Live Signals</span>
+              <strong>24</strong>
+              <small>screened</small>
+            </article>
+            <article>
+              <span>Risk Gates</span>
+              <strong>7</strong>
+              <small>active</small>
+            </article>
+            <article>
+              <span>Execution</span>
+              <strong>ON</strong>
+              <small>workspace</small>
+            </article>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
             <button type="button" className={loginRole === 'admin' ? 'active' : ''} onClick={() => { setLoginRole('admin'); setAuthMessage(''); setLoginPasswordVisible(false); }}>Admin</button>
           </div>
           <div className="auto-auth-form">
-            <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder={loginRole === 'admin' ? 'Admin username or admin name' : 'Username'} />
-            <div className="password-field">
+            <label className="auth-input-shell">
+              <UserCog size={17} />
+              <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder={loginRole === 'admin' ? 'Admin username or admin name' : 'Username'} />
+            </label>
+            <div className="password-field auth-input-shell">
+              <KeyRound size={17} />
               <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} />
               <button type="button" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
                 {loginPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
             </div>
-            <label className="remember-login">
-              <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
-              <span>Remember login</span>
-            </label>
-            <small className="password-policy-note">8+ characters, uppercase, lowercase, number, and special character.</small>
-            <button type="submit">Login</button>
-          </div>
-          <div className="register-prompt">
-            <span>Forgot password?</span>
-            <button type="button" onClick={() => setPasswordResetOpen(value => !value)}>{passwordResetOpen ? 'Close reset' : 'Reset password'}</button>
+            <div className="auth-form-row">
+              <label className="remember-login">
+                <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
+                <span>Remember login</span>
+              </label>
+              <button type="button" className="inline-link" onClick={() => setPasswordResetOpen(value => !value)}>{passwordResetOpen ? 'Close reset' : 'Forgot?'}</button>
+            </div>
+            {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
+            <button type="submit"><LogIn size={17} /> Login</button>
           </div>
           {authMessage && <p className="auth-message">{authMessage}</p>}
           {loginRole === 'user' && <div className="register-prompt access-request-prompt">
