@@ -18656,23 +18656,25 @@ textarea,
   display: flex !important;
   justify-content: center !important;
   width: 100%;
-  margin-top: -4px;
+  margin-top: -2px;
 }
 
 .home-cta-login {
-  width: min(360px, 100%);
-  min-height: 62px;
+  width: min(290px, 100%);
+  min-height: 78px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   border: 1px solid var(--border) !important;
-  border-radius: 22px;
+  border-radius: 24px;
   color: var(--text) !important;
   background: var(--card-surface) !important;
   box-shadow: 0 8px 18px var(--shadow-soft) !important;
   cursor: pointer;
-  font-weight: 900;
+  font-weight: 850;
+  padding: 0 20px;
+  text-align: left;
 }
 
 .home-cta-login:hover {
@@ -18682,8 +18684,8 @@ textarea,
 }
 
 .home-cta-login svg {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   padding: 10px;
   border: 1px solid var(--border) !important;
   border-radius: 14px;
@@ -18696,6 +18698,7 @@ textarea,
   font-size: 18px;
   line-height: 1.05;
   letter-spacing: 0;
+  font-weight: 850;
 }
 
 .theme-control {
@@ -18706,12 +18709,17 @@ textarea,
 }
 
 .theme-control .theme-toggle {
-  min-width: 118px !important;
+  min-width: 112px !important;
   min-height: 38px !important;
-  padding: 5px 9px !important;
+  padding: 5px 11px !important;
   border: 1px solid var(--border) !important;
   color: var(--text) !important;
   background: var(--card-surface) !important;
+  font-family: "Segoe UI", Inter, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
 
 .theme-control .theme-toggle.active {
@@ -18735,6 +18743,7 @@ textarea,
     width: 100%;
     min-height: 52px;
     border-radius: 18px;
+    padding: 0 12px;
   }
 
   .home-cta-login svg {
