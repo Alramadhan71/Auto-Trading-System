@@ -18437,3 +18437,9 @@ body {
 .home-market-switch button {
   background: var(--card-surface-raised) !important;
 }
+
+/* Final home surface cleanup: keep the hero card visually aligned with the market cards. */
+.page-home .home-launchpad {
+  background: var(--section-surface) !important;
+  box-shadow: 0 10px 24px var(--shadow-soft) !important;
+}
