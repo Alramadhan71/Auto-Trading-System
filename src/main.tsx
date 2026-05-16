@@ -4388,67 +4388,38 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <span className="home-kicker">14 days free</span>
-          <h1>Stop chasing signals. Let the system qualify them.</h1>
-          <p>AI-powered trading workspace that scans, filters, tests, and learns before a setup reaches execution.</p>
-          <div className="auth-proof-row" aria-label="Trading system highlights">
-            <span><BarChart3 size={15} /> 10+ Strategies</span>
-            <span><ShieldAlert size={15} /> Risk Gates</span>
-            <span><Gauge size={15} /> Backtested</span>
-            <span><Sparkles size={15} /> Loss Learning</span>
+          <div className="auth-hero-kickers">
+            <span>14 days free</span>
+            <span>Private access</span>
           </div>
-          <div className="auth-flow-line" aria-label="System approval process">
-            {[
-              ['Scan', 'Markets watched continuously.'],
-              ['Filter', 'Weak setups rejected early.'],
-              ['Test', 'Strategies checked before release.'],
-              ['Execute', 'Only qualified ideas move forward.'],
-              ['Learn', 'Losses improve future filters.']
-            ].map(([title, copy], index) => <article key={title}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <strong>{title}</strong>
-              <small>{copy}</small>
-            </article>)}
+          <h1>Trade only when the system says yes.</h1>
+          <div className="auth-command-list" aria-label="Trading system decision flow">
+            <strong>Scan the market.</strong>
+            <strong>Reject weak setups.</strong>
+            <strong>Control risk first.</strong>
+            <strong>Execute with rules.</strong>
           </div>
-          <div className="auth-story-board" aria-label="Decision engine promise">
-            <article className="auth-decision-card">
-              <span>Decision engine</span>
-              <strong>Every setup must pass strategy agreement, market quality, and risk limits.</strong>
-              <p>Built to reduce impulsive entries, weak setups, and emotional decisions.</p>
-            </article>
-            <div className="auth-mini-terminal" aria-label="System snapshot">
-              <div><span>Signals screened today</span><strong>128</strong></div>
-              <div><span>Weak setups rejected</span><strong>91</strong></div>
-              <div><span>Strategies active</span><strong>10</strong></div>
-            </div>
+          <p>Weak trades never reach your dashboard.</p>
+          <div className="auth-signal-line" aria-label="System proof">
+            <span>10+ strategies</span>
+            <span>Risk gates</span>
+            <span>Backtested logic</span>
           </div>
           <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
-            Start with 14 days free
+            Start 14 days free
           </button>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
-            <p className="eyebrow">Private Access Only</p>
-            <h1>Your trading desk is ready</h1>
-            <small>Monitor signals, risk gates, execution, and learning feedback.</small>
+            <p className="eyebrow">Private Trading Desk</p>
+            <h1>Login to continue</h1>
+            <small>Signals, risk gates, and execution controls are inside.</small>
           </div>
           <div className="auth-desk-preview" aria-label="Trading workspace preview">
-            <article>
-              <span>Live Signals</span>
-              <strong>24</strong>
-              <small>screened</small>
-            </article>
-            <article>
-              <span>Risk Gates</span>
-              <strong>7</strong>
-              <small>active</small>
-            </article>
-            <article>
-              <span>Execution</span>
-              <strong>ON</strong>
-              <small>workspace</small>
-            </article>
+            <span>Live signals</span>
+            <span>Risk gates</span>
+            <span>Execution</span>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
@@ -4471,7 +4442,7 @@ function AutoTradePage({
                 <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
                 <span>Remember login</span>
               </label>
-              <button type="button" className="inline-link" onClick={() => setPasswordResetOpen(value => !value)}>{passwordResetOpen ? 'Close reset' : 'Forgot?'}</button>
+              <button type="button" className="inline-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot access?</button>
             </div>
             {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
             <button type="submit"><LogIn size={17} /> Login</button>
@@ -4485,14 +4456,19 @@ function AutoTradePage({
           <small className="auth-help">If you have any problem, contact admin on <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">WhatsApp</a>.</small>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
-          <form className="register-panel auth-modal" onClick={event => event.stopPropagation()} onSubmit={event => { event.preventDefault(); handlePasswordReset(); }}>
+          <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>
             <div className="register-panel-head">
-              <strong>{loginRole === 'admin' ? 'Admin password reset' : 'User password reset'}</strong>
-              <button type="button" onClick={() => setPasswordResetOpen(false)} aria-label="Close password reset form">x</button>
+              <strong>Recover access</strong>
+              <button type="button" onClick={() => setPasswordResetOpen(false)} aria-label="Close recovery dialog">x</button>
             </div>
-            <small className="password-policy-note">Email recovery will be enabled after secure email delivery is configured.</small>
-            <button type="button" onClick={() => setPasswordResetOpen(false)}>Close</button>
-          </form>
+            <p>Fastest path: contact admin and include your username. No email setup or extra account linking needed.</p>
+            <div className="recovery-actions">
+              <a href={`https://wa.me/966599204215?text=${encodeURIComponent(`Hi, I need to recover my Auto Trading access. Username: ${loginUsername || 'not sure'}`)}`} target="_blank" rel="noreferrer">
+                <Send size={16} /> WhatsApp admin
+              </a>
+              <button type="button" onClick={() => setPasswordResetOpen(false)}>Back to login</button>
+            </div>
+          </div>
         </div>}
         {loginRole === 'user' && registerOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setRegisterOpen(false)}>
           <form className="register-panel auth-modal" onClick={event => event.stopPropagation()} onSubmit={event => { event.preventDefault(); submitAccessRequest(); }}>
