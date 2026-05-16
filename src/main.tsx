@@ -10,24 +10,22 @@ function App() {
   return (
     <main className={theme}>
       <div className="theme-toggle">
-        <button className="btn" type="button" onClick={() => setTheme('dark')} aria-pressed={theme === 'dark'}>Dark Mode</button>
-        <button className="btn" type="button" onClick={() => setTheme('light')} aria-pressed={theme === 'light'}>Light Mode</button>
+        <button className="btn" type="button" onClick={() => setTheme('dark')}>Dark Mode</button>
+        <button className="btn" type="button" onClick={() => setTheme('light')}>Light Mode</button>
       </div>
 
       <div className="dashboard">
         <div className="card">
           <h3>Major Markets</h3>
-          <div className="metric-list">
-            <p><span>BTC/USDT</span><span className="price down">$78,310 (-1.19%)</span></p>
-            <p><span>ETH/USDT</span><span className="price down">$2,179.91 (-1.95%)</span></p>
-            <p><span>BNB/USDT</span><span className="price down">$656.43 (-2.45%)</span></p>
-            <p><span>SOL/USDT</span><span className="price down">$86.57 (-2.74%)</span></p>
-          </div>
+          <p>BTC/USDT: <span className="price down">$78,310 (-1.19%)</span></p>
+          <p>ETH/USDT: <span className="price down">$2,179.91 (-1.95%)</span></p>
+          <p>BNB/USDT: <span className="price down">$656.43 (-2.45%)</span></p>
+          <p>SOL/USDT: <span className="price down">$86.57 (-2.74%)</span></p>
         </div>
 
         <div className="card">
-          <h3>Fear &amp; Greed Index</h3>
-          <p className="focus-value">Now: Fear (31)</p>
+          <h3>Fear &amp; Greed</h3>
+          <p>Now: Fear (31)</p>
         </div>
 
         <div className="card">
@@ -68,27 +66,25 @@ function App() {
 
         <div className="card wide">
           <h3>Top Market Cap</h3>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Coin</th>
-                  <th>Price</th>
-                  <th>24h Change</th>
-                  <th>Market Cap</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>BTC</td><td>$78,292</td><td className="down">-1.19%</td><td>$1.567T</td></tr>
-                <tr><td>2</td><td>ETH</td><td>$2,180.62</td><td className="up">+1.43%</td><td>$263.2B</td></tr>
-                <tr><td>3</td><td>USDT</td><td>$0.999615</td><td>+0.01%</td><td>$189.8B</td></tr>
-                <tr><td>4</td><td>BNB</td><td>$656.86</td><td className="down">-2.00%</td><td>$98.4B</td></tr>
-                <tr><td>5</td><td>XRP</td><td>$1.42</td><td className="down">-2.81%</td><td>$87.6B</td></tr>
-                <tr><td>6</td><td>USDC</td><td>$0.998863</td><td>+0.00%</td><td>$77.0B</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Coin</th>
+                <th>Price</th>
+                <th>24h Change</th>
+                <th>Market Cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>BTC</td><td>$78,292</td><td className="down">-1.19%</td><td>$1.567T</td></tr>
+              <tr><td>2</td><td>ETH</td><td>$2,180.62</td><td className="up">+1.43%</td><td>$263.2B</td></tr>
+              <tr><td>3</td><td>USDT</td><td>$0.999615</td><td>+0.01%</td><td>$189.8B</td></tr>
+              <tr><td>4</td><td>BNB</td><td>$656.86</td><td className="down">-2.00%</td><td>$98.4B</td></tr>
+              <tr><td>5</td><td>XRP</td><td>$1.42</td><td className="down">-2.81%</td><td>$87.6B</td></tr>
+              <tr><td>6</td><td>USDC</td><td>$0.998863</td><td>+0.00%</td><td>$77.0B</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <div className="card wide">
