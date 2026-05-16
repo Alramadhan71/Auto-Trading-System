@@ -43,82 +43,6 @@
   --brand-text: #ffffff;
 }
 
-:root[data-theme="executive"] {
-  --bg: #0f1419;
-  --sidebar: #0a0f14;
-  --panel: #151c23;
-  --panel-strong: #10161c;
-  --panel-soft: #1b2832;
-  --border: #2c3945;
-  --border-strong: #8aa0b2;
-  --text: #f2f5f7;
-  --muted: #a6b2bd;
-  --soft-text: #c8d0d7;
-  --accent: #8aa0b2;
-  --accent-strong: #52687a;
-  --success: #2fbf71;
-  --danger: #d85b63;
-  --warning: #c9a45c;
-  --hover: rgba(138, 160, 178, 0.12);
-}
-
-:root[data-theme="navy"] {
-  --bg: #0b1220;
-  --sidebar: #07101d;
-  --panel: #111b2b;
-  --panel-strong: #0c1523;
-  --panel-soft: #17253a;
-  --border: #26364f;
-  --border-strong: #7f9bb8;
-  --text: #f4f7fb;
-  --muted: #a6b3c4;
-  --soft-text: #c9d3df;
-  --accent: #7f9bb8;
-  --accent-strong: #3f5876;
-  --success: #33b879;
-  --danger: #d96767;
-  --warning: #d1a85f;
-  --hover: rgba(127, 155, 184, 0.12);
-}
-
-:root[data-theme="emerald"] {
-  --bg: #0d1713;
-  --sidebar: #09110e;
-  --panel: #14231d;
-  --panel-strong: #0f1a16;
-  --panel-soft: #193027;
-  --border: #2a4438;
-  --border-strong: #6fa890;
-  --text: #f2f8f5;
-  --muted: #a9bbb2;
-  --soft-text: #cad8d1;
-  --accent: #6fa890;
-  --accent-strong: #3f725e;
-  --success: #2fbd74;
-  --danger: #d25f65;
-  --warning: #c7a35d;
-  --hover: rgba(111, 168, 144, 0.12);
-}
-
-:root[data-theme="graphite"] {
-  --bg: #111111;
-  --sidebar: #0b0b0b;
-  --panel: #1b1b1b;
-  --panel-strong: #141414;
-  --panel-soft: #242424;
-  --border: #343434;
-  --border-strong: #9a9a9a;
-  --text: #f3f3f3;
-  --muted: #b1b1b1;
-  --soft-text: #d2d2d2;
-  --accent: #9a9a9a;
-  --accent-strong: #5f6368;
-  --success: #45b36b;
-  --danger: #cf5c5c;
-  --warning: #caa45b;
-  --hover: rgba(154, 154, 154, 0.12);
-}
-
 :root[data-theme="light"] {
   color-scheme: light;
   --bg: #fbfbfd;
@@ -370,7 +294,7 @@ button, input { font: inherit; }
   border-color: color-mix(in srgb, var(--warning) 70%, var(--border));
   background:
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--warning) 26%, transparent), transparent 36%),
-    linear-gradient(135deg, color-mix(in srgb, var(--warning) 22%, var(--panel-soft)), color-mix(in srgb, #7f5a16 68%, var(--panel)));
+    linear-gradient(135deg, color-mix(in srgb, var(--warning) 16%, var(--panel-soft)), color-mix(in srgb, var(--panel) 92%, var(--panel-strong)));
   box-shadow: 0 16px 32px rgba(0,0,0,.18);
 }
 .shell-nav button.premium.active,
@@ -378,7 +302,7 @@ button, input { font: inherit; }
   border-color: color-mix(in srgb, var(--warning) 70%, var(--border-strong));
   background:
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--warning) 30%, transparent), transparent 36%),
-    linear-gradient(135deg, color-mix(in srgb, var(--warning) 26%, var(--panel-soft)), color-mix(in srgb, #7f5a16 76%, var(--panel)));
+    linear-gradient(135deg, color-mix(in srgb, var(--warning) 18%, var(--panel-soft)), color-mix(in srgb, var(--panel) 90%, var(--panel-strong)));
 }
 .shell-tools {
   display: flex;
@@ -812,16 +736,16 @@ button, input { font: inherit; }
 .home-cta-primary {
   background:
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--warning) 26%, transparent), transparent 36%),
-    linear-gradient(135deg, color-mix(in srgb, var(--warning) 22%, var(--panel-soft)), color-mix(in srgb, #7f5a16 68%, var(--panel)));
+    linear-gradient(135deg, color-mix(in srgb, var(--warning) 16%, var(--panel-soft)), color-mix(in srgb, var(--panel) 92%, var(--panel-strong)));
   border-color: color-mix(in srgb, var(--warning) 70%, var(--border));
   box-shadow: 0 22px 48px rgba(0,0,0,.2);
   cursor: pointer;
 }
 .home-cta-secondary {
   background:
-    radial-gradient(circle at 100% 0%, rgba(0, 195, 255, .22), transparent 36%),
-    linear-gradient(135deg, rgba(26, 132, 170, .42), color-mix(in srgb, var(--panel-strong) 98%, black));
-  border-color: rgba(85, 195, 255, .42);
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 36%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--panel-soft)), color-mix(in srgb, var(--panel-strong) 98%, var(--panel)));
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
 }
 .home-cta-primary:hover, .home-cta-secondary:hover {
   transform: translateY(-2px);
@@ -1924,7 +1848,7 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
   min-height: 48px;
   border: 1px solid color-mix(in srgb, var(--warning) 54%, var(--border));
   border-radius: 15px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--warning) 20%, var(--panel-soft)), color-mix(in srgb, #7f5a16 70%, var(--panel)));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--warning) 16%, var(--panel-soft)), color-mix(in srgb, var(--panel) 92%, var(--panel-strong)));
   color: var(--text);
   cursor: pointer;
   font-weight: 900;
@@ -2835,14 +2759,14 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
   background: color-mix(in srgb, var(--panel-soft) 78%, transparent);
 }
 .leverage-meter.low {
-  border-color: color-mix(in srgb, #2fbf71 44%, var(--border));
+  border-color: color-mix(in srgb, var(--success) 44%, var(--border));
 }
 .leverage-meter.medium {
-  border-color: color-mix(in srgb, #c9a45c 44%, var(--border));
+  border-color: color-mix(in srgb, var(--warning) 44%, var(--border));
 }
 .leverage-meter.elevated,
 .leverage-meter.high {
-  border-color: color-mix(in srgb, #d85b63 44%, var(--border));
+  border-color: color-mix(in srgb, var(--danger) 44%, var(--border));
 }
 .leverage-meter-topline {
   display: flex;
@@ -2861,7 +2785,7 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
 }
 .leverage-meter input[type="range"] {
   width: 100%;
-  accent-color: color-mix(in srgb, var(--warning) 72%, #d85b63);
+  accent-color: color-mix(in srgb, var(--warning) 72%, var(--danger));
 }
 .leverage-meter-scale {
   display: flex;
@@ -6356,7 +6280,7 @@ video {
 .strategy-switch.on { color: var(--success); border-color: color-mix(in srgb, var(--success) 52%, var(--border)); }
 .strategy-switch.off { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 48%, var(--border)); }
 .scoreline { height: 7px; border-radius: 999px; background: var(--panel); border: 1px solid var(--border); overflow: hidden; }
-.scoreline i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--success)); }
+.scoreline i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--border-strong)); }
 .command-summary { display: grid; grid-template-columns: 1.55fr repeat(7, 1fr); gap: 12px; }
 .performance-summary { display: grid; gap: 12px; }
 .dashboard-scan-top {
@@ -6472,7 +6396,7 @@ video {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), var(--success));
+  background: linear-gradient(90deg, var(--accent), var(--border-strong));
 }
 .scan-progress-card small {
   overflow-wrap: anywhere;
@@ -14984,9 +14908,9 @@ video {
   box-shadow: 0 0 14px color-mix(in srgb, currentColor 20%, transparent);
 }
 
-.strategy-bar.win { color: #2fbf71; background: #2fbf71; }
-.strategy-bar.loss { color: #d85b63; background: #d85b63; }
-.strategy-bar.open { color: #c9a45c; background: #c9a45c; }
+.strategy-bar.win { color: var(--success); background: var(--success); }
+.strategy-bar.loss { color: var(--danger); background: var(--danger); }
+.strategy-bar.open { color: var(--warning); background: var(--warning); }
 
 .strategy-bar i {
   position: absolute;
@@ -15029,9 +14953,9 @@ video {
   border-radius: 999px;
 }
 
-.strategy-chart-legend .win { background: #2fbf71; }
-.strategy-chart-legend .loss { background: #d85b63; }
-.strategy-chart-legend .open { background: #c9a45c; }
+.strategy-chart-legend .win { background: var(--success); }
+.strategy-chart-legend .loss { background: var(--danger); }
+.strategy-chart-legend .open { background: var(--warning); }
 
 .performance-command .chart,
 .performance-command .chart-block.wide {
@@ -16589,12 +16513,12 @@ video {
   flex: 1;
   min-width: 0;
   border-radius: 6px 6px 0 0;
-  background: linear-gradient(180deg, var(--success), color-mix(in srgb, var(--accent) 48%, #12342a));
+  background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--border-strong) 48%, var(--panel)));
   box-shadow: 0 0 24px color-mix(in srgb, var(--success) 18%, transparent);
 }
 
 .preview-chart i:nth-child(2n) {
-  background: linear-gradient(180deg, var(--warning), color-mix(in srgb, var(--warning) 28%, #1a1711));
+  background: linear-gradient(180deg, var(--warning), color-mix(in srgb, var(--warning) 28%, var(--panel)));
 }
 
 .preview-lock-strip {

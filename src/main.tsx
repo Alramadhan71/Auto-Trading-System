@@ -793,7 +793,7 @@ function App() {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme');
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
-    if (!migratedDefault && (!saved || saved === 'executive')) {
+    if (!migratedDefault && (!saved || ['executive', 'navy', 'emerald', 'graphite'].includes(saved))) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
       return 'dark';
     }
@@ -1456,6 +1456,15 @@ function subscribeLiveTicker(market: MarketMode, symbol: string, listener: LiveP
 
 const chartTime = (stamp: number) => Math.floor(stamp / 1000) as UTCTimestamp;
 
+function colorMixFallback(color: string, alphaHex: string) {
+  if (color.startsWith('#') && color.length === 7) return `${color}${alphaHex}`;
+  if (color.startsWith('#') && color.length === 4) {
+    const [, r, g, b] = color;
+    return `#${r}${r}${g}${g}${b}${b}${alphaHex}`;
+  }
+  return color;
+}
+
 function candleToChartData(candle: ChartCandle): CandlestickData<UTCTimestamp> {
   return {
     time: chartTime(candle.openTime),
@@ -1510,6 +1519,7 @@ function addTradeLevelLine(
   title: string,
   color: string
 ) {
+  const axisTextColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-text').trim() || '#ffffff';
   if (typeof price !== 'number' || !Number.isFinite(price) || price <= 0) return;
   series.createPriceLine({
     price,
@@ -1520,7 +1530,7 @@ function addTradeLevelLine(
     axisLabelVisible: true,
     title,
     axisLabelColor: color,
-    axisLabelTextColor: '#ffffff'
+    axisLabelTextColor: axisTextColor
   });
 }
 
@@ -1578,22 +1588,33 @@ function BinanceLiveChart({
     chartReadyRef.current = false;
     lastCandleRef.current = null;
     chartRef.current?.remove();
+    const rootStyles = getComputedStyle(document.documentElement);
+    const cssVar = (name: string, fallback: string) => rootStyles.getPropertyValue(name).trim() || fallback;
+    const chartBg = cssVar('--panel-strong', '#131722');
+    const chartText = cssVar('--soft-text', '#d1d5db');
+    const chartGrid = colorMixFallback(cssVar('--border', '#334155'), '22');
+    const chartScale = colorMixFallback(cssVar('--border', '#334155'), '55');
+    const candleUp = cssVar('--success', '#00b894');
+    const candleDown = cssVar('--danger', '#ff4d5a');
+    const entryColor = cssVar('--accent', '#3b82f6');
+    const takeProfitColor = cssVar('--success', '#22c55e');
+    const stopLossColor = cssVar('--danger', '#ef4444');
     const chart = createChart(container, {
       width: container.clientWidth,
       height: container.clientHeight,
       layout: {
-        background: { color: '#131722' },
-        textColor: '#d1d5db'
+        background: { color: chartBg },
+        textColor: chartText
       },
       grid: {
-        vertLines: { color: 'rgba(148, 163, 184, 0.12)' },
-        horzLines: { color: 'rgba(148, 163, 184, 0.12)' }
+        vertLines: { color: chartGrid },
+        horzLines: { color: chartGrid }
       },
       rightPriceScale: {
-        borderColor: 'rgba(148, 163, 184, 0.25)'
+        borderColor: chartScale
       },
       timeScale: {
-        borderColor: 'rgba(148, 163, 184, 0.25)',
+        borderColor: chartScale,
         timeVisible: true,
         secondsVisible: false
       },
@@ -1604,21 +1625,21 @@ function BinanceLiveChart({
     const initialPrecision = pricePrecisionFor(latestTicker?.price ?? 1);
     pricePrecisionRef.current = initialPrecision;
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: '#00b894',
-      downColor: '#ff4d5a',
-      borderUpColor: '#00b894',
-      borderDownColor: '#ff4d5a',
-      wickUpColor: '#00b894',
-      wickDownColor: '#ff4d5a',
+      upColor: candleUp,
+      downColor: candleDown,
+      borderUpColor: candleUp,
+      borderDownColor: candleDown,
+      wickUpColor: candleUp,
+      wickDownColor: candleDown,
       priceFormat: {
         type: 'price',
         precision: initialPrecision,
         minMove: 0.00000001
       }
     });
-    addTradeLevelLine(series, levels?.entry, 'Entry', '#3b82f6');
-    addTradeLevelLine(series, levels?.takeProfit, 'TP', '#22c55e');
-    addTradeLevelLine(series, levels?.stopLoss, 'SL', '#ef4444');
+    addTradeLevelLine(series, levels?.entry, 'Entry', entryColor);
+    addTradeLevelLine(series, levels?.takeProfit, 'TP', takeProfitColor);
+    addTradeLevelLine(series, levels?.stopLoss, 'SL', stopLossColor);
     chartRef.current = chart;
     seriesRef.current = series;
     const resizeObserver = new ResizeObserver(entries => {
@@ -7454,9 +7475,9 @@ function PerformanceCharts({
                 <XAxis dataKey="name" tick={false} axisLine={false} tickLine={false} height={8} />
                 <YAxis tick={false} axisLine={false} tickLine={false} width={8} allowDecimals={false} />
                 <Tooltip content={<StrategyChartTooltip />} cursor={{ fill: 'var(--hover)' }} wrapperStyle={{ outline: 'none' }} />
-                <Bar dataKey="wins" fill="#2fbf71" stroke="#2fbf71" fillOpacity={1} isAnimationActive={false} name="Wins" radius={[4, 4, 0, 0]} maxBarSize={28} />
-                <Bar dataKey="losses" fill="#d85b63" stroke="#d85b63" fillOpacity={1} isAnimationActive={false} name="Losses" radius={[4, 4, 0, 0]} maxBarSize={28} />
-                <Bar dataKey="live" fill="#c9a45c" stroke="#c9a45c" fillOpacity={1} isAnimationActive={false} name="Open" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                <Bar dataKey="wins" fill="var(--success)" stroke="var(--success)" fillOpacity={1} isAnimationActive={false} name="Wins" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                <Bar dataKey="losses" fill="var(--danger)" stroke="var(--danger)" fillOpacity={1} isAnimationActive={false} name="Losses" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                <Bar dataKey="live" fill="var(--warning)" stroke="var(--warning)" fillOpacity={1} isAnimationActive={false} name="Open" radius={[4, 4, 0, 0]} maxBarSize={28} />
               </BarChart>
             </ResponsiveContainer>
           </div>}
