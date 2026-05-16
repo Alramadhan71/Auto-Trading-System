@@ -275,6 +275,7 @@ type TelegramSubscriber = {
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
 type Theme = 'dark' | 'light';
+type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
   connected: boolean;
@@ -554,6 +555,12 @@ const themes: { id: Theme; name: string }[] = [
   { id: 'dark', name: 'Dark' },
   { id: 'light', name: 'Light' }
 ];
+const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
+  { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
+  { id: '2', name: 'Option 2', summary: 'High contrast trading' },
+  { id: '3', name: 'Option 3', summary: 'Minimal clean' },
+  { id: '4', name: 'Option 4', summary: 'Institutional dashboard' }
+];
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
   const response = await fetch(url, { credentials: 'include', ...init });
@@ -792,6 +799,10 @@ function App() {
     }
     return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
   });
+  const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
+    const saved = localStorage.getItem('themeStyle');
+    return themeStyles.some(item => item.id === saved) ? saved as ThemeStyle : '1';
+  });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
   const [themePanelOpen, setThemePanelOpen] = useState(false);
@@ -815,6 +826,11 @@ function App() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.dataset.themeStyle = themeStyle;
+    localStorage.setItem('themeStyle', themeStyle);
+  }, [themeStyle]);
 
   useEffect(() => {
     localStorage.setItem('toastDuration', String(toastDuration));
@@ -1182,7 +1198,7 @@ function App() {
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
-          <ThemeStudio currentTheme={theme} onPick={setTheme} />
+          <ThemeStudio currentTheme={theme} themeStyle={themeStyle} onPick={setTheme} onOpen={() => setThemePanelOpen(true)} />
           <NotificationSettings
             duration={toastDuration}
             enabled={alertsEnabled}
@@ -1234,7 +1250,7 @@ function App() {
         onTimeframeChange={setChartTimeframe}
         onClose={() => setChartOpen(false)}
       />}
-      {themePanelOpen && <ThemePanel currentTheme={theme} onPick={setTheme} onClose={() => setThemePanelOpen(false)} />}
+      {themePanelOpen && <ThemePanel currentTheme={theme} currentStyle={themeStyle} onPick={setTheme} onPickStyle={setThemeStyle} onClose={() => setThemePanelOpen(false)} />}
     </div>
   );
 
@@ -1731,38 +1747,76 @@ function TradeChartModal({ trade, latestTicker, onClose }: { trade: TradeChartTr
   </div>;
 }
 
-function ThemeStudio({ currentTheme, onPick }: { currentTheme: Theme; onPick: (theme: Theme) => void }) {
+function ThemeStudio({
+  currentTheme,
+  themeStyle,
+  onPick,
+  onOpen
+}: {
+  currentTheme: Theme;
+  themeStyle: ThemeStyle;
+  onPick: (theme: Theme) => void;
+  onOpen: () => void;
+}) {
   const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-  return <button
-    type="button"
-    className={`theme-studio theme-toggle ${currentTheme}`}
-    onClick={() => onPick(nextTheme)}
-    aria-label={`Switch to ${nextTheme} theme`}
-  >
-    <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
-    <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
-  </button>;
+  return <div className={`theme-studio theme-control ${currentTheme} style-${themeStyle}`}>
+    <button
+      type="button"
+      className="theme-toggle"
+      onClick={() => onPick(nextTheme)}
+      aria-label={`Switch to ${nextTheme} theme`}
+    >
+      <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+      <span>{currentTheme === 'light' ? 'Light' : 'Dark'}</span>
+    </button>
+    <button
+      type="button"
+      className="theme-style-trigger"
+      onClick={onOpen}
+      aria-label="Open numbered theme options"
+    >
+      Style {themeStyle}
+    </button>
+  </div>;
 }
 
-function ThemePanel({ currentTheme, onPick, onClose }: { currentTheme: Theme; onPick: (theme: Theme) => void; onClose: () => void }) {
+function ThemePanel({
+  currentTheme,
+  currentStyle,
+  onPick,
+  onPickStyle,
+  onClose
+}: {
+  currentTheme: Theme;
+  currentStyle: ThemeStyle;
+  onPick: (theme: Theme) => void;
+  onPickStyle: (style: ThemeStyle) => void;
+  onClose: () => void;
+}) {
   return <div className="theme-overlay" role="presentation" onClick={onClose}>
     <section className="theme-modal" role="dialog" aria-modal="true" onClick={event => event.stopPropagation()}>
       <header>
         <div>
           <p className="eyebrow">Theme Studio</p>
-          <h2>Choose Your Trading Desk</h2>
+          <h2>Choose Numbered Style</h2>
         </div>
         <button onClick={onClose}>Close</button>
       </header>
+      <div className="theme-mode-switch" aria-label="Theme mode">
+        {themes.map(item => <button key={item.id} className={currentTheme === item.id ? 'active' : ''} onClick={() => onPick(item.id)}>
+          {item.id === 'light' ? <Sun size={16} /> : <Moon size={16} />}
+          <span>{item.name}</span>
+        </button>)}
+      </div>
       <div className="theme-showcase">
-        {themes.map(item => <button key={item.id} className={currentTheme === item.id ? `theme-showcase-card ${item.id} active` : `theme-showcase-card ${item.id}`} onClick={() => {
-          onPick(item.id);
-          onClose();
+        {themeStyles.map(item => <button key={item.id} className={currentStyle === item.id ? `theme-showcase-card style-${item.id} active` : `theme-showcase-card style-${item.id}`} onClick={() => {
+          onPickStyle(item.id);
         }}>
           <div className="showcase-top">
             <span>{item.name}</span>
-            <b>{currentTheme === item.id ? 'ACTIVE' : 'SELECT'}</b>
+            <b>{currentStyle === item.id ? 'ACTIVE' : 'SELECT'}</b>
           </div>
+          <small className="showcase-summary">{item.summary}</small>
           <div className="showcase-screen">
             <aside>
               <i />
