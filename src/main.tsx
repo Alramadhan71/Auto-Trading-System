@@ -4394,6 +4394,18 @@ function AutoTradePage({
             <strong>No emotional entries.</strong>
             <strong>Only qualified signals.</strong>
           </div>
+          <div className="auth-decision-visual" aria-label="Signal qualification preview">
+            <div className="decision-node">
+              <span>Market idea</span>
+            </div>
+            <div className="decision-path" aria-hidden="true">
+              <i />
+            </div>
+            <div className="decision-results">
+              <span className="rejected">Rejected</span>
+              <span className="qualified">Qualified</span>
+            </div>
+          </div>
           <p>Weak trades never reach your dashboard.</p>
         </div>
         <div className="auto-auth-card">
