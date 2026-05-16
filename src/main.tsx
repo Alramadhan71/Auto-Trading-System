@@ -1899,6 +1899,14 @@ function HomePage({
       : (homeIntel?.fearGreed.value ?? 50) >= 55 ? 'warm'
         : (homeIntel?.fearGreed.value ?? 50) >= 40 ? 'neutral'
           : 'cold';
+  const sentimentToneClass = (value?: number | null) => {
+    const score = value ?? 0;
+    if (score >= 75) return 'sentiment-greed';
+    if (score >= 55) return 'sentiment-optimism';
+    if (score >= 40) return 'sentiment-neutral';
+    if (score >= 25) return 'sentiment-fear';
+    return 'sentiment-extreme';
+  };
 
   return <>
     <section className="home-launchpad">
@@ -1998,7 +2006,7 @@ function HomePage({
             { label: 'Yesterday', row: homeIntel?.fearGreed.yesterday },
             { label: 'Last week', row: homeIntel?.fearGreed.lastWeek },
             { label: 'Last month', row: homeIntel?.fearGreed.lastMonth }
-          ].map(item => <article key={item.label} className="home-fear-history-row">
+          ].map(item => <article key={item.label} className={`home-fear-history-row ${sentimentToneClass(item.row?.value)}`}>
             <div>
               <span>{item.label}</span>
               <strong>{item.row?.classification ?? 'Unavailable'}</strong>
