@@ -4388,38 +4388,18 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <div className="auth-hero-kickers">
-            <span>14 days free</span>
-            <span>Private access</span>
-          </div>
-          <h1>Trade only when the system says yes.</h1>
+          <h1>A system that says no first.</h1>
           <div className="auth-command-list" aria-label="Trading system decision flow">
-            <strong>Scan the market.</strong>
-            <strong>Reject weak setups.</strong>
-            <strong>Control risk first.</strong>
-            <strong>Execute with rules.</strong>
+            <strong>No weak setups.</strong>
+            <strong>No emotional entries.</strong>
+            <strong>Only qualified signals.</strong>
           </div>
           <p>Weak trades never reach your dashboard.</p>
-          <div className="auth-signal-line" aria-label="System proof">
-            <span>10+ strategies</span>
-            <span>Risk gates</span>
-            <span>Backtested logic</span>
-          </div>
-          <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
-            Start 14 days free
-          </button>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
-            <p className="eyebrow">Private Trading Desk</p>
-            <h1>Login to continue</h1>
-            <small>Signals, risk gates, and execution controls are inside.</small>
-          </div>
-          <div className="auth-desk-preview" aria-label="Trading workspace preview">
-            <span>Live signals</span>
-            <span>Risk gates</span>
-            <span>Execution</span>
+            <h1>Login</h1>
           </div>
           <div className="role-switch">
             <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
@@ -4448,12 +4428,14 @@ function AutoTradePage({
             <button type="submit"><LogIn size={17} /> Login</button>
           </div>
           {authMessage && <p className="auth-message">{authMessage}</p>}
+          {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
+            Start 14 days free
+          </button>}
           {loginRole === 'user' && <div className="register-prompt access-request-prompt">
-            <span>Don't have an account?</span>
             <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
           </div>}
           </form>
-          <small className="auth-help">If you have any problem, contact admin on <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">WhatsApp</a>.</small>
+          <small className="auth-help"><a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a></small>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
           <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>

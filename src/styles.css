@@ -19328,6 +19328,178 @@ body {
   }
 }
 
+/* Minimal auth: fewer words, tighter composition. */
+.page-frame.page-auto-trade .auto-auth-shell {
+  width: min(100%, 1320px) !important;
+  grid-template-columns: minmax(440px, 620px) 400px !important;
+  gap: clamp(48px, 5vw, 78px) !important;
+  justify-content: center !important;
+  padding-inline: clamp(34px, 4vw, 64px) !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing {
+  max-width: 620px !important;
+  gap: 24px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing h1 {
+  max-width: 600px !important;
+  font-size: clamp(54px, 5vw, 82px) !important;
+  line-height: .95 !important;
+}
+
+.auth-command-list {
+  gap: 10px !important;
+}
+
+.auth-command-list strong {
+  min-height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: var(--soft-text) !important;
+  background: transparent !important;
+  font-size: clamp(21px, 1.45vw, 27px) !important;
+  font-weight: 760 !important;
+}
+
+.auth-command-list strong::before {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  margin-right: 11px !important;
+  border-radius: 999px !important;
+  background: var(--success) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--success) 42%, transparent) !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing > p {
+  max-width: 430px !important;
+  color: var(--muted) !important;
+  font-size: 16px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-card {
+  max-width: 400px !important;
+  padding: 22px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 20px 52px rgba(0,0,0,.34) !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-card::before {
+  height: 2px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-head {
+  margin-bottom: 16px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  margin: 0 !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+}
+
+.page-frame.page-auto-trade .role-switch {
+  min-height: 38px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px !important;
+  margin-bottom: 12px !important;
+  padding: 3px !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+}
+
+.page-frame.page-auto-trade .role-switch button {
+  min-height: 32px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+.page-frame.page-auto-trade .role-switch button.active {
+  color: var(--text) !important;
+  background: color-mix(in srgb, var(--card-surface-raised) 84%, transparent) !important;
+  box-shadow: inset 0 0 0 1px var(--border) !important;
+}
+
+.auth-input-shell {
+  min-height: 46px !important;
+  border-radius: 8px !important;
+}
+
+.page-frame.page-auto-trade .auth-input-shell input,
+.page-frame.page-auto-trade .password-field.auth-input-shell input {
+  min-height: 42px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 46px !important;
+  margin-top: 2px !important;
+  border-radius: 8px !important;
+}
+
+.auth-trial-button {
+  width: 100% !important;
+  min-height: 42px !important;
+  margin-top: 10px !important;
+  border: 1px solid color-mix(in srgb, var(--success) 45%, var(--border)) !important;
+  border-radius: 8px !important;
+  color: var(--text) !important;
+  background: color-mix(in srgb, var(--success) 10%, transparent) !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.page-frame.page-auto-trade .register-prompt {
+  min-height: auto !important;
+  margin-top: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  justify-content: center !important;
+}
+
+.page-frame.page-auto-trade .register-prompt button,
+.page-frame.page-auto-trade .auth-help a {
+  border: 0 !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+.page-frame.page-auto-trade .auth-help {
+  margin-top: 9px !important;
+  text-align: center !important;
+}
+
+.page-frame.page-auto-trade .remember-login span,
+.inline-link {
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 1100px) and (min-width: 981px) {
+  .page-frame.page-auto-trade .auto-auth-shell {
+    grid-template-columns: minmax(420px, 560px) 380px !important;
+    gap: 36px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Full-page auth redesign: use the viewport, not a centered poster card. */
 .page-auto-trade:has(.auto-auth-shell) {
   height: calc(100vh - 72px) !important;
