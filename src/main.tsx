@@ -552,9 +552,9 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Midnight' },
-  { id: 'black', name: 'Black' }
+  { id: 'light', name: 'لايت' },
+  { id: 'dark', name: 'اكسيكيوشن' },
+  { id: 'black', name: 'دارك' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
@@ -1765,18 +1765,18 @@ function ThemeStudio({
   currentTheme: Theme;
   onPick: (theme: Theme) => void;
 }) {
+  const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
+  const nextTheme = currentTheme === 'light' ? 'dark' : currentTheme === 'dark' ? 'black' : 'light';
   return <div className={`theme-studio theme-control ${currentTheme}`}>
-    {themes.map(item => <button
-      key={item.id}
+    <button
       type="button"
-      className={currentTheme === item.id ? 'theme-toggle active' : 'theme-toggle'}
-      onClick={() => onPick(item.id)}
-      aria-label={`Switch to ${item.name} theme`}
-      aria-pressed={currentTheme === item.id}
+      className="theme-toggle active"
+      onClick={() => onPick(nextTheme)}
+      aria-label={`Switch to ${(themes.find(item => item.id === nextTheme) ?? themes[0]).name} theme`}
     >
-      <span className="theme-toggle-icon">{item.id === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
-      <span>{item.name}</span>
-    </button>)}
+      <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+      <span>{currentThemeItem.name}</span>
+    </button>
   </div>;
 }
 
@@ -1933,7 +1933,7 @@ function HomePage({
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
             <LogIn size={20} />
             <span>
-              <strong>Log In to Account</strong>
+              <strong>Log In to Your Account</strong>
             </span>
           </button>
         </div>
