@@ -18381,3 +18381,59 @@ body {
   border-color: var(--card-hairline) !important;
   border-left-color: var(--card-hairline) !important;
 }
+
+/* Remove inner surface gradients that read like colored/bright edges. */
+.home-launchpad,
+.home-live-board,
+.price-card,
+.home-top-market-card,
+.home-intel-card,
+.home-fear-card,
+.home-fear-history-card,
+.home-signal-shell,
+.home-leader-shell,
+.home-marketcap-shell,
+.home-news-shell,
+.panel,
+.chart-block,
+.trade-list,
+.performance-command,
+.premium-panel,
+.binance-connect-panel,
+.auto-auth-card,
+.minimal-home {
+  background: var(--section-surface) !important;
+}
+
+.home-live-card,
+.home-signal-card,
+.home-leader-card,
+.home-leader-row,
+.home-marketcap-row,
+.home-news-card,
+.home-cta-primary,
+.home-cta-secondary,
+.search-panel,
+.home-search-panel,
+.notification-card,
+.scorecard,
+.strategy,
+.leader-item,
+.trade-ledger-shell,
+.snapshot-list article,
+.command-summary article {
+  background: var(--card-surface) !important;
+}
+
+.home-marketcap-row:nth-child(even),
+.home-fear-history-row,
+.home-news-tags b,
+.home-marketcap-rank,
+.home-fear-history-row b,
+.theme-toggle,
+.theme-studio,
+.theme-control,
+.home-market-switch,
+.home-market-switch button {
+  background: var(--card-surface-raised) !important;
+}
