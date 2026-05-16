@@ -18694,6 +18694,331 @@ body {
   }
 }
 
+/* Auth polish pass: reduce density, keep the first viewport complete. */
+.page-frame.page-auto-trade .auto-auth-shell {
+  grid-template-columns: minmax(520px, 0.95fr) minmax(390px, 440px) !important;
+  gap: clamp(32px, 4.2vw, 72px) !important;
+  padding: clamp(24px, 3vw, 46px) clamp(48px, 5.2vw, 96px) !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing {
+  max-width: 880px !important;
+  gap: clamp(12px, 1.55vh, 17px) !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing h1 {
+  max-width: 690px !important;
+  font-size: clamp(44px, 3.85vw, 66px) !important;
+  line-height: .96 !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-marketing > p {
+  max-width: 640px !important;
+  font-size: clamp(15px, 1.02vw, 18px) !important;
+  line-height: 1.42 !important;
+}
+
+.auth-proof-row {
+  gap: 8px !important;
+}
+
+.auth-proof-row span {
+  min-height: 32px !important;
+  padding: 0 11px !important;
+  font-size: 11.5px !important;
+}
+
+.auth-flow-line {
+  position: relative !important;
+  width: min(100%, 820px) !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  padding: 10px 0 2px !important;
+}
+
+.auth-flow-line::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 6% !important;
+  right: 6% !important;
+  top: 24px !important;
+  height: 1px !important;
+  background: color-mix(in srgb, var(--border) 82%, transparent) !important;
+}
+
+.auth-flow-line article {
+  min-height: 78px !important;
+  padding: 0 10px !important;
+  display: grid !important;
+  justify-items: start !important;
+  align-content: start !important;
+  gap: 5px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.auth-flow-line article span {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border)) !important;
+  border-radius: 999px !important;
+  color: var(--text) !important;
+  background: color-mix(in srgb, var(--card-surface-raised) 92%, #0e141d) !important;
+  font-size: 10px !important;
+  letter-spacing: 0 !important;
+}
+
+.auth-flow-line article strong {
+  margin-top: 2px !important;
+  font-size: 14px !important;
+}
+
+.auth-flow-line article small {
+  max-width: 130px !important;
+  font-size: 10.5px !important;
+  line-height: 1.25 !important;
+}
+
+.auth-story-board {
+  width: min(100%, 820px) !important;
+  grid-template-columns: minmax(0, 1.1fr) minmax(240px, .72fr) !important;
+  gap: 10px !important;
+}
+
+.auth-decision-card {
+  min-height: 124px !important;
+  padding: 16px !important;
+  gap: 8px !important;
+}
+
+.auth-decision-card strong {
+  max-width: 560px !important;
+  font-size: clamp(20px, 1.45vw, 26px) !important;
+  line-height: 1.1 !important;
+}
+
+.auth-decision-card p {
+  font-size: 12.5px !important;
+  line-height: 1.35 !important;
+}
+
+.auth-mini-terminal {
+  align-content: stretch !important;
+}
+
+.auth-mini-terminal div {
+  min-height: 38px !important;
+}
+
+.page-frame.page-auto-trade .auth-marketing-cta {
+  min-height: 38px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-card {
+  max-width: 440px !important;
+  padding: 22px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-head {
+  margin-bottom: 14px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  max-width: 340px !important;
+  font-size: clamp(27px, 1.85vw, 34px) !important;
+}
+
+.auth-desk-preview {
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  margin-bottom: 13px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: color-mix(in srgb, var(--card-surface-raised) 86%, #0e141d) !important;
+}
+
+.auth-desk-preview article {
+  min-height: 42px !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto auto !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 8px 12px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.auth-desk-preview article:last-child {
+  border-bottom: 0 !important;
+}
+
+.auth-desk-preview span,
+.auth-desk-preview small {
+  font-size: 10.5px !important;
+}
+
+.auth-desk-preview strong {
+  font-size: 18px !important;
+}
+
+.page-frame.page-auto-trade .role-switch {
+  min-height: 44px !important;
+  margin-bottom: 10px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-form {
+  gap: 9px !important;
+}
+
+.auth-input-shell {
+  min-height: 46px !important;
+}
+
+.page-frame.page-auto-trade .auth-input-shell input,
+.page-frame.page-auto-trade .password-field.auth-input-shell input {
+  min-height: 42px !important;
+}
+
+.auth-form-row {
+  min-height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.inline-link {
+  min-height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--soft-text) !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 47px !important;
+}
+
+.page-frame.page-auto-trade .register-prompt {
+  min-height: 34px !important;
+  margin-top: 8px !important;
+  padding-top: 8px !important;
+}
+
+.page-frame.page-auto-trade .auth-help {
+  display: block !important;
+  margin-top: 12px !important;
+  color: var(--muted) !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+}
+
+.auth-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 80 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 24px !important;
+  background: rgba(5, 8, 12, .68) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.auth-modal {
+  width: min(440px, 100%) !important;
+  max-height: calc(100vh - 56px) !important;
+  overflow: auto !important;
+  margin: 0 !important;
+  padding: 18px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border)) !important;
+  border-radius: 8px !important;
+  background: color-mix(in srgb, var(--card-surface) 96%, #111923) !important;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .42) !important;
+}
+
+.auth-modal .register-panel-head {
+  margin-bottom: 12px !important;
+}
+
+@media (max-height: 820px) and (min-width: 981px) {
+  .page-frame.page-auto-trade .auto-auth-shell {
+    padding-block: 18px !important;
+    grid-template-columns: minmax(500px, 0.95fr) minmax(370px, 420px) !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-marketing h1 {
+    font-size: clamp(40px, 3.55vw, 58px) !important;
+  }
+
+  .auth-flow-line article {
+    min-height: 68px !important;
+  }
+
+  .auth-decision-card {
+    min-height: 112px !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 981px) {
+  .page-frame.page-auto-trade .auto-auth-shell {
+    grid-template-columns: minmax(470px, 1fr) minmax(350px, 410px) !important;
+    gap: 24px !important;
+    padding-inline: 28px !important;
+  }
+
+  .auth-flow-line {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-frame.page-auto-trade .auto-auth-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .auth-flow-line {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .auth-flow-line::before {
+    display: none !important;
+  }
+
+  .auth-flow-line article {
+    min-height: auto !important;
+    grid-template-columns: 32px 1fr !important;
+    gap: 4px 9px !important;
+  }
+
+  .auth-flow-line article span {
+    grid-row: span 2 !important;
+  }
+
+  .auth-flow-line article small {
+    max-width: none !important;
+  }
+
+  .auth-story-board {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Full-page auth redesign: use the viewport, not a centered poster card. */
 .page-auto-trade:has(.auto-auth-shell) {
   height: calc(100vh - 72px) !important;

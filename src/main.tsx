@@ -4422,12 +4422,6 @@ function AutoTradePage({
               <div><span>Strategies active</span><strong>10</strong></div>
             </div>
           </div>
-          <div className="trial-proof-strip">
-            <span><strong>14</strong><small>days free</small></span>
-            <span><strong>10+</strong><small>strategies</small></span>
-            <span><strong>91</strong><small>weak setups rejected</small></span>
-            <span><strong>AI</strong><small>learning loop</small></span>
-          </div>
           <button type="button" className="auth-marketing-cta" onClick={() => { setLoginRole('user'); setRegisterOpen(true); setPasswordResetOpen(false); }}>
             Start with 14 days free
           </button>
@@ -4485,18 +4479,23 @@ function AutoTradePage({
           {authMessage && <p className="auth-message">{authMessage}</p>}
           {loginRole === 'user' && <div className="register-prompt access-request-prompt">
             <span>Don't have an account?</span>
-            <button type="button" onClick={() => setRegisterOpen(value => !value)}>{registerOpen ? 'Close request' : 'Request access'}</button>
+            <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
           </div>}
           </form>
-          {passwordResetOpen && <form className="register-panel" onSubmit={event => { event.preventDefault(); handlePasswordReset(); }}>
+          <small className="auth-help">If you have any problem, contact admin on <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">WhatsApp</a>.</small>
+        </div>
+        {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
+          <form className="register-panel auth-modal" onClick={event => event.stopPropagation()} onSubmit={event => { event.preventDefault(); handlePasswordReset(); }}>
             <div className="register-panel-head">
               <strong>{loginRole === 'admin' ? 'Admin password reset' : 'User password reset'}</strong>
               <button type="button" onClick={() => setPasswordResetOpen(false)} aria-label="Close password reset form">x</button>
             </div>
             <small className="password-policy-note">Email recovery will be enabled after secure email delivery is configured.</small>
             <button type="button" onClick={() => setPasswordResetOpen(false)}>Close</button>
-          </form>}
-          {loginRole === 'user' && registerOpen && <form className="register-panel" onSubmit={event => { event.preventDefault(); submitAccessRequest(); }}>
+          </form>
+        </div>}
+        {loginRole === 'user' && registerOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setRegisterOpen(false)}>
+          <form className="register-panel auth-modal" onClick={event => event.stopPropagation()} onSubmit={event => { event.preventDefault(); submitAccessRequest(); }}>
             <div className="register-panel-head">
               <strong>New access request</strong>
               <button type="button" onClick={() => setRegisterOpen(false)} aria-label="Close registration form">x</button>
@@ -4512,9 +4511,8 @@ function AutoTradePage({
             <input value={joinTelegram} onChange={event => setJoinTelegram(event.target.value)} placeholder="Telegram account or link" />
             <input value={joinPhone} onChange={event => setJoinPhone(event.target.value)} placeholder="Phone number" />
             <button type="submit">Submit Request</button>
-          </form>}
-          <small className="auth-help">If you have any problem, contact admin on <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">WhatsApp</a>.</small>
-        </div>
+          </form>
+        </div>}
       </div>
     </section>;
   }
