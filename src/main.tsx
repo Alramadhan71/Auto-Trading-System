@@ -4388,29 +4388,27 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <h1>A system that says no first.</h1>
-          <div className="auth-command-list" aria-label="Trading system decision flow">
-            <strong>No weak setups.</strong>
-            <strong>No emotional entries.</strong>
-            <strong>Only qualified signals.</strong>
+          <span className="auth-live-kicker">Private automated execution</span>
+          <h1>Trade with AI that protects the entry.</h1>
+          <div className="auth-value-stack" aria-label="Automated trading advantages">
+            <strong>Secure Binance execution.</strong>
+            <strong>1,000+ coins scanned continuously.</strong>
+            <strong>BTC and ETH trend alignment.</strong>
+            <strong>Losses teach the AI in real time.</strong>
+            <strong>Every order passes risk tests first.</strong>
           </div>
-          <div className="auth-decision-visual" aria-label="Signal qualification preview">
-            <div className="decision-node">
-              <span>Market idea</span>
-            </div>
-            <div className="decision-path" aria-hidden="true">
-              <i />
-            </div>
-            <div className="decision-results">
-              <span className="rejected">Rejected</span>
-              <span className="qualified">Qualified</span>
-            </div>
+          <div className="auth-system-strip" aria-label="System execution path">
+            <span>Scan</span>
+            <span>Filter</span>
+            <span>Risk</span>
+            <span>Execute</span>
           </div>
-          <p>Weak trades never reach your dashboard.</p>
+          <p>Weak setups stay out. Qualified trades move to execution.</p>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
           <div className="auto-auth-head">
+            <span>Private desk</span>
             <h1>Login</h1>
           </div>
           <div className="role-switch">
@@ -4434,7 +4432,7 @@ function AutoTradePage({
                 <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
                 <span>Remember login</span>
               </label>
-              <button type="button" className="inline-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot access?</button>
+              <button type="button" className="inline-link auth-text-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot access?</button>
             </div>
             {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
             <button type="submit"><LogIn size={17} /> Login</button>
@@ -4444,7 +4442,7 @@ function AutoTradePage({
             Start 14 days free
           </button>}
           {loginRole === 'user' && <div className="register-prompt access-request-prompt">
-            <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
+            <button type="button" className="auth-text-link" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
           </div>}
           </form>
           <small className="auth-help"><a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a></small>

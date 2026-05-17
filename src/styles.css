@@ -18694,6 +18694,383 @@ body {
   }
 }
 
+/* Final auth landing pass: compact, alive, and intentionally simple. */
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) {
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  background:
+    linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .014) 1px, transparent 1px),
+    #101721 !important;
+  background-size: 42px 42px, 42px 42px, auto !important;
+}
+
+.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+.page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.page-auto-trade .auto-auth-shell,
+.page-frame.page-auto-trade .auto-auth-shell {
+  width: min(100%, 1220px) !important;
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  padding: clamp(34px, 5vh, 74px) clamp(20px, 3vw, 42px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(520px, 650px) minmax(360px, 420px) !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: clamp(28px, 3.2vw, 52px) !important;
+}
+
+.page-auto-trade .auto-auth-marketing,
+.page-frame.page-auto-trade .auto-auth-marketing {
+  max-width: 650px !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 18px !important;
+}
+
+.auth-live-kicker {
+  width: fit-content !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  color: #c9d4e1 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.auth-live-kicker::before {
+  content: "" !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  background: #3acb83 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auto-auth-marketing h1,
+.page-frame.page-auto-trade .auto-auth-marketing h1 {
+  max-width: 650px !important;
+  margin: 0 !important;
+  color: #f4f7fb !important;
+  font-size: clamp(52px, 5.1vw, 84px) !important;
+  line-height: .9 !important;
+  letter-spacing: 0 !important;
+}
+
+.auth-value-stack {
+  width: min(100%, 610px) !important;
+  display: grid !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.auth-value-stack strong {
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 0 0 17px !important;
+  border-left: 3px solid rgba(58, 203, 131, .86) !important;
+  color: #e7edf5 !important;
+  background: linear-gradient(90deg, rgba(58, 203, 131, .105), rgba(255, 255, 255, .018)) !important;
+  font-size: clamp(16px, 1.2vw, 21px) !important;
+  line-height: 1.18 !important;
+  font-weight: 850 !important;
+  box-shadow: none !important;
+}
+
+.auth-system-strip {
+  width: min(100%, 560px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.auth-system-strip span {
+  min-height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(155, 170, 190, .22) !important;
+  border-radius: 8px !important;
+  color: #c8d2de !important;
+  background: rgba(255, 255, 255, .035) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+.page-auto-trade .auto-auth-marketing > p,
+.page-frame.page-auto-trade .auto-auth-marketing > p {
+  max-width: 560px !important;
+  margin: 4px 0 0 !important;
+  color: #aeb9c7 !important;
+  font-size: clamp(16px, 1.15vw, 20px) !important;
+  line-height: 1.42 !important;
+}
+
+.page-auto-trade .auto-auth-card,
+.page-frame.page-auto-trade .auto-auth-card {
+  width: 100% !important;
+  max-width: 420px !important;
+  justify-self: start !important;
+  position: relative !important;
+  padding: 22px !important;
+  border: 1px solid rgba(159, 176, 198, .28) !important;
+  border-radius: 10px !important;
+  background: rgba(19, 27, 38, .94) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .24) !important;
+}
+
+.page-auto-trade .auto-auth-card::before,
+.page-frame.page-auto-trade .auto-auth-card::before {
+  content: none !important;
+}
+
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form {
+  display: grid !important;
+  gap: 13px !important;
+}
+
+.page-auto-trade .auto-auth-head,
+.page-frame.page-auto-trade .auto-auth-head {
+  display: grid !important;
+  gap: 5px !important;
+}
+
+.page-auto-trade .auto-auth-head span,
+.page-frame.page-auto-trade .auto-auth-head span {
+  color: #9caabc !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+.page-auto-trade .auto-auth-head h1,
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  margin: 0 !important;
+  color: #f3f6fa !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  height: 42px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  border: 1px solid rgba(159, 176, 198, .22) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, .025) !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  color: #9faec1 !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  color: #f5f8fb !important;
+  background: rgba(255, 255, 255, .075) !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell {
+  min-height: 46px !important;
+  border-radius: 8px !important;
+  border-color: rgba(159, 176, 198, .22) !important;
+  background: rgba(255, 255, 255, .04) !important;
+}
+
+.page-auto-trade .password-field.auth-input-shell button,
+.page-frame.page-auto-trade .password-field.auth-input-shell button,
+.register-panel .password-field button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(159, 176, 198, .24) !important;
+  background: rgba(255, 255, 255, .035) !important;
+  color: #d7e0ea !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-form-row,
+.page-frame.page-auto-trade .auth-form-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  color: #9faec1 !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+}
+
+.page-auto-trade .auth-text-link,
+.page-auto-trade .inline-link,
+.page-auto-trade .register-prompt button,
+.page-frame.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .inline-link,
+.page-frame.page-auto-trade .register-prompt button {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #c5d1df !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.page-auto-trade .auth-text-link:hover,
+.page-auto-trade .inline-link:hover,
+.page-auto-trade .register-prompt button:hover,
+.page-frame.page-auto-trade .auth-text-link:hover,
+.page-frame.page-auto-trade .inline-link:hover,
+.page-frame.page-auto-trade .register-prompt button:hover {
+  color: #f3f7fb !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"],
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  color: #07110d !important;
+  background: #3acb83 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.auth-trial-button {
+  min-height: 42px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(58, 203, 131, .55) !important;
+  color: #dff8ec !important;
+  background: rgba(58, 203, 131, .11) !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  box-shadow: none !important;
+}
+
+.access-request-prompt {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.page-auto-trade .auto-auth-card > .auth-help,
+.page-frame.page-auto-trade .auto-auth-card > .auth-help {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 13px !important;
+  color: #8d9bad !important;
+  font-size: 12px !important;
+}
+
+.page-auto-trade .auto-auth-card > .auth-help a,
+.page-frame.page-auto-trade .auto-auth-card > .auth-help a {
+  color: #c5d1df !important;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+
+.auth-modal .register-panel-head button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(159, 176, 198, .28) !important;
+  background: rgba(255, 255, 255, .04) !important;
+  color: #d8e1eb !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 1100px) {
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: min(100%, 920px) !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 28px !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    justify-self: start !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    padding: 24px 16px 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-marketing h1,
+  .page-frame.page-auto-trade .auto-auth-marketing h1 {
+    font-size: clamp(42px, 14vw, 58px) !important;
+  }
+
+  .auth-system-strip {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .auth-value-stack strong {
+    min-height: 38px !important;
+    font-size: 15px !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    max-width: none !important;
+  }
+}
+
 /* Auth polish pass: reduce density, keep the first viewport complete. */
 .page-frame.page-auto-trade .auto-auth-shell {
   grid-template-columns: minmax(520px, 0.95fr) minmax(390px, 440px) !important;
@@ -21991,5 +22368,382 @@ textarea,
   .auth-story-board,
   .page-frame.page-auto-trade .trial-proof-strip {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* Final auth landing pass: compact, alive, and intentionally simple. */
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) {
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  background:
+    linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .014) 1px, transparent 1px),
+    #101721 !important;
+  background-size: 42px 42px, 42px 42px, auto !important;
+}
+
+.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+.page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.page-auto-trade .auto-auth-shell,
+.page-frame.page-auto-trade .auto-auth-shell {
+  width: min(100%, 1220px) !important;
+  min-height: calc(100vh - 72px) !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  padding: clamp(34px, 5vh, 74px) clamp(20px, 3vw, 42px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(520px, 650px) minmax(360px, 420px) !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: clamp(28px, 3.2vw, 52px) !important;
+}
+
+.page-auto-trade .auto-auth-marketing,
+.page-frame.page-auto-trade .auto-auth-marketing {
+  max-width: 650px !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 18px !important;
+}
+
+.auth-live-kicker {
+  width: fit-content !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  color: #c9d4e1 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.auth-live-kicker::before {
+  content: "" !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  background: #3acb83 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auto-auth-marketing h1,
+.page-frame.page-auto-trade .auto-auth-marketing h1 {
+  max-width: 650px !important;
+  margin: 0 !important;
+  color: #f4f7fb !important;
+  font-size: clamp(52px, 5.1vw, 84px) !important;
+  line-height: .9 !important;
+  letter-spacing: 0 !important;
+}
+
+.auth-value-stack {
+  width: min(100%, 610px) !important;
+  display: grid !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.auth-value-stack strong {
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 0 0 17px !important;
+  border-left: 3px solid rgba(58, 203, 131, .86) !important;
+  color: #e7edf5 !important;
+  background: linear-gradient(90deg, rgba(58, 203, 131, .105), rgba(255, 255, 255, .018)) !important;
+  font-size: clamp(16px, 1.2vw, 21px) !important;
+  line-height: 1.18 !important;
+  font-weight: 850 !important;
+  box-shadow: none !important;
+}
+
+.auth-system-strip {
+  width: min(100%, 560px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+.auth-system-strip span {
+  min-height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(155, 170, 190, .22) !important;
+  border-radius: 8px !important;
+  color: #c8d2de !important;
+  background: rgba(255, 255, 255, .035) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+.page-auto-trade .auto-auth-marketing > p,
+.page-frame.page-auto-trade .auto-auth-marketing > p {
+  max-width: 560px !important;
+  margin: 4px 0 0 !important;
+  color: #aeb9c7 !important;
+  font-size: clamp(16px, 1.15vw, 20px) !important;
+  line-height: 1.42 !important;
+}
+
+.page-auto-trade .auto-auth-card,
+.page-frame.page-auto-trade .auto-auth-card {
+  width: 100% !important;
+  max-width: 420px !important;
+  justify-self: start !important;
+  position: relative !important;
+  padding: 22px !important;
+  border: 1px solid rgba(159, 176, 198, .28) !important;
+  border-radius: 10px !important;
+  background: rgba(19, 27, 38, .94) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .24) !important;
+}
+
+.page-auto-trade .auto-auth-card::before,
+.page-frame.page-auto-trade .auto-auth-card::before {
+  content: none !important;
+}
+
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form {
+  display: grid !important;
+  gap: 13px !important;
+}
+
+.page-auto-trade .auto-auth-head,
+.page-frame.page-auto-trade .auto-auth-head {
+  display: grid !important;
+  gap: 5px !important;
+}
+
+.page-auto-trade .auto-auth-head span,
+.page-frame.page-auto-trade .auto-auth-head span {
+  color: #9caabc !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+.page-auto-trade .auto-auth-head h1,
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  margin: 0 !important;
+  color: #f3f6fa !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  height: 42px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  border: 1px solid rgba(159, 176, 198, .22) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, .025) !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  color: #9faec1 !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  color: #f5f8fb !important;
+  background: rgba(255, 255, 255, .075) !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell {
+  min-height: 46px !important;
+  border-radius: 8px !important;
+  border-color: rgba(159, 176, 198, .22) !important;
+  background: rgba(255, 255, 255, .04) !important;
+}
+
+.page-auto-trade .password-field.auth-input-shell button,
+.page-frame.page-auto-trade .password-field.auth-input-shell button,
+.register-panel .password-field button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(159, 176, 198, .24) !important;
+  background: rgba(255, 255, 255, .035) !important;
+  color: #d7e0ea !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-form-row,
+.page-frame.page-auto-trade .auth-form-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  color: #9faec1 !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+}
+
+.page-auto-trade .auth-text-link,
+.page-auto-trade .inline-link,
+.page-auto-trade .register-prompt button,
+.page-frame.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .inline-link,
+.page-frame.page-auto-trade .register-prompt button {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #c5d1df !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.page-auto-trade .auth-text-link:hover,
+.page-auto-trade .inline-link:hover,
+.page-auto-trade .register-prompt button:hover,
+.page-frame.page-auto-trade .auth-text-link:hover,
+.page-frame.page-auto-trade .inline-link:hover,
+.page-frame.page-auto-trade .register-prompt button:hover {
+  color: #f3f7fb !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"],
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  color: #07110d !important;
+  background: #3acb83 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.auth-trial-button {
+  min-height: 42px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(58, 203, 131, .55) !important;
+  color: #dff8ec !important;
+  background: rgba(58, 203, 131, .11) !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  box-shadow: none !important;
+}
+
+.access-request-prompt {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.page-auto-trade .auto-auth-card > .auth-help,
+.page-frame.page-auto-trade .auto-auth-card > .auth-help {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 13px !important;
+  color: #8d9bad !important;
+  font-size: 12px !important;
+}
+
+.page-auto-trade .auto-auth-card > .auth-help a,
+.page-frame.page-auto-trade .auto-auth-card > .auth-help a {
+  color: #c5d1df !important;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+
+.auth-modal .register-panel-head button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(159, 176, 198, .28) !important;
+  background: rgba(255, 255, 255, .04) !important;
+  color: #d8e1eb !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 1100px) {
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: min(100%, 920px) !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 28px !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    justify-self: start !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    padding: 24px 16px 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-marketing h1,
+  .page-frame.page-auto-trade .auto-auth-marketing h1 {
+    font-size: clamp(42px, 14vw, 58px) !important;
+  }
+
+  .auth-system-strip {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .auth-value-stack strong {
+    min-height: 38px !important;
+    font-size: 15px !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    max-width: none !important;
   }
 }
