@@ -4388,7 +4388,6 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <span className="auth-live-kicker">Private automated execution</span>
           <h1>Trade with AI that protects the entry.</h1>
           <div className="auth-value-stack" aria-label="Automated trading advantages">
             <strong>Secure Binance execution.</strong>
@@ -4397,13 +4396,6 @@ function AutoTradePage({
             <strong>Losses teach the AI in real time.</strong>
             <strong>Every order passes risk tests first.</strong>
           </div>
-          <div className="auth-system-strip" aria-label="System execution path">
-            <span>Scan</span>
-            <span>Filter</span>
-            <span>Risk</span>
-            <span>Execute</span>
-          </div>
-          <p>Weak setups stay out. Qualified trades move to execution.</p>
         </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
@@ -4441,11 +4433,11 @@ function AutoTradePage({
           {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
             Start 14 days free
           </button>}
-          {loginRole === 'user' && <div className="register-prompt access-request-prompt">
-            <button type="button" className="auth-text-link" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
+          {loginRole === 'user' && <div className="auth-secondary-actions">
+            <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
+            <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a>
           </div>}
           </form>
-          <small className="auth-help"><a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a></small>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
           <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>
