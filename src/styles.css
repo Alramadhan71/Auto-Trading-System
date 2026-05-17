@@ -23709,3 +23709,166 @@ textarea,
     padding: 26px 16px 36px !important;
   }
 }
+
+/* Auth landing hardening pass: stable controls, unified theme surface, aligned actions. */
+.shell-header.auth-header {
+  grid-template-columns: auto 1fr !important;
+}
+
+.shell-header.auth-header .shell-tools {
+  justify-self: end !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.shell-header.auth-header .auth-return-home,
+.shell-header.auth-header .theme-control .theme-toggle {
+  height: 42px !important;
+  min-height: 42px !important;
+  min-width: 132px !important;
+  padding: 0 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--border) !important;
+  background: color-mix(in srgb, var(--panel-strong) 88%, transparent) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+}
+
+.shell-header.auth-header .theme-control,
+.shell-header.auth-header .theme-studio {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell),
+.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+.page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
+  background: var(--bg) !important;
+  background-image: none !important;
+}
+
+.page-auto-trade .auto-auth-shell,
+.page-frame.page-auto-trade .auto-auth-shell {
+  background: transparent !important;
+}
+
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form,
+.page-auto-trade .auto-auth-form,
+.page-frame.page-auto-trade .auto-auth-form {
+  gap: 12px !important;
+}
+
+.auth-action-stack {
+  display: grid !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+.auth-action-stack > button,
+.auth-action-stack .auth-trial-button,
+.auth-secondary-actions button,
+.auth-secondary-actions a {
+  width: 100% !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+}
+
+.auth-secondary-actions {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 10px !important;
+}
+
+.page-auto-trade .auto-auth-form > button[type="submit"],
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  display: none !important;
+}
+
+.auth-action-stack > button[type="submit"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  color: color-mix(in srgb, var(--bg) 88%, #000) !important;
+  background: var(--success) !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.auth-password-eye {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  border-radius: 7px !important;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--text) 8%) !important;
+  background: color-mix(in srgb, var(--panel) 72%, transparent) !important;
+  color: var(--muted) !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+}
+
+.auth-password-eye svg {
+  width: 15px !important;
+  height: 15px !important;
+  display: block !important;
+}
+
+.auth-close-button {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  min-height: 26px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--text) 8%) !important;
+  background: color-mix(in srgb, var(--panel-strong) 86%, transparent) !important;
+  color: var(--text) !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+
+@media (max-width: 720px) {
+  .shell-header.auth-header {
+    grid-template-columns: 1fr !important;
+  }
+
+  .shell-header.auth-header .shell-tools {
+    width: 100% !important;
+    justify-self: stretch !important;
+  }
+
+  .shell-header.auth-header .auth-return-home,
+  .shell-header.auth-header .theme-control,
+  .shell-header.auth-header .theme-control .theme-toggle {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+}

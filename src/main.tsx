@@ -4415,7 +4415,7 @@ function AutoTradePage({
             <div className="password-field auth-input-shell">
               <KeyRound size={17} />
               <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} />
-              <button type="button" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
+              <button type="button" className="auth-password-eye" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
                 {loginPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
             </div>
@@ -4427,23 +4427,25 @@ function AutoTradePage({
               <button type="button" className="inline-link auth-text-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot access?</button>
             </div>
             {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
-            <button type="submit"><LogIn size={17} /> Login</button>
+            <div className="auth-action-stack">
+              <button type="submit"><LogIn size={17} /> Login</button>
+              {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
+                Start 14 days free
+              </button>}
+              {loginRole === 'user' && <div className="auth-secondary-actions">
+                <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
+                <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a>
+              </div>}
+            </div>
           </div>
           {authMessage && <p className="auth-message">{authMessage}</p>}
-          {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
-            Start 14 days free
-          </button>}
-          {loginRole === 'user' && <div className="auth-secondary-actions">
-            <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
-            <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a>
-          </div>}
           </form>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
           <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>
             <div className="register-panel-head">
               <strong>Recover access</strong>
-              <button type="button" onClick={() => setPasswordResetOpen(false)} aria-label="Close recovery dialog">x</button>
+              <button type="button" className="auth-close-button" onClick={() => setPasswordResetOpen(false)} aria-label="Close recovery dialog">x</button>
             </div>
             <p>Fastest path: contact admin and include your username. No email setup or extra account linking needed.</p>
             <div className="recovery-actions">
@@ -4458,12 +4460,12 @@ function AutoTradePage({
           <form className="register-panel auth-modal" onClick={event => event.stopPropagation()} onSubmit={event => { event.preventDefault(); submitAccessRequest(); }}>
             <div className="register-panel-head">
               <strong>New access request</strong>
-              <button type="button" onClick={() => setRegisterOpen(false)} aria-label="Close registration form">x</button>
+              <button type="button" className="auth-close-button" onClick={() => setRegisterOpen(false)} aria-label="Close registration form">x</button>
             </div>
             <input required value={joinUsername} onChange={event => setJoinUsername(event.target.value)} placeholder="Username" />
             <div className="password-field">
               <input value={joinPassword} onChange={event => setJoinPassword(event.target.value)} placeholder="Password" type={registerPasswordVisible ? 'text' : 'password'} />
-              <button type="button" onClick={() => setRegisterPasswordVisible(value => !value)} aria-label={registerPasswordVisible ? 'Hide password' : 'Show password'}>
+              <button type="button" className="auth-password-eye" onClick={() => setRegisterPasswordVisible(value => !value)} aria-label={registerPasswordVisible ? 'Hide password' : 'Show password'}>
                 {registerPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
             </div>
