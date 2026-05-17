@@ -111,26 +111,10 @@ Use semantic tokens in components, not raw colors.
 
 Buttons:
 
-- Command buttons are 42px high, 10px radius, and use `--surface-field`.
-- Primary command buttons use the brand accent, not green.
-- Secondary command buttons use `--surface-field` and accent border on hover.
-- Danger command buttons use red only for destructive actions.
-- Icon-only buttons are 32px square, 9px radius.
+- Primary actions use the brand accent, not green.
+- Secondary actions use `--surface-field` and accent border on hover.
+- Success buttons are only for successful state confirmation.
 - Every button must have hover, active, focus, and disabled states.
-
-Chips and segmented controls:
-
-- Chips are 36px high and pill-shaped.
-- Active chips use the brand accent with a visible border and filled background.
-- Chips must not look like cards.
-- Range filters, market switches, role switches, strategy filters, and venue switches all use the same chip family.
-
-Clickable cards:
-
-- Card-buttons are not styled like command buttons.
-- They use `--surface-card`, 10px radius, and lift by 2px on hover.
-- Active card-buttons use a subtle brand fill and an inset accent line.
-- Scorecards, market cards, news cards, strategy cards, and trade extreme cards belong to this family.
 
 Cards and panels:
 
@@ -138,15 +122,12 @@ Cards and panels:
 - Repeated cards use `--surface-card`.
 - Inputs and segmented controls use `--surface-field`.
 - Use one card level only. Do not put decorative cards inside decorative cards.
-- Page background, section surface, card surface, raised card surface, and field surface must be visually different in every theme.
 
 Progress and sliders:
 
 - Track uses `--progress-track` or `--slider-track`.
 - Fill uses brand accent, or success-warning-danger only when it represents risk.
 - Thumb must contrast against both the track and the page.
-- Scanner/progress indicators must keep a minimum visible fill so they never disappear at low values.
-- Risk sliders use green/yellow/red only because they encode risk, not brand.
 
 ## Implementation Contract
 
@@ -157,3 +138,4 @@ Every project should:
 - Use shared classes/components for `Button`, `Panel`, `Card`, `Input`, `SegmentedControl`, `Progress`, `Slider`, `Badge`, and `PageHeader`.
 - Avoid page-specific brand colors. Pages can change layout, not identity.
 - Treat green, red, and amber as semantic status colors only.
+
