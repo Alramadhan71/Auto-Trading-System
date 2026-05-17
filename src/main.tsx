@@ -552,9 +552,9 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'light', name: 'Atlas Light' },
-  { id: 'dark', name: 'Atlas Dark' },
-  { id: 'black', name: 'Atlas Black' }
+  { id: 'light', name: 'Light' },
+  { id: 'dark', name: 'Execution' },
+  { id: 'black', name: 'Dark' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
