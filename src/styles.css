@@ -23872,3 +23872,552 @@ textarea,
     min-width: 0 !important;
   }
 }
+
+/* Muslim Alramadhan Atlas Design System
+   Keep this layer last. It centralizes the product identity so new pages inherit
+   the same visual language instead of adding one-off page styling. */
+:root {
+  color-scheme: dark;
+  --brand-core: #4f8cff;
+  --brand-core-strong: #77a6ff;
+  --brand-core-deep: #1e5fd8;
+  --brand-ink: #f5f8ff;
+  --brand-positive: #35c77f;
+  --brand-negative: #f06472;
+  --brand-caution: #d8a84f;
+  --brand-info: #69d3ff;
+
+  --bg: #0b1017;
+  --sidebar: #0e141d;
+  --panel: #141b26;
+  --panel-strong: #101720;
+  --panel-soft: #1b2532;
+  --border: #2c394b;
+  --border-strong: var(--brand-core);
+  --text: #f5f8ff;
+  --muted: #9aa8ba;
+  --soft-text: #cad4e2;
+  --accent: var(--brand-core);
+  --accent-strong: var(--brand-core-strong);
+  --success: var(--brand-positive);
+  --danger: var(--brand-negative);
+  --warning: var(--brand-caution);
+  --hover: rgba(79, 140, 255, .14);
+  --brand-text: #ffffff;
+
+  --surface-page: var(--bg);
+  --surface-nav: color-mix(in srgb, var(--sidebar) 94%, black);
+  --surface-section: color-mix(in srgb, var(--panel-strong) 86%, var(--bg));
+  --surface-card: color-mix(in srgb, var(--panel) 92%, var(--bg));
+  --surface-card-raised: color-mix(in srgb, var(--panel-soft) 82%, var(--panel));
+  --surface-field: color-mix(in srgb, var(--panel-strong) 74%, var(--bg));
+  --surface-hover: color-mix(in srgb, var(--accent) 13%, var(--surface-card-raised));
+  --surface-active: color-mix(in srgb, var(--accent) 20%, var(--surface-card));
+  --border-subtle: color-mix(in srgb, var(--border) 78%, transparent);
+  --border-control: color-mix(in srgb, var(--border) 88%, var(--text) 8%);
+  --border-focus: color-mix(in srgb, var(--accent) 64%, var(--border));
+  --shadow-soft: rgba(0, 0, 0, .24);
+  --shadow-lift: rgba(0, 0, 0, .34);
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --control-h-sm: 34px;
+  --control-h-md: 42px;
+  --control-h-lg: 54px;
+  --motion-fast: 140ms ease;
+  --motion-base: 200ms ease;
+
+  --progress-track: color-mix(in srgb, var(--surface-field) 86%, black);
+  --progress-fill: linear-gradient(90deg, var(--accent), var(--brand-info));
+  --slider-track: color-mix(in srgb, var(--surface-field) 88%, black);
+  --slider-thumb: var(--accent-strong);
+  --slider-thumb-ring: color-mix(in srgb, var(--accent) 24%, transparent);
+  --active-indicator: var(--accent);
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light;
+  --brand-core: #245fd6;
+  --brand-core-strong: #1748ad;
+  --brand-core-deep: #0d347f;
+  --brand-ink: #0f1724;
+  --brand-positive: #168a5a;
+  --brand-negative: #c84152;
+  --brand-caution: #9a691d;
+  --brand-info: #1479b8;
+  --bg: #f4f7fb;
+  --sidebar: #ffffff;
+  --panel: #ffffff;
+  --panel-strong: #eef2f7;
+  --panel-soft: #e6edf6;
+  --border: #c8d2df;
+  --text: #111927;
+  --muted: #5d6b7c;
+  --soft-text: #334155;
+  --hover: rgba(36, 95, 214, .11);
+  --shadow-soft: rgba(21, 34, 54, .10);
+  --shadow-lift: rgba(21, 34, 54, .16);
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark;
+  --brand-core: #4f8cff;
+  --brand-core-strong: #7eabff;
+  --brand-core-deep: #1f60d9;
+  --brand-positive: #35c77f;
+  --brand-negative: #f06472;
+  --brand-caution: #d8a84f;
+  --brand-info: #69d3ff;
+  --bg: #0b1017;
+  --sidebar: #0e141d;
+  --panel: #141b26;
+  --panel-strong: #101720;
+  --panel-soft: #1b2532;
+  --border: #2c394b;
+  --text: #f5f8ff;
+  --muted: #9aa8ba;
+  --soft-text: #cad4e2;
+  --hover: rgba(79, 140, 255, .14);
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark;
+  --brand-core: #aeb8c8;
+  --brand-core-strong: #f4f7fb;
+  --brand-core-deep: #7f8a9c;
+  --brand-positive: #52c782;
+  --brand-negative: #ef6672;
+  --brand-caution: #c99c4a;
+  --brand-info: #93a4bd;
+  --bg: #050607;
+  --sidebar: #080a0d;
+  --panel: #0e1115;
+  --panel-strong: #0a0d10;
+  --panel-soft: #15191f;
+  --border: #2a3038;
+  --text: #f4f6f8;
+  --muted: #9da5b1;
+  --soft-text: #d0d5dd;
+  --hover: rgba(244, 247, 251, .08);
+  --shadow-soft: rgba(0, 0, 0, .30);
+  --shadow-lift: rgba(0, 0, 0, .44);
+}
+
+body,
+.app-shell,
+.page-frame {
+  background: var(--surface-page) !important;
+}
+
+.shell-header {
+  min-height: 72px;
+  background: var(--surface-nav) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  box-shadow: 0 12px 28px var(--shadow-soft) !important;
+}
+
+.shell-brand-mark,
+.theme-toggle-icon,
+.home-cta-primary svg,
+.home-cta-secondary svg,
+.home-cta-login svg {
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--border)) !important;
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-card-raised)) !important;
+  color: var(--accent-strong) !important;
+}
+
+.shell-nav button,
+.theme-toggle,
+.theme-studio button,
+.home-market-switch button,
+.range-pills button,
+.signal-filters button,
+.access-filter-pills button,
+.portfolio-filter-pills button,
+.selection-pill-row button,
+.venue-switch button,
+.auto-trade-head-actions button,
+.auth-secondary-actions button,
+.auth-secondary-actions a,
+.auth-trial-button,
+.home-news-badge,
+.duration-picker-trigger,
+.custom-date-trigger {
+  min-height: var(--control-h-md) !important;
+  border: 1px solid var(--border-control) !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--surface-field) !important;
+  color: var(--soft-text) !important;
+  box-shadow: none !important;
+  transition:
+    background var(--motion-fast),
+    border-color var(--motion-fast),
+    color var(--motion-fast),
+    transform var(--motion-fast),
+    box-shadow var(--motion-fast) !important;
+}
+
+.shell-nav button,
+.theme-toggle,
+.home-news-badge {
+  border-radius: var(--radius-pill) !important;
+}
+
+.shell-nav button:hover,
+.theme-toggle:hover,
+.theme-studio button:hover,
+.home-market-switch button:hover,
+.range-pills button:hover,
+.signal-filters button:hover,
+.access-filter-pills button:hover,
+.portfolio-filter-pills button:hover,
+.selection-pill-row button:hover:not(:disabled),
+.venue-switch button:hover,
+.auto-trade-head-actions button:hover,
+.auth-secondary-actions button:hover,
+.auth-secondary-actions a:hover,
+.auth-trial-button:hover,
+.home-news-badge:hover,
+.duration-picker-trigger:hover,
+.custom-date-trigger:hover {
+  color: var(--text) !important;
+  background: var(--surface-hover) !important;
+  border-color: var(--border-focus) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px var(--shadow-soft) !important;
+}
+
+.shell-nav button.active,
+.theme-toggle.active,
+.home-market-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.access-filter-pills button.active,
+.portfolio-filter-pills button.active,
+.selection-pill-row button.active,
+.venue-switch button.active,
+.theme-mode-switch button.active,
+.role-switch button.active {
+  color: var(--text) !important;
+  background: var(--surface-active) !important;
+  border-color: var(--border-focus) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent) !important;
+}
+
+.home-launchpad,
+.home-live-board,
+.home-search-bridge,
+.home-intel-card,
+.home-fear-card,
+.home-fear-history-card,
+.home-signal-shell,
+.home-leader-shell,
+.home-marketcap-shell,
+.home-news-shell,
+.dashboard-hero,
+.dashboard-scan-top,
+.performance-command,
+.panel,
+.chart-block,
+.trade-list,
+.premium-panel,
+.binance-connect-panel,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.auto-trade-hero,
+.auto-trade-headbar,
+.auto-auth-card,
+.theme-modal,
+.confirm-modal {
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface-section) !important;
+  box-shadow: 0 14px 34px var(--shadow-soft) !important;
+}
+
+.price-card,
+.home-top-market-card,
+.home-live-card,
+.home-signal-card,
+.home-leader-card,
+.home-leader-row,
+.home-marketcap-row,
+.home-news-card,
+.home-cta-primary,
+.home-cta-secondary,
+.home-cta-login,
+.search-panel,
+.home-search-panel,
+.notification-card,
+.scorecard,
+.strategy,
+.leader-item,
+.snapshot-list article,
+.command-summary article,
+.allocation-grid article,
+.automation-grid article,
+.scenario-band article,
+.selection-control-card,
+.live-rules-panel-card,
+.live-futures-rule-card,
+.capital-group,
+.trade-extreme-card,
+.duration-insight-item,
+.theme-showcase-card,
+.toast,
+.public-strategy-card {
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--surface-card) !important;
+  box-shadow: 0 10px 24px var(--shadow-soft) !important;
+}
+
+.home-cta-primary,
+.home-cta-secondary,
+.home-cta-login {
+  min-height: 78px !important;
+  padding: 14px 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition:
+    background var(--motion-base),
+    border-color var(--motion-base),
+    transform var(--motion-base),
+    box-shadow var(--motion-base) !important;
+}
+
+.home-cta-primary:hover,
+.home-cta-secondary:hover,
+.home-cta-login:hover,
+.home-top-market-card:hover,
+.home-leader-row:hover,
+.home-marketcap-row:hover,
+.home-news-card:hover {
+  background: var(--surface-hover) !important;
+  border-color: var(--border-focus) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 36px var(--shadow-lift) !important;
+}
+
+.home-cta-primary {
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--border)) !important;
+}
+
+.home-cta-secondary {
+  border-color: color-mix(in srgb, var(--brand-info) 36%, var(--border)) !important;
+}
+
+.home-cta-login {
+  width: min(100%, 294px) !important;
+  border-color: var(--border-control) !important;
+}
+
+.home-cta-primary strong,
+.home-cta-secondary strong,
+.home-cta-login strong {
+  color: var(--text) !important;
+  font-size: 17px !important;
+  line-height: 1.12 !important;
+}
+
+.good,
+.wins,
+.low,
+.risk-scale-low {
+  color: var(--success) !important;
+}
+
+.bad,
+.losses,
+.high,
+.risk-scale-high {
+  color: var(--danger) !important;
+}
+
+.risk-badge,
+.side-badge,
+.nav-badge,
+.home-news-tags b,
+.status-pill {
+  border: 1px solid var(--border-control) !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--surface-field) !important;
+  color: var(--soft-text) !important;
+}
+
+input,
+select,
+textarea,
+.auth-input-shell {
+  border-color: var(--border-control) !important;
+  background: var(--surface-field) !important;
+  color: var(--text) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.auth-input-shell:focus-within {
+  outline: none !important;
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent) !important;
+}
+
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) {
+  --auth-page-bg: var(--surface-page);
+  --auth-surface: var(--surface-section);
+  --auth-surface-soft: var(--surface-field);
+  --auth-border: var(--border-control);
+  --auth-text: var(--text);
+  --auth-muted: var(--muted);
+  --auth-soft: var(--soft-text);
+  --auth-accent: var(--accent);
+  background: var(--surface-page) !important;
+  background-image: none !important;
+}
+
+.page-auto-trade .auto-auth-card,
+.page-frame.page-auto-trade .auto-auth-card {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important;
+  background: var(--surface-section) !important;
+}
+
+.auth-value-stack strong {
+  border-left-color: var(--accent) !important;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-card)) !important;
+}
+
+.auth-action-stack > button[type="submit"],
+.page-auto-trade .auto-auth-form > button[type="submit"],
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"] {
+  min-height: 48px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 54%, var(--border)) !important;
+  border-radius: var(--radius-sm) !important;
+  color: #ffffff !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 92%, white), var(--brand-core-deep)) !important;
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 20%, transparent) !important;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast), filter var(--motion-fast) !important;
+}
+
+.auth-action-stack > button[type="submit"]:hover,
+.page-auto-trade .auto-auth-form > button[type="submit"]:hover,
+.page-frame.page-auto-trade .auto-auth-form > button[type="submit"]:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.06) !important;
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--accent) 28%, transparent) !important;
+}
+
+.dashboard-scan-top {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.scan-progress-card {
+  min-height: 74px !important;
+  display: grid !important;
+  grid-template-columns: auto auto minmax(180px, 1fr) auto !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 16px 18px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border)) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface-section) !important;
+  box-shadow: 0 12px 28px var(--shadow-soft) !important;
+}
+
+.scan-progress-track {
+  position: relative !important;
+  height: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border-control) !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--progress-track) !important;
+}
+
+.scan-progress-track i,
+.scoreline i,
+.home-strategy-preview-scoreline i,
+.live-leverage-progress {
+  display: block !important;
+  min-width: 10px !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: var(--progress-fill) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 28%, transparent) !important;
+}
+
+.live-leverage-spectrum {
+  --spectrum-low: var(--success);
+  --spectrum-mid: var(--warning);
+  --spectrum-high: var(--danger);
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--border)) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface-card) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 3%, transparent) !important;
+}
+
+.live-leverage-spectrum-rail::before {
+  height: 10px !important;
+  background: var(--slider-track) !important;
+  border: 1px solid var(--border-control) !important;
+}
+
+.live-leverage-spectrum-rail::after {
+  height: 10px !important;
+  background: linear-gradient(90deg, var(--success), var(--warning) 58%, var(--danger)) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 22%, transparent) !important;
+}
+
+.live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb,
+.live-leverage-slider input[type="range"]::-webkit-slider-thumb,
+.leverage-meter input[type="range"]::-webkit-slider-thumb {
+  width: 26px !important;
+  height: 26px !important;
+  border: 3px solid var(--text) !important;
+  background: var(--slider-thumb) !important;
+  box-shadow: 0 0 0 4px var(--slider-thumb-ring), 0 10px 22px var(--shadow-lift) !important;
+}
+
+.live-leverage-spectrum-rail input[type="range"]::-moz-range-thumb,
+.live-leverage-slider input[type="range"]::-moz-range-thumb,
+.leverage-meter input[type="range"]::-moz-range-thumb {
+  width: 22px !important;
+  height: 22px !important;
+  border: 3px solid var(--text) !important;
+  background: var(--slider-thumb) !important;
+  box-shadow: 0 0 0 4px var(--slider-thumb-ring), 0 10px 22px var(--shadow-lift) !important;
+}
+
+.live-leverage-spectrum-ticks button.active {
+  color: var(--text) !important;
+  text-shadow: 0 0 16px color-mix(in srgb, var(--accent) 36%, transparent) !important;
+}
+
+.live-margin-mode-row button.active {
+  border-color: var(--border-focus) !important;
+  background: var(--surface-active) !important;
+}
+
+@media (max-width: 720px) {
+  .scan-progress-card {
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+  }
+
+  .home-cta-login {
+    width: 100% !important;
+  }
+}
