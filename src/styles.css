@@ -23872,3 +23872,618 @@ textarea,
     min-width: 0 !important;
   }
 }
+
+/* Muslim Soliotions product identity system */
+:root,
+:root[data-theme-style],
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --ms-bg: #f5f7f8;
+  --ms-rail: #ffffff;
+  --ms-surface: #ffffff;
+  --ms-surface-2: #eef2f4;
+  --ms-surface-3: #e3e9ed;
+  --ms-line: #d7e0e5;
+  --ms-line-strong: #9fb0bb;
+  --ms-text: #172026;
+  --ms-muted: #61717c;
+  --ms-soft: #34444f;
+  --ms-accent: #087f8c;
+  --ms-accent-2: #2f6f73;
+  --ms-execute: #33c27f;
+  --ms-warning: #c28a2e;
+  --ms-danger: #c94a55;
+  --ms-radius-xs: 6px;
+  --ms-radius-sm: 8px;
+  --ms-radius-md: 10px;
+  --ms-radius-lg: 14px;
+  --ms-shadow: 0 14px 34px rgba(19, 36, 48, .08);
+  --ms-shadow-strong: 0 20px 54px rgba(19, 36, 48, .14);
+  --bg: var(--ms-bg);
+  --sidebar: var(--ms-rail);
+  --panel: var(--ms-surface);
+  --panel-strong: var(--ms-surface-2);
+  --panel-soft: var(--ms-surface-3);
+  --border: var(--ms-line);
+  --border-strong: var(--ms-line-strong);
+  --text: var(--ms-text);
+  --muted: var(--ms-muted);
+  --soft-text: var(--ms-soft);
+  --accent: var(--ms-accent);
+  --accent-strong: var(--ms-accent-2);
+  --success: #16895e;
+  --danger: var(--ms-danger);
+  --warning: var(--ms-warning);
+  --hover: rgba(8, 127, 140, .08);
+  --brand-text: var(--ms-text);
+  --section-surface: var(--ms-surface);
+  --card-surface: var(--ms-surface);
+  --card-surface-raised: var(--ms-surface-2);
+  --card-hairline: var(--ms-line);
+  --shadow-soft: rgba(19, 36, 48, .08);
+  --shadow-lift: rgba(19, 36, 48, .14);
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --ms-bg: #070b0d;
+  --ms-rail: #0b1013;
+  --ms-surface: #10171b;
+  --ms-surface-2: #151f24;
+  --ms-surface-3: #1b2930;
+  --ms-line: #24353d;
+  --ms-line-strong: #45606a;
+  --ms-text: #edf4f6;
+  --ms-muted: #9fb0b8;
+  --ms-soft: #c9d6db;
+  --ms-accent: #18a7b5;
+  --ms-accent-2: #49c4c0;
+  --ms-execute: #35c77f;
+  --ms-warning: #d0a04e;
+  --ms-danger: #ef5f67;
+  --ms-shadow: 0 18px 46px rgba(0, 0, 0, .28);
+  --ms-shadow-strong: 0 26px 70px rgba(0, 0, 0, .38);
+  --bg: var(--ms-bg);
+  --sidebar: var(--ms-rail);
+  --panel: var(--ms-surface);
+  --panel-strong: var(--ms-surface-2);
+  --panel-soft: var(--ms-surface-3);
+  --border: var(--ms-line);
+  --border-strong: var(--ms-line-strong);
+  --text: var(--ms-text);
+  --muted: var(--ms-muted);
+  --soft-text: var(--ms-soft);
+  --accent: var(--ms-accent);
+  --accent-strong: var(--ms-accent-2);
+  --success: var(--ms-execute);
+  --danger: var(--ms-danger);
+  --warning: var(--ms-warning);
+  --hover: rgba(24, 167, 181, .1);
+  --brand-text: var(--ms-text);
+  --section-surface: var(--ms-surface);
+  --card-surface: var(--ms-surface);
+  --card-surface-raised: var(--ms-surface-2);
+  --card-hairline: var(--ms-line);
+  --shadow-soft: rgba(0, 0, 0, .28);
+  --shadow-lift: rgba(0, 0, 0, .38);
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --ms-bg: #030605;
+  --ms-rail: #07100d;
+  --ms-surface: #0c1512;
+  --ms-surface-2: #101d18;
+  --ms-surface-3: #172a22;
+  --ms-line: #254337;
+  --ms-line-strong: #39d486;
+  --ms-text: #f1f8f5;
+  --ms-muted: #9fbaae;
+  --ms-soft: #d3e2dc;
+  --ms-accent: #35c77f;
+  --ms-accent-2: #9ee9bf;
+  --ms-execute: #35c77f;
+  --ms-warning: #d8a24d;
+  --ms-danger: #ff626d;
+  --ms-shadow: 0 16px 44px rgba(0, 0, 0, .3);
+  --ms-shadow-strong: 0 26px 70px rgba(0, 0, 0, .46);
+  --bg: var(--ms-bg);
+  --sidebar: var(--ms-rail);
+  --panel: var(--ms-surface);
+  --panel-strong: var(--ms-surface-2);
+  --panel-soft: var(--ms-surface-3);
+  --border: var(--ms-line);
+  --border-strong: var(--ms-line-strong);
+  --text: var(--ms-text);
+  --muted: var(--ms-muted);
+  --soft-text: var(--ms-soft);
+  --accent: var(--ms-accent);
+  --accent-strong: var(--ms-accent-2);
+  --success: var(--ms-execute);
+  --danger: var(--ms-danger);
+  --warning: var(--ms-warning);
+  --hover: rgba(53, 199, 127, .12);
+  --brand-text: var(--ms-text);
+  --section-surface: var(--ms-surface);
+  --card-surface: var(--ms-surface);
+  --card-surface-raised: var(--ms-surface-2);
+  --card-hairline: var(--ms-line);
+  --shadow-soft: rgba(0, 0, 0, .3);
+  --shadow-lift: rgba(0, 0, 0, .46);
+}
+
+html,
+body,
+.app-shell {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--sidebar) 78%, var(--bg)), var(--bg) 360px),
+    var(--bg) !important;
+  color: var(--text) !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-header {
+  min-height: 74px !important;
+  grid-template-columns: minmax(230px, auto) minmax(0, 1fr) auto !important;
+  gap: 16px !important;
+  padding: 12px clamp(14px, 2vw, 24px) !important;
+  border-bottom: 1px solid var(--border) !important;
+  background: color-mix(in srgb, var(--sidebar) 94%, transparent) !important;
+  box-shadow: 0 10px 30px var(--shadow-soft) !important;
+}
+
+.shell-header.auth-header,
+.shell-header.home-header {
+  grid-template-columns: minmax(230px, auto) auto !important;
+}
+
+.shell-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.shell-brand-mark,
+.product-mark {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 46%, var(--border)) !important;
+  border-radius: var(--ms-radius-md) !important;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 20%, var(--panel-soft)), var(--panel)) !important;
+  color: var(--accent-strong) !important;
+  box-shadow: none !important;
+}
+
+.shell-brand-copy,
+.shell-brand > div {
+  display: grid !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+.shell-brand strong {
+  color: var(--text) !important;
+  font-size: 15px !important;
+  line-height: 1.05 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+.shell-brand small {
+  display: block !important;
+  color: var(--muted) !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  font-weight: 760 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+.shell-nav {
+  justify-content: center !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+}
+
+.shell-nav button,
+.theme-control .theme-toggle,
+.auth-return-home,
+.home-header-cta,
+.home-market-switch button,
+.range-pills button,
+.signal-filters button,
+.access-filter-pills button,
+.auth-secondary-actions button,
+.auth-secondary-actions a {
+  min-height: 40px !important;
+  border-radius: var(--ms-radius-sm) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--panel-strong) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-nav button.active,
+.shell-nav button.premium.active,
+.home-market-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.access-filter-pills button.active {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border)) !important;
+  background: color-mix(in srgb, var(--accent) 13%, var(--panel-strong)) !important;
+  color: var(--text) !important;
+}
+
+.theme-control,
+.theme-studio {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.theme-control .theme-toggle {
+  min-width: 118px !important;
+  padding: 0 12px !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.theme-toggle-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: var(--ms-radius-xs) !important;
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel)) !important;
+  color: var(--accent-strong) !important;
+}
+
+.product-identity-lockup {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  min-width: 0 !important;
+}
+
+.product-identity-lockup h1,
+.product-identity-lockup p {
+  margin: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+.product-identity-lockup h1 {
+  color: var(--text) !important;
+  font-weight: 940 !important;
+  line-height: .96 !important;
+}
+
+.product-identity-lockup p {
+  color: var(--muted) !important;
+  font-weight: 820 !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(390px, 48vh, 560px) !important;
+  border-radius: var(--ms-radius-lg) !important;
+  border: 1px solid var(--border) !important;
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34%),
+    var(--section-surface) !important;
+  box-shadow: var(--ms-shadow) !important;
+}
+
+.home-product-lockup {
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.home-product-lockup .product-mark {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.home-product-lockup h1 {
+  font-size: clamp(52px, 6.2vw, 96px) !important;
+  white-space: normal !important;
+}
+
+.home-launchpad-summary {
+  margin-top: 8px !important;
+  color: var(--accent-strong) !important;
+  font-size: clamp(17px, 1.5vw, 24px) !important;
+}
+
+.home-brand-line {
+  width: min(680px, 100%) !important;
+  margin: -4px auto 2px !important;
+  color: var(--muted) !important;
+  font-size: clamp(15px, 1.3vw, 18px) !important;
+  line-height: 1.5 !important;
+  font-weight: 680 !important;
+  text-align: center !important;
+}
+
+.home-cta-primary,
+.home-cta-secondary,
+.home-cta-login,
+.auth-action-stack > button[type="submit"],
+.auth-trial-button {
+  border-radius: var(--ms-radius-md) !important;
+}
+
+.home-cta-primary,
+.auth-action-stack > button[type="submit"] {
+  border-color: color-mix(in srgb, var(--accent) 62%, var(--border)) !important;
+  background: var(--accent) !important;
+  color: color-mix(in srgb, var(--bg) 92%, #000) !important;
+}
+
+.home-cta-secondary,
+.home-cta-login,
+.auth-trial-button {
+  border-color: var(--border) !important;
+  background: var(--panel-strong) !important;
+  color: var(--text) !important;
+}
+
+.panel,
+.chart-block,
+.trade-list,
+.price-card,
+.home-top-market-card,
+.home-live-card,
+.home-signal-card,
+.home-leader-card,
+.home-marketcap-shell,
+.home-news-shell,
+.search-panel,
+.home-search-panel,
+.notification-card,
+.scorecard,
+.strategy,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.auto-auth-card,
+.register-panel,
+.theme-modal,
+.confirm-modal {
+  border-radius: var(--ms-radius-md) !important;
+  border-color: var(--border) !important;
+  background: var(--card-surface) !important;
+  box-shadow: none !important;
+}
+
+.page-frame.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
+  background:
+    linear-gradient(color-mix(in srgb, var(--text) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text) 2.5%, transparent) 1px, transparent 1px),
+    var(--bg) !important;
+  background-size: 36px 36px, 36px 36px, auto !important;
+}
+
+.page-frame.page-auto-trade .auto-auth-shell {
+  width: min(100%, 1260px) !important;
+  grid-template-columns: minmax(520px, 680px) minmax(360px, 430px) !important;
+  align-items: center !important;
+  gap: clamp(34px, 5vw, 72px) !important;
+}
+
+.auth-product-lockup {
+  justify-content: flex-start !important;
+}
+
+.auth-product-lockup h1 {
+  font-size: clamp(34px, 4vw, 58px) !important;
+}
+
+.auth-product-lockup p {
+  margin-top: 6px !important;
+  font-size: clamp(14px, 1vw, 17px) !important;
+}
+
+.auto-auth-marketing h2 {
+  max-width: 620px !important;
+  margin: 26px 0 0 !important;
+  color: var(--text) !important;
+  font-size: clamp(40px, 5.2vw, 74px) !important;
+  line-height: .95 !important;
+  letter-spacing: 0 !important;
+}
+
+.auth-value-stack {
+  margin-top: 24px !important;
+  gap: 8px !important;
+}
+
+.auth-value-stack strong {
+  border-radius: var(--ms-radius-sm) !important;
+  border-color: var(--border) !important;
+  border-left-color: var(--accent) !important;
+  background: color-mix(in srgb, var(--accent) 9%, var(--panel)) !important;
+  color: var(--soft-text) !important;
+}
+
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .chart-block,
+:root[data-theme="dark"] .trade-list,
+:root[data-theme="dark"] .trade-ledger-shell,
+:root[data-theme="dark"] .ledger-wallet-panel,
+:root[data-theme="dark"] .ledger-simulation-panel {
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 12%, transparent) !important;
+}
+
+:root[data-theme="dark"] .home-launchpad,
+:root[data-theme="dark"] .auto-auth-card,
+:root[data-theme="dark"] .price-card {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important;
+}
+
+@media (max-width: 980px) {
+  .shell-header {
+    grid-template-columns: 1fr auto !important;
+    align-items: start !important;
+    min-height: 0 !important;
+    padding-bottom: 86px !important;
+  }
+
+  .shell-header.auth-header,
+  .shell-header.home-header {
+    grid-template-columns: 1fr auto !important;
+    padding-bottom: 12px !important;
+  }
+
+  .shell-nav {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    z-index: 60 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    padding: 6px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--ms-radius-lg) !important;
+    background: color-mix(in srgb, var(--sidebar) 94%, transparent) !important;
+    box-shadow: var(--ms-shadow-strong) !important;
+    overflow: visible !important;
+  }
+
+  .shell-nav button {
+    min-width: 0 !important;
+    min-height: 52px !important;
+    padding: 0 6px !important;
+    display: grid !important;
+    justify-items: center !important;
+    gap: 4px !important;
+    font-size: 11px !important;
+    line-height: 1.05 !important;
+  }
+
+  .shell-nav button svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .page-frame {
+    padding-bottom: 96px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: min(100%, 760px) !important;
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 24px !important;
+  }
+
+  .auto-auth-marketing h2 {
+    max-width: 680px !important;
+    font-size: clamp(34px, 8vw, 58px) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 14px 12px 96px !important;
+  }
+
+  .shell-header,
+  .shell-header.auth-header,
+  .shell-header.home-header {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .shell-brand-mark,
+  .product-mark {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+  }
+
+  .shell-brand strong {
+    max-width: 148px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .shell-brand small {
+    max-width: 148px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .theme-control .theme-toggle {
+    min-width: 46px !important;
+    width: 46px !important;
+    padding: 0 !important;
+  }
+
+  .theme-control .theme-toggle > span:last-child {
+    display: none !important;
+  }
+
+  .home-product-lockup {
+    gap: 12px !important;
+  }
+
+  .home-product-lockup .product-mark {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .home-product-lockup h1 {
+    max-width: 330px !important;
+    font-size: clamp(38px, 12vw, 54px) !important;
+  }
+
+  .home-launchpad-summary {
+    font-size: 15px !important;
+  }
+
+  .home-brand-line {
+    font-size: 14px !important;
+  }
+
+  .page-home .home-launchpad {
+    padding: 28px 14px !important;
+  }
+
+  .page-home .home-cta-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .home-cta-login {
+    min-height: 52px !important;
+  }
+
+  .auth-product-lockup {
+    align-items: flex-start !important;
+  }
+
+  .auth-product-lockup h1 {
+    font-size: clamp(30px, 10vw, 46px) !important;
+  }
+
+  .auto-auth-marketing h2 {
+    margin-top: 18px !important;
+    font-size: clamp(32px, 10vw, 46px) !important;
+  }
+
+  .auth-secondary-actions {
+    grid-template-columns: 1fr !important;
+  }
+}

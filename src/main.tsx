@@ -437,6 +437,8 @@ type HomeIntelResponse = {
 };
 
 const livePortfolioRefreshEvent = 'live-portfolio-refresh';
+const companyName = 'Muslim Soliotions';
+const productName = 'Auto Trading System';
 
 
 type TelegramConfig = {
@@ -553,8 +555,8 @@ const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role
 
 const themes: { id: Theme; name: string }[] = [
   { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Execution' },
-  { id: 'black', name: 'Dark' }
+  { id: 'black', name: 'Dark' },
+  { id: 'dark', name: 'Execution' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
@@ -1177,10 +1179,11 @@ function App() {
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
-        <div className="shell-brand" aria-label="Auto Trading System">
+        <div className="shell-brand" aria-label={`${productName} by ${companyName}`}>
           <span className="shell-brand-mark"><TrendingUp size={20} /></span>
-          <div>
-            <strong>Auto Trading</strong>
+          <div className="shell-brand-copy">
+            <strong>{productName}</strong>
+            <small>By {companyName}</small>
           </div>
         </div>
         {!authEntryPage && <nav className="shell-nav" aria-label="Primary navigation">
@@ -1774,7 +1777,8 @@ function ThemeStudio({
   onPick: (theme: Theme) => void;
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
-  const nextTheme = currentTheme === 'light' ? 'dark' : currentTheme === 'dark' ? 'black' : 'light';
+  const nextTheme = currentTheme === 'light' ? 'black' : currentTheme === 'black' ? 'dark' : 'light';
+  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Moon size={18} /> : <Gauge size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
@@ -1782,7 +1786,7 @@ function ThemeStudio({
       onClick={() => onPick(nextTheme)}
       aria-label={`Switch to ${(themes.find(item => item.id === nextTheme) ?? themes[0]).name} theme`}
     >
-      <span className="theme-toggle-icon">{currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</span>
+      <span className="theme-toggle-icon">{themeIcon}</span>
       <span>{currentThemeItem.name}</span>
     </button>
   </div>;
@@ -1921,8 +1925,14 @@ function HomePage({
   return <>
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
-        <h1>Auto Trading System</h1>
-        <p className="home-launchpad-summary">by Muslim Alramadhan</p>
+        <div className="product-identity-lockup home-product-lockup">
+          <span className="product-mark"><TrendingUp size={32} /></span>
+          <div>
+            <h1>{productName}</h1>
+            <p className="home-launchpad-summary">By {companyName}</p>
+          </div>
+        </div>
+        <p className="home-brand-line">Execution-grade trading intelligence with a Muslim Soliotions visual system.</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
@@ -4388,7 +4398,14 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <h1>Trade with AI that protects the entry.</h1>
+          <div className="product-identity-lockup auth-product-lockup">
+            <span className="product-mark"><TrendingUp size={30} /></span>
+            <div>
+              <h1>{productName}</h1>
+              <p>By {companyName}</p>
+            </div>
+          </div>
+          <h2>Trade with AI that protects the entry.</h2>
           <div className="auth-value-stack" aria-label="Automated trading advantages">
             <strong>Secure Binance execution.</strong>
             <strong>1,000+ coins scanned continuously.</strong>
