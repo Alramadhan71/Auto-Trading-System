@@ -556,9 +556,9 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'light', name: 'Light' },
-  { id: 'black', name: 'Dark' },
-  { id: 'dark', name: 'Execution' }
+  { id: 'black', name: 'Midnight Pro' },
+  { id: 'light', name: 'Aurora Light' },
+  { id: 'dark', name: 'Terminal Black' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
@@ -1888,24 +1888,29 @@ function ThemePanel({
 function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily) => void }) {
   return <section className="market-select-page">
     <div className="market-select-lockup">
-      <span className="eyebrow">Choose market</span>
+      <span className="market-select-kicker">Trading Gateway</span>
       <h1>{productName}</h1>
-      <p><CompanyAttribution /></p>
+      <p>Select a workspace for signals, portfolios, and automated trading tools.</p>
+      <CompanyAttribution className="market-select-company" />
     </div>
     <div className="market-select-grid">
       <button type="button" className="market-select-card crypto" onClick={() => onSelect('crypto')}>
-        <span className="market-select-icon"><TrendingUp size={28} /></span>
-        <span>
+        <span className="market-select-icon"><TrendingUp size={30} /></span>
+        <span className="market-select-copy">
+          <small>Crypto Workspace</small>
           <strong>Crypto Market</strong>
-          <small>Current Binance spot and futures system</small>
+          <span>Binance spot and futures automation</span>
         </span>
+        <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
       <button type="button" className="market-select-card stocks" onClick={() => onSelect('us-stocks')}>
-        <span className="market-select-icon"><BarChart3 size={28} /></span>
-        <span>
+        <span className="market-select-icon"><BarChart3 size={30} /></span>
+        <span className="market-select-copy">
+          <small>Equities Workspace</small>
           <strong>US Stock Market</strong>
-          <small>Separate cloned workspace for American stocks</small>
+          <span>US stocks strategy workspace</span>
         </span>
+        <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
     </div>
   </section>;
