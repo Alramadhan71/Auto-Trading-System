@@ -1916,6 +1916,316 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
   </section>;
 }
 
+const usMarketIndexes = [
+  { symbol: 'SPX', name: 'S&P 500', value: '6,421.18', change: 0.42, meta: 'Large-cap benchmark' },
+  { symbol: 'NDX', name: 'Nasdaq 100', value: '22,908.74', change: 0.68, meta: 'Growth leadership' },
+  { symbol: 'DJI', name: 'Dow Jones', value: '44,216.09', change: 0.24, meta: 'Blue-chip average' },
+  { symbol: 'RUT', name: 'Russell 2000', value: '2,286.41', change: -0.18, meta: 'Small-cap breadth' },
+  { symbol: 'VIX', name: 'Volatility Index', value: '14.82', change: -3.21, meta: 'Risk pressure' },
+  { symbol: '10Y', name: 'US 10Y Yield', value: '4.18%', change: 0.05, meta: 'Rates regime' }
+];
+
+const usMarketPulse = [
+  { label: 'Market Regime', value: 'Risk-On', detail: 'Indexes above rising 20D trend', tone: 'good' },
+  { label: 'VIX Pressure', value: 'Low', detail: 'Volatility below stress threshold', tone: 'good' },
+  { label: 'Breadth', value: '63%', detail: 'S&P 500 members above 50D MA', tone: 'good' },
+  { label: 'Rates Drag', value: 'Moderate', detail: '10Y yield still caps duration assets', tone: 'warning' },
+  { label: 'Dollar Impact', value: 'Neutral', detail: 'DXY range-bound vs mega-cap earnings', tone: '' },
+  { label: 'Liquidity', value: 'Healthy', detail: 'Volume concentrated in leaders', tone: 'good' }
+];
+
+const usSectors = [
+  { name: 'Technology', ticker: 'XLK', change: 1.12, strength: 92 },
+  { name: 'Communication', ticker: 'XLC', change: 0.84, strength: 84 },
+  { name: 'Financials', ticker: 'XLF', change: 0.51, strength: 72 },
+  { name: 'Industrials', ticker: 'XLI', change: 0.34, strength: 66 },
+  { name: 'Healthcare', ticker: 'XLV', change: -0.12, strength: 48 },
+  { name: 'Energy', ticker: 'XLE', change: -0.38, strength: 41 },
+  { name: 'Utilities', ticker: 'XLU', change: -0.44, strength: 37 },
+  { name: 'Real Estate', ticker: 'XLRE', change: -0.61, strength: 31 }
+];
+
+const usScannerGroups = [
+  {
+    title: 'Breakout Candidates',
+    icon: <ArrowUpRight size={18} />,
+    rows: [
+      { symbol: 'NVDA', name: 'NVIDIA', metric: '+2.4%', note: 'Clearing 20D range high' },
+      { symbol: 'MSFT', name: 'Microsoft', metric: '+1.1%', note: 'Cloud leadership continuation' },
+      { symbol: 'AVGO', name: 'Broadcom', metric: '+1.8%', note: 'Semis relative strength' }
+    ]
+  },
+  {
+    title: 'Unusual Volume',
+    icon: <Activity size={18} />,
+    rows: [
+      { symbol: 'TSLA', name: 'Tesla', metric: '1.9x', note: 'Options-led flow expansion' },
+      { symbol: 'AMD', name: 'Advanced Micro Devices', metric: '1.6x', note: 'AI hardware rotation' },
+      { symbol: 'JPM', name: 'JPMorgan', metric: '1.4x', note: 'Financials accumulation' }
+    ]
+  },
+  {
+    title: 'Relative Strength',
+    icon: <Target size={18} />,
+    rows: [
+      { symbol: 'META', name: 'Meta Platforms', metric: '94 RS', note: 'Outperforming Nasdaq 100' },
+      { symbol: 'COST', name: 'Costco', metric: '89 RS', note: 'Defensive growth bid' },
+      { symbol: 'LLY', name: 'Eli Lilly', metric: '87 RS', note: 'Healthcare leadership' }
+    ]
+  }
+];
+
+const usMegaCaps = [
+  { rank: 1, symbol: 'NVDA', name: 'NVIDIA', price: '$1,024.70', cap: '$2.52T', change: 2.14 },
+  { rank: 2, symbol: 'MSFT', name: 'Microsoft', price: '$487.22', cap: '$3.62T', change: 0.76 },
+  { rank: 3, symbol: 'AAPL', name: 'Apple', price: '$212.44', cap: '$3.18T', change: -0.22 },
+  { rank: 4, symbol: 'AMZN', name: 'Amazon', price: '$221.09', cap: '$2.36T', change: 0.58 },
+  { rank: 5, symbol: 'META', name: 'Meta Platforms', price: '$648.31', cap: '$1.64T', change: 1.03 },
+  { rank: 6, symbol: 'GOOGL', name: 'Alphabet', price: '$188.76', cap: '$2.31T', change: 0.41 }
+];
+
+const usEarningsRadar = [
+  { symbol: 'NVDA', date: 'This week', eps: '$5.58 est.', setup: 'AI demand and gross margin guidance' },
+  { symbol: 'CRM', date: 'Next week', eps: '$2.61 est.', setup: 'Enterprise software spending read-through' },
+  { symbol: 'COST', date: 'Next week', eps: '$4.24 est.', setup: 'Consumer resilience and membership growth' },
+  { symbol: 'ADBE', date: 'Upcoming', eps: '$4.72 est.', setup: 'Creative AI monetization update' }
+];
+
+const usBriefingCards = [
+  { source: 'US Market Desk', tag: 'Macro', title: 'Treasury yields and mega-cap earnings define the next equity rotation.' },
+  { source: 'Strategy Pulse', tag: 'Breadth', title: 'Participation is strongest in technology, communication services, and financials.' },
+  { source: 'Risk Monitor', tag: 'Volatility', title: 'VIX remains below stress levels while index trend structure stays constructive.' },
+  { source: 'Earnings Radar', tag: 'Events', title: 'AI infrastructure, cloud margins, and consumer demand are the key earnings themes.' }
+];
+
+function USStockHomePage({
+  query,
+  setQuery,
+  openAutoTradeLogin
+}: {
+  query: string;
+  setQuery: (value: string) => void;
+  openAutoTradeLogin: () => void;
+}) {
+  const stockResults = useMemo(() => {
+    const needle = query.trim().toUpperCase();
+    if (!needle) return [];
+    return usMegaCaps.filter(item => item.symbol.includes(needle) || item.name.toUpperCase().includes(needle)).slice(0, 6);
+  }, [query]);
+
+  return <>
+    <section className="home-launchpad us-stock-hero">
+      <div className="home-launchpad-copy">
+        <div className="product-identity-lockup home-product-lockup">
+          <div>
+            <span className="us-hero-kicker">US Market Command Center</span>
+            <h1>{productName}</h1>
+            <p className="home-launchpad-summary">US Stock Market <CompanyAttribution /></p>
+          </div>
+        </div>
+        <div className="home-cta-row">
+          <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
+            <Bot size={22} />
+            <span><strong>Open Stock Automation</strong></span>
+          </button>
+          <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
+            <Bell size={22} />
+            <span><strong>Join Market Alerts</strong></span>
+          </a>
+        </div>
+        <div className="home-login-row">
+          <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
+            <LogIn size={20} />
+            <span><strong>Log In to Your Account</strong></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section className="us-market-overview">
+      <div className="home-top-market-head">
+        <div>
+          <span className="eyebrow">NYSE / Nasdaq intelligence</span>
+          <h2>US Market Overview</h2>
+        </div>
+        <div className="home-news-badge">
+          <Gauge size={16} />
+          <span>Live-ready workspace</span>
+        </div>
+      </div>
+      <div className="us-index-grid">
+        {usMarketIndexes.map(item => <article key={item.symbol} className="us-index-card">
+          <div>
+            <span>{item.symbol}</span>
+            <small>{item.name}</small>
+          </div>
+          <strong>{item.value}</strong>
+          <footer>
+            <b className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</b>
+            <small>{item.meta}</small>
+          </footer>
+        </article>)}
+      </div>
+      <div className="search-panel home-search-panel us-stock-search">
+        <Search size={20} />
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search US stocks: AAPL, MSFT, NVDA, TSLA..." />
+        <span>US equities workspace | indexes, sectors, earnings, scanners, and sentiment</span>
+      </div>
+      {stockResults.length > 0 && <section className="results home-results">
+        {stockResults.map(item => <article key={item.symbol}>
+          <strong>{item.symbol}</strong>
+          <span>{item.name}</span>
+          <b>{item.price}</b>
+          <small className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</small>
+        </article>)}
+      </section>}
+    </section>
+
+    <section className="home-signal-shell us-pulse-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Macro and risk model</span>
+          <h2>US Market Pulse</h2>
+        </div>
+      </div>
+      <div className="home-signal-grid">
+        {usMarketPulse.map(item => <article key={item.label} className="home-signal-card us-pulse-card">
+          <span>{item.label}</span>
+          <strong className={item.tone}>{item.value}</strong>
+          <small>{item.detail}</small>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="us-sector-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Sector rotation</span>
+          <h2>Institutional Heatmap</h2>
+        </div>
+        <div className="home-news-badge">
+          <Activity size={16} />
+          <span>Relative strength</span>
+        </div>
+      </div>
+      <div className="us-sector-grid">
+        {usSectors.map(sector => <article key={sector.ticker} className="us-sector-card">
+          <div>
+            <span>{sector.ticker}</span>
+            <strong>{sector.name}</strong>
+          </div>
+          <b className={sector.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(sector.change)}</b>
+          <div className="us-sector-meter"><i style={{ width: `${sector.strength}%` }} /></div>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="us-scanner-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Opportunity scanner</span>
+          <h2>Advanced Stock Signals</h2>
+        </div>
+      </div>
+      <div className="us-scanner-grid">
+        {usScannerGroups.map(group => <article key={group.title} className="home-leader-card us-scanner-card">
+          <div className="home-intel-head">
+            <div>
+              <span className="eyebrow">{group.title}</span>
+              <h3>{group.title}</h3>
+            </div>
+            {group.icon}
+          </div>
+          <div className="home-leader-list">
+            {group.rows.map(row => <div key={`${group.title}-${row.symbol}`} className="home-leader-row us-scanner-row">
+              <div>
+                <strong>{row.symbol}</strong>
+                <small>{row.name}</small>
+              </div>
+              <div className="home-leader-values">
+                <b>{row.metric}</b>
+                <small>{row.note}</small>
+              </div>
+            </div>)}
+          </div>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="home-marketcap-shell us-megacap-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">US mega caps</span>
+          <h2>Leadership Board</h2>
+        </div>
+        <div className="home-news-badge">
+          <Globe2 size={16} />
+          <span>Market leaders</span>
+        </div>
+      </div>
+      <div className="home-marketcap-list">
+        {usMegaCaps.map(asset => <div key={asset.symbol} className="home-marketcap-row">
+          <div className="home-marketcap-rank">#{asset.rank}</div>
+          <div className="home-marketcap-copy">
+            <strong>{asset.symbol}</strong>
+            <small>{asset.name}</small>
+          </div>
+          <div className="home-marketcap-values">
+            <b>{asset.price}</b>
+            <small>{asset.cap} | <span className={asset.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(asset.change)}</span></small>
+          </div>
+        </div>)}
+      </div>
+    </section>
+
+    <section className="us-events-news-grid">
+      <section className="home-news-shell us-earnings-shell">
+        <div className="home-live-board-head">
+          <div>
+            <span className="eyebrow">Earnings radar</span>
+            <h2>Upcoming Catalysts</h2>
+          </div>
+          <div className="home-news-badge">
+            <CalendarDays size={16} />
+            <span>Event risk</span>
+          </div>
+        </div>
+        <div className="us-earnings-list">
+          {usEarningsRadar.map(item => <article key={item.symbol} className="us-earnings-card">
+            <strong>{item.symbol}</strong>
+            <span>{item.date}</span>
+            <b>{item.eps}</b>
+            <small>{item.setup}</small>
+          </article>)}
+        </div>
+      </section>
+
+      <section className="home-news-shell us-briefing-shell">
+        <div className="home-live-board-head">
+          <div>
+            <span className="eyebrow">US market briefing</span>
+            <h2>News &amp; Sentiment</h2>
+          </div>
+          <div className="home-news-badge">
+            <Newspaper size={16} />
+            <span>Equities only</span>
+          </div>
+        </div>
+        <div className="home-news-grid">
+          {usBriefingCards.map(item => <article key={item.title} className="home-news-card us-briefing-card">
+            <div className="home-news-top">
+              <span>{item.source}</span>
+              <small>{item.tag}</small>
+            </div>
+            <strong>{item.title}</strong>
+            <div className="home-news-tags"><b>US STOCKS</b><b>{item.tag.toUpperCase()}</b></div>
+          </article>)}
+        </div>
+      </section>
+    </section>
+  </>;
+}
+
 function HomePage({
   marketFamily,
   spotTop,
@@ -1988,6 +2298,14 @@ function HomePage({
     if (score >= 25) return 'sentiment-fear';
     return 'sentiment-extreme';
   };
+
+  if (isStocks) {
+    return <USStockHomePage
+      query={query}
+      setQuery={setQuery}
+      openAutoTradeLogin={openAutoTradeLogin}
+    />;
+  }
 
   return <>
     <section className="home-launchpad">

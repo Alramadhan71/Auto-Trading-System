@@ -26005,3 +26005,225 @@ td,
     height: 52px;
   }
 }
+
+/* US stock command center */
+.us-stock-hero {
+  min-height: clamp(360px, 43vh, 520px) !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--success) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in srgb, var(--success) 9%, var(--panel-strong)), color-mix(in srgb, var(--accent) 7%, var(--panel))) !important;
+  background-size: 44px 44px, 44px 44px, 100% 100% !important;
+}
+
+.us-hero-kicker {
+  display: inline-flex;
+  justify-content: center;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 13px;
+  margin-bottom: 10px;
+  border: 1px solid color-mix(in srgb, var(--success) 40%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--success) 10%, var(--panel-strong));
+  color: var(--success);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.us-market-overview,
+.us-sector-shell,
+.us-scanner-shell,
+.us-events-news-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.us-index-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.us-index-card,
+.us-sector-card,
+.us-earnings-card {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--success) 7%, transparent), transparent 45%),
+    color-mix(in srgb, var(--panel) 92%, var(--panel-strong));
+  color: var(--text);
+}
+
+.us-index-card span,
+.us-sector-card span,
+.us-earnings-card span {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.us-index-card small,
+.us-sector-card small,
+.us-earnings-card small {
+  color: var(--soft-text);
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.us-index-card strong {
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.us-index-card footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 10px;
+}
+
+.us-stock-search {
+  border-color: color-mix(in srgb, var(--success) 20%, var(--border)) !important;
+}
+
+.us-pulse-shell,
+.us-sector-shell,
+.us-scanner-shell {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+}
+
+.us-pulse-card strong.good {
+  color: var(--success) !important;
+}
+
+.us-pulse-card strong.warning {
+  color: var(--warning) !important;
+}
+
+.us-sector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.us-sector-card {
+  gap: 10px;
+}
+
+.us-sector-card strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
+}
+
+.us-sector-card > b {
+  font-size: 22px;
+}
+
+.us-sector-meter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border) 70%, var(--panel-strong));
+}
+
+.us-sector-meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--success), var(--accent));
+}
+
+.us-scanner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.us-scanner-card {
+  min-height: 100%;
+}
+
+.us-scanner-row {
+  cursor: default;
+}
+
+.us-scanner-row .home-leader-values {
+  max-width: 190px;
+}
+
+.us-megacap-shell .home-marketcap-row {
+  cursor: default;
+}
+
+.us-events-news-grid {
+  grid-template-columns: minmax(340px, .85fr) minmax(0, 1.15fr);
+  align-items: start;
+}
+
+.us-earnings-list {
+  display: grid;
+  gap: 10px;
+}
+
+.us-earnings-card {
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.us-earnings-card strong {
+  font-size: 22px;
+}
+
+.us-earnings-card small {
+  grid-column: 1 / -1;
+}
+
+.us-briefing-card {
+  cursor: default;
+}
+
+.us-briefing-card::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--success), var(--accent));
+}
+
+@media (max-width: 1180px) {
+  .us-index-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .us-scanner-grid,
+  .us-events-news-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .us-index-grid,
+  .us-sector-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .us-index-card footer,
+  .us-earnings-card {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
