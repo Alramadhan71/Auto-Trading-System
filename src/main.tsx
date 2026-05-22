@@ -437,7 +437,8 @@ type HomeIntelResponse = {
 };
 
 const livePortfolioRefreshEvent = 'live-portfolio-refresh';
-const companyName = 'Muslim Soliotions';
+const companyName = 'Muslim Solutions';
+const companyUrl = 'https://www.muslimalramadan71.com/';
 const productName = 'Auto Trading System';
 
 
@@ -799,9 +800,9 @@ function App() {
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
     if (!migratedDefault && (!saved || ['executive', 'navy', 'emerald', 'graphite'].includes(saved))) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
-      return 'dark';
+      return 'black';
     }
-    return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
+    return themes.some(item => item.id === saved) ? saved as Theme : 'black';
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
@@ -1183,7 +1184,7 @@ function App() {
           <span className="shell-brand-mark"><TrendingUp size={20} /></span>
           <div className="shell-brand-copy">
             <strong>{productName}</strong>
-            <small>By {companyName}</small>
+            <small><CompanyAttribution /></small>
           </div>
         </div>
         {!authEntryPage && <nav className="shell-nav" aria-label="Primary navigation">
@@ -1929,10 +1930,10 @@ function HomePage({
           <span className="product-mark"><TrendingUp size={32} /></span>
           <div>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">By {companyName}</p>
+            <p className="home-launchpad-summary"><CompanyAttribution /></p>
           </div>
         </div>
-        <p className="home-brand-line">Execution-grade trading intelligence with a Muslim Soliotions visual system.</p>
+        <p className="home-brand-line">Execution-grade trading intelligence with a Muslim Solutions visual system.</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
@@ -1940,7 +1941,7 @@ function HomePage({
               <strong>Join Auto Trading System</strong>
             </span>
           </button>
-          <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noreferrer">
+          <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
             <Send size={22} />
             <span>
               <strong>Join Free Trades on Telegram</strong>
@@ -2098,11 +2099,11 @@ function HomePage({
             <button type="button" className={leaderMarketMode === 'futures' ? 'active' : ''} onClick={() => setLeaderMarketMode('futures')}>Futures</button>
           </div>
           <div className="home-leader-source-links">
-          <a className="home-news-badge" href="https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#all-market-tickers-stream" target="_blank" rel="noreferrer">
+          <a className="home-news-badge" href="https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#all-market-tickers-stream" target="_blank" rel="noopener noreferrer">
             <Activity size={16} />
             <span>Spot source</span>
           </a>
-          <a className="home-news-badge" href="https://developers.binance.com/docs/derivatives/usds-margined-futures/websocket-market-streams/All-Market-Tickers-Streams" target="_blank" rel="noreferrer">
+          <a className="home-news-badge" href="https://developers.binance.com/docs/derivatives/usds-margined-futures/websocket-market-streams/All-Market-Tickers-Streams" target="_blank" rel="noopener noreferrer">
             <Activity size={16} />
             <span>Futures source</span>
           </a>
@@ -2194,7 +2195,7 @@ function HomePage({
         </div>
       </div>
       <div className="home-news-grid">
-        {(homeIntel?.news ?? []).slice(0, 6).map(item => <a key={item.id} className="home-news-card" href={item.url} target="_blank" rel="noreferrer">
+        {(homeIntel?.news ?? []).slice(0, 6).map(item => <a key={item.id} className="home-news-card" href={item.url} target="_blank" rel="noopener noreferrer">
           <div className="home-news-top">
             <span>{item.source}</span>
             <small>{item.publishedAt ? entryTime(item.publishedAt) : 'Recent'}</small>
@@ -4402,7 +4403,7 @@ function AutoTradePage({
             <span className="product-mark"><TrendingUp size={30} /></span>
             <div>
               <h1>{productName}</h1>
-              <p>By {companyName}</p>
+              <p><CompanyAttribution /></p>
             </div>
           </div>
           <h2>Trade with AI that protects the entry.</h2>
@@ -4427,11 +4428,11 @@ function AutoTradePage({
           <div className="auto-auth-form">
             <label className="auth-input-shell">
               <UserCog size={17} />
-              <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder={loginRole === 'admin' ? 'Admin username or admin name' : 'Username'} />
+              <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder={loginRole === 'admin' ? 'Admin username or admin name' : 'Username'} autoComplete="username" />
             </label>
             <div className="password-field auth-input-shell">
               <KeyRound size={17} />
-              <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} />
+              <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
               <button type="button" className="auth-password-eye" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
                 {loginPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
@@ -4451,7 +4452,7 @@ function AutoTradePage({
               </button>}
               {loginRole === 'user' && <div className="auth-secondary-actions">
                 <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
-                <a href="https://wa.me/966599204215" target="_blank" rel="noreferrer">Contact admin</a>
+                <a href="https://wa.me/966599204215" target="_blank" rel="noopener noreferrer">Contact admin</a>
               </div>}
             </div>
           </div>
@@ -4466,7 +4467,7 @@ function AutoTradePage({
             </div>
             <p>Fastest path: contact admin and include your username. No email setup or extra account linking needed.</p>
             <div className="recovery-actions">
-              <a href={`https://wa.me/966599204215?text=${encodeURIComponent(`Hi, I need to recover my Auto Trading access. Username: ${loginUsername || 'not sure'}`)}`} target="_blank" rel="noreferrer">
+              <a href={`https://wa.me/966599204215?text=${encodeURIComponent(`Hi, I need to recover my Auto Trading access. Username: ${loginUsername || 'not sure'}`)}`} target="_blank" rel="noopener noreferrer">
                 <Send size={16} /> WhatsApp admin
               </a>
               <button type="button" onClick={() => setPasswordResetOpen(false)}>Back to login</button>
@@ -4479,9 +4480,9 @@ function AutoTradePage({
               <strong>New access request</strong>
               <button type="button" className="auth-close-button" onClick={() => setRegisterOpen(false)} aria-label="Close registration form">x</button>
             </div>
-            <input required value={joinUsername} onChange={event => setJoinUsername(event.target.value)} placeholder="Username" />
+            <input required value={joinUsername} onChange={event => setJoinUsername(event.target.value)} placeholder="Username" autoComplete="username" />
             <div className="password-field">
-              <input value={joinPassword} onChange={event => setJoinPassword(event.target.value)} placeholder="Password" type={registerPasswordVisible ? 'text' : 'password'} />
+              <input value={joinPassword} onChange={event => setJoinPassword(event.target.value)} placeholder="Password" type={registerPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
               <button type="button" className="auth-password-eye" onClick={() => setRegisterPasswordVisible(value => !value)} aria-label={registerPasswordVisible ? 'Hide password' : 'Show password'}>
                 {registerPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
               </button>
@@ -4550,16 +4551,16 @@ function AutoTradePage({
           <div className="admin-password-editor">
             <span>Change Password</span>
             <label className="password-field">
-              <input value={userCurrentPassword} onChange={event => setUserCurrentPassword(event.target.value)} placeholder="Current password" type={userCurrentPasswordVisible ? 'text' : 'password'} />
-              <button type="button" onClick={() => setUserCurrentPasswordVisible(visible => !visible)}>{userCurrentPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+              <input value={userCurrentPassword} onChange={event => setUserCurrentPassword(event.target.value)} placeholder="Current password" type={userCurrentPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
+              <button type="button" onClick={() => setUserCurrentPasswordVisible(visible => !visible)} aria-label={userCurrentPasswordVisible ? 'Hide current password' : 'Show current password'}>{userCurrentPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
             </label>
             <label className="password-field">
-              <input value={userNewPassword} onChange={event => setUserNewPassword(event.target.value)} placeholder="New password" type={userNewPasswordVisible ? 'text' : 'password'} />
-              <button type="button" onClick={() => setUserNewPasswordVisible(visible => !visible)}>{userNewPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+              <input value={userNewPassword} onChange={event => setUserNewPassword(event.target.value)} placeholder="New password" type={userNewPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
+              <button type="button" onClick={() => setUserNewPasswordVisible(visible => !visible)} aria-label={userNewPasswordVisible ? 'Hide new password' : 'Show new password'}>{userNewPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
             </label>
             <label className="password-field">
-              <input value={userConfirmPassword} onChange={event => setUserConfirmPassword(event.target.value)} placeholder="Confirm new password" type={userConfirmPasswordVisible ? 'text' : 'password'} />
-              <button type="button" onClick={() => setUserConfirmPasswordVisible(visible => !visible)}>{userConfirmPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+              <input value={userConfirmPassword} onChange={event => setUserConfirmPassword(event.target.value)} placeholder="Confirm new password" type={userConfirmPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
+              <button type="button" onClick={() => setUserConfirmPasswordVisible(visible => !visible)} aria-label={userConfirmPasswordVisible ? 'Hide password confirmation' : 'Show password confirmation'}>{userConfirmPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
             </label>
             <small>8+ characters, uppercase, lowercase, number, and special character.</small>
           </div>
@@ -5545,7 +5546,7 @@ function AutoTradePage({
             <label>
               <span>API Key</span>
               <div className="password-field">
-                <input value={binanceApiKey} onChange={event => setBinanceApiKey(event.target.value)} placeholder="Binance API key" type={binanceApiVisible ? 'text' : 'password'} />
+                <input value={binanceApiKey} onChange={event => setBinanceApiKey(event.target.value)} placeholder="Binance API key" type={binanceApiVisible ? 'text' : 'password'} autoComplete="off" />
                 <button type="button" onClick={() => setBinanceApiVisible(value => !value)} aria-label={binanceApiVisible ? 'Hide API key' : 'Show API key'}>
                   {binanceApiVisible ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
@@ -5554,7 +5555,7 @@ function AutoTradePage({
             <label>
               <span>Secret Key</span>
               <div className="password-field">
-                <input value={binanceSecretKey} onChange={event => setBinanceSecretKey(event.target.value)} placeholder="Binance secret key" type={binanceSecretVisible ? 'text' : 'password'} />
+                <input value={binanceSecretKey} onChange={event => setBinanceSecretKey(event.target.value)} placeholder="Binance secret key" type={binanceSecretVisible ? 'text' : 'password'} autoComplete="off" />
                 <button type="button" onClick={() => setBinanceSecretVisible(value => !value)} aria-label={binanceSecretVisible ? 'Hide secret key' : 'Show secret key'}>
                   {binanceSecretVisible ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
@@ -5567,7 +5568,7 @@ function AutoTradePage({
           </form>}
           <div className="binance-admin-actions">
             <small className="binance-connect-note">
-              <b>Tip:</b> Enable Reading and Spot &amp; Margin Trading. Enable Futures only if needed. Keep Withdrawals disabled. Create keys from <a href="https://www.binance.com/en/my/settings/api-management" target="_blank" rel="noreferrer">Binance API Management</a>. <b>Verified:</b> keys checked with Binance and ready. <b>Save Only:</b> keys saved but not verified yet.
+              <b>Tip:</b> Enable Reading and Spot &amp; Margin Trading. Enable Futures only if needed. Keep Withdrawals disabled. Create keys from <a href="https://www.binance.com/en/my/settings/api-management" target="_blank" rel="noopener noreferrer">Binance API Management</a>. <b>Verified:</b> keys checked with Binance and ready. <b>Save Only:</b> keys saved but not verified yet.
             </small>
             {!binanceEditorOpen && <button type="button" onClick={openBinanceEditor}>{binanceConnection.saved ? 'Replace Keys' : 'Connect Binance'}</button>}
             {binanceConnection.saved && !binanceEditorOpen && <button type="button" className="ghost" onClick={disconnectBinanceConnection}>Disconnect</button>}
@@ -5752,15 +5753,15 @@ function AutoTradePage({
               <div className="admin-password-editor">
                 <span>Change Password</span>
                 {adminPasswordProtected && <label className="password-field">
-                  <input value={adminCurrentPassword} onChange={event => setAdminCurrentPassword(event.target.value)} placeholder="Current password" type={adminCurrentPasswordVisible ? 'text' : 'password'} />
+                  <input value={adminCurrentPassword} onChange={event => setAdminCurrentPassword(event.target.value)} placeholder="Current password" type={adminCurrentPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
                   <button type="button" onClick={() => setAdminCurrentPasswordVisible(visible => !visible)}>{adminCurrentPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                 </label>}
                 <label className="password-field">
-                  <input value={adminNewPassword} onChange={event => setAdminNewPassword(event.target.value)} placeholder="New password" type={adminNewPasswordVisible ? 'text' : 'password'} />
+                  <input value={adminNewPassword} onChange={event => setAdminNewPassword(event.target.value)} placeholder="New password" type={adminNewPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
                   <button type="button" onClick={() => setAdminNewPasswordVisible(visible => !visible)}>{adminNewPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                 </label>
                 <label className="password-field">
-                  <input value={adminConfirmPassword} onChange={event => setAdminConfirmPassword(event.target.value)} placeholder="Confirm new password" type={adminConfirmPasswordVisible ? 'text' : 'password'} />
+                  <input value={adminConfirmPassword} onChange={event => setAdminConfirmPassword(event.target.value)} placeholder="Confirm new password" type={adminConfirmPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
                   <button type="button" onClick={() => setAdminConfirmPasswordVisible(visible => !visible)}>{adminConfirmPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                 </label>
                 <small>8+ characters, uppercase, lowercase, number, and special character.</small>
@@ -5846,15 +5847,15 @@ function AutoTradePage({
                 <div className="admin-password-editor">
                   <span>Change Password</span>
                   {adminPasswordProtected && <label className="password-field">
-                    <input value={adminCurrentPassword} onChange={event => setAdminCurrentPassword(event.target.value)} placeholder="Current password" type={adminCurrentPasswordVisible ? 'text' : 'password'} />
+                    <input value={adminCurrentPassword} onChange={event => setAdminCurrentPassword(event.target.value)} placeholder="Current password" type={adminCurrentPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
                     <button type="button" onClick={() => setAdminCurrentPasswordVisible(visible => !visible)}>{adminCurrentPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                   </label>}
                   <label className="password-field">
-                    <input value={adminNewPassword} onChange={event => setAdminNewPassword(event.target.value)} placeholder="New password" type={adminNewPasswordVisible ? 'text' : 'password'} />
+                    <input value={adminNewPassword} onChange={event => setAdminNewPassword(event.target.value)} placeholder="New password" type={adminNewPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
                     <button type="button" onClick={() => setAdminNewPasswordVisible(visible => !visible)}>{adminNewPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                   </label>
                   <label className="password-field">
-                    <input value={adminConfirmPassword} onChange={event => setAdminConfirmPassword(event.target.value)} placeholder="Confirm new password" type={adminConfirmPasswordVisible ? 'text' : 'password'} />
+                    <input value={adminConfirmPassword} onChange={event => setAdminConfirmPassword(event.target.value)} placeholder="Confirm new password" type={adminConfirmPasswordVisible ? 'text' : 'password'} autoComplete="new-password" />
                     <button type="button" onClick={() => setAdminConfirmPasswordVisible(visible => !visible)}>{adminConfirmPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}</button>
                   </label>
                   <small>8+ characters with uppercase, lowercase, number, and symbol.</small>
@@ -7639,6 +7640,17 @@ function pnlFromPrice(signal: Signal, price: number) {
   return signal.side === 'LONG'
     ? ((price - signal.entry) / signal.entry) * 100
     : ((signal.entry - price) / signal.entry) * 100;
+}
+
+function CompanyAttribution({ className }: { className?: string }) {
+  return <a
+    className={className ?? 'company-attribution'}
+    href={companyUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    By {companyName}
+  </a>;
 }
 
 function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
