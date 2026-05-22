@@ -274,6 +274,7 @@ type TelegramSubscriber = {
   linked: boolean;
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
+type MarketFamily = 'crypto' | 'us-stocks';
 type Theme = 'light' | 'dark' | 'black';
 type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
@@ -793,6 +794,7 @@ function App() {
   const [toasts, setToasts] = useState<Notification[]>([]);
   const [stats, setStats] = useState<Stat[]>([]);
   const [page, setPage] = useState<Page>('home');
+  const [activeMarketFamily, setActiveMarketFamily] = useState<MarketFamily | null>(null);
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [autoTradePortalView, setAutoTradePortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [theme, setTheme] = useState<Theme>(() => {
@@ -1137,8 +1139,24 @@ function App() {
   const deferredTickers = useDeferredValue(tickers);
   const deferredFuturesTickers = useDeferredValue(futuresTickers);
   const isAuthenticated = Boolean(appSessionUser);
+  const marketLabel = activeMarketFamily === 'us-stocks' ? 'US Stock Market' : 'Crypto Market';
+
+  const enterMarket = (marketFamily: MarketFamily) => {
+    setActiveMarketFamily(marketFamily);
+    setPage('home');
+    setQuery('');
+    setMarketMode('spot');
+    try {
+      localStorage.setItem('autoTrade.activeMarketFamily', marketFamily);
+    } catch {
+      // Navigation still works when local storage is blocked.
+    }
+  };
 
   const navigateToPage = (nextPage: Page) => {
+    if (nextPage !== 'home' && !activeMarketFamily) {
+      setActiveMarketFamily('crypto');
+    }
     if (nextPage !== 'home' && !isAuthenticated) {
       try {
         localStorage.setItem('autoTrade.portalView', 'login');
@@ -1153,6 +1171,7 @@ function App() {
   };
 
   const openAutoTradeLogin = () => {
+    if (!activeMarketFamily) setActiveMarketFamily('crypto');
     try {
       if (!isAuthenticated) localStorage.setItem('autoTrade.portalView', 'login');
     } catch {
@@ -1177,18 +1196,19 @@ function App() {
   };
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
+  const isMarketPicker = page === 'home' && !activeMarketFamily;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <div className="shell-brand" aria-label={`${productName} by ${companyName}`}>
-          <span className="shell-brand-mark"><TrendingUp size={20} /></span>
+          <span className="shell-brand-mark">{activeMarketFamily === 'us-stocks' ? <BarChart3 size={20} /> : <TrendingUp size={20} />}</span>
           <div className="shell-brand-copy">
-            <strong>{productName}</strong>
+            <strong>{isMarketPicker ? productName : `${marketLabel}`}</strong>
             <small><CompanyAttribution /></small>
           </div>
         </div>
-        {!authEntryPage && <nav className="shell-nav" aria-label="Primary navigation">
-          <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>Home</span></button>
+        {!authEntryPage && !isMarketPicker && <nav className="shell-nav" aria-label="Primary navigation">
+          <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>{marketLabel}</span></button>
           <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
         </nav>}
@@ -1197,7 +1217,11 @@ function App() {
             <Home size={16} />
             <span>Back to Home</span>
           </button>}
-          {page === 'home' && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
+          {!authEntryPage && !isMarketPicker && <button type="button" className="home-header-cta market-return-cta" onClick={() => { setActiveMarketFamily(null); setPage('home'); }}>
+            <Globe2 size={16} />
+            <span>Markets</span>
+          </button>}
+          {page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
             <Bot size={16} />
             <span>Start free trial</span>
           </button>}
@@ -1213,7 +1237,9 @@ function App() {
         </div>
       </header>
       <main className={`page-frame page-${page}`}>
-        {page === 'home' && <HomePage
+        {page === 'home' && !activeMarketFamily && <MarketSelectPage onSelect={enterMarket} />}
+        {page === 'home' && activeMarketFamily && <HomePage
+          marketFamily={activeMarketFamily}
           spotTop={spotTop}
           futuresTop={futuresTop}
           marketMode={marketMode}
@@ -1859,7 +1885,34 @@ function ThemePanel({
   </div>;
 }
 
+function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily) => void }) {
+  return <section className="market-select-page">
+    <div className="market-select-lockup">
+      <span className="eyebrow">Choose market</span>
+      <h1>{productName}</h1>
+      <p><CompanyAttribution /></p>
+    </div>
+    <div className="market-select-grid">
+      <button type="button" className="market-select-card crypto" onClick={() => onSelect('crypto')}>
+        <span className="market-select-icon"><TrendingUp size={28} /></span>
+        <span>
+          <strong>Crypto Market</strong>
+          <small>Current Binance spot and futures system</small>
+        </span>
+      </button>
+      <button type="button" className="market-select-card stocks" onClick={() => onSelect('us-stocks')}>
+        <span className="market-select-icon"><BarChart3 size={28} /></span>
+        <span>
+          <strong>US Stock Market</strong>
+          <small>Separate cloned workspace for American stocks</small>
+        </span>
+      </button>
+    </div>
+  </section>;
+}
+
 function HomePage({
+  marketFamily,
   spotTop,
   futuresTop,
   marketMode,
@@ -1878,6 +1931,7 @@ function HomePage({
   openAutoTradeLogin,
   openSymbolChart
 }: {
+  marketFamily: MarketFamily;
   spotTop: Ticker[];
   futuresTop: Ticker[];
   marketMode: MarketMode;
@@ -1897,6 +1951,13 @@ function HomePage({
   openSymbolChart: (symbol: string, market: MarketMode) => void;
 }) {
   const [leaderMarketMode, setLeaderMarketMode] = useState<MarketMode>('spot');
+  const isStocks = marketFamily === 'us-stocks';
+  const selectedMarketLabel = isStocks ? 'US Stock Market' : 'Crypto Market';
+  const dataSourceLabel = isStocks ? 'US market workspace' : 'Binance watchlist';
+  const majorMarketTitle = isStocks ? 'American Market Workspace' : 'Major Markets';
+  const searchPlaceholder = isStocks
+    ? 'Search US stock symbols: AAPL, MSFT, NVDA...'
+    : marketMode === 'spot' ? 'Search spot symbols: BTC, ETH, SOL...' : 'Search futures symbols: BTC, ETH, SOL...';
   const fallbackSpotCount = symbols.length;
   const fallbackFuturesCount = futuresSymbols.length;
   const monitoredCount = marketMode === 'spot'
@@ -1929,7 +1990,7 @@ function HomePage({
         <div className="product-identity-lockup home-product-lockup">
           <div>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary"><CompanyAttribution /></p>
+            <p className="home-launchpad-summary">{selectedMarketLabel} <CompanyAttribution /></p>
           </div>
         </div>
         <div className="home-cta-row">
@@ -1960,8 +2021,8 @@ function HomePage({
     <section className="home-search-bridge">
       <div className="home-top-market-head">
         <div>
-          <span className="eyebrow">Binance watchlist</span>
-          <h2>Major Markets</h2>
+          <span className="eyebrow">{dataSourceLabel}</span>
+          <h2>{majorMarketTitle}</h2>
         </div>
         <div className="home-market-switch">
           <button type="button" className={marketMode === 'spot' ? 'active' : ''} onClick={() => setMarketMode('spot')}>Spot</button>
@@ -1983,8 +2044,10 @@ function HomePage({
       </div>
       <div className="search-panel home-search-panel">
         <Search size={20} />
-        <input value={query} onChange={e => setQuery(e.target.value)} placeholder={marketMode === 'spot' ? 'Search spot symbols: BTC, ETH, SOL...' : 'Search futures symbols: BTC, ETH, SOL...'} />
-        <span>{`${monitoredCount.toLocaleString('en-US')} ${marketMode} markets actively scanned • ${availableCount.toLocaleString('en-US')} available on Binance`}</span>
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder={searchPlaceholder} />
+        <span>{isStocks
+          ? `${monitoredCount.toLocaleString('en-US')} cloned market slots active in the US workspace`
+          : `${monitoredCount.toLocaleString('en-US')} ${marketMode} markets actively scanned - ${availableCount.toLocaleString('en-US')} available on Binance`}</span>
       </div>
       {searchResults.length > 0 && <section className="results home-results">
         {searchResults.map(item => <article key={item.symbol} onClick={() => openSymbolChart(item.symbol, marketMode)} role="button" tabIndex={0} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') openSymbolChart(item.symbol, marketMode); }}>
