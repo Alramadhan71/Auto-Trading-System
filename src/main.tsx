@@ -1927,13 +1927,11 @@ function HomePage({
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
         <div className="product-identity-lockup home-product-lockup">
-          <span className="product-mark"><TrendingUp size={32} /></span>
           <div>
             <h1>{productName}</h1>
             <p className="home-launchpad-summary"><CompanyAttribution /></p>
           </div>
         </div>
-        <p className="home-brand-line">Execution-grade trading intelligence with a Muslim Solutions visual system.</p>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />

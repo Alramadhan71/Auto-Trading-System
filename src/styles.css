@@ -25343,3 +25343,223 @@ td,
     padding: 18px !important;
   }
 }
+
+/* Polished home hero lockup and CTA system */
+.page-home .home-launchpad {
+  min-height: clamp(430px, 52vh, 600px) !important;
+  padding: clamp(44px, 6vw, 72px) 24px !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(100%, 760px) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 24px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup {
+  width: min(100%, 720px) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+}
+
+.page-home .home-product-lockup .product-mark,
+.page-home .home-brand-line {
+  display: none !important;
+}
+
+.page-home .home-product-lockup > div {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+}
+
+.page-home .home-product-lockup h1 {
+  max-width: 12ch !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: clamp(48px, 7.4vw, 92px) !important;
+  line-height: .94 !important;
+  font-weight: 950 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.page-home .home-launchpad-summary {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: clamp(16px, 1.7vw, 22px) !important;
+  line-height: 1.25 !important;
+  font-weight: 800 !important;
+}
+
+.page-home .home-launchpad-summary .company-attribution {
+  color: var(--accent-strong) !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: 900 !important;
+}
+
+.page-home .home-cta-row,
+.page-home .home-login-row {
+  width: min(100%, 640px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  margin: 0 auto !important;
+}
+
+.page-home .home-login-row {
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: min(100%, 313px) !important;
+  margin-top: -10px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 78px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  padding: 12px 18px !important;
+  border-radius: 24px !important;
+  font-weight: 900 !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--shadow-lift) 64%, transparent) !important;
+  transition: transform var(--motion-ms), filter var(--motion-ms), border-color var(--motion-ms), box-shadow var(--motion-ms) !important;
+}
+
+.page-home .home-cta-primary {
+  border: 1px solid color-mix(in srgb, var(--accent-strong) 42%, var(--border)) !important;
+  background: var(--ms-primary-gradient) !important;
+  color: var(--ms-primary-text) !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  border: 1px solid var(--border) !important;
+  background: color-mix(in srgb, var(--card-surface) 92%, var(--panel-strong)) !important;
+  color: var(--text) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.04) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 58%, var(--border)) !important;
+  box-shadow: 0 18px 38px var(--shadow-lift) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  flex: 0 0 52px !important;
+  padding: 13px !important;
+  border-radius: 16px !important;
+  border: 1px solid color-mix(in srgb, var(--accent-strong) 28%, var(--border)) !important;
+  background: color-mix(in srgb, var(--card-surface-raised) 88%, transparent) !important;
+  color: currentColor !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-cta-primary svg {
+  background: color-mix(in srgb, var(--ms-primary-text) 10%, transparent) !important;
+  border-color: color-mix(in srgb, var(--ms-primary-text) 18%, transparent) !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span {
+  display: block !important;
+  min-width: 0 !important;
+  text-align: left !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  display: block !important;
+  max-width: 100% !important;
+  color: inherit !important;
+  font-size: clamp(16px, 1.35vw, 18px) !important;
+  line-height: 1.08 !important;
+  font-weight: 950 !important;
+  letter-spacing: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (max-width: 720px) {
+  .page-home {
+    overflow-x: hidden !important;
+  }
+
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 40px 14px !important;
+  }
+
+  .page-home .home-launchpad-copy {
+    max-width: calc(100vw - 40px) !important;
+    gap: 20px !important;
+  }
+
+  .page-home .home-product-lockup h1 {
+    width: min(100%, calc(100vw - 92px)) !important;
+    max-width: 8.5ch !important;
+    font-size: clamp(32px, 9.8vw, 42px) !important;
+    line-height: .98 !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: 100% !important;
+    max-width: min(100%, calc(100vw - 112px), 280px) !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-top: 0 !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    min-height: 68px !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 20px !important;
+  }
+
+  .page-home .home-cta-primary svg,
+  .page-home .home-cta-secondary svg,
+  .page-home .home-cta-login svg {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    flex-basis: 46px !important;
+    padding: 11px !important;
+    border-radius: 14px !important;
+  }
+
+  .page-home .home-cta-primary strong,
+  .page-home .home-cta-secondary strong,
+  .page-home .home-cta-login strong {
+    font-size: 14px !important;
+    line-height: 1.15 !important;
+  }
+}
