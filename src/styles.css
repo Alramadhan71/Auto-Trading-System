@@ -26308,6 +26308,24 @@ td,
   border-color: color-mix(in srgb, var(--warning) 28%, var(--border)) !important;
 }
 
+.saudi-data-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--warning) 42%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--warning) 9%, var(--panel-strong));
+  color: var(--soft-text);
+  font-weight: 850;
+}
+
+.saudi-data-status svg {
+  color: var(--warning);
+  flex: 0 0 auto;
+}
+
 .saudi-pulse-shell,
 .saudi-sector-shell,
 .saudi-scanner-shell {

@@ -437,6 +437,59 @@ type HomeIntelResponse = {
   updatedAt: number;
 };
 
+type SaudiMarketSummary = {
+  index?: string;
+  is_delayed?: boolean;
+  timestamp?: string;
+  index_value?: number;
+  index_change?: number;
+  index_change_percent?: number;
+  total_volume?: number;
+  advancing?: number;
+  declining?: number;
+  unchanged?: number;
+  market_mood?: string;
+};
+
+type SaudiMarketQuote = {
+  symbol: string;
+  name?: string;
+  name_en?: string;
+  price?: number;
+  change?: number;
+  change_percent?: number;
+  volume?: number;
+  value?: number;
+  updated_at?: string;
+  is_delayed?: boolean;
+};
+
+type SaudiMarketSector = {
+  id?: string;
+  name: string;
+  change_percent?: number;
+  avg_change_percent?: number;
+  volume?: number;
+  num_stocks?: number;
+};
+
+type SaudiMarketResponse = {
+  ok: boolean;
+  configured: boolean;
+  source: string;
+  index?: string;
+  isDelayed: boolean;
+  updatedAt: number;
+  message?: string;
+  summary: SaudiMarketSummary | null;
+  nomuSummary: SaudiMarketSummary | null;
+  gainers: SaudiMarketQuote[];
+  losers: SaudiMarketQuote[];
+  volumeLeaders: SaudiMarketQuote[];
+  valueLeaders: SaudiMarketQuote[];
+  sectors: SaudiMarketSector[];
+};
+
 const livePortfolioRefreshEvent = 'live-portfolio-refresh';
 const companyName = 'Muslim Solutions';
 const companyUrl = 'https://www.muslimalramadan71.com/';
@@ -541,6 +594,21 @@ const normalizeDashboardPayload = (payload: Partial<DashboardPayload>): Dashboar
   stats: payload.stats ?? [],
   scanProgress: payload.scanProgress ?? defaultScanProgress
 });
+
+const defaultSaudiMarketPayload: SaudiMarketResponse = {
+  ok: false,
+  configured: false,
+  source: 'SAHMK',
+  isDelayed: true,
+  updatedAt: 0,
+  summary: null,
+  nomuSummary: null,
+  gainers: [],
+  losers: [],
+  volumeLeaders: [],
+  valueLeaders: [],
+  sectors: []
+};
 
 const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): BinanceConnection => ({
   connected: Boolean(value?.connected),
@@ -811,6 +879,7 @@ function App() {
   const [alertsPanelOpen, setAlertsPanelOpen] = useState(false);
   const [dashboard, setDashboard] = useState<DashboardPayload>(defaultDashboardPayload);
   const [homeIntel, setHomeIntel] = useState<HomeIntelResponse | null>(null);
+  const [saudiMarket, setSaudiMarket] = useState<SaudiMarketResponse>(defaultSaudiMarketPayload);
   const [chartSymbol, setChartSymbol] = useState('');
   const [chartMarket, setChartMarket] = useState<MarketMode>('spot');
   const [chartTimeframe, setChartTimeframe] = useState<Timeframe>('15m');
@@ -859,8 +928,9 @@ function App() {
       api<{ signals: Signal[] }>('/api/execution-signals'),
       api<{ notifications: Notification[] }>('/api/notifications'),
       api<DashboardPayload>('/api/dashboard'),
-      api<HomeIntelResponse>('/api/home-intel')
-    ]).then(([s, t, fs, ft, st, sig, execSig, n, d, intel]) => {
+      api<HomeIntelResponse>('/api/home-intel'),
+      api<SaudiMarketResponse>('/api/saudi/market')
+    ]).then(([s, t, fs, ft, st, sig, execSig, n, d, intel, saudi]) => {
       const spotMap = new Map(t.tickers.map(x => [x.symbol, x]));
       const futuresMap = new Map(ft.tickers.map(x => [x.symbol, x]));
       publishLiveTickers('spot', t.tickers);
@@ -886,6 +956,7 @@ function App() {
       setStats(d.stats);
       setDashboard(normalizeDashboardPayload(d));
       setHomeIntel(intel);
+      setSaudiMarket(saudi);
     });
   }, [toastDuration]);
 
@@ -1035,9 +1106,10 @@ function App() {
         api<{ signals: Signal[] }>('/api/execution-signals'),
         api<{ notifications: Notification[] }>('/api/notifications'),
         api<DashboardPayload>('/api/dashboard'),
-        api<HomeIntelResponse>('/api/home-intel')
+        api<HomeIntelResponse>('/api/home-intel'),
+        api<SaudiMarketResponse>('/api/saudi/market')
       ])
-        .then(([spotResponse, futuresResponse, signalResponse, executionSignalResponse, notificationResponse, dashboardResponse, intelResponse]) => {
+        .then(([spotResponse, futuresResponse, signalResponse, executionSignalResponse, notificationResponse, dashboardResponse, intelResponse, saudiResponse]) => {
           publishLiveTickers('spot', spotResponse.tickers);
           publishLiveTickers('futures', futuresResponse.tickers);
           setTickers(new Map(spotResponse.tickers.map(x => [x.symbol, x])));
@@ -1048,6 +1120,7 @@ function App() {
           setDashboard(normalizeDashboardPayload(dashboardResponse));
           setStats(dashboardResponse.stats);
           setHomeIntel(intelResponse);
+          setSaudiMarket(saudiResponse);
         })
         .catch(() => undefined);
     }, 60000);
@@ -1249,6 +1322,7 @@ function App() {
         {page === 'home' && !activeMarketFamily && <MarketSelectPage onSelect={enterMarket} />}
         {page === 'home' && activeMarketFamily && <HomePage
           marketFamily={activeMarketFamily}
+          saudiMarket={saudiMarket}
           spotTop={spotTop}
           futuresTop={futuresTop}
           marketMode={marketMode}
@@ -2316,17 +2390,67 @@ function USStockHomePage({
 function SaudiStockHomePage({
   query,
   setQuery,
-  openAutoTradeLogin
+  openAutoTradeLogin,
+  saudiMarket
 }: {
   query: string;
   setQuery: (value: string) => void;
   openAutoTradeLogin: () => void;
+  saudiMarket: SaudiMarketResponse;
 }) {
+  const hasLiveSaudiData = saudiMarket.ok && saudiMarket.configured;
+  const summaryRows = [
+    {
+      symbol: saudiMarket.summary?.index ?? 'TASI',
+      name: 'Tadawul All Share',
+      value: saudiMarket.summary?.index_value,
+      change: saudiMarket.summary?.index_change_percent,
+      meta: saudiMarket.summary?.market_mood ?? 'Main market benchmark'
+    },
+    {
+      symbol: saudiMarket.nomuSummary?.index ?? 'NOMU',
+      name: 'Parallel Market',
+      value: saudiMarket.nomuSummary?.index_value,
+      change: saudiMarket.nomuSummary?.index_change_percent,
+      meta: saudiMarket.nomuSummary?.market_mood ?? 'Growth companies board'
+    },
+    {
+      symbol: 'ADV',
+      name: 'Advancers',
+      value: saudiMarket.summary?.advancing,
+      change: null,
+      meta: `${saudiMarket.summary?.declining ?? '-'} declining`
+    },
+    {
+      symbol: 'VOL',
+      name: 'TASI Volume',
+      value: saudiMarket.summary?.total_volume,
+      change: null,
+      meta: 'Total traded shares'
+    }
+  ];
+  const livePulse = [
+    { label: 'Data Source', value: hasLiveSaudiData ? saudiMarket.source : 'Not Connected', detail: saudiMarket.message ?? 'SAHMK market data adapter', tone: hasLiveSaudiData ? 'good' : 'warning' },
+    { label: 'Freshness', value: hasLiveSaudiData ? saudiMarket.isDelayed ? 'Delayed' : 'Real-time' : 'API Key Required', detail: hasLiveSaudiData ? 'Reported by the data provider' : 'Set SAHMK_API_KEY on the server', tone: hasLiveSaudiData && !saudiMarket.isDelayed ? 'good' : 'warning' },
+    { label: 'Breadth', value: hasLiveSaudiData ? `${saudiMarket.summary?.advancing ?? 0}/${saudiMarket.summary?.declining ?? 0}` : '-', detail: 'Advancers vs decliners on TASI', tone: 'good' },
+    { label: 'Updated', value: hasLiveSaudiData ? entryTime(saudiMarket.updatedAt) : '-', detail: 'Server-cached market snapshot', tone: '' }
+  ];
+  const sectorRows = hasLiveSaudiData && saudiMarket.sectors.length > 0
+    ? saudiMarket.sectors.slice(0, 6).map(sector => ({
+      name: sector.name,
+      ticker: sector.id ?? sector.name,
+      change: sector.change_percent ?? sector.avg_change_percent ?? 0,
+      strength: Math.min(100, Math.max(8, 50 + ((sector.change_percent ?? sector.avg_change_percent ?? 0) * 12)))
+    }))
+    : [];
+  const leaderRows = hasLiveSaudiData && saudiMarket.valueLeaders.length > 0
+    ? saudiMarket.valueLeaders.slice(0, 6)
+    : [];
   const stockResults = useMemo(() => {
     const needle = query.trim().toUpperCase();
     if (!needle) return [];
-    return saudiBlueChips.filter(item => item.symbol.includes(needle) || item.name.toUpperCase().includes(needle)).slice(0, 6);
-  }, [query]);
+    return leaderRows.filter(item => item.symbol.includes(needle) || (item.name_en ?? item.name ?? '').toUpperCase().includes(needle)).slice(0, 6);
+  }, [leaderRows, query]);
 
   return <>
     <section className="home-launchpad saudi-stock-hero">
@@ -2365,18 +2489,22 @@ function SaudiStockHomePage({
         </div>
         <div className="home-news-badge">
           <Landmark size={16} />
-          <span>Live-ready workspace</span>
+          <span>{hasLiveSaudiData ? saudiMarket.isDelayed ? 'Delayed feed' : 'Real-time feed' : 'Connect SAHMK'}</span>
         </div>
       </div>
+      {!hasLiveSaudiData && <div className="saudi-data-status">
+        <AlertCircle size={18} />
+        <span>{saudiMarket.message ?? 'Set SAHMK_API_KEY on the server to load Saudi market data.'}</span>
+      </div>}
       <div className="saudi-index-grid">
-        {saudiMarketIndexes.map(item => <article key={item.symbol} className="saudi-index-card">
+        {summaryRows.map(item => <article key={item.symbol} className="saudi-index-card">
           <div>
             <span>{item.symbol}</span>
             <small>{item.name}</small>
           </div>
-          <strong>{item.value}</strong>
+          <strong>{typeof item.value === 'number' ? fmt(item.value) : '-'}</strong>
           <footer>
-            <b className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</b>
+            <b className={(item.change ?? 0) >= 0 ? 'good' : 'bad'}>{typeof item.change === 'number' ? formatSignedPct(item.change) : hasLiveSaudiData ? 'LIVE' : '-'}</b>
             <small>{item.meta}</small>
           </footer>
         </article>)}
@@ -2389,9 +2517,9 @@ function SaudiStockHomePage({
       {stockResults.length > 0 && <section className="results home-results">
         {stockResults.map(item => <article key={item.symbol}>
           <strong>{item.symbol}</strong>
-          <span>{item.name}</span>
-          <b>{item.price}</b>
-          <small className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</small>
+          <span>{item.name_en ?? item.name ?? 'Saudi listed company'}</span>
+          <b>{typeof item.price === 'number' ? `SAR ${fmt(item.price)}` : '-'}</b>
+          <small className={(item.change_percent ?? 0) >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change_percent ?? 0)}</small>
         </article>)}
       </section>}
     </section>
@@ -2404,7 +2532,7 @@ function SaudiStockHomePage({
         </div>
       </div>
       <div className="home-signal-grid">
-        {saudiMarketPulse.map(item => <article key={item.label} className="home-signal-card saudi-pulse-card">
+        {livePulse.map(item => <article key={item.label} className="home-signal-card saudi-pulse-card">
           <span>{item.label}</span>
           <strong className={item.tone}>{item.value}</strong>
           <small>{item.detail}</small>
@@ -2424,7 +2552,7 @@ function SaudiStockHomePage({
         </div>
       </div>
       <div className="saudi-sector-grid">
-        {saudiSectors.map(sector => <article key={sector.ticker} className="saudi-sector-card">
+        {(sectorRows.length > 0 ? sectorRows : saudiSectors).map(sector => <article key={sector.ticker} className="saudi-sector-card">
           <div>
             <span>{sector.ticker}</span>
             <strong>{sector.name}</strong>
@@ -2479,15 +2607,15 @@ function SaudiStockHomePage({
         </div>
       </div>
       <div className="home-marketcap-list">
-        {saudiBlueChips.map(asset => <div key={asset.symbol} className="home-marketcap-row">
-          <div className="home-marketcap-rank">#{asset.rank}</div>
+        {(leaderRows.length > 0 ? leaderRows : saudiBlueChips).map((asset, index) => <div key={asset.symbol} className="home-marketcap-row">
+          <div className="home-marketcap-rank">#{index + 1}</div>
           <div className="home-marketcap-copy">
             <strong>{asset.symbol}</strong>
-            <small>{asset.name}</small>
+            <small>{'name_en' in asset ? asset.name_en ?? asset.name ?? 'Saudi listed company' : asset.name}</small>
           </div>
           <div className="home-marketcap-values">
-            <b>{asset.price}</b>
-            <small>{asset.cap} | <span className={asset.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(asset.change)}</span></small>
+            <b>{typeof asset.price === 'number' ? `SAR ${fmt(asset.price)}` : asset.price}</b>
+            <small>{'value' in asset && typeof asset.value === 'number' ? `Value SAR ${fmtCompactMoney(asset.value)}` : 'cap' in asset ? asset.cap : 'Value -'} | <span className={(('change_percent' in asset ? asset.change_percent : asset.change) ?? 0) >= 0 ? 'good' : 'bad'}>{formatSignedPct(('change_percent' in asset ? asset.change_percent : asset.change) ?? 0)}</span></small>
           </div>
         </div>)}
       </div>
@@ -2520,6 +2648,7 @@ function SaudiStockHomePage({
 
 function HomePage({
   marketFamily,
+  saudiMarket,
   spotTop,
   futuresTop,
   marketMode,
@@ -2539,6 +2668,7 @@ function HomePage({
   openSymbolChart
 }: {
   marketFamily: MarketFamily;
+  saudiMarket: SaudiMarketResponse;
   spotTop: Ticker[];
   futuresTop: Ticker[];
   marketMode: MarketMode;
@@ -2605,6 +2735,7 @@ function HomePage({
       query={query}
       setQuery={setQuery}
       openAutoTradeLogin={openAutoTradeLogin}
+      saudiMarket={saudiMarket}
     />;
   }
 

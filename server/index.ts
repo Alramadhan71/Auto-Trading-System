@@ -365,12 +365,59 @@ type HomeNewsRow = {
   currencies: string[];
 };
 
+type SaudiMarketSummary = {
+  index?: string;
+  is_delayed?: boolean;
+  timestamp?: string;
+  index_value?: number;
+  index_change?: number;
+  index_change_percent?: number;
+  total_volume?: number;
+  advancing?: number;
+  declining?: number;
+  unchanged?: number;
+  market_mood?: string;
+};
+
+type SaudiQuoteRow = {
+  symbol: string;
+  name?: string;
+  name_en?: string;
+  price?: number;
+  change?: number;
+  change_percent?: number;
+  volume?: number;
+  value?: number;
+  updated_at?: string;
+  is_delayed?: boolean;
+};
+
+type SaudiSectorRow = {
+  id?: string;
+  name: string;
+  change_percent?: number;
+  avg_change_percent?: number;
+  volume?: number;
+  num_stocks?: number;
+};
+
+type SaudiCompanyRow = {
+  symbol: string;
+  name_ar?: string;
+  name_en?: string;
+  market?: string;
+  status?: string;
+};
+
 const BINANCE_REST = 'https://api.binance.com';
 const BINANCE_FUTURES_REST = 'https://fapi.binance.com';
 const BINANCE_WS = 'wss://stream.binance.com:9443/ws/!ticker@arr';
 const BINANCE_FUTURES_WS = 'wss://fstream.binance.com/ws/!ticker@arr';
 const BINANCE_SPOT_TRADE_WS = 'wss://stream.binance.com:9443/stream?streams=';
 const BINANCE_FUTURES_TRADE_WS = 'wss://fstream.binance.com/stream?streams=';
+const SAHMK_API_BASE = (process.env.SAHMK_API_BASE ?? 'https://app.sahmk.sa/api/v1').replace(/\/+$/, '');
+const SAHMK_API_KEY = (process.env.SAHMK_API_KEY ?? '').trim();
+const SAHMK_CACHE_MS = Math.max(5_000, Number(process.env.SAHMK_CACHE_MS ?? 60_000));
 const PORT = Number(process.env.PORT ?? 8787);
 const ROOT_DIR = process.cwd();
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
@@ -1362,6 +1409,63 @@ async function fetchTextDirect(url: string, init?: RequestInit) {
   const response = await fetch(url, init);
   if (!response.ok) throw new Error(`Request failed: ${response.status}`);
   return response.text();
+}
+
+const sahmkCache = new Map<string, { createdAt: number; value: unknown }>();
+
+function normalizeSaudiIndex(value: unknown) {
+  const index = String(value ?? 'TASI').trim().toUpperCase();
+  return index === 'NOMU' ? 'NOMU' : 'TASI';
+}
+
+async function fetchSahmk<T>(route: string, query: Record<string, string | number | undefined> = {}, cacheMs = SAHMK_CACHE_MS) {
+  if (!SAHMK_API_KEY) {
+    throw new Error('SAHMK_API_KEY is not configured.');
+  }
+  const params = new URLSearchParams();
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined && value !== '') params.set(key, String(value));
+  });
+  const cacheKey = `${route}?${params.toString()}`;
+  const cached = sahmkCache.get(cacheKey);
+  if (cached && Date.now() - cached.createdAt < cacheMs) return cached.value as T;
+  const url = `${SAHMK_API_BASE}${route}${params.size ? `?${params.toString()}` : ''}`;
+  const response = await fetch(url, { headers: { 'X-API-Key': SAHMK_API_KEY } });
+  const payload = await response.json().catch(() => null) as unknown;
+  if (!response.ok) {
+    const message = typeof payload === 'object' && payload && 'error' in payload
+      ? JSON.stringify((payload as { error?: unknown }).error)
+      : `SAHMK request failed (${response.status})`;
+    throw new Error(message);
+  }
+  sahmkCache.set(cacheKey, { createdAt: Date.now(), value: payload });
+  return payload as T;
+}
+
+function latestSaudiTimestamp(...groups: unknown[][]) {
+  const times = groups
+    .flat()
+    .map(item => typeof item === 'object' && item && 'updated_at' in item ? Date.parse(String((item as { updated_at?: string }).updated_at ?? '')) : NaN)
+    .filter(Number.isFinite);
+  return times.length ? Math.max(...times) : Date.now();
+}
+
+function sahmkConfiguredPayload(message = 'SAHMK_API_KEY is not configured.') {
+  return {
+    ok: false,
+    configured: false,
+    source: 'SAHMK',
+    isDelayed: true,
+    updatedAt: Date.now(),
+    message,
+    summary: null,
+    nomuSummary: null,
+    gainers: [],
+    losers: [],
+    volumeLeaders: [],
+    valueLeaders: [],
+    sectors: []
+  };
 }
 
 async function signedBinanceRequest<T>(baseUrl: string, route: string, apiKey: string, secretKey: string, query: Record<string, string> = {}) {
@@ -8119,6 +8223,107 @@ app.get('/api/home-intel', async (_req, res) => {
     });
   } catch (error) {
     res.status(500).json({ ok: false, message: error instanceof Error ? error.message : 'Unable to build home intel feed.' });
+  }
+});
+app.get('/api/saudi/market', async (req, res) => {
+  if (!SAHMK_API_KEY) {
+    res.json(sahmkConfiguredPayload());
+    return;
+  }
+  const index = normalizeSaudiIndex(req.query.index);
+  const limit = Math.min(20, Math.max(3, Number(req.query.limit ?? 8) || 8));
+  try {
+    const [
+      summary,
+      nomuSummary,
+      gainers,
+      losers,
+      volume,
+      value,
+      sectors
+    ] = await Promise.all([
+      fetchSahmk<SaudiMarketSummary>('/market/summary/', { index }),
+      fetchSahmk<SaudiMarketSummary>('/market/summary/', { index: 'NOMU' }),
+      fetchSahmk<{ gainers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/gainers/', { index, limit }),
+      fetchSahmk<{ losers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/losers/', { index, limit }),
+      fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/volume/', { index, limit }),
+      fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/value/', { index, limit }),
+      fetchSahmk<{ sectors?: SaudiSectorRow[]; is_delayed?: boolean; count?: number }>('/market/sectors/', { index })
+    ]);
+    const gainersRows = gainers.gainers ?? [];
+    const losersRows = losers.losers ?? [];
+    const volumeRows = volume.stocks ?? [];
+    const valueRows = value.stocks ?? [];
+    const sectorRows = sectors.sectors ?? [];
+    const isDelayed = Boolean(
+      summary.is_delayed
+      || nomuSummary.is_delayed
+      || gainers.is_delayed
+      || losers.is_delayed
+      || volume.is_delayed
+      || value.is_delayed
+      || sectors.is_delayed
+      || gainersRows.some(row => row.is_delayed)
+      || losersRows.some(row => row.is_delayed)
+      || volumeRows.some(row => row.is_delayed)
+      || valueRows.some(row => row.is_delayed)
+    );
+    res.json({
+      ok: true,
+      configured: true,
+      source: 'SAHMK',
+      index,
+      isDelayed,
+      updatedAt: latestSaudiTimestamp(gainersRows, losersRows, volumeRows, valueRows),
+      summary,
+      nomuSummary,
+      gainers: gainersRows,
+      losers: losersRows,
+      volumeLeaders: volumeRows,
+      valueLeaders: valueRows,
+      sectors: sectorRows
+    });
+  } catch (error) {
+    res.status(502).json({
+      ...sahmkConfiguredPayload(error instanceof Error ? error.message : 'Unable to fetch Saudi market data.'),
+      configured: true
+    });
+  }
+});
+app.get('/api/saudi/quote/:symbol', async (req, res) => {
+  if (!SAHMK_API_KEY) {
+    res.status(503).json({ ok: false, configured: false, message: 'SAHMK_API_KEY is not configured.' });
+    return;
+  }
+  const symbol = String(req.params.symbol ?? '').trim();
+  if (!/^[0-9A-Z.]{2,12}$/i.test(symbol)) {
+    res.status(400).json({ ok: false, configured: true, message: 'Invalid Saudi symbol.' });
+    return;
+  }
+  try {
+    const quote = await fetchSahmk<SaudiQuoteRow>(`/quote/${encodeURIComponent(symbol)}/`);
+    res.json({ ok: true, configured: true, source: 'SAHMK', quote });
+  } catch (error) {
+    res.status(502).json({ ok: false, configured: true, message: error instanceof Error ? error.message : 'Unable to fetch Saudi quote.' });
+  }
+});
+app.get('/api/saudi/companies', async (req, res) => {
+  if (!SAHMK_API_KEY) {
+    res.status(503).json({ ok: false, configured: false, message: 'SAHMK_API_KEY is not configured.', results: [] });
+    return;
+  }
+  const market = normalizeSaudiIndex(req.query.market);
+  const search = String(req.query.search ?? '').trim().slice(0, 80);
+  const limit = Math.min(100, Math.max(1, Number(req.query.limit ?? 20) || 20));
+  try {
+    const payload = await fetchSahmk<{ results?: SaudiCompanyRow[]; count?: number; total?: number; limit?: number; offset?: number }>('/companies/', {
+      market,
+      search,
+      limit
+    }, Math.max(SAHMK_CACHE_MS, 5 * 60_000));
+    res.json({ ok: true, configured: true, source: 'SAHMK', ...payload, results: payload.results ?? [] });
+  } catch (error) {
+    res.status(502).json({ ok: false, configured: true, message: error instanceof Error ? error.message : 'Unable to fetch Saudi companies.', results: [] });
   }
 });
 app.get('/api/telegram/subscribers', requireAdmin, (_req, res) => {
