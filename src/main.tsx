@@ -2446,6 +2446,38 @@ function SaudiStockHomePage({
   const leaderRows = hasLiveSaudiData && saudiMarket.valueLeaders.length > 0
     ? saudiMarket.valueLeaders.slice(0, 6)
     : [];
+  const liveScannerGroups = [
+    {
+      title: 'Top Gainers',
+      icon: <ArrowUpRight size={18} />,
+      rows: saudiMarket.gainers.slice(0, 4).map(row => ({
+        symbol: row.symbol,
+        name: row.name_en ?? row.name ?? 'Saudi listed company',
+        metric: formatSignedPct(row.change_percent ?? 0),
+        note: typeof row.price === 'number' ? `SAR ${fmt(row.price)}` : 'Latest quote'
+      }))
+    },
+    {
+      title: 'Top Losers',
+      icon: <ArrowDownRight size={18} />,
+      rows: saudiMarket.losers.slice(0, 4).map(row => ({
+        symbol: row.symbol,
+        name: row.name_en ?? row.name ?? 'Saudi listed company',
+        metric: formatSignedPct(row.change_percent ?? 0),
+        note: typeof row.price === 'number' ? `SAR ${fmt(row.price)}` : 'Latest quote'
+      }))
+    },
+    {
+      title: 'Volume Leaders',
+      icon: <Activity size={18} />,
+      rows: saudiMarket.volumeLeaders.slice(0, 4).map(row => ({
+        symbol: row.symbol,
+        name: row.name_en ?? row.name ?? 'Saudi listed company',
+        metric: typeof row.volume === 'number' ? fmtCompactMoney(row.volume) : '-',
+        note: typeof row.value === 'number' ? `Value SAR ${fmtCompactMoney(row.value)}` : 'Trading volume'
+      }))
+    }
+  ].filter(group => group.rows.length > 0);
   const stockResults = useMemo(() => {
     const needle = query.trim().toUpperCase();
     if (!needle) return [];
@@ -2509,11 +2541,11 @@ function SaudiStockHomePage({
           </footer>
         </article>)}
       </div>
-      <div className="search-panel home-search-panel saudi-stock-search">
+      {hasLiveSaudiData && <div className="search-panel home-search-panel saudi-stock-search">
         <Search size={20} />
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search Saudi stocks: 1120, 2222, 7010..." />
-        <span>Tadawul workspace | TASI, Nomu, sectors, scanners, and Saudi equity signals</span>
-      </div>
+        <span>Tadawul workspace | live market overview, sectors, movers, and value leaders</span>
+      </div>}
       {stockResults.length > 0 && <section className="results home-results">
         {stockResults.map(item => <article key={item.symbol}>
           <strong>{item.symbol}</strong>
@@ -2540,7 +2572,7 @@ function SaudiStockHomePage({
       </div>
     </section>
 
-    <section className="saudi-sector-shell">
+    {hasLiveSaudiData && sectorRows.length > 0 && <section className="saudi-sector-shell">
       <div className="home-live-board-head">
         <div>
           <span className="eyebrow">Tadawul sector rotation</span>
@@ -2552,7 +2584,7 @@ function SaudiStockHomePage({
         </div>
       </div>
       <div className="saudi-sector-grid">
-        {(sectorRows.length > 0 ? sectorRows : saudiSectors).map(sector => <article key={sector.ticker} className="saudi-sector-card">
+        {sectorRows.map(sector => <article key={sector.ticker} className="saudi-sector-card">
           <div>
             <span>{sector.ticker}</span>
             <strong>{sector.name}</strong>
@@ -2561,17 +2593,17 @@ function SaudiStockHomePage({
           <div className="saudi-sector-meter"><i style={{ width: `${sector.strength}%` }} /></div>
         </article>)}
       </div>
-    </section>
+    </section>}
 
-    <section className="saudi-scanner-shell">
+    {hasLiveSaudiData && liveScannerGroups.length > 0 && <section className="saudi-scanner-shell">
       <div className="home-live-board-head">
         <div>
-          <span className="eyebrow">Opportunity scanner</span>
-          <h2>Saudi Stock Signals</h2>
+          <span className="eyebrow">Live market movers</span>
+          <h2>Saudi Market Lists</h2>
         </div>
       </div>
       <div className="saudi-scanner-grid">
-        {saudiScannerGroups.map(group => <article key={group.title} className="home-leader-card saudi-scanner-card">
+        {liveScannerGroups.map(group => <article key={group.title} className="home-leader-card saudi-scanner-card">
           <div className="home-intel-head">
             <div>
               <span className="eyebrow">{group.title}</span>
@@ -2593,9 +2625,9 @@ function SaudiStockHomePage({
           </div>
         </article>)}
       </div>
-    </section>
+    </section>}
 
-    <section className="home-marketcap-shell saudi-bluechip-shell">
+    {hasLiveSaudiData && leaderRows.length > 0 && <section className="home-marketcap-shell saudi-bluechip-shell">
       <div className="home-live-board-head">
         <div>
           <span className="eyebrow">Saudi blue chips</span>
@@ -2607,42 +2639,19 @@ function SaudiStockHomePage({
         </div>
       </div>
       <div className="home-marketcap-list">
-        {(leaderRows.length > 0 ? leaderRows : saudiBlueChips).map((asset, index) => <div key={asset.symbol} className="home-marketcap-row">
+        {leaderRows.map((asset, index) => <div key={asset.symbol} className="home-marketcap-row">
           <div className="home-marketcap-rank">#{index + 1}</div>
           <div className="home-marketcap-copy">
             <strong>{asset.symbol}</strong>
-            <small>{'name_en' in asset ? asset.name_en ?? asset.name ?? 'Saudi listed company' : asset.name}</small>
+            <small>{asset.name_en ?? asset.name ?? 'Saudi listed company'}</small>
           </div>
           <div className="home-marketcap-values">
-            <b>{typeof asset.price === 'number' ? `SAR ${fmt(asset.price)}` : asset.price}</b>
-            <small>{'value' in asset && typeof asset.value === 'number' ? `Value SAR ${fmtCompactMoney(asset.value)}` : 'cap' in asset ? asset.cap : 'Value -'} | <span className={(('change_percent' in asset ? asset.change_percent : asset.change) ?? 0) >= 0 ? 'good' : 'bad'}>{formatSignedPct(('change_percent' in asset ? asset.change_percent : asset.change) ?? 0)}</span></small>
+            <b>{typeof asset.price === 'number' ? `SAR ${fmt(asset.price)}` : '-'}</b>
+            <small>{typeof asset.value === 'number' ? `Value SAR ${fmtCompactMoney(asset.value)}` : 'Value -'} | <span className={(asset.change_percent ?? 0) >= 0 ? 'good' : 'bad'}>{formatSignedPct(asset.change_percent ?? 0)}</span></small>
           </div>
         </div>)}
       </div>
-    </section>
-
-    <section className="home-news-shell saudi-briefing-shell">
-      <div className="home-live-board-head">
-        <div>
-          <span className="eyebrow">Saudi market briefing</span>
-          <h2>News &amp; Sentiment</h2>
-        </div>
-        <div className="home-news-badge">
-          <Newspaper size={16} />
-          <span>Tadawul only</span>
-        </div>
-      </div>
-      <div className="home-news-grid">
-        {saudiBriefingCards.map(item => <article key={item.title} className="home-news-card saudi-briefing-card">
-          <div className="home-news-top">
-            <span>{item.source}</span>
-            <small>{item.tag}</small>
-          </div>
-          <strong>{item.title}</strong>
-          <div className="home-news-tags"><b>SAUDI STOCKS</b><b>{item.tag.toUpperCase()}</b></div>
-        </article>)}
-      </div>
-    </section>
+    </section>}
   </>;
 }
 
