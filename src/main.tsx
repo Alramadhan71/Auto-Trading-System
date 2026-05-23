@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -274,7 +274,7 @@ type TelegramSubscriber = {
   linked: boolean;
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
-type MarketFamily = 'crypto' | 'us-stocks';
+type MarketFamily = 'crypto' | 'us-stocks' | 'saudi-stocks';
 type Theme = 'light' | 'dark' | 'black';
 type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
@@ -1139,7 +1139,16 @@ function App() {
   const deferredTickers = useDeferredValue(tickers);
   const deferredFuturesTickers = useDeferredValue(futuresTickers);
   const isAuthenticated = Boolean(appSessionUser);
-  const marketLabel = activeMarketFamily === 'us-stocks' ? 'US Stock Market' : 'Crypto Market';
+  const marketLabel = activeMarketFamily === 'us-stocks'
+    ? 'US Stock Market'
+    : activeMarketFamily === 'saudi-stocks'
+      ? 'Saudi Stock Market'
+      : 'Crypto Market';
+  const marketBrandIcon = activeMarketFamily === 'us-stocks'
+    ? <BarChart3 size={20} />
+    : activeMarketFamily === 'saudi-stocks'
+      ? <Landmark size={20} />
+      : <TrendingUp size={20} />;
 
   const enterMarket = (marketFamily: MarketFamily) => {
     setActiveMarketFamily(marketFamily);
@@ -1201,7 +1210,7 @@ function App() {
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <div className="shell-brand" aria-label={`${productName} by ${companyName}`}>
-          <span className="shell-brand-mark">{activeMarketFamily === 'us-stocks' ? <BarChart3 size={20} /> : <TrendingUp size={20} />}</span>
+          <span className="shell-brand-mark">{marketBrandIcon}</span>
           <div className="shell-brand-copy">
             <strong>{isMarketPicker ? productName : `${marketLabel}`}</strong>
             <small><CompanyAttribution /></small>
@@ -1219,7 +1228,7 @@ function App() {
           </button>}
           {!authEntryPage && !isMarketPicker && <button type="button" className="home-header-cta market-return-cta" onClick={() => { setActiveMarketFamily(null); setPage('home'); }}>
             <Globe2 size={16} />
-            <span>Markets</span>
+            <span>Market Options</span>
           </button>}
           {page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
             <Bot size={16} />
@@ -1912,6 +1921,15 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         </span>
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
+      <button type="button" className="market-select-card saudi" onClick={() => onSelect('saudi-stocks')}>
+        <span className="market-select-icon"><Landmark size={30} /></span>
+        <span className="market-select-copy">
+          <small>Tadawul Workspace</small>
+          <strong>Saudi Stock Market</strong>
+          <span>TASI, Nomu, sectors, and Saudi equities signals</span>
+        </span>
+        <span className="market-select-action"><ArrowUpRight size={20} /></span>
+      </button>
     </div>
   </section>;
 }
@@ -1996,6 +2014,75 @@ const usBriefingCards = [
   { source: 'Strategy Pulse', tag: 'Breadth', title: 'Participation is strongest in technology, communication services, and financials.' },
   { source: 'Risk Monitor', tag: 'Volatility', title: 'VIX remains below stress levels while index trend structure stays constructive.' },
   { source: 'Earnings Radar', tag: 'Events', title: 'AI infrastructure, cloud margins, and consumer demand are the key earnings themes.' }
+];
+
+const saudiMarketIndexes = [
+  { symbol: 'TASI', name: 'Tadawul All Share', value: '12,184.42', change: 0.31, meta: 'Main market benchmark' },
+  { symbol: 'NOMU', name: 'Parallel Market', value: '26,908.15', change: 0.74, meta: 'Growth companies board' },
+  { symbol: 'MT30', name: 'Saudi Blue Chips', value: '1,584.22', change: 0.28, meta: 'Large-cap liquidity' },
+  { symbol: 'REIT', name: 'Saudi REITs', value: '4,912.80', change: -0.12, meta: 'Yield-sensitive names' }
+];
+
+const saudiMarketPulse = [
+  { label: 'Market Regime', value: 'Constructive', detail: 'TASI holding above short-term trend support', tone: 'good' },
+  { label: 'Liquidity', value: 'Selective', detail: 'Turnover concentrated in banks and energy leaders', tone: 'warning' },
+  { label: 'Breadth', value: '58%', detail: 'Advancers leading decliners in active names', tone: 'good' },
+  { label: 'Risk Watch', value: 'Oil / Rates', detail: 'Energy prices and funding costs remain key drivers', tone: '' }
+];
+
+const saudiSectors = [
+  { name: 'Banks', ticker: 'TBNI', change: 0.66, strength: 86 },
+  { name: 'Energy', ticker: 'TENI', change: 0.34, strength: 74 },
+  { name: 'Materials', ticker: 'TMTI', change: -0.18, strength: 49 },
+  { name: 'Telecom', ticker: 'TTEL', change: 0.42, strength: 68 },
+  { name: 'Healthcare', ticker: 'THEA', change: 0.21, strength: 62 },
+  { name: 'REITs', ticker: 'TRIT', change: -0.28, strength: 38 }
+];
+
+const saudiScannerGroups = [
+  {
+    title: 'TASI Leaders',
+    icon: <ArrowUpRight size={18} />,
+    rows: [
+      { symbol: '1120', name: 'Al Rajhi Bank', metric: '+0.9%', note: 'Banking leadership and high liquidity' },
+      { symbol: '2222', name: 'Saudi Aramco', metric: '+0.4%', note: 'Energy anchor holding support' },
+      { symbol: '7010', name: 'stc', metric: '+0.7%', note: 'Telecom relative strength' }
+    ]
+  },
+  {
+    title: 'Volume Focus',
+    icon: <Activity size={18} />,
+    rows: [
+      { symbol: '2010', name: 'SABIC', metric: '1.5x', note: 'Materials flow above average' },
+      { symbol: '1180', name: 'SNB', metric: '1.3x', note: 'Financial accumulation watch' },
+      { symbol: '1211', name: 'Maaden', metric: '1.4x', note: 'Commodity-linked momentum' }
+    ]
+  },
+  {
+    title: 'Swing Setups',
+    icon: <Target size={18} />,
+    rows: [
+      { symbol: '4002', name: 'Mouwasat', metric: '82 RS', note: 'Healthcare trend continuation' },
+      { symbol: '7203', name: 'Elm', metric: '88 RS', note: 'Digital services strength' },
+      { symbol: '2082', name: 'ACWA Power', metric: '79 RS', note: 'Energy transition demand' }
+    ]
+  }
+];
+
+const saudiBlueChips = [
+  { rank: 1, symbol: '1120', name: 'Al Rajhi Bank', price: 'SAR 88.40', cap: 'SAR 354B', change: 0.92 },
+  { rank: 2, symbol: '2222', name: 'Saudi Aramco', price: 'SAR 29.10', cap: 'SAR 7.04T', change: 0.38 },
+  { rank: 3, symbol: '1180', name: 'Saudi National Bank', price: 'SAR 38.75', cap: 'SAR 231B', change: 0.54 },
+  { rank: 4, symbol: '2010', name: 'SABIC', price: 'SAR 76.20', cap: 'SAR 229B', change: -0.18 },
+  { rank: 5, symbol: '7010', name: 'stc', price: 'SAR 42.85', cap: 'SAR 214B', change: 0.71 },
+  { rank: 6, symbol: '7203', name: 'Elm', price: 'SAR 905.00', cap: 'SAR 72B', change: 1.12 }
+];
+
+const saudiBriefingCards = [
+  { source: 'Tadawul Desk', tag: 'TASI', title: 'Banking and telecom leadership keeps the Saudi market structure constructive.' },
+  { source: 'Sector Pulse', tag: 'Rotation', title: 'Liquidity is rotating between banks, energy, healthcare, and digital services.' },
+  { source: 'Risk Monitor', tag: 'Macro', title: 'Oil price direction and rate expectations remain the main external drivers.' },
+  { source: 'Nomu Radar', tag: 'Growth', title: 'Parallel market names need tighter risk controls because liquidity is thinner.' }
 ];
 
 function USStockHomePage({
@@ -2226,6 +2313,211 @@ function USStockHomePage({
   </>;
 }
 
+function SaudiStockHomePage({
+  query,
+  setQuery,
+  openAutoTradeLogin
+}: {
+  query: string;
+  setQuery: (value: string) => void;
+  openAutoTradeLogin: () => void;
+}) {
+  const stockResults = useMemo(() => {
+    const needle = query.trim().toUpperCase();
+    if (!needle) return [];
+    return saudiBlueChips.filter(item => item.symbol.includes(needle) || item.name.toUpperCase().includes(needle)).slice(0, 6);
+  }, [query]);
+
+  return <>
+    <section className="home-launchpad saudi-stock-hero">
+      <div className="home-launchpad-copy">
+        <div className="product-identity-lockup home-product-lockup">
+          <div>
+            <span className="saudi-hero-kicker">Saudi Market Command Center</span>
+            <h1>{productName}</h1>
+            <p className="home-launchpad-summary">Saudi Stock Market <CompanyAttribution /></p>
+          </div>
+        </div>
+        <div className="home-cta-row">
+          <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
+            <Bot size={22} />
+            <span><strong>Open Tadawul Automation</strong></span>
+          </button>
+          <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
+            <Bell size={22} />
+            <span><strong>Join Saudi Market Alerts</strong></span>
+          </a>
+        </div>
+        <div className="home-login-row">
+          <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
+            <LogIn size={20} />
+            <span><strong>Log In to Your Account</strong></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section className="saudi-market-overview">
+      <div className="home-top-market-head">
+        <div>
+          <span className="eyebrow">Tadawul intelligence</span>
+          <h2>Saudi Market Overview</h2>
+        </div>
+        <div className="home-news-badge">
+          <Landmark size={16} />
+          <span>Live-ready workspace</span>
+        </div>
+      </div>
+      <div className="saudi-index-grid">
+        {saudiMarketIndexes.map(item => <article key={item.symbol} className="saudi-index-card">
+          <div>
+            <span>{item.symbol}</span>
+            <small>{item.name}</small>
+          </div>
+          <strong>{item.value}</strong>
+          <footer>
+            <b className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</b>
+            <small>{item.meta}</small>
+          </footer>
+        </article>)}
+      </div>
+      <div className="search-panel home-search-panel saudi-stock-search">
+        <Search size={20} />
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search Saudi stocks: 1120, 2222, 7010..." />
+        <span>Tadawul workspace | TASI, Nomu, sectors, scanners, and Saudi equity signals</span>
+      </div>
+      {stockResults.length > 0 && <section className="results home-results">
+        {stockResults.map(item => <article key={item.symbol}>
+          <strong>{item.symbol}</strong>
+          <span>{item.name}</span>
+          <b>{item.price}</b>
+          <small className={item.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(item.change)}</small>
+        </article>)}
+      </section>}
+    </section>
+
+    <section className="home-signal-shell saudi-pulse-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Local market model</span>
+          <h2>Saudi Market Pulse</h2>
+        </div>
+      </div>
+      <div className="home-signal-grid">
+        {saudiMarketPulse.map(item => <article key={item.label} className="home-signal-card saudi-pulse-card">
+          <span>{item.label}</span>
+          <strong className={item.tone}>{item.value}</strong>
+          <small>{item.detail}</small>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="saudi-sector-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Tadawul sector rotation</span>
+          <h2>Saudi Sector Heatmap</h2>
+        </div>
+        <div className="home-news-badge">
+          <Activity size={16} />
+          <span>Relative strength</span>
+        </div>
+      </div>
+      <div className="saudi-sector-grid">
+        {saudiSectors.map(sector => <article key={sector.ticker} className="saudi-sector-card">
+          <div>
+            <span>{sector.ticker}</span>
+            <strong>{sector.name}</strong>
+          </div>
+          <b className={sector.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(sector.change)}</b>
+          <div className="saudi-sector-meter"><i style={{ width: `${sector.strength}%` }} /></div>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="saudi-scanner-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Opportunity scanner</span>
+          <h2>Saudi Stock Signals</h2>
+        </div>
+      </div>
+      <div className="saudi-scanner-grid">
+        {saudiScannerGroups.map(group => <article key={group.title} className="home-leader-card saudi-scanner-card">
+          <div className="home-intel-head">
+            <div>
+              <span className="eyebrow">{group.title}</span>
+              <h3>{group.title}</h3>
+            </div>
+            {group.icon}
+          </div>
+          <div className="home-leader-list">
+            {group.rows.map(row => <div key={`${group.title}-${row.symbol}`} className="home-leader-row saudi-scanner-row">
+              <div>
+                <strong>{row.symbol}</strong>
+                <small>{row.name}</small>
+              </div>
+              <div className="home-leader-values">
+                <b>{row.metric}</b>
+                <small>{row.note}</small>
+              </div>
+            </div>)}
+          </div>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="home-marketcap-shell saudi-bluechip-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Saudi blue chips</span>
+          <h2>Leadership Board</h2>
+        </div>
+        <div className="home-news-badge">
+          <Globe2 size={16} />
+          <span>Market leaders</span>
+        </div>
+      </div>
+      <div className="home-marketcap-list">
+        {saudiBlueChips.map(asset => <div key={asset.symbol} className="home-marketcap-row">
+          <div className="home-marketcap-rank">#{asset.rank}</div>
+          <div className="home-marketcap-copy">
+            <strong>{asset.symbol}</strong>
+            <small>{asset.name}</small>
+          </div>
+          <div className="home-marketcap-values">
+            <b>{asset.price}</b>
+            <small>{asset.cap} | <span className={asset.change >= 0 ? 'good' : 'bad'}>{formatSignedPct(asset.change)}</span></small>
+          </div>
+        </div>)}
+      </div>
+    </section>
+
+    <section className="home-news-shell saudi-briefing-shell">
+      <div className="home-live-board-head">
+        <div>
+          <span className="eyebrow">Saudi market briefing</span>
+          <h2>News &amp; Sentiment</h2>
+        </div>
+        <div className="home-news-badge">
+          <Newspaper size={16} />
+          <span>Tadawul only</span>
+        </div>
+      </div>
+      <div className="home-news-grid">
+        {saudiBriefingCards.map(item => <article key={item.title} className="home-news-card saudi-briefing-card">
+          <div className="home-news-top">
+            <span>{item.source}</span>
+            <small>{item.tag}</small>
+          </div>
+          <strong>{item.title}</strong>
+          <div className="home-news-tags"><b>SAUDI STOCKS</b><b>{item.tag.toUpperCase()}</b></div>
+        </article>)}
+      </div>
+    </section>
+  </>;
+}
+
 function HomePage({
   marketFamily,
   spotTop,
@@ -2267,9 +2559,10 @@ function HomePage({
 }) {
   const [leaderMarketMode, setLeaderMarketMode] = useState<MarketMode>('spot');
   const isStocks = marketFamily === 'us-stocks';
-  const selectedMarketLabel = isStocks ? 'US Stock Market' : 'Crypto Market';
-  const dataSourceLabel = isStocks ? 'US market workspace' : 'Binance watchlist';
-  const majorMarketTitle = isStocks ? 'American Market Workspace' : 'Major Markets';
+  const isSaudiStocks = marketFamily === 'saudi-stocks';
+  const selectedMarketLabel = isStocks ? 'US Stock Market' : isSaudiStocks ? 'Saudi Stock Market' : 'Crypto Market';
+  const dataSourceLabel = isStocks ? 'US market workspace' : isSaudiStocks ? 'Tadawul workspace' : 'Binance watchlist';
+  const majorMarketTitle = isStocks ? 'American Market Workspace' : isSaudiStocks ? 'Saudi Market Workspace' : 'Major Markets';
   const searchPlaceholder = isStocks
     ? 'Search US stock symbols: AAPL, MSFT, NVDA...'
     : marketMode === 'spot' ? 'Search spot symbols: BTC, ETH, SOL...' : 'Search futures symbols: BTC, ETH, SOL...';
@@ -2301,6 +2594,14 @@ function HomePage({
 
   if (isStocks) {
     return <USStockHomePage
+      query={query}
+      setQuery={setQuery}
+      openAutoTradeLogin={openAutoTradeLogin}
+    />;
+  }
+
+  if (isSaudiStocks) {
+    return <SaudiStockHomePage
       query={query}
       setQuery={setQuery}
       openAutoTradeLogin={openAutoTradeLogin}

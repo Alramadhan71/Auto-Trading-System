@@ -25851,7 +25851,7 @@ td,
 
 .market-select-grid {
   width: min(980px, 100%);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -25878,6 +25878,11 @@ td,
 .market-select-card.stocks {
   --market-accent: #32e69a;
   --market-accent-2: #b4f05d;
+}
+
+.market-select-card.saudi {
+  --market-accent: #f0c66d;
+  --market-accent-2: #35d49a;
 }
 
 .market-select-card::before {
@@ -26204,24 +26209,197 @@ td,
   background: linear-gradient(90deg, var(--success), var(--accent));
 }
 
+/* Saudi stock command center */
+.saudi-stock-hero {
+  min-height: clamp(360px, 43vh, 520px) !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--warning) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--success) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in srgb, var(--warning) 11%, var(--panel-strong)), color-mix(in srgb, var(--success) 7%, var(--panel))) !important;
+  background-size: 44px 44px, 44px 44px, 100% 100% !important;
+}
+
+.saudi-hero-kicker {
+  display: inline-flex;
+  justify-content: center;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 13px;
+  margin-bottom: 10px;
+  border: 1px solid color-mix(in srgb, var(--warning) 46%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--warning) 11%, var(--panel-strong));
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.saudi-market-overview,
+.saudi-sector-shell,
+.saudi-scanner-shell {
+  display: grid;
+  gap: 14px;
+}
+
+.saudi-index-grid,
+.saudi-sector-grid,
+.saudi-scanner-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.saudi-index-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.saudi-sector-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.saudi-scanner-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.saudi-index-card,
+.saudi-sector-card {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--warning) 8%, transparent), transparent 45%),
+    color-mix(in srgb, var(--panel) 92%, var(--panel-strong));
+  color: var(--text);
+}
+
+.saudi-index-card span,
+.saudi-sector-card span {
+  color: var(--warning);
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.saudi-index-card small,
+.saudi-sector-card small {
+  color: var(--soft-text);
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.saudi-index-card strong {
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.saudi-index-card footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 10px;
+}
+
+.saudi-stock-search {
+  border-color: color-mix(in srgb, var(--warning) 28%, var(--border)) !important;
+}
+
+.saudi-pulse-shell,
+.saudi-sector-shell,
+.saudi-scanner-shell {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+}
+
+.saudi-pulse-card strong.good {
+  color: var(--success) !important;
+}
+
+.saudi-pulse-card strong.warning {
+  color: var(--warning) !important;
+}
+
+.saudi-sector-card {
+  gap: 10px;
+}
+
+.saudi-sector-card strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
+}
+
+.saudi-sector-card > b {
+  font-size: 22px;
+}
+
+.saudi-sector-meter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border) 70%, var(--panel-strong));
+}
+
+.saudi-sector-meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--warning), var(--success));
+}
+
+.saudi-scanner-card {
+  min-height: 100%;
+}
+
+.saudi-scanner-row,
+.saudi-bluechip-shell .home-marketcap-row,
+.saudi-briefing-card {
+  cursor: default;
+}
+
+.saudi-scanner-row .home-leader-values {
+  max-width: 190px;
+}
+
+.saudi-briefing-card::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--warning), var(--success));
+}
+
 @media (max-width: 1180px) {
-  .us-index-grid {
+  .us-index-grid,
+  .saudi-index-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .us-scanner-grid,
-  .us-events-news-grid {
+  .us-events-news-grid,
+  .saudi-sector-grid,
+  .saudi-scanner-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 760px) {
   .us-index-grid,
-  .us-sector-grid {
+  .us-sector-grid,
+  .saudi-index-grid,
+  .saudi-sector-grid {
     grid-template-columns: 1fr;
   }
 
   .us-index-card footer,
+  .saudi-index-card footer,
   .us-earnings-card {
     display: grid;
     grid-template-columns: 1fr;
