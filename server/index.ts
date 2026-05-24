@@ -409,6 +409,27 @@ type SaudiCompanyRow = {
   status?: string;
 };
 
+type SaudiMarketPayload = {
+  ok: boolean;
+  configured: boolean;
+  source: 'SAHMK';
+  index?: string;
+  isDelayed: boolean;
+  updatedAt: number;
+  refreshedAt: number;
+  nextRefreshAt: number;
+  refreshIntervalMs: number;
+  stale?: boolean;
+  message?: string;
+  summary: SaudiMarketSummary | null;
+  nomuSummary: SaudiMarketSummary | null;
+  gainers: SaudiQuoteRow[];
+  losers: SaudiQuoteRow[];
+  volumeLeaders: SaudiQuoteRow[];
+  valueLeaders: SaudiQuoteRow[];
+  sectors: SaudiSectorRow[];
+};
+
 const BINANCE_REST = 'https://api.binance.com';
 const BINANCE_FUTURES_REST = 'https://fapi.binance.com';
 const BINANCE_WS = 'wss://stream.binance.com:9443/ws/!ticker@arr';
@@ -424,6 +445,7 @@ const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const DB_FILE = path.join(DATA_DIR, 'app.sqlite');
 const STATE_FILE = path.join(DATA_DIR, 'trading-state.json');
+const SAUDI_MARKET_CACHE_FILE = path.join(DATA_DIR, 'saudi-market-cache.json');
 const TELEGRAM_SUBSCRIBERS_FILE = path.join(DATA_DIR, 'telegram-subscribers.json');
 const BINANCE_VAULT_FILE = path.join(DATA_DIR, 'binance-vault.json');
 const BINANCE_VAULT_KEY_FILE = path.join(DATA_DIR, 'binance-vault.key');
@@ -435,6 +457,9 @@ const CANDLE_LIMIT_CHART = 240;
 const CLIENT_PRICE_WATCH_TTL_MS = 2 * 60_000;
 const MAX_CLIENT_PRICE_WATCH_SYMBOLS = 80;
 const FEATURED_LIVE_SYMBOLS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT'];
+const SAUDI_MARKET_REFRESH_MS = Math.max(60_000, Number(process.env.SAUDI_MARKET_REFRESH_MS ?? 3 * 60 * 60_000));
+const SAUDI_MARKET_CLOSED_REFRESH_MS = Math.max(SAUDI_MARKET_REFRESH_MS, Number(process.env.SAUDI_MARKET_CLOSED_REFRESH_MS ?? 24 * 60 * 60_000));
+const SAUDI_COMPANY_CACHE_MS = Math.max(24 * 60 * 60_000, Number(process.env.SAUDI_COMPANY_CACHE_MS ?? 30 * 24 * 60 * 60_000));
 const SCAN_BATCH_SIZE: Record<Timeframe, number> = {
   '5m': 72,
   '10m': 60,
@@ -1412,10 +1437,163 @@ async function fetchTextDirect(url: string, init?: RequestInit) {
 }
 
 const sahmkCache = new Map<string, { createdAt: number; value: unknown }>();
+let saudiMarketSnapshot: SaudiMarketPayload | null = null;
+let saudiMarketRefreshPromise: Promise<SaudiMarketPayload> | null = null;
 
 function normalizeSaudiIndex(value: unknown) {
   const index = String(value ?? 'TASI').trim().toUpperCase();
   return index === 'NOMU' ? 'NOMU' : 'TASI';
+}
+
+function getRiyadhDateParts(at = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Riyadh',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).formatToParts(at);
+  const read = (type: string) => parts.find(part => part.type === type)?.value ?? '';
+  return {
+    weekday: read('weekday'),
+    hour: Number(read('hour')),
+    minute: Number(read('minute'))
+  };
+}
+
+function isSaudiMarketSession(now = Date.now()) {
+  const { weekday, hour, minute } = getRiyadhDateParts(new Date(now));
+  if (weekday === 'Fri' || weekday === 'Sat') return false;
+  const minutes = hour * 60 + minute;
+  return minutes >= (9 * 60 + 45) && minutes <= (15 * 60 + 30);
+}
+
+function saudiRefreshInterval(now = Date.now()) {
+  return isSaudiMarketSession(now) ? SAUDI_MARKET_REFRESH_MS : SAUDI_MARKET_CLOSED_REFRESH_MS;
+}
+
+function readSaudiMarketSnapshot() {
+  if (saudiMarketSnapshot) return saudiMarketSnapshot;
+  try {
+    if (!fs.existsSync(SAUDI_MARKET_CACHE_FILE)) return null;
+    const payload = JSON.parse(fs.readFileSync(SAUDI_MARKET_CACHE_FILE, 'utf8')) as SaudiMarketPayload;
+    if (payload?.source === 'SAHMK' && payload.summary) {
+      saudiMarketSnapshot = payload;
+      return payload;
+    }
+  } catch (error) {
+    console.warn('[sahmk] cached Saudi market snapshot could not be read', error);
+  }
+  return null;
+}
+
+function writeSaudiMarketSnapshot(payload: SaudiMarketPayload) {
+  saudiMarketSnapshot = payload;
+  try {
+    fs.writeFileSync(SAUDI_MARKET_CACHE_FILE, JSON.stringify(payload, null, 2));
+  } catch (error) {
+    console.warn('[sahmk] cached Saudi market snapshot could not be saved', error);
+  }
+}
+
+function buildSaudiMarketPayload(input: {
+  index: string;
+  summary: SaudiMarketSummary;
+  nomuSummary: SaudiMarketSummary;
+  gainers: { gainers?: SaudiQuoteRow[]; is_delayed?: boolean };
+  losers: { losers?: SaudiQuoteRow[]; is_delayed?: boolean };
+  volume: { stocks?: SaudiQuoteRow[]; is_delayed?: boolean };
+  value: { stocks?: SaudiQuoteRow[]; is_delayed?: boolean };
+  sectors: { sectors?: SaudiSectorRow[]; is_delayed?: boolean };
+}) {
+  const gainersRows = input.gainers.gainers ?? [];
+  const losersRows = input.losers.losers ?? [];
+  const volumeRows = input.volume.stocks ?? [];
+  const valueRows = input.value.stocks ?? [];
+  const sectorRows = input.sectors.sectors ?? [];
+  const now = Date.now();
+  const refreshIntervalMs = saudiRefreshInterval(now);
+  const isDelayed = Boolean(
+    input.summary.is_delayed
+    || input.nomuSummary.is_delayed
+    || input.gainers.is_delayed
+    || input.losers.is_delayed
+    || input.volume.is_delayed
+    || input.value.is_delayed
+    || input.sectors.is_delayed
+    || gainersRows.some(row => row.is_delayed)
+    || losersRows.some(row => row.is_delayed)
+    || volumeRows.some(row => row.is_delayed)
+    || valueRows.some(row => row.is_delayed)
+  );
+  return {
+    ok: true,
+    configured: true,
+    source: 'SAHMK',
+    index: input.index,
+    isDelayed,
+    updatedAt: latestSaudiTimestamp(gainersRows, losersRows, volumeRows, valueRows),
+    refreshedAt: now,
+    nextRefreshAt: now + refreshIntervalMs,
+    refreshIntervalMs,
+    summary: input.summary,
+    nomuSummary: input.nomuSummary,
+    gainers: gainersRows,
+    losers: losersRows,
+    volumeLeaders: volumeRows,
+    valueLeaders: valueRows,
+    sectors: sectorRows
+  } satisfies SaudiMarketPayload;
+}
+
+async function refreshSaudiMarketSnapshot(index: string, limit: number) {
+  const [
+    summary,
+    nomuSummary,
+    gainers,
+    losers,
+    volume,
+    value,
+    sectors
+  ] = await Promise.all([
+    fetchSahmk<SaudiMarketSummary>('/market/summary/', { index }),
+    fetchSahmk<SaudiMarketSummary>('/market/summary/', { index: 'NOMU' }),
+    fetchSahmk<{ gainers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/gainers/', { index, limit }),
+    fetchSahmk<{ losers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/losers/', { index, limit }),
+    fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/volume/', { index, limit }),
+    fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/value/', { index, limit }),
+    fetchSahmk<{ sectors?: SaudiSectorRow[]; is_delayed?: boolean; count?: number }>('/market/sectors/', { index })
+  ]);
+  const payload = buildSaudiMarketPayload({ index, summary, nomuSummary, gainers, losers, volume, value, sectors });
+  writeSaudiMarketSnapshot(payload);
+  return payload;
+}
+
+async function getSaudiMarketSnapshot(index: string, limit: number) {
+  const cached = readSaudiMarketSnapshot();
+  const now = Date.now();
+  if (cached && cached.index === index && now - cached.refreshedAt < saudiRefreshInterval(now)) {
+    return cached;
+  }
+  if (!saudiMarketRefreshPromise) {
+    saudiMarketRefreshPromise = refreshSaudiMarketSnapshot(index, limit)
+      .finally(() => {
+        saudiMarketRefreshPromise = null;
+      });
+  }
+  try {
+    return await saudiMarketRefreshPromise;
+  } catch (error) {
+    if (cached) {
+      return {
+        ...cached,
+        stale: true,
+        nextRefreshAt: Date.now() + Math.min(30 * 60_000, saudiRefreshInterval()),
+        message: error instanceof Error ? `Showing cached data. Latest refresh failed: ${error.message}` : 'Showing cached data. Latest refresh failed.'
+      };
+    }
+    throw error;
+  }
 }
 
 async function fetchSahmk<T>(route: string, query: Record<string, string | number | undefined> = {}, cacheMs = SAHMK_CACHE_MS) {
@@ -8233,58 +8411,9 @@ app.get('/api/saudi/market', async (req, res) => {
   const index = normalizeSaudiIndex(req.query.index);
   const limit = Math.min(20, Math.max(3, Number(req.query.limit ?? 8) || 8));
   try {
-    const [
-      summary,
-      nomuSummary,
-      gainers,
-      losers,
-      volume,
-      value,
-      sectors
-    ] = await Promise.all([
-      fetchSahmk<SaudiMarketSummary>('/market/summary/', { index }),
-      fetchSahmk<SaudiMarketSummary>('/market/summary/', { index: 'NOMU' }),
-      fetchSahmk<{ gainers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/gainers/', { index, limit }),
-      fetchSahmk<{ losers?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/losers/', { index, limit }),
-      fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/volume/', { index, limit }),
-      fetchSahmk<{ stocks?: SaudiQuoteRow[]; is_delayed?: boolean; count?: number }>('/market/value/', { index, limit }),
-      fetchSahmk<{ sectors?: SaudiSectorRow[]; is_delayed?: boolean; count?: number }>('/market/sectors/', { index })
-    ]);
-    const gainersRows = gainers.gainers ?? [];
-    const losersRows = losers.losers ?? [];
-    const volumeRows = volume.stocks ?? [];
-    const valueRows = value.stocks ?? [];
-    const sectorRows = sectors.sectors ?? [];
-    const isDelayed = Boolean(
-      summary.is_delayed
-      || nomuSummary.is_delayed
-      || gainers.is_delayed
-      || losers.is_delayed
-      || volume.is_delayed
-      || value.is_delayed
-      || sectors.is_delayed
-      || gainersRows.some(row => row.is_delayed)
-      || losersRows.some(row => row.is_delayed)
-      || volumeRows.some(row => row.is_delayed)
-      || valueRows.some(row => row.is_delayed)
-    );
-    res.json({
-      ok: true,
-      configured: true,
-      source: 'SAHMK',
-      index,
-      isDelayed,
-      updatedAt: latestSaudiTimestamp(gainersRows, losersRows, volumeRows, valueRows),
-      summary,
-      nomuSummary,
-      gainers: gainersRows,
-      losers: losersRows,
-      volumeLeaders: volumeRows,
-      valueLeaders: valueRows,
-      sectors: sectorRows
-    });
+    res.json(await getSaudiMarketSnapshot(index, limit));
   } catch (error) {
-    res.status(502).json({
+    res.json({
       ...sahmkConfiguredPayload(error instanceof Error ? error.message : 'Unable to fetch Saudi market data.'),
       configured: true
     });
@@ -8320,7 +8449,7 @@ app.get('/api/saudi/companies', async (req, res) => {
       market,
       search,
       limit
-    }, Math.max(SAHMK_CACHE_MS, 5 * 60_000));
+    }, SAUDI_COMPANY_CACHE_MS);
     res.json({ ok: true, configured: true, source: 'SAHMK', ...payload, results: payload.results ?? [] });
   } catch (error) {
     res.status(502).json({ ok: false, configured: true, message: error instanceof Error ? error.message : 'Unable to fetch Saudi companies.', results: [] });

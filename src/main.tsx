@@ -480,6 +480,10 @@ type SaudiMarketResponse = {
   index?: string;
   isDelayed: boolean;
   updatedAt: number;
+  refreshedAt?: number;
+  nextRefreshAt?: number;
+  refreshIntervalMs?: number;
+  stale?: boolean;
   message?: string;
   summary: SaudiMarketSummary | null;
   nomuSummary: SaudiMarketSummary | null;
@@ -609,7 +613,7 @@ const defaultSaudiMarketPayload: SaudiMarketResponse = {
   valueLeaders: [],
   sectors: []
 };
-const saudiMarketRefreshMs = 5_000;
+const saudiMarketRefreshMs = 5 * 60_000;
 
 const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): BinanceConnection => ({
   connected: Boolean(value?.connected),
@@ -2405,16 +2409,20 @@ function SaudiStockHomePage({
   openAutoTradeLogin: () => void;
   saudiMarket: SaudiMarketResponse;
 }) {
+  const hasSaudiConnection = saudiMarket.configured;
   const hasLiveSaudiData = saudiMarket.ok && saudiMarket.configured;
   const saudiFreshnessLabel = hasLiveSaudiData
-    ? saudiMarket.isDelayed ? '15-min delayed' : 'Real-time'
-    : 'API Key Required';
+    ? saudiMarket.stale ? 'Cached' : saudiMarket.isDelayed ? '15-min delayed' : 'Real-time'
+    : hasSaudiConnection ? 'Waiting for cache' : 'API Key Required';
   const saudiFeedLabel = hasLiveSaudiData
-    ? saudiMarket.isDelayed ? '15-min delayed feed' : 'Real-time feed'
-    : 'Connect SAHMK';
+    ? saudiMarket.stale ? 'Cached feed' : saudiMarket.isDelayed ? '15-min delayed feed' : 'Real-time feed'
+    : hasSaudiConnection ? 'SAHMK connected' : 'Connect SAHMK';
+  const serverRefreshMinutes = Math.max(1, Math.round((saudiMarket.refreshIntervalMs ?? 0) / 60_000));
   const saudiSnapshotDetail = hasLiveSaudiData
-    ? `Refreshed every ${Math.round(saudiMarketRefreshMs / 1000)} seconds`
-    : 'Set SAHMK_API_KEY on the server';
+    ? saudiMarket.stale
+      ? (saudiMarket.message ?? 'Showing the latest saved market snapshot')
+      : `Server refresh every ${serverRefreshMinutes} minutes`
+    : hasSaudiConnection ? (saudiMarket.message ?? 'Waiting for the first saved market snapshot') : 'Set SAHMK_API_KEY on the server';
   const summaryRows = [
     {
       symbol: saudiMarket.summary?.index ?? 'TASI',
@@ -2446,8 +2454,8 @@ function SaudiStockHomePage({
     }
   ];
   const livePulse = [
-    { label: 'Data Source', value: hasLiveSaudiData ? saudiMarket.source : 'Not Connected', detail: saudiMarket.message ?? 'SAHMK market data adapter', tone: hasLiveSaudiData ? 'good' : 'warning' },
-    { label: 'Freshness', value: saudiFreshnessLabel, detail: hasLiveSaudiData ? 'Reported by the data provider' : 'Set SAHMK_API_KEY on the server', tone: hasLiveSaudiData && !saudiMarket.isDelayed ? 'good' : 'warning' },
+    { label: 'Data Source', value: hasSaudiConnection ? saudiMarket.source : 'Not Connected', detail: saudiMarket.message ?? 'SAHMK market data adapter', tone: hasLiveSaudiData && !saudiMarket.stale ? 'good' : 'warning' },
+    { label: 'Freshness', value: saudiFreshnessLabel, detail: hasSaudiConnection ? 'Reported by the data provider' : 'Set SAHMK_API_KEY on the server', tone: hasLiveSaudiData && !saudiMarket.isDelayed ? 'good' : 'warning' },
     { label: 'Breadth', value: hasLiveSaudiData ? `${saudiMarket.summary?.advancing ?? 0}/${saudiMarket.summary?.declining ?? 0}` : '-', detail: 'Advancers vs decliners on TASI', tone: 'good' },
     { label: 'Updated', value: hasLiveSaudiData ? entryTime(saudiMarket.updatedAt) : '-', detail: saudiSnapshotDetail, tone: '' }
   ];
