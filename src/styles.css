@@ -26780,6 +26780,10 @@ td,
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
+  align-self: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .shell-brand-mark.brand-logo-mark img {
@@ -26788,6 +26792,20 @@ td,
   object-fit: contain !important;
   object-position: center !important;
   filter: drop-shadow(0 10px 18px rgba(36, 104, 216, .32)) saturate(1.08) contrast(1.04);
+  transform: translateY(-2px);
+}
+
+.shell-brand {
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.shell-brand-copy,
+.shell-brand > div {
+  align-self: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  line-height: 1 !important;
 }
 
 .market-select-page {
