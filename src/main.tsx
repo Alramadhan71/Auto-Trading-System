@@ -498,6 +498,7 @@ const livePortfolioRefreshEvent = 'live-portfolio-refresh';
 const companyName = 'Muslim Solutions';
 const companyUrl = 'https://www.muslimalramadan71.com/';
 const productName = 'Auto Trading System';
+const brandLogoSrc = '/brand-bull.webp';
 
 
 type TelegramConfig = {
@@ -1228,12 +1229,6 @@ function App() {
     : activeMarketFamily === 'saudi-stocks'
       ? 'Saudi Stock Market'
       : 'Crypto Market';
-  const marketBrandIcon = activeMarketFamily === 'us-stocks'
-    ? <BarChart3 size={20} />
-    : activeMarketFamily === 'saudi-stocks'
-      ? <Landmark size={20} />
-      : <TrendingUp size={20} />;
-
   const enterMarket = (marketFamily: MarketFamily) => {
     setActiveMarketFamily(marketFamily);
     setPage('home');
@@ -1294,7 +1289,9 @@ function App() {
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <div className="shell-brand" aria-label={`${productName} by ${companyName}`}>
-          <span className="shell-brand-mark">{marketBrandIcon}</span>
+          <span className="shell-brand-mark brand-logo-mark">
+            <img src={brandLogoSrc} alt="" />
+          </span>
           <div className="shell-brand-copy">
             <strong>{isMarketPicker ? productName : `${marketLabel}`}</strong>
             <small><CompanyAttribution /></small>
@@ -1989,7 +1986,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
     </div>
     <div className="market-select-grid">
       <button type="button" className="market-select-card crypto" onClick={() => onSelect('crypto')}>
-        <span className="market-select-icon"><TrendingUp size={30} /></span>
         <span className="market-select-copy">
           <small>Crypto Workspace</small>
           <strong>Crypto Market</strong>
@@ -1998,7 +1994,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
       <button type="button" className="market-select-card stocks" onClick={() => onSelect('us-stocks')}>
-        <span className="market-select-icon"><BarChart3 size={30} /></span>
         <span className="market-select-copy">
           <small>Equities Workspace</small>
           <strong>US Stock Market</strong>
@@ -2007,7 +2002,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
       <button type="button" className="market-select-card saudi" onClick={() => onSelect('saudi-stocks')}>
-        <span className="market-select-icon"><Landmark size={30} /></span>
         <span className="market-select-copy">
           <small>Tadawul Workspace</small>
           <strong>Saudi Stock Market</strong>
