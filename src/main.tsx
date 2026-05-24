@@ -1980,8 +1980,7 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
   return <section className="market-select-page">
     <div className="market-select-lockup">
       <span className="market-select-kicker">Trading Gateway</span>
-      <h1>{productName}</h1>
-      <p>Select a workspace for signals, portfolios, and automated trading tools.</p>
+      <h1><span>Auto Trading</span><span>System</span></h1>
       <CompanyAttribution className="market-select-company" />
     </div>
     <div className="market-select-grid">
@@ -1989,7 +1988,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         <span className="market-select-copy">
           <small>Crypto Workspace</small>
           <strong>Crypto Market</strong>
-          <span>Binance spot and futures automation</span>
         </span>
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
@@ -1997,7 +1995,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         <span className="market-select-copy">
           <small>Equities Workspace</small>
           <strong>US Stock Market</strong>
-          <span>US stocks strategy workspace</span>
         </span>
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
@@ -2005,7 +2002,6 @@ function MarketSelectPage({ onSelect }: { onSelect: (marketFamily: MarketFamily)
         <span className="market-select-copy">
           <small>Tadawul Workspace</small>
           <strong>Saudi Stock Market</strong>
-          <span>TASI, Nomu, sectors, and Saudi equities signals</span>
         </span>
         <span className="market-select-action"><ArrowUpRight size={20} /></span>
       </button>
