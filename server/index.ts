@@ -1439,6 +1439,7 @@ async function fetchTextDirect(url: string, init?: RequestInit) {
 const sahmkCache = new Map<string, { createdAt: number; value: unknown }>();
 let saudiMarketSnapshot: SaudiMarketPayload | null = null;
 let saudiMarketRefreshPromise: Promise<SaudiMarketPayload> | null = null;
+let saudiMarketFailureBackoff: { until: number; message: string } | null = null;
 
 function normalizeSaudiIndex(value: unknown) {
   const index = String(value ?? 'TASI').trim().toUpperCase();
@@ -1546,6 +1547,32 @@ function buildSaudiMarketPayload(input: {
   } satisfies SaudiMarketPayload;
 }
 
+function buildSaudiUnavailablePayload(index: string, message: string) {
+  const now = Date.now();
+  const retryAt = saudiMarketFailureBackoff?.until && saudiMarketFailureBackoff.until > now
+    ? saudiMarketFailureBackoff.until
+    : now + 30 * 60_000;
+  return {
+    ok: false,
+    configured: true,
+    source: 'SAHMK',
+    index,
+    isDelayed: true,
+    updatedAt: now,
+    refreshedAt: 0,
+    nextRefreshAt: retryAt,
+    refreshIntervalMs: retryAt - now,
+    message,
+    summary: null,
+    nomuSummary: null,
+    gainers: [],
+    losers: [],
+    volumeLeaders: [],
+    valueLeaders: [],
+    sectors: []
+  } satisfies SaudiMarketPayload;
+}
+
 async function refreshSaudiMarketSnapshot(index: string, limit: number) {
   const [
     summary,
@@ -1575,6 +1602,9 @@ async function getSaudiMarketSnapshot(index: string, limit: number) {
   if (cached && cached.index === index && now - cached.refreshedAt < saudiRefreshInterval(now)) {
     return cached;
   }
+  if (!cached && saudiMarketFailureBackoff && now < saudiMarketFailureBackoff.until) {
+    return buildSaudiUnavailablePayload(index, saudiMarketFailureBackoff.message);
+  }
   if (!saudiMarketRefreshPromise) {
     saudiMarketRefreshPromise = refreshSaudiMarketSnapshot(index, limit)
       .finally(() => {
@@ -1584,15 +1614,20 @@ async function getSaudiMarketSnapshot(index: string, limit: number) {
   try {
     return await saudiMarketRefreshPromise;
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unable to fetch Saudi market data.';
+    saudiMarketFailureBackoff = {
+      until: Date.now() + 30 * 60_000,
+      message
+    };
     if (cached) {
       return {
         ...cached,
         stale: true,
         nextRefreshAt: Date.now() + Math.min(30 * 60_000, saudiRefreshInterval()),
-        message: error instanceof Error ? `Showing cached data. Latest refresh failed: ${error.message}` : 'Showing cached data. Latest refresh failed.'
+        message: `Showing cached data. Latest refresh failed: ${message}`
       };
     }
-    throw error;
+    return buildSaudiUnavailablePayload(index, message);
   }
 }
 
