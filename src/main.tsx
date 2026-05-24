@@ -609,6 +609,7 @@ const defaultSaudiMarketPayload: SaudiMarketResponse = {
   valueLeaders: [],
   sectors: []
 };
+const saudiMarketRefreshMs = 5_000;
 
 const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): BinanceConnection => ({
   connected: Boolean(value?.connected),
@@ -1124,6 +1125,11 @@ function App() {
         })
         .catch(() => undefined);
     }, 60000);
+    const saudiRefresh = setInterval(() => {
+      api<SaudiMarketResponse>('/api/saudi/market')
+        .then(setSaudiMarket)
+        .catch(() => undefined);
+    }, saudiMarketRefreshMs);
     const liveLedgerRefresh = setInterval(() => {
       Promise.all([
         api<{ signals: Signal[] }>('/api/signals'),
@@ -1144,6 +1150,7 @@ function App() {
       if (priceUiFlushTimer) window.clearTimeout(priceUiFlushTimer);
       socket?.close();
       clearInterval(refresh);
+      clearInterval(saudiRefresh);
       clearInterval(liveLedgerRefresh);
     };
   }, [alertsEnabled, toastDuration]);
@@ -2399,6 +2406,15 @@ function SaudiStockHomePage({
   saudiMarket: SaudiMarketResponse;
 }) {
   const hasLiveSaudiData = saudiMarket.ok && saudiMarket.configured;
+  const saudiFreshnessLabel = hasLiveSaudiData
+    ? saudiMarket.isDelayed ? '15-min delayed' : 'Real-time'
+    : 'API Key Required';
+  const saudiFeedLabel = hasLiveSaudiData
+    ? saudiMarket.isDelayed ? '15-min delayed feed' : 'Real-time feed'
+    : 'Connect SAHMK';
+  const saudiSnapshotDetail = hasLiveSaudiData
+    ? `Refreshed every ${Math.round(saudiMarketRefreshMs / 1000)} seconds`
+    : 'Set SAHMK_API_KEY on the server';
   const summaryRows = [
     {
       symbol: saudiMarket.summary?.index ?? 'TASI',
@@ -2431,9 +2447,9 @@ function SaudiStockHomePage({
   ];
   const livePulse = [
     { label: 'Data Source', value: hasLiveSaudiData ? saudiMarket.source : 'Not Connected', detail: saudiMarket.message ?? 'SAHMK market data adapter', tone: hasLiveSaudiData ? 'good' : 'warning' },
-    { label: 'Freshness', value: hasLiveSaudiData ? saudiMarket.isDelayed ? 'Delayed' : 'Real-time' : 'API Key Required', detail: hasLiveSaudiData ? 'Reported by the data provider' : 'Set SAHMK_API_KEY on the server', tone: hasLiveSaudiData && !saudiMarket.isDelayed ? 'good' : 'warning' },
+    { label: 'Freshness', value: saudiFreshnessLabel, detail: hasLiveSaudiData ? 'Reported by the data provider' : 'Set SAHMK_API_KEY on the server', tone: hasLiveSaudiData && !saudiMarket.isDelayed ? 'good' : 'warning' },
     { label: 'Breadth', value: hasLiveSaudiData ? `${saudiMarket.summary?.advancing ?? 0}/${saudiMarket.summary?.declining ?? 0}` : '-', detail: 'Advancers vs decliners on TASI', tone: 'good' },
-    { label: 'Updated', value: hasLiveSaudiData ? entryTime(saudiMarket.updatedAt) : '-', detail: 'Server-cached market snapshot', tone: '' }
+    { label: 'Updated', value: hasLiveSaudiData ? entryTime(saudiMarket.updatedAt) : '-', detail: saudiSnapshotDetail, tone: '' }
   ];
   const sectorRows = hasLiveSaudiData && saudiMarket.sectors.length > 0
     ? saudiMarket.sectors.slice(0, 6).map(sector => ({
@@ -2521,7 +2537,7 @@ function SaudiStockHomePage({
         </div>
         <div className="home-news-badge">
           <Landmark size={16} />
-          <span>{hasLiveSaudiData ? saudiMarket.isDelayed ? 'Delayed feed' : 'Real-time feed' : 'Connect SAHMK'}</span>
+          <span>{saudiFeedLabel}</span>
         </div>
       </div>
       {!hasLiveSaudiData && <div className="saudi-data-status">
@@ -2544,7 +2560,7 @@ function SaudiStockHomePage({
       {hasLiveSaudiData && <div className="search-panel home-search-panel saudi-stock-search">
         <Search size={20} />
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search Saudi stocks: 1120, 2222, 7010..." />
-        <span>Tadawul workspace | live market overview, sectors, movers, and value leaders</span>
+        <span>Tadawul workspace | {saudiMarket.isDelayed ? '15-min delayed' : 'real-time'} market overview, sectors, movers, and value leaders</span>
       </div>}
       {stockResults.length > 0 && <section className="results home-results">
         {stockResults.map(item => <article key={item.symbol}>
@@ -2598,7 +2614,7 @@ function SaudiStockHomePage({
     {hasLiveSaudiData && liveScannerGroups.length > 0 && <section className="saudi-scanner-shell">
       <div className="home-live-board-head">
         <div>
-          <span className="eyebrow">Live market movers</span>
+          <span className="eyebrow">{saudiMarket.isDelayed ? 'Delayed market movers' : 'Live market movers'}</span>
           <h2>Saudi Market Lists</h2>
         </div>
       </div>

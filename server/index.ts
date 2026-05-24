@@ -417,7 +417,7 @@ const BINANCE_SPOT_TRADE_WS = 'wss://stream.binance.com:9443/stream?streams=';
 const BINANCE_FUTURES_TRADE_WS = 'wss://fstream.binance.com/stream?streams=';
 const SAHMK_API_BASE = (process.env.SAHMK_API_BASE ?? 'https://app.sahmk.sa/api/v1').replace(/\/+$/, '');
 const SAHMK_API_KEY = (process.env.SAHMK_API_KEY ?? '').trim();
-const SAHMK_CACHE_MS = Math.max(5_000, Number(process.env.SAHMK_CACHE_MS ?? 60_000));
+const SAHMK_CACHE_MS = Math.max(5_000, Number(process.env.SAHMK_CACHE_MS ?? 5_000));
 const PORT = Number(process.env.PORT ?? 8787);
 const ROOT_DIR = process.cwd();
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
