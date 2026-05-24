@@ -1269,6 +1269,18 @@ function App() {
     setPage('auto-trade');
   };
 
+  const returnToMarketPicker = () => {
+    setActiveMarketFamily(null);
+    setPage('home');
+    setQuery('');
+    setChartOpen(false);
+    try {
+      localStorage.removeItem('autoTrade.activeMarketFamily');
+    } catch {
+      // Navigation still works when local storage is blocked.
+    }
+  };
+
   const saveSelection = async (nextSelected = selected, nextTimeframes = timeframes, nextExitModes = exitModes, nextMarketScope = strategyMarketScope) => {
     const safeTimeframes = new Set(defaultSelectedTimeframes);
     const safeExitModes = nextExitModes.size > 0 ? nextExitModes : new Set<ExitMode>(['strategy-defined']);
@@ -1288,32 +1300,32 @@ function App() {
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
-        <div className="shell-brand" aria-label={`${productName} by ${companyName}`}>
+        <button type="button" className="shell-brand" aria-label="Back to market workspaces" onClick={returnToMarketPicker}>
           <span className="shell-brand-mark brand-logo-mark">
             <img src={brandLogoSrc} alt="" />
           </span>
           <div className="shell-brand-copy">
             <strong>{isMarketPicker ? productName : `${marketLabel}`}</strong>
-            <small><CompanyAttribution /></small>
+            {!authEntryPage && <small>By {companyName}</small>}
           </div>
-        </div>
+        </button>
         {!authEntryPage && !isMarketPicker && <nav className="shell-nav" aria-label="Primary navigation">
           <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>{marketLabel}</span></button>
           <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
           <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
         </nav>}
         <div className="shell-tools">
-          {authEntryPage && <button type="button" className="auth-return-home" onClick={() => setPage('home')}>
+          {authEntryPage && <button type="button" className="auth-return-home" onClick={returnToMarketPicker}>
             <Home size={16} />
             <span>Back to Home</span>
-          </button>}
-          {!authEntryPage && !isMarketPicker && <button type="button" className="home-header-cta market-return-cta" onClick={() => { setActiveMarketFamily(null); setPage('home'); }}>
-            <Globe2 size={16} />
-            <span>Market Options</span>
           </button>}
           {page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
             <Bot size={16} />
             <span>Start free trial</span>
+          </button>}
+          {!authEntryPage && !isMarketPicker && page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta market-return-cta" onClick={returnToMarketPicker}>
+            <Home size={16} />
+            <span>Back to Home</span>
           </button>}
           <ThemeStudio currentTheme={theme} onPick={setTheme} />
           {!authEntryPage && <NotificationSettings
@@ -2182,7 +2194,7 @@ function USStockHomePage({
           <div>
             <span className="us-hero-kicker">US Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">US Stock Market <CompanyAttribution /></p>
+            <p className="home-launchpad-summary"><CompanyAttribution /></p>
           </div>
         </div>
         <div className="home-cta-row">
@@ -2505,7 +2517,7 @@ function SaudiStockHomePage({
           <div>
             <span className="saudi-hero-kicker">Saudi Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">Saudi Stock Market <CompanyAttribution /></p>
+            <p className="home-launchpad-summary"><CompanyAttribution /></p>
           </div>
         </div>
         <div className="home-cta-row">
@@ -2713,7 +2725,6 @@ function HomePage({
   const [leaderMarketMode, setLeaderMarketMode] = useState<MarketMode>('spot');
   const isStocks = marketFamily === 'us-stocks';
   const isSaudiStocks = marketFamily === 'saudi-stocks';
-  const selectedMarketLabel = isStocks ? 'US Stock Market' : isSaudiStocks ? 'Saudi Stock Market' : 'Crypto Market';
   const dataSourceLabel = isStocks ? 'US market workspace' : isSaudiStocks ? 'Tadawul workspace' : 'Binance watchlist';
   const majorMarketTitle = isStocks ? 'American Market Workspace' : isSaudiStocks ? 'Saudi Market Workspace' : 'Major Markets';
   const searchPlaceholder = isStocks
@@ -2768,7 +2779,7 @@ function HomePage({
         <div className="product-identity-lockup home-product-lockup">
           <div>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">{selectedMarketLabel} <CompanyAttribution /></p>
+            <p className="home-launchpad-summary"><CompanyAttribution /></p>
           </div>
         </div>
         <div className="home-cta-row">
@@ -5239,10 +5250,8 @@ function AutoTradePage({
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
           <div className="product-identity-lockup auth-product-lockup">
-            <span className="product-mark"><TrendingUp size={30} /></span>
             <div>
               <h1>{productName}</h1>
-              <p><CompanyAttribution /></p>
             </div>
           </div>
           <h2>Trade with AI that protects the entry.</h2>
