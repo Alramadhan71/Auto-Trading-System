@@ -1319,10 +1319,6 @@ function App() {
             <Home size={16} />
             <span>Back to Home</span>
           </button>}
-          {page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta" onClick={openAutoTradeLogin}>
-            <Bot size={16} />
-            <span>Start free trial</span>
-          </button>}
           {!authEntryPage && !isMarketPicker && page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta market-return-cta" onClick={returnToMarketPicker}>
             <Home size={16} />
             <span>Back to Home</span>
@@ -2200,11 +2196,11 @@ function USStockHomePage({
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
-            <span><strong>Open Stock Automation</strong></span>
+            <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
-            <Bell size={22} />
-            <span><strong>Join Market Alerts</strong></span>
+            <Send size={22} />
+            <span><strong>Join Free Trades on Telegram</strong></span>
           </a>
         </div>
         <div className="home-login-row">
@@ -2523,11 +2519,11 @@ function SaudiStockHomePage({
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
             <Bot size={22} />
-            <span><strong>Open Tadawul Automation</strong></span>
+            <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
-            <Bell size={22} />
-            <span><strong>Join Saudi Market Alerts</strong></span>
+            <Send size={22} />
+            <span><strong>Join Free Trades on Telegram</strong></span>
           </a>
         </div>
         <div className="home-login-row">

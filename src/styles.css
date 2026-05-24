@@ -26808,6 +26808,18 @@ td,
   transition: opacity .18s ease, transform .18s ease !important;
 }
 
+.shell-brand-mark.brand-logo-mark {
+  background-image: url('/brand-bull.webp') !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 76px 76px !important;
+  filter: drop-shadow(0 10px 18px rgba(36, 104, 216, .32));
+}
+
+.shell-brand-mark.brand-logo-mark img {
+  opacity: 0 !important;
+}
+
 .shell-brand:hover {
   opacity: .92 !important;
   transform: translateY(-1px);
@@ -26942,5 +26954,156 @@ td,
 
   .market-select-card strong {
     font-size: clamp(25px, 8vw, 32px) !important;
+  }
+}
+
+/* Unified market pages: header actions and hero system */
+.shell-header.home-header .shell-tools {
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.shell-header.home-header .market-return-cta {
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 0 15px !important;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border)) !important;
+  background: color-mix(in srgb, var(--panel) 90%, transparent) !important;
+  color: var(--text) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 12px 26px color-mix(in srgb, var(--shadow-lift) 42%, transparent) !important;
+}
+
+.shell-header.home-header .market-return-cta svg {
+  width: 17px !important;
+  height: 17px !important;
+  color: color-mix(in srgb, var(--accent-strong) 70%, var(--bull-ice)) !important;
+}
+
+.shell-header.home-header .market-return-cta:hover {
+  transform: translateY(-1px) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 56%, var(--border)) !important;
+  background: color-mix(in srgb, var(--panel-soft) 72%, var(--panel)) !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(380px, 46vh, 520px) !important;
+  padding: clamp(40px, 5.2vw, 68px) 24px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(100%, 720px) !important;
+  gap: clamp(17px, 2.1vh, 24px) !important;
+}
+
+.page-home .home-product-lockup,
+.page-home .home-product-lockup > div {
+  gap: 9px !important;
+}
+
+.page-home .home-product-lockup h1 {
+  font-size: clamp(46px, 5.15vw, 78px) !important;
+  line-height: .93 !important;
+  max-width: 12ch !important;
+  text-shadow: 0 18px 48px rgba(36, 104, 216, .16) !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary .company-attribution {
+  color: color-mix(in srgb, var(--bull-sky) 68%, var(--bull-ice)) !important;
+  font-size: clamp(20px, 1.55vw, 26px) !important;
+  line-height: 1.14 !important;
+  font-weight: 950 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 10px 24px rgba(36, 104, 216, .2) !important;
+}
+
+.page-home .home-cta-row {
+  width: min(100%, 590px) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.page-home .home-login-row {
+  width: min(100%, 288px) !important;
+  margin-top: -5px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  min-height: 70px !important;
+  height: 70px !important;
+  padding: 10px 16px !important;
+  border-radius: 18px !important;
+  gap: 13px !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  flex: 0 0 46px !important;
+  padding: 11px !important;
+  border-radius: 14px !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  font-size: clamp(15px, 1.08vw, 17px) !important;
+  line-height: 1.12 !important;
+  font-weight: 950 !important;
+}
+
+@media (max-width: 720px) {
+  .shell-header.home-header .market-return-cta {
+    width: 42px !important;
+    min-width: 42px !important;
+    padding: 0 !important;
+  }
+
+  .shell-header.home-header .market-return-cta span {
+    display: none !important;
+  }
+
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 38px 14px !important;
+  }
+
+  .page-home .home-product-lockup h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary .company-attribution {
+    font-size: clamp(17px, 5vw, 21px) !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: min(100%, 320px) !important;
+    max-width: min(100%, 320px) !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    height: 66px !important;
+    min-height: 66px !important;
   }
 }
