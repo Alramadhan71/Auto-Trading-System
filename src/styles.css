@@ -23873,6 +23873,253 @@ textarea,
   }
 }
 
+/* Login polish pass: coherent controls, blue accents, and simplified auth modals. */
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) {
+  --login-blue: #0d47a1;
+  --login-blue-2: #1565c0;
+  --login-blue-soft: rgba(13, 71, 161, .11);
+  --login-ring: rgba(21, 101, 192, .16);
+  --login-line: #d5dfec;
+  --login-field: #f8fafc;
+  --login-ink: #111827;
+  --login-muted: #667085;
+}
+
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form,
+.auth-modal.register-panel {
+  border: 1px solid rgba(13, 71, 161, .13) !important;
+  border-radius: 20px !important;
+  background: #ffffff !important;
+  box-shadow: 0 26px 80px rgba(15, 23, 42, .14) !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  height: 52px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 6px !important;
+  border: 1px solid var(--login-line) !important;
+  border-radius: 14px !important;
+  background: #f3f7fc !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .04) !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 40px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: var(--login-blue) !important;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .06) !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  border-color: rgba(13, 71, 161, .24) !important;
+  background: linear-gradient(135deg, #1565c0, #0d47a1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(13, 71, 161, .24) !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell,
+.auth-modal.register-panel input,
+.auth-modal.register-panel .password-field {
+  min-height: 56px !important;
+  border: 1px solid var(--login-line) !important;
+  border-radius: 14px !important;
+  background: var(--login-field) !important;
+  color: var(--login-ink) !important;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .055) !important;
+}
+
+.page-auto-trade .auth-input-shell:focus-within,
+.page-frame.page-auto-trade .auth-input-shell:focus-within,
+.auth-modal.register-panel input:focus,
+.auth-modal.register-panel .password-field:focus-within {
+  border-color: rgba(21, 101, 192, .62) !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 4px var(--login-ring), 0 14px 28px rgba(15, 23, 42, .07) !important;
+  outline: 0 !important;
+}
+
+.page-auto-trade .auth-input-shell svg,
+.page-frame.page-auto-trade .auth-input-shell svg,
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye,
+.auth-modal.register-panel .auth-password-eye,
+.auth-modal.register-panel .auth-password-eye svg {
+  color: var(--login-blue) !important;
+}
+
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye,
+.auth-modal.register-panel .auth-password-eye {
+  border-color: rgba(13, 71, 161, .18) !important;
+  background: var(--login-blue-soft) !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .remember-login input,
+.page-frame.page-auto-trade .remember-login input {
+  width: 18px !important;
+  height: 18px !important;
+  appearance: none !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  margin: 0 !important;
+  border: 2px solid rgba(13, 71, 161, .55) !important;
+  border-radius: 5px !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(13, 71, 161, .12) !important;
+}
+
+.page-auto-trade .remember-login input:checked,
+.page-frame.page-auto-trade .remember-login input:checked {
+  background: var(--login-blue) !important;
+  border-color: var(--login-blue) !important;
+}
+
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  content: "" !important;
+  width: 5px !important;
+  height: 9px !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) translateY(-1px) !important;
+}
+
+.page-auto-trade .remember-login span,
+.page-frame.page-auto-trade .remember-login span {
+  color: var(--login-muted) !important;
+  font-weight: 750 !important;
+}
+
+.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .auth-text-link,
+.auth-modal.register-panel a {
+  color: var(--login-blue) !important;
+  font-weight: 850 !important;
+}
+
+.page-auto-trade .auth-action-stack > button[type="submit"],
+.page-frame.page-auto-trade .auth-action-stack > button[type="submit"],
+.auth-modal.register-panel button[type="submit"],
+.recovery-actions a {
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #1565c0, #0d47a1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 34px rgba(13, 71, 161, .25) !important;
+}
+
+.recovery-actions a,
+.recovery-actions a svg {
+  color: #ffffff !important;
+}
+
+.auth-trial-button,
+.auth-secondary-actions button,
+.auth-secondary-actions a,
+.recovery-actions button {
+  border: 1px solid rgba(13, 71, 161, .22) !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: var(--login-blue) !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .05) !important;
+}
+
+.auth-modal-backdrop {
+  background: rgba(15, 23, 42, .45) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.auth-modal.register-panel {
+  width: min(440px, calc(100vw - 32px)) !important;
+  display: grid !important;
+  gap: 14px !important;
+  padding: 24px !important;
+  color: var(--login-ink) !important;
+}
+
+.auth-modal .register-panel-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin: 0 0 2px !important;
+}
+
+.auth-modal .register-panel-head strong {
+  color: var(--login-ink) !important;
+  font-size: 22px !important;
+  line-height: 1.15 !important;
+}
+
+.auth-modal .register-panel-head button,
+.auth-close-button {
+  width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  border: 1px solid rgba(13, 71, 161, .18) !important;
+  border-radius: 12px !important;
+  background: var(--login-blue-soft) !important;
+  color: var(--login-blue) !important;
+}
+
+.auth-modal p,
+.auth-modal small,
+.auth-modal .password-policy-note {
+  color: var(--login-muted) !important;
+  line-height: 1.5 !important;
+}
+
+.recovery-actions {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin-top: 4px !important;
+}
+
+.recovery-actions a,
+.recovery-actions button,
+.auth-modal.register-panel button[type="submit"] {
+  min-height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  font-weight: 850 !important;
+  text-decoration: none !important;
+}
+
+.page-auto-trade .auto-auth-marketing,
+.page-frame.page-auto-trade .auto-auth-marketing {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, .07) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, .07) 1px, transparent 1px),
+    radial-gradient(circle at 76% 18%, rgba(143, 211, 255, .22), transparent 31%),
+    linear-gradient(145deg, #0d47a1, #082d69 74%) !important;
+}
+
+.page-auto-trade .auth-value-stack strong,
+.page-frame.page-auto-trade .auth-value-stack strong {
+  border-radius: 14px !important;
+  border-color: rgba(255, 255, 255, .22) !important;
+  background: rgba(255, 255, 255, .12) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 16px 30px rgba(4, 20, 48, .12) !important;
+}
+
 /* Bull identity refresh: header logo and logo-derived gateway palette. */
 :root,
 :root[data-theme-style],
