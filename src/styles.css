@@ -24084,6 +24084,102 @@ textarea,
   }
 }
 
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  position: absolute !important;
+  left: 4px !important;
+  top: 1px !important;
+  width: 4px !important;
+  height: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+  transform-origin: center !important;
+}
+
+/* Final auth micro-fix: centered remember checkmark and theme-proof blue eye icon. */
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .remember-login input,
+.page-frame.page-auto-trade .remember-login input {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  position: relative !important;
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex: 0 0 16px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+  border: 1.5px solid rgba(13, 71, 161, .72) !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .remember-login input:checked,
+.page-frame.page-auto-trade .remember-login input:checked {
+  border-color: #0d47a1 !important;
+  background: #0d47a1 !important;
+}
+
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 4px !important;
+  top: 1px !important;
+  width: 4px !important;
+  height: 8px !important;
+  margin: 0 !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+}
+
+.page-auto-trade .password-field .auth-password-eye,
+.page-frame.page-auto-trade .password-field .auth-password-eye,
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye,
+.auth-modal.register-panel .password-field .auth-password-eye,
+.auth-modal.register-panel .auth-password-eye {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-color: rgba(13, 71, 161, .18) !important;
+  background: rgba(13, 71, 161, .08) !important;
+  color: #0d47a1 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .password-field .auth-password-eye svg,
+.page-frame.page-auto-trade .password-field .auth-password-eye svg,
+.page-auto-trade .password-field .auth-password-eye svg *,
+.page-frame.page-auto-trade .password-field .auth-password-eye svg *,
+.page-auto-trade .auth-password-eye svg,
+.page-frame.page-auto-trade .auth-password-eye svg,
+.page-auto-trade .auth-password-eye svg *,
+.page-frame.page-auto-trade .auth-password-eye svg *,
+.auth-modal.register-panel .auth-password-eye svg,
+.auth-modal.register-panel .auth-password-eye svg * {
+  color: #0d47a1 !important;
+  stroke: #0d47a1 !important;
+}
+
 /* Compact premium login controls: final sizing and blue icon corrections. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
