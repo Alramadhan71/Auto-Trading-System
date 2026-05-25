@@ -5262,7 +5262,7 @@ function AutoTradePage({
           </div>
         </div>
         <div className="auto-auth-card">
-          <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
+          <form className="auth-login-form" onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
             <div className="auto-auth-head">
               <img src={brandLogoSrc} alt="" aria-hidden="true" />
               <span>Secure trading access</span>
