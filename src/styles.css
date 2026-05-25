@@ -24084,6 +24084,1203 @@ textarea,
   }
 }
 
+/* FINAL GLOBAL THEME + HERO OVERRIDE
+   This block intentionally stays last to beat older generated layers. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --app-bg: #faf9f6 !important;
+  --surface: #ffffff !important;
+  --surface-soft: #f4f0e8 !important;
+  --panel: #ffffff !important;
+  --card: #ffffff !important;
+  --text: #101828 !important;
+  --muted: #667085 !important;
+  --border: rgba(15, 23, 42, .12) !important;
+  --primary: #0d47a1 !important;
+  --primary-strong: #083a86 !important;
+  --accent: #1d5fd1 !important;
+  --shadow-soft: 0 18px 44px rgba(15, 23, 42, .10) !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --app-bg: #0f1115 !important;
+  --surface: #161a22 !important;
+  --surface-soft: #1d232d !important;
+  --panel: #171b23 !important;
+  --card: #171b23 !important;
+  --text: #f6f8fb !important;
+  --muted: #a7b0c0 !important;
+  --border: rgba(226, 232, 240, .13) !important;
+  --primary: #4f8cff !important;
+  --primary-strong: #7aa7ff !important;
+  --accent: #60a5fa !important;
+  --shadow-soft: 0 20px 54px rgba(0, 0, 0, .30) !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --app-bg: #081423 !important;
+  --surface: #0d1b2e !important;
+  --surface-soft: #10243a !important;
+  --panel: #0d1b2e !important;
+  --card: #0d1b2e !important;
+  --text: #f4f8ff !important;
+  --muted: #9fb4d0 !important;
+  --border: rgba(125, 167, 217, .18) !important;
+  --primary: #5aa7ff !important;
+  --primary-strong: #8bc2ff !important;
+  --accent: #38bdf8 !important;
+  --shadow-soft: 0 22px 58px rgba(0, 9, 26, .36) !important;
+}
+
+body,
+.app-shell,
+.page-frame,
+.page-home,
+.page-auto-trade,
+.dashboard-shell,
+.admin-shell,
+.user-shell,
+.shell-main {
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
+}
+
+.shell-header,
+.panel,
+.chart-block,
+.trade-list,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.notification-card,
+.theme-modal,
+.theme-panel,
+.home-market-card,
+.market-card,
+.price-card,
+.auto-auth-card,
+.auth-modal,
+.login-panel,
+.dashboard-card,
+.admin-card,
+.user-card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.page-home .home-launchpad {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: clamp(560px, 72vh, 760px) !important;
+  padding: clamp(72px, 9vw, 118px) clamp(20px, 5vw, 72px) clamp(44px, 6vw, 76px) !important;
+  text-align: center !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(13, 71, 161, .12), transparent 34%),
+    var(--app-bg) !important;
+}
+
+:root[data-theme="dark"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="dark"] .page-home .home-launchpad {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(79, 140, 255, .18), transparent 36%),
+    #0f1115 !important;
+}
+
+:root[data-theme="black"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="black"] .page-home .home-launchpad {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(56, 189, 248, .16), transparent 36%),
+    #081423 !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(100%, 900px) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup,
+.page-home .home-product-lockup {
+  display: grid !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 auto 6px !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup h1,
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  margin: 0 !important;
+  max-width: 920px !important;
+  color: var(--text) !important;
+  font-size: clamp(48px, 7vw, 88px) !important;
+  line-height: .95 !important;
+  letter-spacing: 0 !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary *,
+.page-home .company-attribution,
+.page-home .company-attribution * {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: clamp(16px, 1.6vw, 22px) !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-row,
+.page-home .home-login-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.page-home .home-login-row {
+  margin-top: -4px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.page-home .minimal-home-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: auto !important;
+  min-width: 245px !important;
+  max-width: 100% !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 22px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--border) !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 12px 28px rgba(13, 71, 161, .16) !important;
+  transform: none !important;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-login {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong)) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .minimal-home-action {
+  background: var(--surface) !important;
+  color: var(--primary) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover,
+.page-home .minimal-home-action:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 16px 34px rgba(13, 71, 161, .20) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg,
+.page-home .minimal-home-action svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  flex: 0 0 22px !important;
+  stroke-width: 2.25 !important;
+  transform: none !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-login svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.page-home .home-cta-secondary svg,
+.page-home .minimal-home-action svg {
+  color: var(--primary) !important;
+  stroke: var(--primary) !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span,
+.page-home .minimal-home-action span {
+  display: inline-flex !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong,
+.page-home .minimal-home-action strong {
+  font-size: 15px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button,
+.spot-futures-switch button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .08) !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.spot-futures-switch button.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.theme-studio,
+.theme-studio button,
+.theme-mode-switch button,
+.theme-panel button,
+button,
+a {
+  accent-color: var(--primary) !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 64px 18px 42px !important;
+  }
+
+  .page-home .product-identity-lockup h1,
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(40px, 13vw, 58px) !important;
+    line-height: 1 !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary *,
+  .page-home .company-attribution,
+  .page-home .company-attribution * {
+    font-size: 15px !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login,
+  .page-home .minimal-home-action {
+    width: min(100%, 340px) !important;
+    min-width: 0 !important;
+    height: 50px !important;
+    min-height: 50px !important;
+  }
+}
+
+/* FINAL GLOBAL THEME + HERO OVERRIDE
+   Keep this block at the very end so legacy visual layers cannot override it. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --app-bg: #faf9f6 !important;
+  --surface: #ffffff !important;
+  --surface-soft: #f4f0e8 !important;
+  --panel: #ffffff !important;
+  --card: #ffffff !important;
+  --text: #101828 !important;
+  --muted: #667085 !important;
+  --border: rgba(15, 23, 42, .12) !important;
+  --primary: #0d47a1 !important;
+  --primary-strong: #083a86 !important;
+  --accent: #1d5fd1 !important;
+  --shadow-soft: 0 18px 44px rgba(15, 23, 42, .10) !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --app-bg: #0f1115 !important;
+  --surface: #161a22 !important;
+  --surface-soft: #1d232d !important;
+  --panel: #171b23 !important;
+  --card: #171b23 !important;
+  --text: #f6f8fb !important;
+  --muted: #a7b0c0 !important;
+  --border: rgba(226, 232, 240, .13) !important;
+  --primary: #4f8cff !important;
+  --primary-strong: #7aa7ff !important;
+  --accent: #60a5fa !important;
+  --shadow-soft: 0 20px 54px rgba(0, 0, 0, .30) !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --app-bg: #081423 !important;
+  --surface: #0d1b2e !important;
+  --surface-soft: #10243a !important;
+  --panel: #0d1b2e !important;
+  --card: #0d1b2e !important;
+  --text: #f4f8ff !important;
+  --muted: #9fb4d0 !important;
+  --border: rgba(125, 167, 217, .18) !important;
+  --primary: #5aa7ff !important;
+  --primary-strong: #8bc2ff !important;
+  --accent: #38bdf8 !important;
+  --shadow-soft: 0 22px 58px rgba(0, 9, 26, .36) !important;
+}
+
+body,
+.app-shell,
+.page-frame,
+.page-home,
+.page-auto-trade,
+.dashboard-shell,
+.admin-shell,
+.user-shell,
+.shell-main {
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
+}
+
+.shell-header,
+.panel,
+.chart-block,
+.trade-list,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.notification-card,
+.theme-modal,
+.theme-panel,
+.home-market-card,
+.market-card,
+.price-card,
+.auto-auth-card,
+.auth-modal,
+.login-panel,
+.dashboard-card,
+.admin-card,
+.user-card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.page-home .home-launchpad {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: clamp(560px, 72vh, 760px) !important;
+  padding: clamp(72px, 9vw, 118px) clamp(20px, 5vw, 72px) clamp(44px, 6vw, 76px) !important;
+  text-align: center !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(13, 71, 161, .12), transparent 34%),
+    var(--app-bg) !important;
+}
+
+:root[data-theme="dark"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="dark"] .page-home .home-launchpad {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(79, 140, 255, .18), transparent 36%),
+    #0f1115 !important;
+}
+
+:root[data-theme="black"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="black"] .page-home .home-launchpad {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(56, 189, 248, .16), transparent 36%),
+    #081423 !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(100%, 900px) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup,
+.page-home .home-product-lockup {
+  display: grid !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 auto 6px !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup h1,
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  margin: 0 !important;
+  max-width: 920px !important;
+  color: var(--text) !important;
+  font-size: clamp(48px, 7vw, 88px) !important;
+  line-height: .95 !important;
+  letter-spacing: 0 !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary *,
+.page-home .company-attribution,
+.page-home .company-attribution * {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: clamp(16px, 1.6vw, 22px) !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-row,
+.page-home .home-login-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.page-home .home-login-row {
+  margin-top: -4px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.page-home .minimal-home-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: auto !important;
+  min-width: 245px !important;
+  max-width: 100% !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 22px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--border) !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 12px 28px rgba(13, 71, 161, .16) !important;
+  transform: none !important;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-login {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong)) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .minimal-home-action {
+  background: var(--surface) !important;
+  color: var(--primary) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover,
+.page-home .minimal-home-action:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 16px 34px rgba(13, 71, 161, .20) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg,
+.page-home .minimal-home-action svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  flex: 0 0 22px !important;
+  stroke-width: 2.25 !important;
+  transform: none !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-login svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.page-home .home-cta-secondary svg,
+.page-home .minimal-home-action svg {
+  color: var(--primary) !important;
+  stroke: var(--primary) !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span,
+.page-home .minimal-home-action span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong,
+.page-home .minimal-home-action strong {
+  font-size: 15px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button,
+.spot-futures-switch button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .08) !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.spot-futures-switch button.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.theme-studio,
+.theme-studio button,
+.theme-mode-switch button,
+.theme-panel button,
+button,
+a {
+  accent-color: var(--primary) !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 64px 18px 42px !important;
+  }
+
+  .page-home .product-identity-lockup h1,
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(40px, 13vw, 58px) !important;
+    line-height: 1 !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary *,
+  .page-home .company-attribution,
+  .page-home .company-attribution * {
+    font-size: 15px !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login,
+  .page-home .minimal-home-action {
+    width: min(100%, 340px) !important;
+    min-width: 0 !important;
+    height: 50px !important;
+    min-height: 50px !important;
+  }
+}
+
+/* TRUE FINAL HERO/THEME OVERRIDE: must stay last. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --bg: #faf9f6 !important;
+  --theme-page-bg: #faf9f6 !important;
+  --theme-surface: #ffffff !important;
+  --theme-surface-2: #f3f1ec !important;
+  --theme-border: #ddd8ce !important;
+  --theme-shadow: rgba(23, 32, 44, .10) !important;
+  --text: #17202c !important;
+  --muted: #687383 !important;
+  --accent: #0d47a1 !important;
+  --accent-strong: #1565c0 !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --bg: #0f1115 !important;
+  --theme-page-bg: #0f1115 !important;
+  --theme-surface: #181c23 !important;
+  --theme-surface-2: #202631 !important;
+  --theme-border: #303846 !important;
+  --theme-shadow: rgba(0, 0, 0, .30) !important;
+  --text: #f4f7fb !important;
+  --muted: #a8b1bf !important;
+  --accent: #6ea8ff !important;
+  --accent-strong: #9cc7ff !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --bg: #09111f !important;
+  --theme-page-bg: #09111f !important;
+  --theme-surface: #101b2a !important;
+  --theme-surface-2: #16243a !important;
+  --theme-border: #263954 !important;
+  --theme-shadow: rgba(0, 0, 0, .34) !important;
+  --text: #f5f9ff !important;
+  --muted: #9fb1c9 !important;
+  --accent: #5aa9ff !important;
+  --accent-strong: #8fd3ff !important;
+}
+
+body,
+#root,
+.app-shell,
+main.page-frame,
+.page-home {
+  background: var(--theme-page-bg) !important;
+  color: var(--text) !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(760px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup,
+.page-home .home-product-lockup > div {
+  width: min(720px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad-copy .home-product-lockup h1,
+.page-home .home-launchpad .home-product-lockup h1 {
+  max-width: 12ch !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: clamp(44px, 5vw, 74px) !important;
+  line-height: .96 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+  text-shadow: none !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary .company-attribution,
+.page-home .home-product-lockup .company-attribution {
+  margin: 0 !important;
+  color: color-mix(in srgb, var(--accent-strong) 78%, var(--text)) !important;
+  font-size: clamp(18px, 1.5vw, 24px) !important;
+  line-height: 1.2 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: none !important;
+}
+
+.page-home .home-cta-row {
+  width: min(620px, 100%) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.page-home .home-login-row {
+  width: min(304px, 100%) !important;
+  display: grid !important;
+  margin: 0 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.page-home .home-cta-row .home-cta-primary,
+.page-home .home-cta-row .home-cta-secondary,
+.page-home .home-login-row .home-cta-login {
+  width: 100% !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--theme-border)) !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--theme-shadow) 38%, transparent) !important;
+}
+
+.page-home .home-cta-primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-strong) 72%, var(--accent))) !important;
+  color: #ffffff !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  background: color-mix(in srgb, var(--theme-surface) 94%, transparent) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg,
+.page-home .home-cta-row .home-cta-primary svg,
+.page-home .home-cta-row .home-cta-secondary svg,
+.page-home .home-login-row .home-cta-login svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex: 0 0 22px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch,
+.venue-switch,
+.access-filter-pills,
+.selection-pill-row,
+.range-pills,
+.signal-filters {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 5px !important;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 88%, transparent) !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--theme-surface-2) 90%, transparent) !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button {
+  min-height: 36px !important;
+  height: 36px !important;
+  min-width: 86px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 14px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--theme-border)) !important;
+  background: color-mix(in srgb, var(--accent) 13%, var(--theme-surface)) !important;
+  color: var(--text) !important;
+}
+
+@media (max-width: 720px) {
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: min(100%, 340px) !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad-copy .home-product-lockup h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+  }
+}
+
+/* Absolute final global UI harmony layer: themes, hero typography, hero CTAs. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light !important;
+  --bg: #faf9f6 !important;
+  --theme-page-bg: #faf9f6 !important;
+  --theme-surface: #ffffff !important;
+  --theme-surface-2: #f3f1ec !important;
+  --theme-border: #ddd8ce !important;
+  --theme-shadow: rgba(23, 32, 44, .10) !important;
+  --text: #17202c !important;
+  --muted: #687383 !important;
+  --soft-text: #3f4b5a !important;
+  --accent: #0d47a1 !important;
+  --accent-strong: #1565c0 !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark !important;
+  --bg: #0f1115 !important;
+  --theme-page-bg: #0f1115 !important;
+  --theme-surface: #181c23 !important;
+  --theme-surface-2: #202631 !important;
+  --theme-border: #303846 !important;
+  --theme-shadow: rgba(0, 0, 0, .30) !important;
+  --text: #f4f7fb !important;
+  --muted: #a8b1bf !important;
+  --soft-text: #d7dde7 !important;
+  --accent: #6ea8ff !important;
+  --accent-strong: #9cc7ff !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark !important;
+  --bg: #09111f !important;
+  --theme-page-bg: #09111f !important;
+  --theme-surface: #101b2a !important;
+  --theme-surface-2: #16243a !important;
+  --theme-border: #263954 !important;
+  --theme-shadow: rgba(0, 0, 0, .34) !important;
+  --text: #f5f9ff !important;
+  --muted: #9fb1c9 !important;
+  --soft-text: #d7e5f7 !important;
+  --accent: #5aa9ff !important;
+  --accent-strong: #8fd3ff !important;
+}
+
+body,
+#root,
+.app-shell,
+main.page-frame,
+.auto-trade-page,
+.page-home {
+  background: var(--theme-page-bg) !important;
+  color: var(--text) !important;
+}
+
+.shell-header {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface-2) 92%, transparent), color-mix(in srgb, var(--theme-surface) 88%, transparent)) !important;
+  border-bottom-color: color-mix(in srgb, var(--theme-border) 90%, transparent) !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(440px, 54vh, 620px) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: clamp(44px, 6vw, 76px) 24px !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 7%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
+    var(--theme-page-bg) !important;
+  background-size: 58px 58px, 58px 58px, 100% 100%, 100% 100% !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(760px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup,
+.page-home .home-product-lockup > div {
+  width: min(720px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad-copy .home-product-lockup h1,
+.page-home .home-launchpad .home-product-lockup h1 {
+  max-width: 12ch !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: clamp(44px, 5vw, 74px) !important;
+  line-height: .96 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+  text-shadow: none !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary .company-attribution,
+.page-home .home-product-lockup .home-launchpad-summary,
+.page-home .home-product-lockup .company-attribution {
+  margin: 0 !important;
+  color: color-mix(in srgb, var(--accent-strong) 78%, var(--text)) !important;
+  font-size: clamp(18px, 1.5vw, 24px) !important;
+  line-height: 1.2 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: none !important;
+}
+
+.page-home .home-cta-row {
+  width: min(620px, 100%) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.page-home .home-login-row {
+  width: min(304px, 100%) !important;
+  display: grid !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.page-home .home-cta-row .home-cta-primary,
+.page-home .home-cta-row .home-cta-secondary,
+.page-home .home-login-row .home-cta-login {
+  width: 100% !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--theme-border)) !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--theme-shadow) 38%, transparent) !important;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease !important;
+}
+
+.page-home .home-cta-primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-strong) 72%, var(--accent))) !important;
+  color: #ffffff !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  background: color-mix(in srgb, var(--theme-surface) 94%, transparent) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-1px) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 62%, var(--theme-border)) !important;
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--theme-shadow) 52%, transparent) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg,
+.page-home .home-cta-row .home-cta-primary svg,
+.page-home .home-cta-row .home-cta-secondary svg,
+.page-home .home-login-row .home-cta-login svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex: 0 0 22px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch,
+.venue-switch,
+.access-filter-pills,
+.selection-pill-row,
+.range-pills,
+.signal-filters {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 5px !important;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 88%, transparent) !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--theme-surface-2) 90%, transparent) !important;
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--theme-shadow) 18%, transparent) !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button {
+  min-height: 36px !important;
+  height: 36px !important;
+  min-width: 86px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 14px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--theme-border)) !important;
+  background: color-mix(in srgb, var(--accent) 13%, var(--theme-surface)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--theme-shadow) 26%, transparent) !important;
+}
+
+.theme-toggle-icon svg,
+.theme-mode-switch svg,
+.theme-control svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--accent) !important;
+  stroke: var(--accent) !important;
+}
+
+@media (max-width: 720px) {
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: min(100%, 340px) !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad-copy .home-product-lockup h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary .company-attribution {
+    font-size: clamp(16px, 4.8vw, 20px) !important;
+  }
+}
+
 /* Unified app polish: Light / Dark / Execution themes, hero balance, and segmented controls. */
 :root[data-theme="light"],
 :root[data-theme-style][data-theme="light"] {
@@ -29330,5 +30527,342 @@ td,
   .page-frame.page-auto-trade .auto-auth-card form {
     width: min(100%, 360px) !important;
     padding: 22px !important;
+  }
+}
+
+/* FINAL GLOBAL THEME + HERO OVERRIDE
+   EOF enforced override. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --app-bg: #faf9f6 !important;
+  --surface: #ffffff !important;
+  --surface-soft: #f4f0e8 !important;
+  --panel: #ffffff !important;
+  --card: #ffffff !important;
+  --text: #101828 !important;
+  --muted: #667085 !important;
+  --border: rgba(15, 23, 42, .12) !important;
+  --primary: #0d47a1 !important;
+  --primary-strong: #083a86 !important;
+  --accent: #1d5fd1 !important;
+  --shadow-soft: 0 18px 44px rgba(15, 23, 42, .10) !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --app-bg: #0f1115 !important;
+  --surface: #161a22 !important;
+  --surface-soft: #1d232d !important;
+  --panel: #171b23 !important;
+  --card: #171b23 !important;
+  --text: #f6f8fb !important;
+  --muted: #a7b0c0 !important;
+  --border: rgba(226, 232, 240, .13) !important;
+  --primary: #4f8cff !important;
+  --primary-strong: #7aa7ff !important;
+  --accent: #60a5fa !important;
+  --shadow-soft: 0 20px 54px rgba(0, 0, 0, .30) !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --app-bg: #081423 !important;
+  --surface: #0d1b2e !important;
+  --surface-soft: #10243a !important;
+  --panel: #0d1b2e !important;
+  --card: #0d1b2e !important;
+  --text: #f4f8ff !important;
+  --muted: #9fb4d0 !important;
+  --border: rgba(125, 167, 217, .18) !important;
+  --primary: #5aa7ff !important;
+  --primary-strong: #8bc2ff !important;
+  --accent: #38bdf8 !important;
+  --shadow-soft: 0 22px 58px rgba(0, 9, 26, .36) !important;
+}
+
+body,
+.app-shell,
+.page-frame,
+.page-home,
+.page-auto-trade,
+.dashboard-shell,
+.admin-shell,
+.user-shell,
+.shell-main {
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
+}
+
+.shell-header,
+.panel,
+.chart-block,
+.trade-list,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.notification-card,
+.theme-modal,
+.theme-panel,
+.home-market-card,
+.market-card,
+.price-card,
+.auto-auth-card,
+.auth-modal,
+.login-panel,
+.dashboard-card,
+.admin-card,
+.user-card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.page-home .home-launchpad {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: clamp(560px, 72vh, 760px) !important;
+  padding: clamp(72px, 9vw, 118px) clamp(20px, 5vw, 72px) clamp(44px, 6vw, 76px) !important;
+  text-align: center !important;
+  background: radial-gradient(circle at 50% 18%, rgba(13, 71, 161, .12), transparent 34%), var(--app-bg) !important;
+}
+
+:root[data-theme="dark"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="dark"] .page-home .home-launchpad {
+  background: radial-gradient(circle at 50% 16%, rgba(79, 140, 255, .18), transparent 36%), #0f1115 !important;
+}
+
+:root[data-theme="black"] .page-home .home-launchpad,
+:root[data-theme-style][data-theme="black"] .page-home .home-launchpad {
+  background: radial-gradient(circle at 50% 16%, rgba(56, 189, 248, .16), transparent 36%), #081423 !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(100%, 900px) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup,
+.page-home .home-product-lockup,
+.page-home .home-product-lockup > div {
+  width: min(760px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 auto 6px !important;
+  text-align: center !important;
+}
+
+.page-home .product-identity-lockup h1,
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  margin: 0 !important;
+  max-width: 920px !important;
+  color: var(--text) !important;
+  font-size: clamp(48px, 7vw, 88px) !important;
+  line-height: .95 !important;
+  letter-spacing: 0 !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary *,
+.page-home .company-attribution,
+.page-home .company-attribution * {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: clamp(16px, 1.6vw, 22px) !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-row,
+.page-home .home-login-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.page-home .home-login-row {
+  margin-top: -4px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.page-home .minimal-home-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: auto !important;
+  min-width: 245px !important;
+  max-width: 100% !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 22px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--border) !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 12px 28px rgba(13, 71, 161, .16) !important;
+  transform: none !important;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-login {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong)) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .minimal-home-action {
+  background: var(--surface) !important;
+  color: var(--primary) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover,
+.page-home .minimal-home-action:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 16px 34px rgba(13, 71, 161, .20) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg,
+.page-home .minimal-home-action svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  flex: 0 0 22px !important;
+  stroke-width: 2.25 !important;
+  transform: none !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-login svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.page-home .home-cta-secondary svg,
+.page-home .minimal-home-action svg {
+  color: var(--primary) !important;
+  stroke: var(--primary) !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span,
+.page-home .minimal-home-action span {
+  display: inline-flex !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong,
+.page-home .minimal-home-action strong {
+  font-size: 15px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button,
+.spot-futures-switch button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .08) !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.spot-futures-switch button.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.theme-studio,
+.theme-studio button,
+.theme-mode-switch button,
+.theme-panel button,
+button,
+a {
+  accent-color: var(--primary) !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 64px 18px 42px !important;
+  }
+
+  .page-home .product-identity-lockup h1,
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(40px, 13vw, 58px) !important;
+    line-height: 1 !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary *,
+  .page-home .company-attribution,
+  .page-home .company-attribution * {
+    font-size: 15px !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login,
+  .page-home .minimal-home-action {
+    width: min(100%, 340px) !important;
+    min-width: 0 !important;
+    height: 50px !important;
+    min-height: 50px !important;
   }
 }

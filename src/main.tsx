@@ -1904,7 +1904,7 @@ function ThemeStudio({
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
   const nextTheme = currentTheme === 'light' ? 'black' : currentTheme === 'black' ? 'dark' : 'light';
-  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Moon size={18} /> : <Gauge size={18} />;
+  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Gauge size={18} /> : <Moon size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
@@ -1942,7 +1942,7 @@ function ThemePanel({
       </header>
       <div className="theme-mode-switch" aria-label="Theme mode">
         {themes.map(item => <button key={item.id} className={currentTheme === item.id ? 'active' : ''} onClick={() => onPick(item.id)}>
-          {item.id === 'light' ? <Sun size={16} /> : <Moon size={16} />}
+          {item.id === 'light' ? <Sun size={16} /> : item.id === 'black' ? <Gauge size={16} /> : <Moon size={16} />}
           <span>{item.name}</span>
         </button>)}
       </div>
@@ -2205,7 +2205,7 @@ function USStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={20} />
+            <LogIn size={22} />
             <span><strong>Log In to Your Account</strong></span>
           </button>
         </div>
@@ -2528,7 +2528,7 @@ function SaudiStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={20} />
+            <LogIn size={22} />
             <span><strong>Log In to Your Account</strong></span>
           </button>
         </div>
@@ -2794,7 +2794,7 @@ function HomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={20} />
+            <LogIn size={22} />
             <span>
               <strong>Log In to Your Account</strong>
             </span>
