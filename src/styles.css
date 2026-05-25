@@ -24084,6 +24084,357 @@ textarea,
   }
 }
 
+/* Unified app polish: Light / Dark / Execution themes, hero balance, and segmented controls. */
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light;
+  --bg: #faf9f6;
+  --sidebar: #f3f1ec;
+  --panel: #ffffff;
+  --panel-strong: #f5f3ee;
+  --panel-soft: #f0f4f9;
+  --border: #ddd8ce;
+  --border-strong: #0d47a1;
+  --text: #17202c;
+  --muted: #687383;
+  --soft-text: #3f4b5a;
+  --accent: #0d47a1;
+  --accent-strong: #1565c0;
+  --success: #178f5f;
+  --danger: #c84252;
+  --warning: #8a681f;
+  --hover: rgba(13, 71, 161, .09);
+  --brand-text: #17202c;
+  --theme-page-bg: #faf9f6;
+  --theme-surface: #ffffff;
+  --theme-surface-2: #f5f3ee;
+  --theme-border: #ddd8ce;
+  --theme-shadow: rgba(23, 32, 44, .10);
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1115;
+  --sidebar: #12151b;
+  --panel: #181c23;
+  --panel-strong: #11141a;
+  --panel-soft: #202631;
+  --border: #2f3642;
+  --border-strong: #6ea8ff;
+  --text: #f4f7fb;
+  --muted: #a8b1bf;
+  --soft-text: #d7dde7;
+  --accent: #6ea8ff;
+  --accent-strong: #9cc7ff;
+  --success: #35c77f;
+  --danger: #ef6672;
+  --warning: #d8ad5f;
+  --hover: rgba(110, 168, 255, .13);
+  --brand-text: #ffffff;
+  --theme-page-bg: #0f1115;
+  --theme-surface: #181c23;
+  --theme-surface-2: #202631;
+  --theme-border: #2f3642;
+  --theme-shadow: rgba(0, 0, 0, .28);
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark;
+  --bg: #09111f;
+  --sidebar: #0b1524;
+  --panel: #101b2a;
+  --panel-strong: #0c1422;
+  --panel-soft: #16243a;
+  --border: #263954;
+  --border-strong: #76c8ff;
+  --text: #f5f9ff;
+  --muted: #9fb1c9;
+  --soft-text: #d7e5f7;
+  --accent: #5aa9ff;
+  --accent-strong: #8fd3ff;
+  --success: #38d18f;
+  --danger: #ff6675;
+  --warning: #d7b468;
+  --hover: rgba(90, 169, 255, .14);
+  --brand-text: #ffffff;
+  --theme-page-bg: #09111f;
+  --theme-surface: #101b2a;
+  --theme-surface-2: #16243a;
+  --theme-border: #263954;
+  --theme-shadow: rgba(0, 0, 0, .32);
+}
+
+body,
+.app-shell,
+main.page-frame {
+  background: var(--theme-page-bg, var(--bg)) !important;
+  color: var(--text) !important;
+}
+
+.shell-header {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--sidebar) 92%, transparent), color-mix(in srgb, var(--panel-strong) 96%, transparent)) !important;
+  border-bottom-color: color-mix(in srgb, var(--theme-border, var(--border)) 88%, transparent) !important;
+}
+
+.theme-toggle,
+.theme-studio button,
+.shell-nav button,
+.market-return-cta,
+.home-news-badge,
+.nav-badge,
+.risk-badge,
+.side-badge {
+  border-color: color-mix(in srgb, var(--theme-border, var(--border)) 86%, transparent) !important;
+  background: color-mix(in srgb, var(--theme-surface, var(--panel)) 90%, transparent) !important;
+  color: var(--text) !important;
+}
+
+.premium-panel,
+.chart-block,
+.trade-list,
+.portfolio-card,
+.selection-control-card,
+.admin-split-panel,
+.admin-strategy-control,
+.telegram-delivery-panel,
+.access-board-card,
+.ledger-wallet-panel,
+.market-select-card,
+.price-card,
+.home-live-card,
+.home-news-card,
+.home-leader-row,
+.home-marketcap-row,
+.home-leader-card,
+.notification-card {
+  border-color: color-mix(in srgb, var(--theme-border, var(--border)) 88%, transparent) !important;
+  background: color-mix(in srgb, var(--theme-surface, var(--panel)) 92%, transparent) !important;
+  color: var(--text) !important;
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--theme-shadow, rgba(0,0,0,.18)) 42%, transparent) !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(430px, 54vh, 620px) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: clamp(42px, 6vw, 76px) 24px !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 7%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
+    var(--theme-page-bg, var(--bg)) !important;
+  background-size: 58px 58px, 58px 58px, 100% 100%, 100% 100% !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(760px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 22px !important;
+  text-align: center !important;
+}
+
+.page-home .home-product-lockup,
+.page-home .home-product-lockup > div {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+}
+
+.page-home .home-product-lockup h1 {
+  max-width: 12ch !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: clamp(44px, 5vw, 74px) !important;
+  line-height: .96 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.page-home .home-launchpad-summary,
+.page-home .home-launchpad-summary .company-attribution {
+  margin: 0 !important;
+  color: color-mix(in srgb, var(--accent-strong) 78%, var(--text)) !important;
+  font-size: clamp(18px, 1.5vw, 24px) !important;
+  line-height: 1.2 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+
+.page-home .home-cta-row {
+  width: min(620px, 100%) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.page-home .home-login-row {
+  width: min(304px, 100%) !important;
+  margin: 0 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  width: 100% !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--theme-border, var(--border))) !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--theme-shadow, rgba(0,0,0,.16)) 36%, transparent) !important;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease !important;
+}
+
+.page-home .home-cta-primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-strong) 72%, var(--accent))) !important;
+  color: #ffffff !important;
+}
+
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  background: color-mix(in srgb, var(--theme-surface, var(--panel)) 92%, transparent) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-1px) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 62%, var(--theme-border, var(--border))) !important;
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--theme-shadow, rgba(0,0,0,.16)) 48%, transparent) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  flex: 0 0 22px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+}
+
+.home-market-switch,
+.venue-switch,
+.access-filter-pills,
+.selection-pill-row,
+.range-pills,
+.signal-filters {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 5px !important;
+  border: 1px solid color-mix(in srgb, var(--theme-border, var(--border)) 86%, transparent) !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--theme-surface-2, var(--panel-strong)) 88%, transparent) !important;
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--theme-shadow, rgba(0,0,0,.08)) 18%, transparent) !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.access-filter-pills button,
+.selection-pill-row button,
+.range-pills button,
+.signal-filters button {
+  min-height: 36px !important;
+  height: 36px !important;
+  min-width: 86px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.access-filter-pills button.active,
+.selection-pill-row button.active,
+.range-pills button.active,
+.signal-filters button.active {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--theme-border, var(--border))) !important;
+  background: color-mix(in srgb, var(--accent) 13%, var(--theme-surface, var(--panel))) !important;
+  color: var(--text) !important;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--theme-shadow, rgba(0,0,0,.16)) 26%, transparent) !important;
+}
+
+.home-market-switch button:hover,
+.venue-switch button:hover,
+.access-filter-pills button:hover,
+.selection-pill-row button:hover,
+.range-pills button:hover,
+.signal-filters button:hover {
+  color: var(--text) !important;
+  background: color-mix(in srgb, var(--accent) 9%, transparent) !important;
+}
+
+@media (max-width: 720px) {
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: min(100%, 340px) !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-home .home-product-lockup h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+  }
+
+  .page-home .home-launchpad-summary,
+  .page-home .home-launchpad-summary .company-attribution {
+    font-size: clamp(16px, 4.8vw, 20px) !important;
+  }
+
+  .home-market-switch,
+  .venue-switch,
+  .access-filter-pills,
+  .selection-pill-row,
+  .range-pills,
+  .signal-filters {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .home-market-switch button,
+  .venue-switch button,
+  .access-filter-pills button,
+  .selection-pill-row button,
+  .range-pills button,
+  .signal-filters button {
+    min-width: 0 !important;
+    flex: 1 0 auto !important;
+  }
+}
+
 /* Warm off-white login-side background only. */
 .page-auto-trade .auto-auth-card,
 .page-frame.page-auto-trade .auto-auth-card {
