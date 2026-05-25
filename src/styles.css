@@ -23873,6 +23873,499 @@ textarea,
   }
 }
 
+/* Final compact control override - must remain at end of file. */
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form {
+  width: min(410px, 100%) !important;
+  gap: 16px !important;
+  padding: 26px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 54px rgba(15, 23, 42, .11) !important;
+}
+
+.page-auto-trade .auto-auth-head img,
+.page-frame.page-auto-trade .auto-auth-head img {
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 4px !important;
+}
+
+.page-auto-trade .auto-auth-head h1,
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(27px, 2.4vw, 34px) !important;
+  line-height: 1.1 !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  height: 44px !important;
+  min-height: 44px !important;
+  gap: 6px !important;
+  padding: 4px !important;
+  border-radius: 12px !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .045) !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  box-shadow: 0 8px 18px rgba(13, 71, 161, .18) !important;
+}
+
+.page-auto-trade .auto-auth-form,
+.page-frame.page-auto-trade .auto-auth-form {
+  gap: 12px !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell {
+  height: 48px !important;
+  min-height: 48px !important;
+  gap: 10px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04) !important;
+}
+
+.page-auto-trade .auth-input-shell input,
+.page-frame.page-auto-trade .auth-input-shell input,
+.page-auto-trade .password-field.auth-input-shell input,
+.page-frame.page-auto-trade .password-field.auth-input-shell input {
+  height: 46px !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+}
+
+.page-auto-trade .auth-input-shell svg,
+.page-frame.page-auto-trade .auth-input-shell svg,
+.page-auto-trade .auth-password-eye svg,
+.page-frame.page-auto-trade .auth-password-eye svg,
+.auth-modal.register-panel .auth-password-eye svg {
+  width: 17px !important;
+  height: 17px !important;
+  color: #0d47a1 !important;
+  stroke: #0d47a1 !important;
+}
+
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 9px !important;
+  background: rgba(13, 71, 161, .09) !important;
+  color: #0d47a1 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-form-row,
+.page-frame.page-auto-trade .auth-form-row {
+  min-height: 28px !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  gap: 8px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .remember-login input,
+.page-frame.page-auto-trade .remember-login input {
+  appearance: none !important;
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  min-height: 15px !important;
+  max-width: 15px !important;
+  max-height: 15px !important;
+  flex: 0 0 15px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1.5px solid rgba(13, 71, 161, .72) !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .remember-login input:checked,
+.page-frame.page-auto-trade .remember-login input:checked {
+  background: #0d47a1 !important;
+  border-color: #0d47a1 !important;
+}
+
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  content: "" !important;
+  display: block !important;
+  width: 4px !important;
+  height: 7px !important;
+  margin: 1px auto 0 !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+}
+
+.page-auto-trade .remember-login span,
+.page-frame.page-auto-trade .remember-login span,
+.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .auth-text-link {
+  font-size: 13px !important;
+}
+
+.page-auto-trade .auth-action-stack,
+.page-frame.page-auto-trade .auth-action-stack {
+  gap: 9px !important;
+  margin-top: 4px !important;
+}
+
+.page-auto-trade .auth-action-stack > button[type="submit"],
+.page-frame.page-auto-trade .auth-action-stack > button[type="submit"] {
+  height: 49px !important;
+  min-height: 49px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  box-shadow: 0 12px 26px rgba(13, 71, 161, .22) !important;
+}
+
+.auth-trial-button,
+.auth-secondary-actions button,
+.auth-secondary-actions a {
+  min-height: 42px !important;
+  border-radius: 11px !important;
+  font-size: 13px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .04) !important;
+}
+
+.auth-modal.register-panel {
+  width: min(410px, calc(100vw - 32px)) !important;
+  gap: 13px !important;
+  padding: 24px !important;
+  border-radius: 18px !important;
+}
+
+.auth-modal.register-panel input,
+.auth-modal.register-panel .password-field {
+  height: 48px !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+}
+
+.auth-modal.register-panel button[type="submit"],
+.recovery-actions a,
+.recovery-actions button {
+  min-height: 46px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+}
+
+.recovery-actions a,
+.recovery-actions a svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+@media (max-width: 640px) {
+  .page-auto-trade .auto-auth-card form,
+  .page-frame.page-auto-trade .auto-auth-card form {
+    width: min(100%, 360px) !important;
+    padding: 22px !important;
+  }
+}
+
+/* Compact premium login controls: final sizing and blue icon corrections. */
+.page-auto-trade:has(.auto-auth-shell),
+.page-frame.page-auto-trade:has(.auto-auth-shell) {
+  --login-blue: #0d47a1;
+  --login-blue-2: #1565c0;
+  --login-blue-soft: rgba(13, 71, 161, .09);
+  --login-ring: rgba(21, 101, 192, .14);
+  --login-line: #d8e2ee;
+  --login-field: #f8fafc;
+  --login-ink: #111827;
+  --login-muted: #667085;
+}
+
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form {
+  width: min(410px, 100%) !important;
+  gap: 16px !important;
+  padding: 26px !important;
+  border: 1px solid rgba(13, 71, 161, .12) !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 18px 54px rgba(15, 23, 42, .11) !important;
+}
+
+.page-auto-trade .auto-auth-head,
+.page-frame.page-auto-trade .auto-auth-head {
+  gap: 6px !important;
+}
+
+.page-auto-trade .auto-auth-head img,
+.page-frame.page-auto-trade .auto-auth-head img {
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 4px !important;
+}
+
+.page-auto-trade .auto-auth-head span,
+.page-frame.page-auto-trade .auto-auth-head span {
+  font-size: 11px !important;
+}
+
+.page-auto-trade .auto-auth-head h1,
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(27px, 2.4vw, 34px) !important;
+  line-height: 1.1 !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  width: 100% !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  padding: 4px !important;
+  border: 1px solid var(--login-line) !important;
+  border-radius: 12px !important;
+  background: #f4f7fb !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .035) !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+  background: #ffffff !important;
+  color: var(--login-blue) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .045) !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  border-color: rgba(13, 71, 161, .22) !important;
+  background: linear-gradient(135deg, var(--login-blue-2), var(--login-blue)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(13, 71, 161, .18) !important;
+}
+
+.page-auto-trade .auto-auth-form,
+.page-frame.page-auto-trade .auto-auth-form {
+  gap: 12px !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell {
+  min-height: 48px !important;
+  height: 48px !important;
+  grid-template-columns: 20px minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  padding: 0 14px !important;
+  border: 1px solid var(--login-line) !important;
+  border-radius: 12px !important;
+  background: var(--login-field) !important;
+  color: var(--login-muted) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04) !important;
+}
+
+.page-auto-trade .auth-input-shell:focus-within,
+.page-frame.page-auto-trade .auth-input-shell:focus-within {
+  border-color: rgba(21, 101, 192, .55) !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 4px var(--login-ring), 0 8px 20px rgba(15, 23, 42, .055) !important;
+}
+
+.page-auto-trade .auth-input-shell svg,
+.page-frame.page-auto-trade .auth-input-shell svg {
+  width: 17px !important;
+  height: 17px !important;
+  color: var(--login-blue) !important;
+  stroke: var(--login-blue) !important;
+}
+
+.page-auto-trade .auth-input-shell input,
+.page-frame.page-auto-trade .auth-input-shell input,
+.page-auto-trade .password-field.auth-input-shell input,
+.page-frame.page-auto-trade .password-field.auth-input-shell input {
+  height: 46px !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+}
+
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border: 1px solid rgba(13, 71, 161, .16) !important;
+  border-radius: 9px !important;
+  background: var(--login-blue-soft) !important;
+  color: var(--login-blue) !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-password-eye svg,
+.page-frame.page-auto-trade .auth-password-eye svg,
+.auth-modal.register-panel .auth-password-eye svg {
+  color: var(--login-blue) !important;
+  stroke: var(--login-blue) !important;
+}
+
+.page-auto-trade .auth-form-row,
+.page-frame.page-auto-trade .auth-form-row {
+  min-height: 28px !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  gap: 8px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .remember-login input,
+.page-frame.page-auto-trade .remember-login input {
+  appearance: none !important;
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  min-height: 15px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  margin: 0 !important;
+  border: 1.5px solid rgba(13, 71, 161, .72) !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .remember-login input:checked,
+.page-frame.page-auto-trade .remember-login input:checked {
+  background: var(--login-blue) !important;
+  border-color: var(--login-blue) !important;
+}
+
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  content: "" !important;
+  width: 4px !important;
+  height: 7px !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) translateY(-1px) !important;
+}
+
+.page-auto-trade .remember-login span,
+.page-frame.page-auto-trade .remember-login span,
+.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .auth-text-link {
+  font-size: 13px !important;
+}
+
+.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .auth-text-link {
+  color: var(--login-blue) !important;
+}
+
+.page-auto-trade .auth-action-stack,
+.page-frame.page-auto-trade .auth-action-stack {
+  gap: 9px !important;
+  margin-top: 4px !important;
+}
+
+.page-auto-trade .auth-action-stack > button[type="submit"],
+.page-frame.page-auto-trade .auth-action-stack > button[type="submit"] {
+  min-height: 49px !important;
+  height: 49px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  box-shadow: 0 12px 26px rgba(13, 71, 161, .22) !important;
+}
+
+.auth-trial-button,
+.auth-secondary-actions button,
+.auth-secondary-actions a {
+  min-height: 42px !important;
+  border-radius: 11px !important;
+  font-size: 13px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .04) !important;
+}
+
+.auth-secondary-actions {
+  gap: 8px !important;
+}
+
+.auth-modal.register-panel {
+  width: min(410px, calc(100vw - 32px)) !important;
+  gap: 13px !important;
+  padding: 24px !important;
+  border: 1px solid rgba(13, 71, 161, .13) !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .16) !important;
+}
+
+.auth-modal.register-panel input,
+.auth-modal.register-panel .password-field {
+  min-height: 48px !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--login-line) !important;
+  background: var(--login-field) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04) !important;
+}
+
+.auth-modal.register-panel button[type="submit"],
+.recovery-actions a,
+.recovery-actions button {
+  min-height: 46px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+}
+
+.recovery-actions a,
+.recovery-actions a svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+@media (max-width: 640px) {
+  .page-auto-trade .auto-auth-card form,
+  .page-frame.page-auto-trade .auto-auth-card form {
+    width: min(100%, 360px) !important;
+    padding: 22px !important;
+  }
+
+  .page-auto-trade .auto-auth-head h1,
+  .page-frame.page-auto-trade .auto-auth-head h1 {
+    font-size: 27px !important;
+  }
+}
+
 /* Login polish pass: coherent controls, blue accents, and simplified auth modals. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
@@ -28015,5 +28508,212 @@ td,
     margin: 0 !important;
     justify-self: stretch !important;
     align-self: stretch !important;
+  }
+}
+
+/* Final compact control override - keep this as the last stylesheet block. */
+.page-auto-trade .auto-auth-card form,
+.page-frame.page-auto-trade .auto-auth-card form {
+  width: min(410px, 100%) !important;
+  gap: 16px !important;
+  padding: 26px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 54px rgba(15, 23, 42, .11) !important;
+}
+
+.page-auto-trade .auto-auth-head img,
+.page-frame.page-auto-trade .auto-auth-head img {
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 4px !important;
+}
+
+.page-auto-trade .auto-auth-head h1,
+.page-frame.page-auto-trade .auto-auth-head h1 {
+  font-size: clamp(27px, 2.4vw, 34px) !important;
+  line-height: 1.1 !important;
+}
+
+.page-auto-trade .role-switch,
+.page-frame.page-auto-trade .role-switch {
+  height: 44px !important;
+  min-height: 44px !important;
+  gap: 6px !important;
+  padding: 4px !important;
+  border-radius: 12px !important;
+}
+
+.page-auto-trade .role-switch button,
+.page-frame.page-auto-trade .role-switch button {
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .045) !important;
+}
+
+.page-auto-trade .role-switch button.active,
+.page-frame.page-auto-trade .role-switch button.active {
+  box-shadow: 0 8px 18px rgba(13, 71, 161, .18) !important;
+}
+
+.page-auto-trade .auto-auth-form,
+.page-frame.page-auto-trade .auto-auth-form {
+  gap: 12px !important;
+}
+
+.page-auto-trade .auth-input-shell,
+.page-frame.page-auto-trade .auth-input-shell {
+  height: 48px !important;
+  min-height: 48px !important;
+  gap: 10px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04) !important;
+}
+
+.page-auto-trade .auth-input-shell input,
+.page-frame.page-auto-trade .auth-input-shell input,
+.page-auto-trade .password-field.auth-input-shell input,
+.page-frame.page-auto-trade .password-field.auth-input-shell input {
+  height: 46px !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+}
+
+.page-auto-trade .auth-input-shell svg,
+.page-frame.page-auto-trade .auth-input-shell svg,
+.page-auto-trade .auth-password-eye svg,
+.page-frame.page-auto-trade .auth-password-eye svg,
+.auth-modal.register-panel .auth-password-eye svg {
+  width: 17px !important;
+  height: 17px !important;
+  color: #0d47a1 !important;
+  stroke: #0d47a1 !important;
+}
+
+.page-auto-trade .auth-password-eye,
+.page-frame.page-auto-trade .auth-password-eye {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 9px !important;
+  background: rgba(13, 71, 161, .09) !important;
+  color: #0d47a1 !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-form-row,
+.page-frame.page-auto-trade .auth-form-row {
+  min-height: 28px !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.page-auto-trade .remember-login,
+.page-frame.page-auto-trade .remember-login {
+  gap: 8px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+.page-auto-trade .remember-login input,
+.page-frame.page-auto-trade .remember-login input {
+  appearance: none !important;
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  min-height: 15px !important;
+  margin: 0 !important;
+  border: 1.5px solid rgba(13, 71, 161, .72) !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .remember-login input:checked,
+.page-frame.page-auto-trade .remember-login input:checked {
+  background: #0d47a1 !important;
+  border-color: #0d47a1 !important;
+}
+
+.page-auto-trade .remember-login input:checked::after,
+.page-frame.page-auto-trade .remember-login input:checked::after {
+  content: "" !important;
+  display: block !important;
+  width: 4px !important;
+  height: 7px !important;
+  margin: 1px auto 0 !important;
+  border: solid #ffffff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+}
+
+.page-auto-trade .remember-login span,
+.page-frame.page-auto-trade .remember-login span,
+.page-auto-trade .auth-text-link,
+.page-frame.page-auto-trade .auth-text-link {
+  font-size: 13px !important;
+}
+
+.page-auto-trade .auth-action-stack,
+.page-frame.page-auto-trade .auth-action-stack {
+  gap: 9px !important;
+  margin-top: 4px !important;
+}
+
+.page-auto-trade .auth-action-stack > button[type="submit"],
+.page-frame.page-auto-trade .auth-action-stack > button[type="submit"] {
+  height: 49px !important;
+  min-height: 49px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  box-shadow: 0 12px 26px rgba(13, 71, 161, .22) !important;
+}
+
+.auth-trial-button,
+.auth-secondary-actions button,
+.auth-secondary-actions a {
+  min-height: 42px !important;
+  border-radius: 11px !important;
+  font-size: 13px !important;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .04) !important;
+}
+
+.auth-modal.register-panel {
+  width: min(410px, calc(100vw - 32px)) !important;
+  gap: 13px !important;
+  padding: 24px !important;
+  border-radius: 18px !important;
+}
+
+.auth-modal.register-panel input,
+.auth-modal.register-panel .password-field {
+  height: 48px !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+}
+
+.auth-modal.register-panel button[type="submit"],
+.recovery-actions a,
+.recovery-actions button {
+  min-height: 46px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+}
+
+.recovery-actions a,
+.recovery-actions a svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+@media (max-width: 640px) {
+  .page-auto-trade .auto-auth-card form,
+  .page-frame.page-auto-trade .auto-auth-card form {
+    width: min(100%, 360px) !important;
+    padding: 22px !important;
   }
 }
