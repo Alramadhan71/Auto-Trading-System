@@ -5244,6 +5244,23 @@ function AutoTradePage({
   if (portalView === 'login') {
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
+        <div className="auto-auth-marketing">
+          <img className="auth-logo-watermark" src={brandLogoSrc} alt="" aria-hidden="true" />
+          <div className="auth-market-graph" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div className="product-identity-lockup auth-product-lockup">
+            <div>
+              <h1>One Platform. All Markets.</h1>
+            </div>
+          </div>
+          <h2>Trade Crypto, US Stocks, and Saudi Stocks with confidence.</h2>
+          <div className="auth-value-stack" aria-label="Platform advantages">
+            <strong><ShieldAlert size={18} /> Secure & Private</strong>
+            <strong><BarChart3 size={18} /> Smart & Reliable</strong>
+            <strong><TrendingUp size={18} /> All Markets. One System.</strong>
+          </div>
+        </div>
         <div className="auto-auth-card">
           <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
             <div className="auto-auth-head">
@@ -5288,25 +5305,6 @@ function AutoTradePage({
             </div>
             {authMessage && <p className="auth-message">{authMessage}</p>}
           </form>
-        </div>
-        <div className="auto-auth-marketing">
-          <img className="auth-logo-watermark" src={brandLogoSrc} alt="" aria-hidden="true" />
-          <div className="auth-market-graph" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div className="product-identity-lockup auth-product-lockup">
-            <div>
-              <h1>{productName}</h1>
-            </div>
-          </div>
-          <h2>Secure, Reliable Trading Platform for All Markets</h2>
-          <p>Private access for automated trading workflows, analytics, and continuous market monitoring across every supported market.</p>
-          <div className="auth-value-stack" aria-label="Platform advantages">
-            <strong><ShieldAlert size={18} /> Fast & Private Access to Your Trading Accounts</strong>
-            <strong><BarChart3 size={18} /> Smart Analytics for Informed Decisions</strong>
-            <strong><Sparkles size={18} /> AI-Powered Insights & Continuous Market Scanning</strong>
-            <strong><TrendingUp size={18} /> Consistent experience across every market page</strong>
-          </div>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
           <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>
