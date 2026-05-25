@@ -635,10 +635,10 @@ const themes: { id: Theme; name: string }[] = [
   { id: 'black', name: 'Execution' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
-  { id: '1', name: 'Option 1', summary: 'Calm neutral desk' },
-  { id: '2', name: 'Option 2', summary: 'High contrast trading' },
-  { id: '3', name: 'Option 3', summary: 'Minimal clean' },
-  { id: '4', name: 'Option 4', summary: 'Institutional dashboard' }
+  { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
+  { id: '2', name: 'Market Depth', summary: 'Sharper contrast for dense market views' },
+  { id: '3', name: 'Clear Sheet', summary: 'Minimal operational workspace' },
+  { id: '4', name: 'Brand Accent', summary: 'Logo-inspired accents without copying it' }
 ];
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
@@ -1936,7 +1936,7 @@ function ThemePanel({
       <header>
         <div>
           <p className="eyebrow">Theme Studio</p>
-          <h2>Choose Numbered Style</h2>
+          <h2>Choose System Style</h2>
         </div>
         <button onClick={onClose}>Close</button>
       </header>
