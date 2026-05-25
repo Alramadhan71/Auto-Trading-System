@@ -5244,64 +5244,69 @@ function AutoTradePage({
   if (portalView === 'login') {
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
+        <div className="auto-auth-card">
+          <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
+            <div className="auto-auth-head">
+              <img src={brandLogoSrc} alt="" aria-hidden="true" />
+              <span>Secure trading access</span>
+              <h1>Login to Your Account</h1>
+            </div>
+            <div className="role-switch" aria-label="Account type">
+              <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
+              <button type="button" className={loginRole === 'admin' ? 'active' : ''} onClick={() => { setLoginRole('admin'); setAuthMessage(''); setLoginPasswordVisible(false); }}>Admin</button>
+            </div>
+            <div className="auto-auth-form">
+              <label className="auth-input-shell">
+                <UserCog size={18} />
+                <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder="Email/Username" autoComplete="username" />
+              </label>
+              <div className="password-field auth-input-shell">
+                <KeyRound size={18} />
+                <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
+                <button type="button" className="auth-password-eye" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
+                  {loginPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
+              <div className="auth-form-row">
+                <label className="remember-login">
+                  <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
+                  <span>Remember me</span>
+                </label>
+                <button type="button" className="inline-link auth-text-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot password?</button>
+              </div>
+              {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
+              <div className="auth-action-stack">
+                <button type="submit"><LogIn size={18} /> Login</button>
+                {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
+                  Start 14 days free
+                </button>}
+                {loginRole === 'user' && <div className="auth-secondary-actions">
+                  <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
+                  <a href="https://wa.me/966599204215" target="_blank" rel="noopener noreferrer">Contact admin</a>
+                </div>}
+              </div>
+            </div>
+            {authMessage && <p className="auth-message">{authMessage}</p>}
+          </form>
+        </div>
         <div className="auto-auth-marketing">
+          <img className="auth-logo-watermark" src={brandLogoSrc} alt="" aria-hidden="true" />
+          <div className="auth-market-graph" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
           <div className="product-identity-lockup auth-product-lockup">
             <div>
               <h1>{productName}</h1>
             </div>
           </div>
-          <h2>Trade with AI that protects the entry.</h2>
-          <div className="auth-value-stack" aria-label="Automated trading advantages">
-            <strong>Secure Binance execution.</strong>
-            <strong>1,000+ coins scanned continuously.</strong>
-            <strong>BTC and ETH trend alignment.</strong>
-            <strong>Losses teach the AI in real time.</strong>
-            <strong>Every order passes risk tests first.</strong>
+          <h2>Secure, Reliable Trading Platform for All Markets</h2>
+          <p>Private access for automated trading workflows, analytics, and continuous market monitoring across every supported market.</p>
+          <div className="auth-value-stack" aria-label="Platform advantages">
+            <strong><ShieldAlert size={18} /> Fast & Private Access to Your Trading Accounts</strong>
+            <strong><BarChart3 size={18} /> Smart Analytics for Informed Decisions</strong>
+            <strong><Sparkles size={18} /> AI-Powered Insights & Continuous Market Scanning</strong>
+            <strong><TrendingUp size={18} /> Consistent experience across every market page</strong>
           </div>
-        </div>
-        <div className="auto-auth-card">
-          <form onSubmit={event => { event.preventDefault(); handleAutoLogin(); }}>
-          <div className="auto-auth-head">
-            <span>Private desk</span>
-            <h1>Login</h1>
-          </div>
-          <div className="role-switch">
-            <button type="button" className={loginRole === 'user' ? 'active' : ''} onClick={() => { setLoginRole('user'); setAuthMessage(''); setLoginPasswordVisible(false); }}>User</button>
-            <button type="button" className={loginRole === 'admin' ? 'active' : ''} onClick={() => { setLoginRole('admin'); setAuthMessage(''); setLoginPasswordVisible(false); }}>Admin</button>
-          </div>
-          <div className="auto-auth-form">
-            <label className="auth-input-shell">
-              <UserCog size={17} />
-              <input value={loginUsername} onChange={event => setLoginUsername(event.target.value)} placeholder={loginRole === 'admin' ? 'Admin username or admin name' : 'Username'} autoComplete="username" />
-            </label>
-            <div className="password-field auth-input-shell">
-              <KeyRound size={17} />
-              <input value={loginPassword} onChange={event => setLoginPassword(event.target.value)} placeholder="Password" type={loginPasswordVisible ? 'text' : 'password'} autoComplete="current-password" />
-              <button type="button" className="auth-password-eye" onClick={() => setLoginPasswordVisible(value => !value)} aria-label={loginPasswordVisible ? 'Hide password' : 'Show password'}>
-                {loginPasswordVisible ? <EyeOff size={17} /> : <Eye size={17} />}
-              </button>
-            </div>
-            <div className="auth-form-row">
-              <label className="remember-login">
-                <input type="checkbox" checked={rememberLogin} onChange={event => setRememberLogin(event.target.checked)} />
-                <span>Remember login</span>
-              </label>
-              <button type="button" className="inline-link auth-text-link" onClick={() => { setPasswordResetOpen(true); setRegisterOpen(false); }}>Forgot access?</button>
-            </div>
-            {loginPassword && <small className="password-policy-note">Use 8+ characters with uppercase, lowercase, number, and special character.</small>}
-            <div className="auth-action-stack">
-              <button type="submit"><LogIn size={17} /> Login</button>
-              {loginRole === 'user' && <button type="button" className="auth-trial-button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>
-                Start 14 days free
-              </button>}
-              {loginRole === 'user' && <div className="auth-secondary-actions">
-                <button type="button" onClick={() => { setRegisterOpen(true); setPasswordResetOpen(false); }}>Request access</button>
-                <a href="https://wa.me/966599204215" target="_blank" rel="noopener noreferrer">Contact admin</a>
-              </div>}
-            </div>
-          </div>
-          {authMessage && <p className="auth-message">{authMessage}</p>}
-          </form>
         </div>
         {passwordResetOpen && <div className="auth-modal-backdrop" role="presentation" onClick={() => setPasswordResetOpen(false)}>
           <div className="register-panel auth-modal auth-recovery-modal" onClick={event => event.stopPropagation()}>
