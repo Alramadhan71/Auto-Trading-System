@@ -498,7 +498,7 @@ const livePortfolioRefreshEvent = 'live-portfolio-refresh';
 const companyName = 'Muslim Solutions';
 const companyUrl = 'https://www.muslimalramadan71.com/';
 const productName = 'Auto Trading System';
-const brandLogoSrc = '/brand-bull.webp';
+const brandLogoSrc = '/brand-bull.png';
 
 
 type TelegramConfig = {
@@ -630,15 +630,15 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' },
-  { id: 'black', name: 'Execution' }
+  { id: 'light', name: 'Bull Light' },
+  { id: 'dark', name: 'Bull Dark' },
+  { id: 'black', name: 'Execution Terminal' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
   { id: '2', name: 'Market Depth', summary: 'Sharper contrast for dense market views' },
   { id: '3', name: 'Clear Sheet', summary: 'Minimal operational workspace' },
-  { id: '4', name: 'Brand Accent', summary: 'Logo-inspired accents without copying it' }
+  { id: '4', name: 'Bull Accent', summary: 'Logo-led accents without flooding the UI' }
 ];
 
 const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
@@ -1310,9 +1310,9 @@ function App() {
           </div>
         </button>
         {!authEntryPage && !isMarketPicker && <nav className="shell-nav" aria-label="Primary navigation">
-          <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><Home size={17} /> <span>{marketLabel}</span></button>
-          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><BarChart3 size={17} /> <span>Dashboard</span></button>
-          <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><Bot size={17} /> <span>Auto Trading</span></button>
+          <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><span>{marketLabel}</span></button>
+          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><span>Dashboard</span></button>
+          <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
           {authEntryPage && <button type="button" className="auth-return-home" onClick={returnToMarketPicker}>
@@ -2187,10 +2187,12 @@ function USStockHomePage({
     <section className="home-launchpad us-stock-hero">
       <div className="home-launchpad-copy">
         <div className="product-identity-lockup home-product-lockup">
+          <img src={brandLogoSrc} alt="" aria-hidden="true" />
           <div>
             <span className="us-hero-kicker">US Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary"><CompanyAttribution /></p>
+            <p className="home-launchpad-summary">Market data, signal tracking, and controlled execution in one disciplined workspace.</p>
+            <CompanyAttribution />
           </div>
         </div>
         <div className="home-cta-row">
@@ -2510,10 +2512,12 @@ function SaudiStockHomePage({
     <section className="home-launchpad saudi-stock-hero">
       <div className="home-launchpad-copy">
         <div className="product-identity-lockup home-product-lockup">
+          <img src={brandLogoSrc} alt="" aria-hidden="true" />
           <div>
             <span className="saudi-hero-kicker">Saudi Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary"><CompanyAttribution /></p>
+            <p className="home-launchpad-summary">Market data, signal tracking, and controlled execution in one disciplined workspace.</p>
+            <CompanyAttribution />
           </div>
         </div>
         <div className="home-cta-row">
@@ -2773,9 +2777,11 @@ function HomePage({
     <section className="home-launchpad">
       <div className="home-launchpad-copy">
         <div className="product-identity-lockup home-product-lockup">
+          <img src={brandLogoSrc} alt="" aria-hidden="true" />
           <div>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary"><CompanyAttribution /></p>
+            <p className="home-launchpad-summary">Live crypto markets, strategy signals, and execution controls built for repeat daily use.</p>
+            <CompanyAttribution />
           </div>
         </div>
         <div className="home-cta-row">

@@ -31928,3 +31928,595 @@ input, select, textarea, .auth-input-shell, .password-field { background: var(--
   .page-home .home-cta-row, .page-home .home-login-row { flex-direction: column !important; }
   .page-home .home-cta-primary, .page-home .home-cta-secondary, .page-home .home-cta-login { width: min(100%, 350px) !important; min-width: 0 !important; }
 }
+
+/* 2026 Bull identity reset: restrained fintech UI, logo-led tokens, and terminal-grade density. */
+:root,
+:root[data-theme-style],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #070a0f !important;
+  --app-bg: #070a0f !important;
+  --sidebar: #090d13 !important;
+  --surface: #101722 !important;
+  --surface-soft: #0c121a !important;
+  --surface-raised: #151f2b !important;
+  --panel: #101722 !important;
+  --panel-strong: #0b1017 !important;
+  --panel-soft: #151f2b !important;
+  --card: #101722 !important;
+  --border: rgba(180, 200, 224, .14) !important;
+  --border-strong: rgba(89, 151, 255, .45) !important;
+  --text: #f4f7fb !important;
+  --muted: #8f9caf !important;
+  --soft-text: #c7d0dd !important;
+  --brand-text: #f7fbff !important;
+  --accent: #3f83ff !important;
+  --accent-strong: #8dc3ff !important;
+  --accent-soft: rgba(63, 131, 255, .12) !important;
+  --primary: #f4f7fb !important;
+  --primary-strong: #ffffff !important;
+  --success: #23c982 !important;
+  --danger: #f35f70 !important;
+  --warning: #d9a852 !important;
+  --hover: rgba(63, 131, 255, .10) !important;
+  --shadow-soft: 0 18px 46px rgba(0, 0, 0, .22) !important;
+  --shadow-tight: 0 10px 24px rgba(0, 0, 0, .18) !important;
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f7fa !important;
+  --app-bg: #f4f7fa !important;
+  --sidebar: #ffffff !important;
+  --surface: #ffffff !important;
+  --surface-soft: #edf2f7 !important;
+  --surface-raised: #f8fafc !important;
+  --panel: #ffffff !important;
+  --panel-strong: #edf2f7 !important;
+  --panel-soft: #f8fafc !important;
+  --card: #ffffff !important;
+  --border: rgba(15, 23, 42, .12) !important;
+  --border-strong: rgba(39, 105, 214, .35) !important;
+  --text: #101827 !important;
+  --muted: #617084 !important;
+  --soft-text: #334155 !important;
+  --brand-text: #0f172a !important;
+  --accent: #2769d6 !important;
+  --accent-strong: #174ea6 !important;
+  --accent-soft: rgba(39, 105, 214, .10) !important;
+  --primary: #111827 !important;
+  --primary-strong: #020617 !important;
+  --success: #0d8b61 !important;
+  --danger: #c84657 !important;
+  --warning: #986820 !important;
+  --hover: rgba(39, 105, 214, .08) !important;
+  --shadow-soft: 0 18px 42px rgba(15, 23, 42, .08) !important;
+  --shadow-tight: 0 10px 22px rgba(15, 23, 42, .07) !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark;
+  --bg: #020407 !important;
+  --app-bg: #020407 !important;
+  --sidebar: #05080c !important;
+  --surface: #080d13 !important;
+  --surface-soft: #0b121a !important;
+  --surface-raised: #101923 !important;
+  --panel: #080d13 !important;
+  --panel-strong: #030609 !important;
+  --panel-soft: #101923 !important;
+  --card: #080d13 !important;
+  --border: rgba(174, 205, 235, .16) !important;
+  --border-strong: rgba(86, 170, 255, .48) !important;
+  --text: #f8fbff !important;
+  --muted: #91a8bd !important;
+  --soft-text: #cddbea !important;
+  --brand-text: #ffffff !important;
+  --accent: #55a9ff !important;
+  --accent-strong: #a3d7ff !important;
+  --accent-soft: rgba(85, 169, 255, .13) !important;
+  --primary: #f8fbff !important;
+  --primary-strong: #ffffff !important;
+  --success: #24d790 !important;
+  --danger: #ff5d70 !important;
+  --warning: #f1c363 !important;
+  --hover: rgba(85, 169, 255, .12) !important;
+  --shadow-soft: 0 20px 54px rgba(0, 0, 0, .32) !important;
+  --shadow-tight: 0 12px 30px rgba(0, 0, 0, .28) !important;
+}
+
+body,
+.app-shell,
+.shell-main,
+.page-frame,
+.page-home,
+.page-dashboard,
+.page-auto-trade,
+.dashboard-shell,
+.auto-trade-page {
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
+}
+
+.shell-header,
+.shell-header.home-header,
+.shell-header.auth-header {
+  min-height: 76px !important;
+  grid-template-columns: minmax(220px, 1fr) auto auto !important;
+  gap: 18px !important;
+  padding: 12px 24px !important;
+  background: color-mix(in srgb, var(--surface-soft) 92%, transparent) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .18) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+.shell-brand {
+  width: max-content !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+.shell-brand-mark {
+  width: 54px !important;
+  height: 54px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.shell-brand-mark img {
+  width: 54px !important;
+  height: 54px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 16px rgba(55, 125, 255, .22)) !important;
+}
+
+.shell-brand-copy {
+  display: grid !important;
+  gap: 2px !important;
+  text-align: left !important;
+}
+
+.shell-brand-copy strong {
+  font-size: 15px !important;
+  line-height: 1.1 !important;
+  font-weight: 820 !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-brand-copy small {
+  color: var(--muted) !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-nav {
+  justify-content: center !important;
+  flex-direction: row !important;
+  gap: 4px !important;
+  padding: 4px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: color-mix(in srgb, var(--surface) 72%, transparent) !important;
+  box-shadow: none !important;
+}
+
+.shell-nav button {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 14px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 760 !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-nav button svg {
+  display: none !important;
+}
+
+.shell-nav button:hover,
+.shell-nav button.active,
+.shell-nav button.premium:hover,
+.shell-nav button.premium.active {
+  transform: none !important;
+  background: var(--surface-raised) !important;
+  color: var(--text) !important;
+  border: 0 !important;
+  box-shadow: inset 0 0 0 1px var(--border) !important;
+}
+
+.shell-nav button.premium.active {
+  color: var(--accent-strong) !important;
+  box-shadow: inset 0 0 0 1px var(--border-strong) !important;
+}
+
+.shell-tools {
+  gap: 8px !important;
+}
+
+.home-header-cta,
+.auth-return-home,
+.market-return-cta,
+.theme-studio .theme-toggle {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  background: color-mix(in srgb, var(--surface) 76%, transparent) !important;
+  color: var(--soft-text) !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 760 !important;
+}
+
+.theme-toggle-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 8px !important;
+  background: var(--accent-soft) !important;
+  color: var(--accent-strong) !important;
+}
+
+.page-frame {
+  padding: 24px !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(430px, 54vh, 610px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: clamp(48px, 6vw, 84px) clamp(18px, 5vw, 72px) clamp(34px, 4vw, 58px) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-raised) 42%, transparent), transparent 68%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 9%, var(--surface-soft)), var(--app-bg)) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(820px, 100%) !important;
+  gap: 18px !important;
+}
+
+.page-home .product-identity-lockup,
+.page-home .home-product-lockup {
+  width: min(760px, 100%) !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 12px !important;
+}
+
+.page-home .home-product-lockup img {
+  width: clamp(86px, 9vw, 122px) !important;
+  height: clamp(86px, 9vw, 122px) !important;
+  object-fit: contain !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 16px 28px rgba(70, 145, 255, .28)) !important;
+}
+
+.page-home .home-product-lockup > div {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  max-width: 860px !important;
+  font-size: clamp(48px, 5.5vw, 78px) !important;
+  line-height: .96 !important;
+  font-weight: 880 !important;
+  letter-spacing: 0 !important;
+  color: var(--brand-text) !important;
+}
+
+.page-home .home-launchpad-summary {
+  max-width: 610px !important;
+  color: var(--soft-text) !important;
+  font-size: clamp(15px, 1.2vw, 18px) !important;
+  line-height: 1.55 !important;
+  font-weight: 620 !important;
+  margin: 0 !important;
+}
+
+.page-home .company-attribution,
+.market-select-company {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 720 !important;
+}
+
+.page-home .home-cta-row,
+.page-home .home-login-row {
+  gap: 10px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  min-width: 220px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 0 18px !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 780 !important;
+}
+
+.page-home .home-cta-primary {
+  background: var(--text) !important;
+  border-color: var(--text) !important;
+  color: var(--app-bg) !important;
+}
+
+.page-home .home-cta-secondary {
+  background: transparent !important;
+  border-color: color-mix(in srgb, var(--success) 38%, var(--border)) !important;
+  color: var(--success) !important;
+}
+
+.page-home .home-cta-login {
+  background: color-mix(in srgb, var(--surface) 72%, transparent) !important;
+  border-color: var(--border) !important;
+  color: var(--soft-text) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-tight) !important;
+}
+
+.page-home .home-search-bridge,
+.us-market-overview,
+.saudi-market-overview,
+.home-intel-grid,
+.home-signal-shell,
+.home-marketcap-shell,
+.home-news-shell,
+.home-live-board {
+  margin-top: 22px !important;
+}
+
+.home-top-market-head {
+  align-items: end !important;
+  margin-bottom: 12px !important;
+}
+
+.home-top-market-head h2 {
+  font-size: clamp(28px, 3vw, 42px) !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+.eyebrow,
+.nav-badge,
+.status-pill,
+.risk-badge,
+.side-badge {
+  border-color: var(--border) !important;
+  background: color-mix(in srgb, var(--surface-raised) 70%, transparent) !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch,
+.venue-switch,
+.spot-futures-switch,
+.theme-mode-switch {
+  padding: 4px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: var(--surface-soft) !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.spot-futures-switch button,
+.range-pills button,
+.signal-filters button,
+.selection-pill-row button,
+.access-filter-pills button {
+  min-height: 34px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+}
+
+.home-market-switch button.active,
+.venue-switch button.active,
+.spot-futures-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.selection-pill-row button.active,
+.access-filter-pills button.active {
+  background: var(--surface-raised) !important;
+  color: var(--text) !important;
+  box-shadow: inset 0 0 0 1px var(--border) !important;
+}
+
+.home-top-market-card,
+.price-card,
+.market-card,
+.home-intel-card,
+.home-signal-card,
+.home-leader-card,
+.home-marketcap-shell,
+.home-news-shell,
+.panel,
+.dashboard-card,
+.admin-card,
+.user-card,
+.strategy-card,
+.trade-list,
+.chart-block,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.portfolio-panel,
+.settings-panel {
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+.home-top-market-card:hover,
+.price-card:hover,
+.market-card:hover {
+  border-color: var(--border-strong) !important;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface)) !important;
+  transform: translateY(-1px) !important;
+}
+
+.home-search-panel,
+.search-panel {
+  min-height: 50px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+input,
+select,
+textarea,
+.auth-input-shell,
+.password-field {
+  background: var(--surface-raised) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+.good,
+b.good {
+  color: var(--success) !important;
+}
+
+.bad,
+b.bad {
+  color: var(--danger) !important;
+}
+
+.market-select-page {
+  min-height: calc(100vh - 124px) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface-soft)), var(--app-bg)) !important;
+}
+
+.market-select-lockup h1 {
+  letter-spacing: 0 !important;
+}
+
+.market-select-card {
+  border-radius: 12px !important;
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+}
+
+.market-select-card.crypto,
+.market-select-card.stocks,
+.market-select-card.saudi {
+  --market-accent: var(--accent) !important;
+  --market-accent-2: var(--accent-strong) !important;
+}
+
+.market-select-card:hover {
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface)) !important;
+  border-color: var(--border-strong) !important;
+}
+
+@media (max-width: 980px) {
+  .shell-header,
+  .shell-header.home-header,
+  .shell-header.auth-header {
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+  }
+
+  .shell-nav {
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+  }
+
+  .shell-tools {
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+  }
+
+  .page-frame {
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 38px 16px 30px !important;
+    border-radius: 12px !important;
+  }
+
+  .page-home .home-product-lockup img {
+    width: 82px !important;
+    height: 82px !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(38px, 11vw, 54px) !important;
+  }
+
+  .page-home .home-cta-row,
+  .page-home .home-login-row {
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    width: min(100%, 360px) !important;
+    min-width: 0 !important;
+  }
+}
