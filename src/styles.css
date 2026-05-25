@@ -24084,6 +24084,12 @@ textarea,
   }
 }
 
+/* Warm off-white login-side background only. */
+.page-auto-trade .auto-auth-card,
+.page-frame.page-auto-trade .auto-auth-card {
+  background: #faf9f6 !important;
+}
+
 .page-auto-trade .auth-login-form .remember-login {
   display: inline-flex !important;
   align-items: center !important;
