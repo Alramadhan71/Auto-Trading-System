@@ -32897,7 +32897,7 @@ b.bad {
   }
 }
 
-/* 2026 final professional UI reset: hero, CTAs, search, header controls, and Bull Light. */
+/* 2026 final professional UI reset: hero, CTAs, search, header controls, and light theme. */
 :root[data-theme="light"],
 :root[data-theme-style][data-theme="light"] {
   --bg: #f5f6f4 !important;
@@ -33743,6 +33743,311 @@ b.bad {
   .page-home .home-cta-login {
     height: 56px !important;
     min-height: 56px !important;
+  }
+}
+
+/* Final brand system: no glow, logo-led attribution, contrast-safe CTA themes. */
+:root,
+:root[data-theme],
+:root[data-theme-style] {
+  --brand-logo-blue: #6ea8ff;
+  --brand-logo-blue-strong: #2f7df0;
+  --brand-logo-ice: #cfe6ff;
+  --brand-logo-steel: #9db1c8;
+  --cta-primary-bg: #1f6fd6;
+  --cta-primary-text: #ffffff;
+  --cta-primary-border: rgba(140, 190, 255, .38);
+  --cta-telegram-bg: #229ed9;
+  --cta-telegram-text: #ffffff;
+  --cta-telegram-border: rgba(149, 224, 255, .36);
+  --cta-login-bg: #111827;
+  --cta-login-text: #ffffff;
+  --cta-login-border: rgba(157, 177, 200, .36);
+  --cta-hover-shadow: rgba(0, 0, 0, .22);
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --brand-logo-blue: #2f6fbf;
+  --brand-logo-blue-strong: #174f91;
+  --brand-logo-ice: #e8f2ff;
+  --brand-logo-steel: #5d6f86;
+  --cta-primary-bg: #10213b;
+  --cta-primary-text: #ffffff;
+  --cta-primary-border: rgba(16, 33, 59, .24);
+  --cta-telegram-bg: #1f8fc7;
+  --cta-telegram-text: #ffffff;
+  --cta-telegram-border: rgba(31, 143, 199, .32);
+  --cta-login-bg: #ffffff;
+  --cta-login-text: #10213b;
+  --cta-login-border: rgba(47, 111, 191, .32);
+  --cta-hover-shadow: rgba(20, 32, 48, .14);
+  --accent: var(--brand-logo-blue-strong) !important;
+  --accent-strong: var(--brand-logo-blue-strong) !important;
+  --border-strong: rgba(47, 111, 191, .34) !important;
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  --brand-logo-blue: #83b8ff;
+  --brand-logo-blue-strong: #4e9aff;
+  --cta-primary-bg: #256fca;
+  --cta-primary-text: #ffffff;
+  --cta-primary-border: rgba(131, 184, 255, .36);
+  --cta-telegram-bg: #1d84b5;
+  --cta-telegram-text: #ffffff;
+  --cta-telegram-border: rgba(131, 184, 255, .30);
+  --cta-login-bg: #151f2c;
+  --cta-login-text: #f7fbff;
+  --cta-login-border: rgba(131, 184, 255, .28);
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --brand-logo-blue: #8dc3ff;
+  --brand-logo-blue-strong: #5aa7ff;
+  --cta-primary-bg: #2b7de0;
+  --cta-primary-text: #ffffff;
+  --cta-primary-border: rgba(141, 195, 255, .34);
+  --cta-telegram-bg: #176f9d;
+  --cta-telegram-text: #ffffff;
+  --cta-telegram-border: rgba(141, 195, 255, .25);
+  --cta-login-bg: #f5f8fc;
+  --cta-login-text: #07111f;
+  --cta-login-border: rgba(245, 248, 252, .42);
+}
+
+*,
+*::before,
+*::after {
+  text-shadow: none !important;
+}
+
+.page-home .home-launchpad,
+.page-home .home-launchpad::before,
+.page-home .home-launchpad::after,
+.shell-brand-mark img,
+.brand-logo-mark img,
+.page-home .home-product-lockup img,
+.auth-product-lockup img,
+.market-select-logo img,
+.home-cta-primary,
+.home-cta-secondary,
+.home-cta-login,
+.theme-toggle-icon,
+.shell-header.home-header .market-return-cta,
+.shell-header.auth-header .auth-return-home,
+.home-header-cta,
+.auth-return-home,
+.market-return-cta {
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+.page-home .home-launchpad,
+.panel,
+.price-card,
+.home-top-market-card,
+.home-intel-card,
+.home-signal-card,
+.home-leader-card,
+.home-marketcap-shell,
+.home-news-shell,
+.dashboard-card,
+.admin-card,
+.user-card,
+.strategy-card,
+.trade-list,
+.chart-block,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.portfolio-panel,
+.settings-panel {
+  box-shadow: none !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(320px, 37vh, 410px) !important;
+  background: color-mix(in srgb, var(--surface) 72%, var(--app-bg)) !important;
+}
+
+.page-home .home-launchpad-copy {
+  gap: 18px !important;
+}
+
+.page-home .home-product-lockup {
+  gap: 9px !important;
+}
+
+.page-home .home-product-lockup img {
+  width: clamp(58px, 5vw, 78px) !important;
+  height: clamp(58px, 5vw, 78px) !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  font-size: clamp(48px, 5.2vw, 76px) !important;
+  line-height: .95 !important;
+  margin: 0 !important;
+}
+
+.company-attribution,
+.market-select-company,
+.page-home .company-attribution,
+.page-home .home-product-lockup .company-attribution {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  width: fit-content !important;
+  justify-self: center !important;
+  margin-top: 10px !important;
+  padding: 0 0 3px !important;
+  border: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-logo-blue) 58%, transparent) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--brand-logo-blue) !important;
+  font-size: clamp(15px, 1.15vw, 18px) !important;
+  font-weight: 820 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+.company-attribution svg,
+.market-select-company svg {
+  width: 14px !important;
+  height: 14px !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.company-attribution:hover,
+.market-select-company:hover {
+  color: var(--brand-logo-ice) !important;
+  border-bottom-color: currentColor !important;
+}
+
+:root[data-theme="light"] .company-attribution:hover,
+:root[data-theme-style][data-theme="light"] .company-attribution:hover,
+:root[data-theme="light"] .market-select-company:hover,
+:root[data-theme-style][data-theme="light"] .market-select-company:hover {
+  color: var(--brand-logo-blue-strong) !important;
+}
+
+.page-home .home-cta-row {
+  width: min(860px, 100%) !important;
+  gap: 14px !important;
+}
+
+.page-home .home-login-row {
+  width: min(430px, 100%) !important;
+  margin-top: -1px !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  height: 62px !important;
+  min-height: 62px !important;
+  border-radius: 13px !important;
+  border-width: 1px !important;
+  gap: 13px !important;
+  padding: 0 22px !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-cta-primary {
+  background: var(--cta-primary-bg) !important;
+  border-color: var(--cta-primary-border) !important;
+  color: var(--cta-primary-text) !important;
+}
+
+.page-home .home-cta-secondary {
+  background: var(--cta-telegram-bg) !important;
+  border-color: var(--cta-telegram-border) !important;
+  color: var(--cta-telegram-text) !important;
+}
+
+.page-home .home-cta-login {
+  background: var(--cta-login-bg) !important;
+  border-color: var(--cta-login-border) !important;
+  color: var(--cta-login-text) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.04) saturate(1.03) !important;
+  box-shadow: 0 12px 26px var(--cta-hover-shadow) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  flex: 0 0 32px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 2.35 !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  color: inherit !important;
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+  font-weight: 900 !important;
+}
+
+.theme-studio .theme-toggle span:last-child {
+  text-transform: none !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-launchpad {
+    min-height: auto !important;
+    padding: 28px 14px !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(38px, 11vw, 56px) !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    height: 58px !important;
+    min-height: 58px !important;
+  }
+
+  .page-home .home-cta-primary svg,
+  .page-home .home-cta-secondary svg,
+  .page-home .home-cta-login svg {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+  }
+
+  .page-home .home-cta-primary strong,
+  .page-home .home-cta-secondary strong,
+  .page-home .home-cta-login strong {
+    font-size: 16px !important;
   }
 }
 

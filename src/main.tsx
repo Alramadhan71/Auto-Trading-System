@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Rocket, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -630,9 +630,9 @@ const normalizeBinanceConnection = (value?: Partial<BinanceConnection> | null): 
 const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role}`;
 
 const themes: { id: Theme; name: string }[] = [
-  { id: 'light', name: 'Bull Light' },
-  { id: 'dark', name: 'Bull Dark' },
-  { id: 'black', name: 'Execution Terminal' }
+  { id: 'light', name: 'Light' },
+  { id: 'dark', name: 'Dark' },
+  { id: 'black', name: 'Execution' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
@@ -2196,7 +2196,7 @@ function USStockHomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Rocket size={30} />
+            <Bot size={30} />
             <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
@@ -2520,7 +2520,7 @@ function SaudiStockHomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Rocket size={30} />
+            <Bot size={30} />
             <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
@@ -2783,7 +2783,7 @@ function HomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Rocket size={30} />
+            <Bot size={30} />
             <span>
               <strong>Join Auto Trading System</strong>
             </span>
@@ -8499,7 +8499,8 @@ function CompanyAttribution({ className }: { className?: string }) {
     target="_blank"
     rel="noopener noreferrer"
   >
-    By {companyName}
+    <span>By {companyName}</span>
+    <ExternalLink size={14} aria-hidden="true" />
   </a>;
 }
 
