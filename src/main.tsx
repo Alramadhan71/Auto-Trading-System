@@ -8494,7 +8494,7 @@ function pnlFromPrice(signal: Signal, price: number) {
 
 function CompanyAttribution({ className }: { className?: string }) {
   return <a
-    className={className ?? 'company-attribution'}
+    className={className ? `company-attribution ${className}` : 'company-attribution'}
     href={companyUrl}
     target="_blank"
     rel="noopener noreferrer"
