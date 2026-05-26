@@ -33532,7 +33532,160 @@ body,
   color: #ffffff !important;
 }
 
+/* Admin workspace IA: real section tabs and lighter operational controls. */
+.page-auto-trade .auto-trade-headbar {
+  min-height: 118px !important;
+  align-items: center !important;
+  padding: clamp(18px, 2.4vw, 28px) !important;
+  border-radius: 16px !important;
+}
+
+.page-auto-trade .welcome-lockup strong {
+  max-width: 760px !important;
+  font-size: clamp(30px, 3.4vw, 48px) !important;
+  line-height: 1.02 !important;
+}
+
+.workspace-status-strip {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.workspace-status-strip span {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 32px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 86%, transparent) !important;
+  color: var(--soft-text, var(--text)) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+.admin-workspace-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin: 12px 0 !important;
+  padding: 6px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 90%, transparent) !important;
+}
+
+.admin-workspace-tabs button {
+  display: grid !important;
+  gap: 3px !important;
+  min-height: 54px !important;
+  padding: 9px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.admin-workspace-tabs button strong {
+  color: inherit !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+.admin-workspace-tabs button span {
+  color: inherit !important;
+  font-size: 11px !important;
+  font-weight: 720 !important;
+  line-height: 1.25 !important;
+}
+
+.admin-workspace-tabs button.active {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border)) !important;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised, var(--surface))) !important;
+  color: var(--text) !important;
+}
+
+.admin-workspace-tabs button:focus-visible,
+.admin-workspace-tabs button:hover {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important;
+  color: var(--text) !important;
+}
+
+.portfolio-workspace-panel,
+.public-ops-panel,
+.admin-panel.users-workspace-panel,
+.admin-panel.settings-workspace-panel {
+  margin-top: 0 !important;
+}
+
+.admin-panel.users-workspace-panel .admin-control-toggle,
+.admin-panel.settings-workspace-panel .admin-control-toggle,
+.public-ops-panel .public-ops-toggle {
+  cursor: default !important;
+}
+
+.shell-header .shell-nav {
+  padding: 4px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 88%, transparent) !important;
+  gap: 2px !important;
+}
+
+.shell-header .shell-nav button {
+  min-height: 34px !important;
+  padding: 0 13px !important;
+  border-radius: 9px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.shell-header .shell-nav button.active {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border)) !important;
+  background: color-mix(in srgb, var(--accent) 13%, var(--surface-raised, var(--surface))) !important;
+  color: var(--text) !important;
+}
+
+.shell-tools .theme-toggle,
+.alerts-button {
+  min-height: 36px !important;
+  border-radius: 12px !important;
+}
+
+.auth-return-home,
+.auto-trade-head-actions .ghost {
+  display: none !important;
+}
+
 @media (max-width: 980px) {
+  .admin-workspace-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+  }
+
+  .admin-workspace-tabs button {
+    flex: 0 0 190px !important;
+    scroll-snap-align: start !important;
+  }
+
+  .page-auto-trade .auto-trade-headbar {
+    min-height: auto !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .workspace-status-strip {
+    justify-content: flex-start !important;
+  }
+
   :root[data-theme] .page-auto-trade .auto-auth-card,
   :root[data-theme-style] .page-auto-trade .auto-auth-card,
   :root[data-theme] .page-frame.page-auto-trade .auto-auth-card,
@@ -33552,42 +33705,50 @@ body,
 }
 
 @media (max-width: 760px) {
-  .shell-header.auth-header .shell-tools {
+  .shell-header.auth-header .shell-tools,
+  .shell-header.app-header .shell-tools {
     flex: 0 0 auto !important;
     gap: 8px !important;
   }
 
   .shell-header.auth-header .auth-return-home,
-  .shell-header.auth-header .theme-toggle {
+  .shell-header.auth-header .theme-toggle,
+  .shell-header.app-header .theme-toggle {
     width: 46px !important;
     min-width: 46px !important;
     max-width: 46px !important;
     padding: 0 !important;
     overflow: hidden !important;
+    color: var(--text) !important;
   }
 
   .shell-header.auth-header .auth-return-home span,
-  .shell-header.auth-header .theme-toggle > span:last-child {
+  .shell-header.auth-header .theme-toggle > span:last-child,
+  .shell-header.app-header .theme-toggle > span:last-child {
     display: none !important;
   }
 
   .shell-header.auth-header .auth-return-home svg,
-  .shell-header.auth-header .theme-toggle svg {
+  .shell-header.auth-header .theme-toggle svg,
+  .shell-header.app-header .theme-toggle svg {
     display: block !important;
     color: currentColor !important;
     stroke: currentColor !important;
   }
 
-  .shell-header.auth-header .theme-toggle-icon {
+  .shell-header.auth-header .theme-toggle-icon,
+  .shell-header.app-header .theme-toggle-icon {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 20px !important;
     height: 20px !important;
     color: currentColor !important;
+    background: transparent !important;
   }
 
-  .shell-header.auth-header .theme-toggle-icon svg {
+  .shell-header.auth-header .theme-toggle-icon svg,
+  .shell-header.app-header .theme-toggle-icon svg {
     width: 20px !important;
     height: 20px !important;
   }

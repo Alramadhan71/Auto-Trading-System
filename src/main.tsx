@@ -3306,6 +3306,7 @@ function AutoTradePage({
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
+  const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
@@ -5137,6 +5138,12 @@ function AutoTradePage({
   }
 
   const labStrategySet = useMemo(() => new Set(labStrategyIds), [labStrategyIds]);
+  const adminWorkspaceTabs = [
+    { id: 'portfolio', label: 'Portfolio', summary: 'Capital, wallet, and ledgers' },
+    { id: 'strategies', label: 'Strategies', summary: 'Public broadcast and strategy visibility' },
+    { id: 'users', label: 'Users', summary: 'Member access and approvals' },
+    { id: 'settings', label: 'Settings', summary: 'Binance, Telegram, and admin access' }
+  ] as const;
   const publicStrategies = useMemo(() => strategies.filter(strategy => !labStrategySet.has(strategy.id)), [labStrategySet, strategies]);
   const labStrategies = useMemo(() => strategies.filter(strategy => labStrategySet.has(strategy.id)), [labStrategySet, strategies]);
   const adminStrategyMetrics = useMemo(() => {
@@ -5354,10 +5361,24 @@ function AutoTradePage({
           <strong>{greetingLine}</strong>
         </div>
       </div>
-      <div className="auto-trade-head-actions">
-        <button className="ghost" onClick={() => setPortalView('login')}>Back To Login</button>
+      <div className="auto-trade-head-actions workspace-status-strip" aria-label="Workspace status">
+        <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
+        <span>{venueMode === 'both' ? 'Spot + Futures' : venueMode === 'spot' ? 'Spot' : 'Futures'}</span>
+        {portalView === 'admin' && <span>{binanceConnection.connected ? 'Binance Verified' : binanceConnection.saved ? 'Binance Saved' : 'Binance Disconnected'}</span>}
       </div>
     </div>
+
+    {portalView === 'admin' && <nav className="admin-workspace-tabs" aria-label="Admin workspace sections">
+      {adminWorkspaceTabs.map(tab => <button
+        key={tab.id}
+        type="button"
+        className={adminWorkspaceTab === tab.id ? 'active' : ''}
+        onClick={() => setAdminWorkspaceTab(tab.id)}
+      >
+        <strong>{tab.label}</strong>
+        <span>{tab.summary}</span>
+      </button>)}
+    </nav>}
 
     <div className="premium-workspace-grid">
       {portalView === 'user' && <section className="admin-split-panel user-access-panel">
@@ -5505,7 +5526,7 @@ function AutoTradePage({
         </div>
       </section>}
 
-      <section className="premium-panel">
+      {(portalView !== 'admin' || adminWorkspaceTab === 'portfolio') && <section className="premium-panel workspace-panel portfolio-workspace-panel">
         <div className="premium-panel-heading">
           <div>
             <h2>Capital</h2>
@@ -6261,20 +6282,20 @@ function AutoTradePage({
             </section>
           </div>
         </section>
-      </section>
+      </section>}
 
-      {portalView === 'admin' && <section className={`premium-panel public-ops-panel ${publicOpsOpen ? 'open' : 'collapsed'}`}>
-        <button type="button" className="public-ops-toggle" onClick={() => setPublicOpsOpen(value => !value)} aria-expanded={publicOpsOpen}>
+      {portalView === 'admin' && adminWorkspaceTab === 'strategies' && <section className={`premium-panel public-ops-panel ${publicOpsOpen || adminWorkspaceTab === 'strategies' ? 'open' : 'collapsed'}`}>
+        <button type="button" className="public-ops-toggle" onClick={() => setPublicOpsOpen(value => !value)} aria-expanded={publicOpsOpen || adminWorkspaceTab === 'strategies'}>
           <div>
             <h2>Public Controls</h2>
             <span>{telegramConfig.publicChannelEnabled ? 'Broadcast ON' : 'Broadcast OFF'} | {publicStrategies.length} public strategies | {[...selected].filter(id => !labStrategySet.has(id)).length} active</span>
           </div>
           <div className="live-rules-badge-row">
             <span className={`nav-badge ${telegramConfig.publicChannelEnabled ? 'glow' : 'subtle'}`}>Public</span>
-            {publicOpsOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            {publicOpsOpen || adminWorkspaceTab === 'strategies' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </div>
         </button>
-        {publicOpsOpen && <div className="public-ops-body">
+        {(publicOpsOpen || adminWorkspaceTab === 'strategies') && <div className="public-ops-body">
           <section className="public-strategies-card">
             <div className="public-strategies-head">
               <div>
@@ -6367,19 +6388,19 @@ function AutoTradePage({
         </div>}
       </section>}
 
-      {portalView === 'admin' && <section className={`premium-panel admin-panel ${adminControlOpen ? 'open' : 'collapsed'}`}>
-        <button type="button" className="admin-control-toggle" onClick={() => setAdminControlOpen(value => !value)} aria-expanded={adminControlOpen}>
+      {portalView === 'admin' && (adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings') && <section className={`premium-panel admin-panel ${adminControlOpen || adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings' ? 'open' : 'collapsed'} ${adminWorkspaceTab === 'users' ? 'users-workspace-panel' : 'settings-workspace-panel'}`}>
+        <button type="button" className="admin-control-toggle" onClick={() => setAdminControlOpen(value => !value)} aria-expanded={adminControlOpen || adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings'}>
           <div>
             <h2>Admin Control</h2>
             <span>{binanceConnection.connected ? 'Binance verified' : binanceConnection.saved ? 'Binance saved' : 'Binance disconnected'} | {activeUsers.filter(request => request.enabled).length} active users</span>
           </div>
           <div className="live-rules-badge-row">
             <span className="nav-badge glow">Admin</span>
-            {adminControlOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            {adminControlOpen || adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </div>
         </button>
-        {adminControlOpen && <>
-        {autoMode === 'live' && <section className="binance-connect-panel admin-binance-panel">
+        {(adminControlOpen || adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings') && <>
+        {adminWorkspaceTab === 'settings' && autoMode === 'live' && <section className="binance-connect-panel admin-binance-panel">
           <div className="binance-admin-head">
             <div>
               <strong>Binance Connection</strong>
@@ -6508,7 +6529,7 @@ function AutoTradePage({
             })}
           </div>
         </section>}
-        <div className="admin-control-grid">
+        {adminWorkspaceTab === 'users' && <div className="admin-control-grid">
           <section className="admin-account-card access-board-card">
             <strong>User Access</strong>
             <div className="access-command-strip">
@@ -6622,8 +6643,8 @@ function AutoTradePage({
               </div>
             </form>}
           </section>}
-        </div>
-        <section className={`admin-personal-panel ${adminPersonalOpen ? 'open' : 'collapsed'}`}>
+        </div>}
+        {adminWorkspaceTab === 'settings' && <section className={`admin-personal-panel ${adminPersonalOpen ? 'open' : 'collapsed'}`}>
           <button type="button" className="admin-personal-toggle" onClick={() => setAdminPersonalOpen(value => !value)} aria-expanded={adminPersonalOpen}>
             <div>
               <h2>Admin Personal Control</h2>
@@ -6717,7 +6738,7 @@ function AutoTradePage({
               </form>}
             </section>
           </div>}
-        </section>
+        </section>}
         </>}
       </section>}
       {dashboardResetConfirmOpen && <div className="theme-overlay" role="dialog" aria-modal="true">
