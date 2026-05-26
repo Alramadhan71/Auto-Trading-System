@@ -32991,6 +32991,7 @@ body,
 .home-header-cta,
 .auth-return-home,
 .market-return-cta,
+.session-logout-button,
 .theme-toggle,
 .theme-control .theme-toggle,
 .theme-studio .theme-toggle {
@@ -33013,11 +33014,23 @@ body,
 .shell-tools .home-header-cta,
 .shell-tools .market-return-cta,
 .shell-tools .auth-return-home,
+.shell-tools .session-logout-button,
 .shell-tools .theme-toggle,
 .theme-control .theme-toggle.active,
 .theme-studio .theme-toggle.active {
   border-radius: 12px !important;
   box-shadow: none !important;
+}
+
+.session-logout-button {
+  border-color: color-mix(in srgb, var(--danger) 34%, var(--ui-border, var(--border))) !important;
+  color: color-mix(in srgb, var(--danger) 72%, var(--text)) !important;
+}
+
+.session-logout-button:hover,
+.session-logout-button:focus-visible {
+  border-color: color-mix(in srgb, var(--danger) 52%, var(--ui-border, var(--border))) !important;
+  background: color-mix(in srgb, var(--danger) 10%, var(--ui-surface, var(--panel))) !important;
 }
 
 .theme-control,
@@ -33795,6 +33808,7 @@ body,
 
   .shell-header.auth-header .auth-return-home,
   .shell-header.auth-header .theme-toggle,
+  .shell-header.app-header .session-logout-button,
   .shell-header.app-header .theme-toggle {
     width: 46px !important;
     min-width: 46px !important;
@@ -33805,12 +33819,14 @@ body,
   }
 
   .shell-header.auth-header .auth-return-home span,
+  .shell-header.app-header .session-logout-button span,
   .shell-header.auth-header .theme-toggle > span:last-child,
   .shell-header.app-header .theme-toggle > span:last-child {
     display: none !important;
   }
 
   .shell-header.auth-header .auth-return-home svg,
+  .shell-header.app-header .session-logout-button svg,
   .shell-header.auth-header .theme-toggle svg,
   .shell-header.app-header .theme-toggle svg {
     display: block !important;

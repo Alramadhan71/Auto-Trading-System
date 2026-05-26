@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, LogOut, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -871,6 +871,8 @@ function App() {
   const [activeMarketFamily, setActiveMarketFamily] = useState<MarketFamily | null>(null);
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [autoTradePortalView, setAutoTradePortalView] = useState<'login' | 'user' | 'admin'>('login');
+  const [logoutSignal, setLogoutSignal] = useState(0);
+  const [logoutBusy, setLogoutBusy] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme');
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
@@ -1281,6 +1283,27 @@ function App() {
     }
   };
 
+  const handleAppLogout = async () => {
+    if (logoutBusy) return;
+    setLogoutBusy(true);
+    try {
+      await api('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // Local logout still clears the client session if the network request fails.
+    } finally {
+      setAppSessionUser(null);
+      setAutoTradePortalView('login');
+      setLogoutSignal(value => value + 1);
+      setPage('auto-trade');
+      setLogoutBusy(false);
+      try {
+        localStorage.setItem('autoTrade.portalView', 'login');
+      } catch {
+        // Logout should not depend on local storage.
+      }
+    }
+  };
+
   const saveSelection = async (nextSelected = selected, nextTimeframes = timeframes, nextExitModes = exitModes, nextMarketScope = strategyMarketScope) => {
     const safeTimeframes = new Set(defaultSelectedTimeframes);
     const safeExitModes = nextExitModes.size > 0 ? nextExitModes : new Set<ExitMode>(['strategy-defined']);
@@ -1297,6 +1320,7 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
+  const showSessionLogout = isAuthenticated && (page === 'dashboard' || (page === 'auto-trade' && !authEntryPage && autoTradePortalView !== 'login'));
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
@@ -1322,6 +1346,10 @@ function App() {
           {!authEntryPage && !isMarketPicker && page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta market-return-cta" onClick={returnToMarketPicker}>
             <Home size={16} />
             <span>Back to Home</span>
+          </button>}
+          {showSessionLogout && <button type="button" className="session-logout-button" onClick={handleAppLogout} disabled={logoutBusy} aria-label="Logout">
+            <LogOut size={16} />
+            <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
           </button>}
           <ThemeStudio currentTheme={theme} onPick={setTheme} />
           {!authEntryPage && <NotificationSettings
@@ -1367,7 +1395,7 @@ function App() {
           labStrategyIds={labStrategyIds}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3369,6 +3397,7 @@ function AutoTradePage({
   selected,
   timeframes,
   saveSelection,
+  logoutSignal = 0,
   onAuthChange,
   onPortalViewChange
 }: {
@@ -3382,6 +3411,7 @@ function AutoTradePage({
   selected: Set<string>;
   timeframes: Set<Timeframe>;
   saveSelection: (nextSelected?: Set<string>, nextTimeframes?: Set<Timeframe>, nextExitModes?: Set<ExitMode>, nextMarketScope?: StrategyMarketScope) => Promise<void>;
+  logoutSignal?: number;
   onAuthChange?: (user: AuthSessionUser | null) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
 }) {
@@ -4948,6 +4978,16 @@ function AutoTradePage({
     setUserNewPasswordVisible(false);
     setUserConfirmPasswordVisible(false);
   }, [portalView, loginRole, registerOpen, adminCredentialsOpen, passwordResetOpen, userAccessOpen]);
+
+  useEffect(() => {
+    if (logoutSignal <= 0) return;
+    setSessionUser(null);
+    setPortalView('login');
+    setLoginPassword('');
+    setAuthMessage('');
+    setLoginPasswordVisible(false);
+    setRegisterPasswordVisible(false);
+  }, [logoutSignal]);
 
   useEffect(() => {
     try {
