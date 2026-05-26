@@ -1309,7 +1309,7 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
-  const showSessionLogout = isAuthenticated && (page === 'dashboard' || (page === 'auto-trade' && !authEntryPage && autoTradePortalView !== 'login'));
+  const showSessionLogout = isAuthenticated && page === 'dashboard';
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
@@ -1383,7 +1383,7 @@ function App() {
           selected={selected}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3384,6 +3384,8 @@ function AutoTradePage({
   timeframes,
   saveSelection,
   logoutSignal = 0,
+  logoutBusy = false,
+  onLogout,
   onAuthChange,
   onPortalViewChange
 }: {
@@ -3396,6 +3398,8 @@ function AutoTradePage({
   timeframes: Set<Timeframe>;
   saveSelection: (nextSelected?: Set<string>, nextTimeframes?: Set<Timeframe>, nextExitModes?: Set<ExitMode>, nextMarketScope?: StrategyMarketScope) => Promise<void>;
   logoutSignal?: number;
+  logoutBusy?: boolean;
+  onLogout?: () => void;
   onAuthChange?: (user: AuthSessionUser | null) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
 }) {
@@ -3513,6 +3517,8 @@ function AutoTradePage({
     .sort((a, b) => b.winRate - a.winRate || b.closed - a.closed || b.total - a.total), [signals, strategies, tickers]);
   const lead = insightRows[0] ?? null;
   const [sessionUser, setSessionUser] = useState<AuthSessionUser | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const [sidebarAvatar, setSidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
   const [memberName, setMemberName] = useState('Premium Member');
   const [adminName, setAdminName] = useState('Admin');
   const [adminUsername, setAdminUsername] = useState('admin');
@@ -3626,6 +3632,22 @@ function AutoTradePage({
 
   const saveAccessRequests = (next: typeof accessRequests) => {
     setAccessRequests(next);
+  };
+
+  const updateSidebarAvatar = (file?: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const next = typeof reader.result === 'string' ? reader.result : '';
+      if (!next) return;
+      setSidebarAvatar(next);
+      try {
+        localStorage.setItem('autoTrade.sidebarAvatar', next);
+      } catch {
+        // Avatar upload remains optional if local storage is full or blocked.
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const getNextUserId = (requests = accessRequests) => {
@@ -5426,21 +5448,15 @@ function AutoTradePage({
   }
 
   return <section className="auto-trade-page">
-    <div className="auto-trade-headbar">
-      <div>
-        <div className="welcome-lockup">
-          <strong>{greetingLine}</strong>
-        </div>
-      </div>
-      <div className="auto-trade-head-actions workspace-status-strip" aria-label="Workspace status">
-        <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
-        <span>{venueMode === 'both' ? 'Spot + Futures' : venueMode === 'spot' ? 'Spot' : 'Futures'}</span>
-        {portalView === 'admin' && <span>{binanceConnection.connected ? 'Binance Verified' : binanceConnection.saved ? 'Binance Saved' : 'Binance Disconnected'}</span>}
-      </div>
-    </div>
-
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Execution workspace navigation">
+        <div className="execution-sidebar-brand">
+          <img src={brandLogoSrc} alt="" aria-hidden="true" />
+          <div>
+            <strong>Execution</strong>
+            <span>{portalView === 'admin' ? 'Admin console' : 'Trading workspace'}</span>
+          </div>
+        </div>
         {visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
           <button
             type="button"
@@ -5451,8 +5467,13 @@ function AutoTradePage({
               if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
             }}
           >
-            <strong>{tab.label}</strong>
-            <span>{tab.summary}</span>
+            <span className="execution-sidebar-icon" aria-hidden="true">
+              {tab.id === 'portfolio' ? <Wallet size={16} /> : tab.id === 'strategies' ? <Target size={16} /> : tab.id === 'users' ? <Users size={16} /> : <KeyRound size={16} />}
+            </span>
+            <span className="execution-sidebar-copy">
+              <strong>{tab.label}</strong>
+              <span>{tab.summary}</span>
+            </span>
           </button>
           {tab.id === 'portfolio' && <div className="execution-sidebar-subnav">
             {([
@@ -5484,7 +5505,40 @@ function AutoTradePage({
             </button>)}
           </div>}
         </div>)}
+        <div className="execution-sidebar-footer">
+          <div className="execution-sidebar-status">
+            <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
+            <span>{binanceConnection.connected ? 'Verified' : binanceConnection.saved ? 'Saved' : 'No Keys'}</span>
+          </div>
+          <button type="button" className="execution-profile-button" onClick={() => avatarInputRef.current?.click()}>
+            <span className="execution-profile-avatar">
+              {sidebarAvatar ? <img src={sidebarAvatar} alt="" /> : <UserCog size={18} />}
+            </span>
+            <span>
+              <strong>{activeName}</strong>
+              <small>{portalView === 'admin' ? 'Admin' : 'User'}</small>
+            </span>
+          </button>
+          <input ref={avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => updateSidebarAvatar(event.target.files?.[0])} />
+          {onLogout && <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
+            <LogOut size={16} />
+            <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
+          </button>}
+        </div>
       </aside>
+
+      <div className="auto-trade-headbar">
+        <div>
+          <div className="welcome-lockup">
+            <strong>{greetingLine}</strong>
+          </div>
+        </div>
+        <div className="auto-trade-head-actions workspace-status-strip" aria-label="Workspace status">
+          <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
+          <span>{venueMode === 'both' ? 'Spot + Futures' : venueMode === 'spot' ? 'Spot' : 'Futures'}</span>
+          {portalView === 'admin' && <span>{binanceConnection.connected ? 'Binance Verified' : binanceConnection.saved ? 'Binance Saved' : 'Binance Disconnected'}</span>}
+        </div>
+      </div>
 
       {portalView === 'user' && adminWorkspaceTab === 'settings' && <section className="admin-split-panel user-access-panel">
         <div className="admin-split-head">
