@@ -8499,8 +8499,8 @@ function CompanyAttribution({ className }: { className?: string }) {
     target="_blank"
     rel="noopener noreferrer"
   >
+    <ExternalLink size={16} aria-hidden="true" />
     <span>By {companyName}</span>
-    <ExternalLink size={14} aria-hidden="true" />
   </a>;
 }
 
