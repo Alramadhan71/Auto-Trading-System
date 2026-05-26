@@ -3081,6 +3081,86 @@ function FieldHint({ label, hint }: { label: string; hint: string }) {
   </span>;
 }
 
+function LeverageSlider({
+  value,
+  tone,
+  onChange
+}: {
+  value: number;
+  tone: string;
+  onChange: (nextValue: string) => void;
+}) {
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const clampedValue = Math.max(1, Math.min(20, value));
+  const progress = Math.max(0, Math.min(100, ((clampedValue - 1) / 19) * 100));
+  const commitFromClientX = (clientX: number) => {
+    const rect = railRef.current?.getBoundingClientRect();
+    if (!rect || rect.width <= 0) return;
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const next = Math.round((1 + ratio * 19) * 10) / 10;
+    onChange(String(next));
+  };
+  const nudge = (delta: number) => onChange(String(Math.max(1, Math.min(20, Math.round((clampedValue + delta) * 10) / 10))));
+
+  return <div
+    className={`live-leverage-spectrum ${tone}`}
+    style={{ '--leverage-progress': `${progress}%` } as React.CSSProperties}
+  >
+    <div
+      ref={railRef}
+      className="live-leverage-spectrum-rail"
+      role="slider"
+      tabIndex={0}
+      aria-label="Futures leverage"
+      aria-valuemin={1}
+      aria-valuemax={20}
+      aria-valuenow={clampedValue}
+      aria-valuetext={`${clampedValue}x`}
+      onPointerDown={event => {
+        event.currentTarget.setPointerCapture(event.pointerId);
+        commitFromClientX(event.clientX);
+      }}
+      onPointerMove={event => {
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) commitFromClientX(event.clientX);
+      }}
+      onKeyDown={event => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          nudge(-0.1);
+        } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          nudge(0.1);
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          onChange('1');
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          onChange('20');
+        }
+      }}
+    >
+      <span className="live-leverage-progress" aria-hidden="true" />
+      <span className="live-leverage-thumb" aria-hidden="true" />
+    </div>
+    <div className="live-leverage-spectrum-ticks" aria-hidden="true">
+      {[1, 5, 10, 15, 20].map(tick => <button
+        key={tick}
+        type="button"
+        className={Math.abs(clampedValue - tick) < 0.05 ? 'active' : ''}
+        onClick={() => onChange(String(tick))}
+        tabIndex={-1}
+      >
+        {`${tick}x`}
+      </button>)}
+    </div>
+    <div className="live-leverage-risk-scale" aria-hidden="true">
+      <span className="low">Low Risk</span>
+      <span className="medium">Medium Risk</span>
+      <span className="high">High Risk</span>
+    </div>
+  </div>;
+}
+
 function readAutoTradeSetting(key: string, fallback: string) {
   try {
     return localStorage.getItem(key) ?? fallback;
@@ -5899,31 +5979,7 @@ function AutoTradePage({
               {venueMode !== 'spot' && <div className="selection-control-card live-rules-panel-card live-rule-wide live-futures-rule-card">
                 <span className="field-label-inline"><FieldHint label="Futures Handling" hint="Set leverage and margin behavior for futures execution." /><small className="field-priority">Futures</small></span>
                 <div className="live-futures-settings live-futures-settings-advanced">
-                  <div
-                    className={`live-leverage-spectrum ${leverageTone}`}
-                    style={{ '--leverage-progress': `${Math.max(0, Math.min(100, ((leverageValue - 1) / 19) * 100))}%` } as React.CSSProperties}
-                  >
-                    <div className="live-leverage-spectrum-rail">
-                      <span className="live-leverage-progress" aria-hidden="true" />
-                      <input type="range" min="1" max="20" step="0.1" value={leverageValue} onChange={event => setFuturesLeverage(event.target.value)} aria-label="Futures leverage" />
-                    </div>
-                    <div className="live-leverage-spectrum-ticks" aria-hidden="true">
-                      {[1, 5, 10, 15, 20].map(value => <button
-                        key={value}
-                        type="button"
-                        className={Math.abs(leverageValue - value) < 0.05 ? 'active' : ''}
-                        onClick={() => setFuturesLeverage(String(value))}
-                        tabIndex={-1}
-                      >
-                        {`${value}x`}
-                      </button>)}
-                    </div>
-                    <div className="live-leverage-risk-scale" aria-hidden="true">
-                      <span className="low">Low Risk</span>
-                      <span className="medium">Medium Risk</span>
-                      <span className="high">High Risk</span>
-                    </div>
-                  </div>
+                  <LeverageSlider value={leverageValue} tone={leverageTone} onChange={setFuturesLeverage} />
                   <div className="selection-pill-row live-margin-mode-row">
                     {([
                       ['isolated', 'Isolated'],

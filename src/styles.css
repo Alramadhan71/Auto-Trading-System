@@ -3055,6 +3055,8 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
   height: 24px;
   display: grid;
   align-items: center;
+  cursor: pointer;
+  touch-action: none;
 }
 .live-leverage-spectrum-rail::before,
 .live-leverage-progress {
@@ -3069,75 +3071,48 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
 .live-leverage-spectrum-rail::before {
   content: "";
   right: 0;
-  background: color-mix(in srgb, var(--panel-soft) 70%, #0a1016);
+  background: linear-gradient(90deg, var(--spectrum-low) 0 28%, var(--spectrum-mid) 48% 68%, var(--spectrum-high) 100%);
   box-shadow: inset 0 1px 2px rgba(0,0,0,.35);
 }
 .live-leverage-progress {
   width: var(--leverage-progress);
-  background: linear-gradient(90deg, var(--spectrum-low), var(--spectrum-mid) 62%, var(--spectrum-high));
-  box-shadow: 0 0 18px color-mix(in srgb, var(--spectrum-low) 18%, transparent);
+  background: linear-gradient(90deg, rgba(255,255,255,.24), rgba(255,255,255,.08));
+  box-shadow: 0 0 16px rgba(255,255,255,.08);
   transition: width .045s linear;
   will-change: width;
 }
-.live-leverage-spectrum:has(input[type="range"]:active) .live-leverage-progress {
+.live-leverage-spectrum-rail:active .live-leverage-progress {
   transition-duration: 0s;
 }
-.live-leverage-spectrum-rail input[type="range"] {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 30px;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
+.live-leverage-spectrum-rail:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 7px;
 }
-.live-leverage-spectrum-rail input[type="range"]::-webkit-slider-runnable-track {
-  height: 8px;
-  background: transparent;
-}
-.live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
+.live-leverage-thumb {
+  position: absolute;
+  left: var(--leverage-progress);
+  top: 50%;
   width: 24px;
   height: 24px;
-  margin-top: -8px;
   border-radius: 999px;
   border: 3px solid color-mix(in srgb, var(--text) 82%, white);
   background: color-mix(in srgb, var(--spectrum-low) 72%, var(--accent));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent), 0 8px 18px rgba(0,0,0,.32);
-  transition: transform .08s ease-out, box-shadow .08s ease-out, background .08s linear;
-  will-change: transform;
+  transform: translate(-50%, -50%);
+  transition: left .045s linear, transform .08s ease-out, box-shadow .08s ease-out, background .08s linear;
+  will-change: left, transform;
+  pointer-events: none;
 }
-.live-leverage-spectrum.medium .live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb {
+.live-leverage-spectrum.medium .live-leverage-thumb {
   background: var(--spectrum-mid);
 }
-.live-leverage-spectrum.elevated .live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb,
-.live-leverage-spectrum.high .live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb {
+.live-leverage-spectrum.elevated .live-leverage-thumb,
+.live-leverage-spectrum.high .live-leverage-thumb {
   background: var(--spectrum-high);
 }
-.live-leverage-spectrum-rail input[type="range"]:active::-webkit-slider-thumb {
-  transform: scale(1.12);
+.live-leverage-spectrum-rail:active .live-leverage-thumb {
+  transform: translate(-50%, -50%) scale(1.12);
   box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent), 0 12px 24px rgba(0,0,0,.38);
-}
-.live-leverage-spectrum-rail input[type="range"]::-moz-range-track {
-  height: 8px;
-  background: transparent;
-}
-.live-leverage-spectrum-rail input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  border: 3px solid color-mix(in srgb, var(--text) 82%, white);
-  background: color-mix(in srgb, var(--spectrum-low) 72%, var(--accent));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent), 0 8px 18px rgba(0,0,0,.32);
-  transition: transform .08s ease-out, box-shadow .08s ease-out, background .08s linear;
-  will-change: transform;
-}
-.live-leverage-spectrum.medium .live-leverage-spectrum-rail input[type="range"]::-moz-range-thumb {
-  background: var(--spectrum-mid);
-}
-.live-leverage-spectrum.elevated .live-leverage-spectrum-rail input[type="range"]::-moz-range-thumb,
-.live-leverage-spectrum.high .live-leverage-spectrum-rail input[type="range"]::-moz-range-thumb {
-  background: var(--spectrum-high);
 }
 .live-leverage-spectrum-ticks {
   display: grid;
@@ -14315,8 +14290,7 @@ video {
     padding: 8px 8px 10px;
   }
 
-  .page-auto-trade .live-leverage-spectrum-rail,
-  .page-auto-trade .live-leverage-spectrum-rail input {
+  .page-auto-trade .live-leverage-spectrum-rail {
     width: 100%;
     min-width: 0;
   }
@@ -14571,14 +14545,9 @@ video {
     height: 7px;
   }
 
-  .page-auto-trade .live-leverage-spectrum-rail input[type="range"] {
-    height: 24px;
-  }
-
-  .page-auto-trade .live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb {
+  .page-auto-trade .live-leverage-thumb {
     width: 20px;
     height: 20px;
-    margin-top: -6px;
     border-width: 3px;
   }
 
@@ -14745,16 +14714,9 @@ video {
     width: 100% !important;
   }
 
-  .page-auto-trade .live-leverage-spectrum-rail input[type="range"] {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 22px !important;
-  }
-
-  .page-auto-trade .live-leverage-spectrum-rail input[type="range"]::-webkit-slider-thumb {
+  .page-auto-trade .live-leverage-thumb {
     width: 19px !important;
     height: 19px !important;
-    margin-top: -5.5px !important;
     border-width: 3px !important;
   }
 
@@ -22194,8 +22156,7 @@ textarea,
 .scoreline i,
 .showcase-screen main b,
 .strategy-bar,
-.strategy-bar i,
-.live-leverage-progress {
+.strategy-bar i {
   background: var(--border-strong) !important;
 }
 
@@ -33695,16 +33656,11 @@ body,
 }
 
 .live-leverage-spectrum-rail::before {
-  background: color-mix(in srgb, var(--panel-soft) 70%, #0a1016) !important;
+  background: linear-gradient(90deg, var(--spectrum-low) 0 28%, var(--spectrum-mid) 48% 68%, var(--spectrum-high) 100%) !important;
 }
 
 .live-leverage-progress {
-  background: linear-gradient(90deg, var(--spectrum-low), var(--spectrum-mid) 62%, var(--spectrum-high)) !important;
-}
-
-.live-leverage-spectrum-rail input[type="range"] {
-  position: relative !important;
-  z-index: 1 !important;
+  background: linear-gradient(90deg, rgba(255,255,255,.24), rgba(255,255,255,.08)) !important;
 }
 
 .live-leverage-spectrum-ticks,
