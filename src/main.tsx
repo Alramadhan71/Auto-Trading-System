@@ -2772,7 +2772,7 @@ function HomePage({
   }
 
   return <>
-    <section className="home-launchpad">
+    <section className="home-launchpad crypto-market-hero">
       <div className="home-launchpad-copy">
         <div className="product-identity-lockup home-product-lockup">
           <img src={brandLogoSrc} alt="" aria-hidden="true" />

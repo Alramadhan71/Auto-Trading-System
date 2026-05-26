@@ -32534,6 +32534,10 @@ b.bad {
   --ui-surface-2: #111e2d;
   --ui-border: rgba(169, 187, 207, .20);
   --ui-border-strong: rgba(115, 173, 255, .46);
+  --hero-ambient-a: rgba(115, 173, 255, .13);
+  --hero-ambient-b: rgba(45, 127, 240, .08);
+  --hero-ambient-c: rgba(7, 16, 27, 0);
+  --card-lift-shadow: rgba(0, 0, 0, .18);
   --cta-primary-bg: #111c2b;
   --cta-primary-text: #f7fbff;
   --cta-primary-border: rgba(115, 173, 255, .44);
@@ -32575,6 +32579,10 @@ b.bad {
   --ui-surface-2: #eef3f8;
   --ui-border: rgba(15, 28, 45, .13);
   --ui-border-strong: rgba(45, 127, 240, .36);
+  --hero-ambient-a: rgba(45, 127, 240, .08);
+  --hero-ambient-b: rgba(115, 173, 255, .06);
+  --hero-ambient-c: rgba(255, 255, 255, 0);
+  --card-lift-shadow: rgba(15, 28, 45, .08);
   --logo-blue: #2d6fbd;
   --logo-blue-strong: #174f91;
   --logo-ice: #dcecff;
@@ -32639,6 +32647,10 @@ b.bad {
   --ui-page: #02060b;
   --ui-surface: #070d14;
   --ui-surface-2: #0d1622;
+  --hero-ambient-a: rgba(83, 171, 255, .12);
+  --hero-ambient-b: rgba(45, 127, 240, .07);
+  --hero-ambient-c: rgba(2, 6, 11, 0);
+  --card-lift-shadow: rgba(0, 0, 0, .24);
   --cta-primary-bg: #0d1622;
   --cta-primary-text: #f8fbff;
   --cta-primary-border: rgba(155, 215, 255, .40);
@@ -32719,6 +32731,8 @@ body,
 }
 
 .page-home .home-launchpad {
+  position: relative !important;
+  isolation: isolate !important;
   min-height: clamp(315px, 36vh, 400px) !important;
   padding: clamp(26px, 3.2vw, 42px) clamp(16px, 3vw, 42px) !important;
   border: 1px solid var(--ui-border) !important;
@@ -32728,11 +32742,25 @@ body,
   overflow: hidden !important;
 }
 
-.page-home .home-launchpad::before,
 .page-home .home-launchpad::after,
 .page-home .home-launchpad-summary,
 .page-home .home-launchpad-summary * {
   display: none !important;
+}
+
+.page-home .home-launchpad::before {
+  display: none !important;
+}
+
+.page-home .crypto-market-hero::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse at 50% 63%, var(--hero-ambient-a) 0%, var(--hero-ambient-b) 26%, var(--hero-ambient-c) 62%) !important;
 }
 
 .page-home .home-launchpad-copy {
@@ -33117,6 +33145,38 @@ body,
   font-size: 14px !important;
   font-weight: 760 !important;
   white-space: nowrap !important;
+}
+
+.page-home .home-top-market-card,
+.page-home .home-signal-card,
+.page-home .home-news-card {
+  transform: translateY(0) !important;
+  will-change: transform !important;
+  transition: transform .16s ease, border-color .16s ease, background-color .16s ease, box-shadow .16s ease !important;
+}
+
+.page-home .home-top-market-card:hover,
+.page-home .home-signal-card:hover,
+.page-home .home-news-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--ui-border-strong) !important;
+  background: color-mix(in srgb, var(--accent) 6%, var(--ui-surface)) !important;
+  box-shadow: 0 14px 30px var(--card-lift-shadow) !important;
+}
+
+.page-home .home-leader-row,
+.page-home .home-marketcap-row,
+.page-home .home-fear-history-row {
+  transition: border-color .16s ease, background-color .16s ease !important;
+}
+
+.page-home .home-leader-row:hover,
+.page-home .home-marketcap-row:hover,
+.page-home .home-fear-history-row:hover {
+  transform: none !important;
+  border-color: var(--ui-border-strong) !important;
+  background: color-mix(in srgb, var(--accent) 7%, var(--ui-surface)) !important;
+  box-shadow: none !important;
 }
 
 @media (max-width: 860px) {
