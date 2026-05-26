@@ -910,7 +910,13 @@ function App() {
 
   useEffect(() => {
     api<{ ok: boolean; user: AuthSessionUser | null }>('/api/auth/session')
-      .then(response => setAppSessionUser(response.user))
+      .then(response => {
+        setAppSessionUser(response.user);
+        if (!response.user) return;
+        setActiveMarketFamily(current => current ?? 'crypto');
+        setAutoTradePortalView(getAuthenticatedPortalView(response.user));
+        setPage('dashboard');
+      })
       .catch(() => setAppSessionUser(null));
   }, []);
 
