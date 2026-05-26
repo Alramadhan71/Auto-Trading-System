@@ -33689,6 +33689,47 @@ body,
   margin-top: 0 !important;
 }
 
+.live-leverage-spectrum {
+  isolation: isolate !important;
+}
+
+.live-leverage-spectrum-rail {
+  overflow: visible !important;
+  z-index: 0 !important;
+}
+
+.live-leverage-spectrum-rail::before {
+  z-index: 0 !important;
+  background: color-mix(in srgb, var(--panel-soft) 70%, #0a1016) !important;
+}
+
+.live-leverage-spectrum-rail::after {
+  z-index: 1 !important;
+  background: linear-gradient(90deg, var(--spectrum-low), var(--spectrum-mid) 62%, var(--spectrum-high)) !important;
+}
+
+.live-leverage-spectrum-rail input[type="range"] {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.live-leverage-spectrum-ticks,
+.live-leverage-risk-scale {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+.scan-progress-track {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.scan-progress-track i {
+  position: relative !important;
+  z-index: 1 !important;
+  background: linear-gradient(90deg, var(--accent), var(--border-strong)) !important;
+}
+
 .portfolio-workspace-panel,
 .public-ops-panel,
 .admin-panel.users-workspace-panel,
@@ -33698,7 +33739,9 @@ body,
 
 .admin-panel.users-workspace-panel .admin-control-toggle,
 .admin-panel.settings-workspace-panel .admin-control-toggle,
-.public-ops-panel .public-ops-toggle {
+.public-ops-panel .public-ops-toggle,
+.live-rules-shell .live-rules-toggle,
+.admin-personal-panel .admin-personal-toggle {
   cursor: default !important;
 }
 
