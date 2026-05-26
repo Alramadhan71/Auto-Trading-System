@@ -5685,11 +5685,10 @@ function AutoTradePage({
         </div>
       </div>}
 
-      <div className="auto-trade-headbar">
-        <div>
-          <div className="welcome-lockup">
-            <strong>{greetingLine}</strong>
-          </div>
+      <div className="auto-trade-headbar execution-content-header">
+        <div className="execution-content-title">
+          <span>Execution Console</span>
+          <h1>{`Ready for today, ${activeName}`}</h1>
         </div>
       </div>
 
@@ -5824,20 +5823,14 @@ function AutoTradePage({
         </div>
       </section>}
 
-      {adminWorkspaceTab === 'portfolio' && <section className="premium-panel workspace-panel portfolio-workspace-panel">
-        <div className="premium-panel-heading">
+      {adminWorkspaceTab === 'portfolio' && <section className="workspace-panel portfolio-workspace-panel execution-flat-workspace">
+        <div className="execution-workspace-title">
           <div>
-            <h2>Capital</h2>
+            <span>Portfolio</span>
+            <h2>{portfolioWorkspaceTab === 'summary' ? 'Capital Overview' : portfolioWorkspaceTab === 'rules' ? 'Live Auto Rules' : 'Portfolio Ledger'}</h2>
           </div>
-          <span className="nav-badge subtle">Members</span>
+          <span className="nav-badge subtle">{portfolioWorkspaceTab === 'summary' ? 'Members' : portfolioWorkspaceTab === 'rules' ? 'Rules' : 'Ledger'}</span>
         </div>
-        <section className="premium-panel premium-panel-accent">
-          <div className="premium-panel-heading">
-            <div>
-              <h2>Portfolio</h2>
-            </div>
-            <span className="nav-badge glow">Portfolio View</span>
-          </div>
           {portfolioWorkspaceTab === 'summary' && autoMode === 'shadow' && <section className="portfolio-card">
             <div className="shadow-profile-grid">
               {shadowProfiles.map(profile => <article key={profile.id} className={selectedShadowProfileId === profile.id ? 'shadow-profile-card active' : 'shadow-profile-card'}>
@@ -6590,7 +6583,6 @@ function AutoTradePage({
             </section>
           </div>
           </>}
-        </section>
       </section>}
 
       {portalView === 'admin' && adminWorkspaceTab === 'strategies' && <section className="premium-panel public-ops-panel open">

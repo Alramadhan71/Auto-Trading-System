@@ -33484,11 +33484,12 @@ body,
 
 .page-auto-trade .premium-workspace-grid {
   grid-template-columns: 248px minmax(0, 1fr) !important;
-  grid-auto-rows: min-content !important;
+  grid-auto-rows: auto !important;
   align-items: start !important;
   gap: 12px 16px !important;
   margin-left: 0 !important;
   padding-left: 0 !important;
+  min-height: 0 !important;
 }
 
 .page-frame.page-auto-trade {
@@ -33504,11 +33505,14 @@ body,
 .execution-sidebar {
   position: sticky;
   top: 73px;
-  grid-row: 1 / span 80;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-height: calc(100vh - 73px);
+  height: calc(100dvh - 73px);
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
   padding: 14px 12px;
   border-right: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
   border-radius: 0;
@@ -33518,6 +33522,7 @@ body,
 .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar) {
   grid-column: 2;
   min-width: 0;
+  align-self: start;
 }
 
 .execution-sidebar-group {
@@ -33938,26 +33943,63 @@ body,
   color: var(--accent-contrast, #fff);
 }
 
-.page-auto-trade .auto-trade-headbar {
+.page-auto-trade .auto-trade-headbar.execution-content-header {
   display: flex !important;
-  min-height: 58px !important;
+  align-items: end !important;
+  min-height: 88px !important;
   margin: 0 !important;
-  padding: 13px 18px !important;
-  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent) !important;
-  border-radius: 12px !important;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 94%, transparent), color-mix(in srgb, var(--panel) 86%, transparent)) !important;
+  padding: 18px 0 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 76%, transparent) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
   box-shadow: none !important;
 }
 
-.page-auto-trade .welcome-lockup {
-  padding: 0 !important;
+.execution-content-title,
+.execution-workspace-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
 }
 
-.page-auto-trade .welcome-lockup strong {
-  font-size: 18px !important;
-  line-height: 1.2 !important;
-  font-weight: 900 !important;
+.execution-content-title {
+  align-items: start;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.execution-content-title span,
+.execution-workspace-title span:not(.nav-badge) {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.execution-content-title h1,
+.execution-workspace-title h2 {
+  margin: 0;
+  color: var(--text);
+  letter-spacing: 0;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.execution-content-title h1 {
+  font-size: clamp(28px, 2.6vw, 42px);
+}
+
+.execution-workspace-title {
+  padding: 4px 0 14px;
+}
+
+.execution-workspace-title h2 {
+  font-size: clamp(22px, 1.6vw, 30px);
 }
 
 .execution-sidebar-logout {
@@ -34036,6 +34078,61 @@ body,
 .admin-panel.users-workspace-panel,
 .admin-panel.settings-workspace-panel {
   margin-top: 0 !important;
+}
+
+.page-auto-trade .execution-flat-workspace,
+.page-auto-trade .public-ops-panel,
+.page-auto-trade .admin-panel.users-workspace-panel,
+.page-auto-trade .admin-panel.settings-workspace-panel {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .execution-flat-workspace {
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.page-auto-trade .execution-flat-workspace .portfolio-card,
+.page-auto-trade .execution-flat-workspace .capital-group,
+.page-auto-trade .public-ops-body,
+.page-auto-trade .admin-control-grid,
+.page-auto-trade .admin-panel.settings-workspace-panel > section,
+.page-auto-trade .admin-panel.settings-workspace-panel > .admin-personal-panel {
+  border-radius: 14px !important;
+}
+
+.page-auto-trade .execution-flat-workspace > .portfolio-card,
+.page-auto-trade .execution-flat-workspace > .capital-group {
+  margin: 0 !important;
+}
+
+.page-auto-trade .execution-flat-workspace .workspace-summary-panel,
+.page-auto-trade .execution-flat-workspace .live-rules-shell,
+.page-auto-trade .execution-flat-workspace .portfolio-ledger-section {
+  padding: 18px !important;
+}
+
+.page-auto-trade .admin-control-toggle,
+.page-auto-trade .public-ops-toggle {
+  padding: 4px 0 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent) !important;
+  background: transparent !important;
+}
+
+.page-auto-trade .admin-control-toggle h2,
+.page-auto-trade .public-ops-toggle h2 {
+  font-size: clamp(22px, 1.5vw, 28px) !important;
+  line-height: 1.05 !important;
+}
+
+.page-auto-trade .admin-control-toggle + *,
+.page-auto-trade .public-ops-toggle + * {
+  margin-top: 12px !important;
 }
 
 .admin-panel.users-workspace-panel .admin-control-toggle,
