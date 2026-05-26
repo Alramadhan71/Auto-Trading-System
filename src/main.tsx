@@ -3309,6 +3309,7 @@ function AutoTradePage({
   const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
   const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
   const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'strategies' | 'broadcast'>('strategies');
+  const [settingsWorkspaceTab, setSettingsWorkspaceTab] = useState<'binance' | 'access'>('binance');
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
@@ -5903,6 +5904,7 @@ function AutoTradePage({
                     style={{ '--leverage-progress': `${Math.max(0, Math.min(100, ((leverageValue - 1) / 19) * 100))}%` } as React.CSSProperties}
                   >
                     <div className="live-leverage-spectrum-rail">
+                      <span className="live-leverage-progress" aria-hidden="true" />
                       <input type="range" min="1" max="20" step="0.1" value={leverageValue} onChange={event => setFuturesLeverage(event.target.value)} aria-label="Futures leverage" />
                     </div>
                     <div className="live-leverage-spectrum-ticks" aria-hidden="true">
@@ -6321,7 +6323,7 @@ function AutoTradePage({
           </div>
         </div>
         <div className="public-ops-body">
-          <nav className="workspace-subtabs" aria-label="Strategies sections">
+          <nav className="workspace-subtabs workspace-subtabs-duo" aria-label="Strategies sections">
             {([
               ['strategies', 'Strategies', 'Filters and active strategy list'],
               ['broadcast', 'Broadcast', 'Channel and reset actions']
@@ -6433,7 +6435,16 @@ function AutoTradePage({
           </div>
         </div>
         <>
-        {adminWorkspaceTab === 'settings' && autoMode === 'live' && <section className="binance-connect-panel admin-binance-panel">
+        {adminWorkspaceTab === 'settings' && <nav className="workspace-subtabs workspace-subtabs-duo settings-subtabs" aria-label="Settings sections">
+          {([
+            ['binance', 'Binance', 'Exchange keys and verification'],
+            ['access', 'Access', 'Admin profile and alerts']
+          ] as const).map(([id, label, summary]) => <button key={id} type="button" className={settingsWorkspaceTab === id ? 'active' : ''} onClick={() => setSettingsWorkspaceTab(id)}>
+            <strong>{label}</strong>
+            <span>{summary}</span>
+          </button>)}
+        </nav>}
+        {adminWorkspaceTab === 'settings' && settingsWorkspaceTab === 'binance' && autoMode === 'live' && <section className="binance-connect-panel admin-binance-panel">
           <div className="binance-admin-head">
             <div>
               <strong>Binance Connection</strong>
@@ -6677,7 +6688,7 @@ function AutoTradePage({
             </form>}
           </section>}
         </div>}
-        {adminWorkspaceTab === 'settings' && <section className="admin-personal-panel open">
+        {adminWorkspaceTab === 'settings' && settingsWorkspaceTab === 'access' && <section className="admin-personal-panel open">
           <div className="admin-personal-toggle">
             <div>
               <h2>Admin Personal Control</h2>

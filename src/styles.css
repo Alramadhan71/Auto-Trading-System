@@ -3057,11 +3057,9 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
   align-items: center;
 }
 .live-leverage-spectrum-rail::before,
-.live-leverage-spectrum-rail::after {
-  content: "";
+.live-leverage-progress {
   position: absolute;
   left: 0;
-  right: 0;
   top: 50%;
   height: 8px;
   border-radius: 999px;
@@ -3069,18 +3067,19 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
   pointer-events: none;
 }
 .live-leverage-spectrum-rail::before {
+  content: "";
+  right: 0;
   background: color-mix(in srgb, var(--panel-soft) 70%, #0a1016);
   box-shadow: inset 0 1px 2px rgba(0,0,0,.35);
 }
-.live-leverage-spectrum-rail::after {
-  right: auto;
+.live-leverage-progress {
   width: var(--leverage-progress);
   background: linear-gradient(90deg, var(--spectrum-low), var(--spectrum-mid) 62%, var(--spectrum-high));
   box-shadow: 0 0 18px color-mix(in srgb, var(--spectrum-low) 18%, transparent);
   transition: width .045s linear;
   will-change: width;
 }
-.live-leverage-spectrum:has(input[type="range"]:active) .live-leverage-spectrum-rail::after {
+.live-leverage-spectrum:has(input[type="range"]:active) .live-leverage-progress {
   transition-duration: 0s;
 }
 .live-leverage-spectrum-rail input[type="range"] {
@@ -14568,7 +14567,7 @@ video {
   }
 
   .page-auto-trade .live-leverage-spectrum-rail::before,
-  .page-auto-trade .live-leverage-spectrum-rail::after {
+  .page-auto-trade .live-leverage-progress {
     height: 7px;
   }
 
@@ -22196,9 +22195,7 @@ textarea,
 .showcase-screen main b,
 .strategy-bar,
 .strategy-bar i,
-.live-leverage-progress,
-.live-leverage-spectrum-rail::before,
-.live-leverage-spectrum-rail::after {
+.live-leverage-progress {
   background: var(--border-strong) !important;
 }
 
@@ -33626,6 +33623,10 @@ body,
   background: color-mix(in srgb, var(--surface-raised, var(--surface)) 88%, transparent) !important;
 }
 
+.workspace-subtabs.workspace-subtabs-duo {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
 .workspace-subtabs button {
   display: grid !important;
   gap: 2px !important;
@@ -33689,34 +33690,26 @@ body,
   margin-top: 0 !important;
 }
 
-.live-leverage-spectrum {
-  isolation: isolate !important;
-}
-
 .live-leverage-spectrum-rail {
   overflow: visible !important;
-  z-index: 0 !important;
 }
 
 .live-leverage-spectrum-rail::before {
-  z-index: 0 !important;
   background: color-mix(in srgb, var(--panel-soft) 70%, #0a1016) !important;
 }
 
-.live-leverage-spectrum-rail::after {
-  z-index: 1 !important;
+.live-leverage-progress {
   background: linear-gradient(90deg, var(--spectrum-low), var(--spectrum-mid) 62%, var(--spectrum-high)) !important;
 }
 
 .live-leverage-spectrum-rail input[type="range"] {
   position: relative !important;
-  z-index: 2 !important;
+  z-index: 1 !important;
 }
 
 .live-leverage-spectrum-ticks,
 .live-leverage-risk-scale {
   position: relative !important;
-  z-index: 3 !important;
 }
 
 .scan-progress-track {
