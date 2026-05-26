@@ -3411,7 +3411,12 @@ function AutoTradePage({
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
-  const [managementOpen, setManagementOpen] = useState(true);
+  const [sidebarSectionOpen, setSidebarSectionOpen] = useState<Record<'portfolio' | 'strategies' | 'users' | 'settings', boolean>>({
+    portfolio: true,
+    strategies: true,
+    users: true,
+    settings: true
+  });
   const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
   const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'strategies' | 'broadcast'>('strategies');
   const [settingsWorkspaceTab, setSettingsWorkspaceTab] = useState<'binance' | 'access'>('binance');
@@ -3652,7 +3657,7 @@ function AutoTradePage({
       const next = typeof reader.result === 'string' ? reader.result : '';
       if (!next) return;
       setAvatarCropImage(next);
-      setAvatarCropZoom(1);
+      setAvatarCropZoom(0.72);
       setAvatarCropOffset({ x: 0, y: 0 });
     };
     reader.readAsDataURL(file);
@@ -3661,7 +3666,7 @@ function AutoTradePage({
 
   const closeAvatarCropper = () => {
     setAvatarCropImage('');
-    setAvatarCropZoom(1);
+    setAvatarCropZoom(0.72);
     setAvatarCropOffset({ x: 0, y: 0 });
     cropDragRef.current = null;
   };
@@ -5548,29 +5553,37 @@ function AutoTradePage({
           </button>
         </div>
         <div className="execution-sidebar-section management-section">
-          <button type="button" className="execution-sidebar-section-toggle" onClick={() => setManagementOpen(value => !value)} aria-expanded={managementOpen}>
-            <span>Management</span>
-            {managementOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
+          <span>Management</span>
         </div>
-        {managementOpen && visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
-          <button
-            type="button"
-            className="execution-sidebar-main"
-            onClick={() => {
-              setAdminWorkspaceTab(tab.id);
-              if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
-              if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
-            }}
-          >
-            <span className="execution-sidebar-icon" aria-hidden="true">
-              {tab.id === 'portfolio' ? <Wallet size={16} /> : tab.id === 'strategies' ? <Target size={16} /> : tab.id === 'users' ? <Users size={16} /> : <KeyRound size={16} />}
-            </span>
-            <span className="execution-sidebar-copy">
-              <strong>{tab.label}</strong>
-            </span>
-          </button>
-          {tab.id === 'portfolio' && <div className="execution-sidebar-subnav">
+        {visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
+          <div className="execution-sidebar-main-wrap">
+            <button
+              type="button"
+              className="execution-sidebar-main"
+              onClick={() => {
+                setAdminWorkspaceTab(tab.id);
+                if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
+                if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
+              }}
+            >
+              <span className="execution-sidebar-icon" aria-hidden="true">
+                {tab.id === 'portfolio' ? <Wallet size={16} /> : tab.id === 'strategies' ? <Target size={16} /> : tab.id === 'users' ? <Users size={16} /> : <KeyRound size={16} />}
+              </span>
+              <span className="execution-sidebar-copy">
+                <strong>{tab.label}</strong>
+              </span>
+            </button>
+            <button
+              type="button"
+              className="execution-sidebar-toggle"
+              onClick={() => setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }))}
+              aria-label={`${sidebarSectionOpen[tab.id] ? 'Collapse' : 'Expand'} ${tab.label}`}
+              aria-expanded={sidebarSectionOpen[tab.id]}
+            >
+              {sidebarSectionOpen[tab.id] ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+          </div>
+          {tab.id === 'portfolio' && sidebarSectionOpen.portfolio && <div className="execution-sidebar-subnav">
             {([
               ['summary', 'Summary'],
               ['rules', 'Rules'],
@@ -5579,7 +5592,7 @@ function AutoTradePage({
               {label}
             </button>)}
           </div>}
-          {tab.id === 'strategies' && <div className="execution-sidebar-subnav">
+          {tab.id === 'strategies' && sidebarSectionOpen.strategies && <div className="execution-sidebar-subnav">
             {(portalView === 'admin' ? [
               ['strategies', 'Strategies'],
               ['broadcast', 'Broadcast']
@@ -5589,7 +5602,7 @@ function AutoTradePage({
               {label}
             </button>)}
           </div>}
-          {tab.id === 'settings' && <div className="execution-sidebar-subnav">
+          {tab.id === 'settings' && sidebarSectionOpen.settings && <div className="execution-sidebar-subnav">
             {(portalView === 'admin' ? [
               ['binance', 'Binance'],
               ['access', 'Access']
@@ -5646,7 +5659,7 @@ function AutoTradePage({
             <div className="avatar-crop-controls">
               <label>
                 <span>Zoom</span>
-                <input type="range" min="1" max="3" step="0.01" value={avatarCropZoom} onChange={event => setAvatarCropZoom(Number(event.target.value))} />
+                <input type="range" min="0.35" max="3" step="0.01" value={avatarCropZoom} onChange={event => setAvatarCropZoom(Number(event.target.value))} />
               </label>
               <div className="avatar-crop-preview">
                 <span>Preview</span>
@@ -5658,6 +5671,7 @@ function AutoTradePage({
           </div>
           <div className="avatar-crop-actions">
             <button type="button" className="ghost" onClick={() => avatarInputRef.current?.click()}>Choose another</button>
+            <button type="button" className="ghost" onClick={() => { setAvatarCropZoom(0.72); setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
             <button type="button" className="ghost" onClick={closeAvatarCropper}>Cancel</button>
             <button type="button" onClick={saveCroppedAvatar}>Save photo</button>
           </div>

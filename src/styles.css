@@ -33523,6 +33523,13 @@ body,
   gap: 3px;
 }
 
+.execution-sidebar-main-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px;
+  gap: 4px;
+  align-items: center;
+}
+
 .execution-sidebar-main {
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
@@ -33538,6 +33545,25 @@ body,
   text-align: left;
   cursor: pointer;
   box-shadow: none;
+}
+
+.execution-sidebar-toggle {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.execution-sidebar-toggle:hover,
+.execution-sidebar-toggle:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--text);
 }
 
 .execution-sidebar-main.market-context {
@@ -33577,6 +33603,7 @@ body,
 }
 
 .execution-sidebar-main.active,
+.execution-sidebar-group.active .execution-sidebar-main,
 .execution-sidebar-group.active > .execution-sidebar-main,
 .execution-sidebar-main:hover,
 .execution-sidebar-main:focus-visible {
@@ -33635,25 +33662,12 @@ body,
   padding: 2px 0 6px;
 }
 
-.execution-sidebar-section > span,
-.execution-sidebar-section-toggle {
+.execution-sidebar-section > span {
   color: var(--muted);
   font-size: 10px;
   font-weight: 950;
   letter-spacing: .08em;
   text-transform: uppercase;
-}
-
-.execution-sidebar-section-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 26px;
-  padding: 0 4px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
 }
 
 .management-section {
@@ -33890,9 +33904,7 @@ body,
 }
 
 .page-auto-trade .auto-trade-headbar {
-  min-height: 58px !important;
-  margin: 0 !important;
-  padding: 14px 16px !important;
+  display: none !important;
 }
 
 .execution-sidebar-logout {
