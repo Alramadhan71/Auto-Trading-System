@@ -1309,7 +1309,7 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
-  const showSessionLogout = isAuthenticated && page === 'dashboard';
+  const showSessionLogout = false;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
@@ -1322,9 +1322,9 @@ function App() {
             <small>By {companyName}</small>
           </div>
         </button>
-        {!authEntryPage && !isMarketPicker && page !== 'auto-trade' && <nav className="shell-nav" aria-label="Primary navigation">
+        {!authEntryPage && !isMarketPicker && page !== 'auto-trade' && page !== 'dashboard' && <nav className="shell-nav" aria-label="Primary navigation">
           <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><span>{marketLabel}</span></button>
-          <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><span>Dashboard</span></button>
+          <button onClick={() => navigateToPage('dashboard')}><span>Dashboard</span></button>
           <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
@@ -1382,6 +1382,13 @@ function App() {
           notifications={deferredNotifications}
           selected={selected}
           dashboard={dashboard}
+          activeName={appSessionUser?.username || appSessionUser?.name || 'Muslim Alramadhan'}
+          roleLabel={appSessionUser?.role === 'admin' ? 'Admin' : 'User'}
+          marketLabel={marketLabel}
+          onMarketHome={() => navigateToPage('home')}
+          onExecution={openAutoTradeLogin}
+          onLogout={handleAppLogout}
+          logoutBusy={logoutBusy}
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
@@ -1480,7 +1487,7 @@ function NotificationsPanel({
   onSelectTrade?: (tradeId: number | null) => void;
 }) {
   const signalSideById = new Map(signals.map(signal => [signal.id, signal.side]));
-  return <section className="panel dashboard-notifications-panel">
+  return <section id="dashboard-notifications" className="panel dashboard-notifications-panel">
     <div className="section-title"><h2>Notifications</h2><p>Trade entries and exits.</p></div>
     <div className="notifications">
       {notifications.map(n => {
@@ -7013,7 +7020,14 @@ function DashboardPage({
   futuresTickers,
   notifications,
   selected,
-  dashboard
+  dashboard,
+  activeName,
+  roleLabel,
+  marketLabel,
+  onMarketHome,
+  onExecution,
+  onLogout,
+  logoutBusy
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -7022,34 +7036,112 @@ function DashboardPage({
   notifications: Notification[];
   selected: Set<string>;
   dashboard: DashboardPayload;
+  activeName: string;
+  roleLabel: string;
+  marketLabel: string;
+  onMarketHome: () => void;
+  onExecution: () => void;
+  onLogout: () => void;
+  logoutBusy: boolean;
 }) {
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
-  return <>
-    <section className="dashboard-hero">
-      <div className="dashboard-heading-row">
-        <div className="dashboard-heading-copy">
-          <h1>Dashboard</h1>
+  const scrollDashboardSection = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return <section className="auto-trade-page dashboard-execution-page">
+    <div className="premium-workspace-grid">
+      <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
+        <div className="execution-sidebar-brand">
+          <div>
+            <strong>Dashboard</strong>
+            <span>Simulation console</span>
+          </div>
         </div>
-      </div>
-    </section>
-    <ScanProgressCard dashboard={dashboard} />
-    <PerformanceChart
-      stats={stats}
-      signals={signals}
-      tickers={tickers}
-      futuresTickers={futuresTickers}
-      notifications={notifications}
-      commandRange={commandRange}
-      onCommandRangeChange={setCommandRange}
-      commandCustomFrom={commandCustomFrom}
-      commandCustomTo={commandCustomTo}
-      onCommandCustomFromChange={setCommandCustomFrom}
-      onCommandCustomToChange={setCommandCustomTo}
-      selected={selected}
-    />
-  </>;
+        <div className="execution-sidebar-section">
+          <span>Markets</span>
+          <button type="button" className="execution-sidebar-main market-context" onClick={onMarketHome}>
+            <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
+          </button>
+        </div>
+        <div className="execution-sidebar-section">
+          <span>Workspace</span>
+          <button type="button" className="execution-sidebar-main active" onClick={() => scrollDashboardSection('dashboard-overview')}>
+            <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
+          </button>
+          <button type="button" className="execution-sidebar-main" onClick={onExecution}>
+            <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Execution</strong></span>
+          </button>
+        </div>
+        <div className="execution-sidebar-section management-section">
+          <span>Simulation</span>
+        </div>
+        <div className="execution-sidebar-group active">
+          <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('simulation-profiles')}>
+            <span className="execution-sidebar-icon" aria-hidden="true"><Target size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Profiles</strong></span>
+            <span className="execution-sidebar-chevron" aria-hidden="true"><ChevronUp size={14} /></span>
+          </button>
+          <div className="execution-sidebar-subnav">
+            <button type="button" onClick={() => scrollDashboardSection('dashboard-trade-ledger')}>Trade Ledger</button>
+            <button type="button" onClick={() => scrollDashboardSection('simulation-profiles')}>Options</button>
+            <button type="button" onClick={() => scrollDashboardSection('signal-routing')}>Signal Routing</button>
+          </div>
+        </div>
+        <div className="execution-sidebar-group">
+          <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('performance-command')}>
+            <span className="execution-sidebar-icon" aria-hidden="true"><Activity size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Analysis</strong></span>
+            <span className="execution-sidebar-chevron" aria-hidden="true"><ChevronDown size={14} /></span>
+          </button>
+          <div className="execution-sidebar-subnav">
+            <button type="button" onClick={() => scrollDashboardSection('performance-command')}>Performance</button>
+            <button type="button" onClick={() => scrollDashboardSection('dashboard-notifications')}>Notifications</button>
+          </div>
+        </div>
+        <div className="execution-sidebar-footer">
+          <button type="button" className="execution-profile-button">
+            <span className="execution-profile-avatar"><UserCog size={18} /></span>
+            <span>
+              <strong>{activeName}</strong>
+              <small>{roleLabel}</small>
+            </span>
+          </button>
+          <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
+            <LogOut size={16} />
+            <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="execution-workspace-main">
+        <div id="dashboard-overview" className="auto-trade-headbar execution-content-header">
+          <div className="execution-content-title">
+            <span>Simulation Console</span>
+            <h1>{`Ready for today, ${activeName}`}</h1>
+          </div>
+        </div>
+        <ScanProgressCard dashboard={dashboard} />
+        <SimulationProfiles stats={stats} signals={signals} dashboard={dashboard} selected={selected} />
+        <SignalRoutingPreview signals={signals} stats={stats} />
+        <PerformanceChart
+          stats={stats}
+          signals={signals}
+          tickers={tickers}
+          futuresTickers={futuresTickers}
+          notifications={notifications}
+          commandRange={commandRange}
+          onCommandRangeChange={setCommandRange}
+          commandCustomFrom={commandCustomFrom}
+          commandCustomTo={commandCustomTo}
+          onCommandCustomFromChange={setCommandCustomFrom}
+          onCommandCustomToChange={setCommandCustomTo}
+          selected={selected}
+        />
+      </main>
+    </div>
+  </section>;
 }
 
 function ScanProgressCard({ dashboard }: { dashboard: DashboardPayload }) {
@@ -7071,6 +7163,76 @@ function ScanProgressCard({ dashboard }: { dashboard: DashboardPayload }) {
       <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
       <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
     </article>
+  </section>;
+}
+
+function SimulationProfiles({
+  stats,
+  signals,
+  dashboard,
+  selected
+}: {
+  stats: Stat[];
+  signals: Signal[];
+  dashboard: DashboardPayload;
+  selected: Set<string>;
+}) {
+  const activeStrategies = stats.filter(item => selected.has(item.strategyId)).length || dashboard.selectedStrategies || stats.length;
+  const closedSignals = signals.filter(signal => signal.status !== 'OPEN').length;
+  const profileCards = [
+    { name: 'Simple Rules', scope: 'All strategies', metric: signals.length, detail: `${activeStrategies} active feeds` },
+    { name: 'Strict Rules', scope: 'Filtered simulation', metric: closedSignals, detail: 'Risk review lane' },
+    { name: 'BTC / ETH Only', scope: 'Major pairs', metric: signals.filter(signal => ['BTCUSDT', 'ETHUSDT'].includes(signal.symbol)).length, detail: 'Liquidity lane' },
+    { name: 'Direction Bias', scope: 'Long / short option', metric: signals.filter(signal => signal.side === 'LONG').length, detail: `${signals.filter(signal => signal.side === 'SHORT').length} shorts tracked` }
+  ];
+  return <section id="simulation-profiles" className="dashboard-simulation-panel">
+    <div className="execution-workspace-title">
+      <div>
+        <span>Simulation</span>
+        <h2>Profile Options</h2>
+      </div>
+      <span className="nav-badge subtle">Demo gates</span>
+    </div>
+    <div className="dashboard-profile-grid">
+      {profileCards.map(profile => <article key={profile.name} className="dashboard-profile-card">
+        <div>
+          <span>{profile.scope}</span>
+          <strong>{profile.name}</strong>
+          <small>{profile.detail}</small>
+        </div>
+        <b>{profile.metric.toLocaleString('en-US')}</b>
+      </article>)}
+    </div>
+  </section>;
+}
+
+function SignalRoutingPreview({ signals, stats }: { signals: Signal[]; stats: Stat[] }) {
+  const recentSignals = signals.slice(0, 3);
+  return <section id="signal-routing" className="dashboard-simulation-panel">
+    <div className="execution-workspace-title">
+      <div>
+        <span>Routing</span>
+        <h2>Signal Flow</h2>
+      </div>
+      <span className="nav-badge subtle">{`${stats.length} strategies`}</span>
+    </div>
+    <div className="dashboard-routing-list">
+      {recentSignals.length ? recentSignals.map(signal => <article key={signal.id} className="dashboard-routing-row">
+        <div>
+          <strong>{signal.symbol}</strong>
+          <span>{`${signal.strategyName} | ${signal.side} | ${signal.timeframe}`}</span>
+        </div>
+        <div>
+          <span>Simple</span>
+          <span>Strict</span>
+          <span>BTC/ETH</span>
+          <span>Direction</span>
+        </div>
+      </article>) : <article className="dashboard-routing-empty">
+        <strong>No routed signals yet</strong>
+        <span>New signals will route through every simulation option here.</span>
+      </article>}
+    </div>
   </section>;
 }
 
@@ -8077,7 +8239,7 @@ function PerformanceChart({
       onCustomToChange={setCustomTo}
     />}
 
-    <div className="ledger-wrap" ref={tradeLedgerRef}>
+    <div id="dashboard-trade-ledger" className="ledger-wrap" ref={tradeLedgerRef}>
       <div className="section-title compact dashboard-section-title"><h2>Trade Ledger</h2></div>
       <div className="ledger-range-filter">
         <span className="dashboard-range-label">{getRangeLabel(ledgerRange)}</span>
