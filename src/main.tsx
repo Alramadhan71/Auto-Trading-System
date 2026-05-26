@@ -7047,8 +7047,9 @@ function DashboardPage({
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
-  const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'overview' | 'ledger' | 'options' | 'routing' | 'performance' | 'notifications'>('overview');
-  const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: false });
+  const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'ledger' | 'options' | 'routing' | 'performance' | 'notifications'>('ledger');
+  const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: true });
+  const [sidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
@@ -7071,7 +7072,7 @@ function DashboardPage({
         </div>
         <div className="execution-sidebar-section">
           <span>Workspace</span>
-          <button type="button" className={dashboardWorkspaceTab === 'overview' ? 'execution-sidebar-main active' : 'execution-sidebar-main'} onClick={() => selectDashboardTab('overview')}>
+          <button type="button" className="execution-sidebar-main active">
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
           </button>
@@ -7119,7 +7120,9 @@ function DashboardPage({
         </div>
         <div className="execution-sidebar-footer">
           <button type="button" className="execution-profile-button">
-            <span className="execution-profile-avatar"><UserCog size={18} /></span>
+            <span className="execution-profile-avatar">
+              {sidebarAvatar ? <img src={sidebarAvatar} alt="" /> : <UserCog size={18} />}
+            </span>
             <span>
               <strong>{activeName}</strong>
               <small>{roleLabel}</small>
@@ -7135,11 +7138,11 @@ function DashboardPage({
       <main className="execution-workspace-main">
         <div id="dashboard-overview" className="auto-trade-headbar execution-content-header">
           <div className="execution-content-title">
-            <span>Execution Console</span>
+            <span>Dashboard Console</span>
             <h1>{`Ready for today, ${activeName}`}</h1>
           </div>
         </div>
-        {dashboardWorkspaceTab === 'overview' && <ScanProgressCard dashboard={dashboard} />}
+        <ScanProgressCard dashboard={dashboard} />
         {dashboardWorkspaceTab === 'options' && <SimulationProfiles stats={stats} signals={signals} dashboard={dashboard} selected={selected} />}
         {dashboardWorkspaceTab === 'routing' && <SignalRoutingPreview signals={signals} stats={stats} />}
         {(['ledger', 'performance', 'notifications'].includes(dashboardWorkspaceTab)) && <PerformanceChart
