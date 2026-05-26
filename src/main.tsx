@@ -2191,7 +2191,6 @@ function USStockHomePage({
           <div>
             <span className="us-hero-kicker">US Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">Market data, signal tracking, and controlled execution in one disciplined workspace.</p>
             <CompanyAttribution />
           </div>
         </div>
@@ -2207,8 +2206,8 @@ function USStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={22} />
-            <span><strong>Log In to Your Account</strong></span>
+            <LogIn size={24} />
+            <span><strong>Log in to your account</strong></span>
           </button>
         </div>
       </div>
@@ -2516,7 +2515,6 @@ function SaudiStockHomePage({
           <div>
             <span className="saudi-hero-kicker">Saudi Market Command Center</span>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">Market data, signal tracking, and controlled execution in one disciplined workspace.</p>
             <CompanyAttribution />
           </div>
         </div>
@@ -2532,8 +2530,8 @@ function SaudiStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={22} />
-            <span><strong>Log In to Your Account</strong></span>
+            <LogIn size={24} />
+            <span><strong>Log in to your account</strong></span>
           </button>
         </div>
       </div>
@@ -2780,7 +2778,6 @@ function HomePage({
           <img src={brandLogoSrc} alt="" aria-hidden="true" />
           <div>
             <h1>{productName}</h1>
-            <p className="home-launchpad-summary">Live crypto markets, strategy signals, and execution controls built for repeat daily use.</p>
             <CompanyAttribution />
           </div>
         </div>
@@ -2800,9 +2797,9 @@ function HomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={22} />
+            <LogIn size={24} />
             <span>
-              <strong>Log In to Your Account</strong>
+              <strong>Log in to your account</strong>
             </span>
           </button>
         </div>

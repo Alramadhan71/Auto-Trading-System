@@ -32520,3 +32520,380 @@ b.bad {
     min-width: 0 !important;
   }
 }
+
+/* Final override: agreed home hero CTA, header action, and search treatment. */
+.page-home .home-launchpad-summary {
+  display: none !important;
+}
+
+.page-home .home-cta-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+.page-home .home-login-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-top: -2px !important;
+  color: var(--muted) !important;
+  font-size: 13px !important;
+  font-weight: 720 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  min-width: 270px !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  padding: 0 18px !important;
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-cta-primary {
+  background: var(--text) !important;
+  border-color: var(--text) !important;
+  color: var(--app-bg) !important;
+}
+
+.page-home .home-cta-secondary {
+  background: color-mix(in srgb, #2aabee 13%, var(--surface)) !important;
+  border-color: color-mix(in srgb, #2aabee 42%, var(--border)) !important;
+  color: #6fcaff !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg {
+  width: 32px !important;
+  height: 32px !important;
+  flex: 0 0 32px !important;
+  padding: 7px !important;
+  border-radius: 8px !important;
+  stroke-width: 2.2 !important;
+}
+
+.page-home .home-cta-primary svg {
+  background: color-mix(in srgb, var(--app-bg) 12%, transparent) !important;
+  color: var(--app-bg) !important;
+  stroke: var(--app-bg) !important;
+}
+
+.page-home .home-cta-secondary svg {
+  background: color-mix(in srgb, #2aabee 18%, transparent) !important;
+  color: #6fcaff !important;
+  stroke: #6fcaff !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong {
+  color: inherit !important;
+  font-size: 14px !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+.shell-header.home-header .market-return-cta,
+.shell-header.auth-header .auth-return-home,
+.home-header-cta,
+.auth-return-home,
+.market-return-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  color: var(--soft-text) !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.shell-header.home-header .market-return-cta:hover,
+.shell-header.auth-header .auth-return-home:hover,
+.home-header-cta:hover,
+.auth-return-home:hover,
+.market-return-cta:hover {
+  border-color: var(--border-strong) !important;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface)) !important;
+  color: var(--text) !important;
+}
+
+.page-home .home-search-panel,
+.page-home .search-panel {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 58px !important;
+  padding: 8px 10px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-search-panel > svg,
+.page-home .search-panel > svg {
+  width: 34px !important;
+  height: 34px !important;
+  padding: 8px !important;
+  border-radius: 9px !important;
+  background: var(--surface-raised) !important;
+  color: var(--accent-strong) !important;
+}
+
+.page-home .home-search-panel input,
+.page-home .search-panel input {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text) !important;
+  font-size: 16px !important;
+  font-weight: 760 !important;
+}
+
+.page-home .home-search-panel span,
+.page-home .search-panel span {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 32px !important;
+  padding: 0 10px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 9px !important;
+  background: var(--surface-raised) !important;
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 780 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-cta-row {
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary {
+    width: min(100%, 360px) !important;
+    min-width: 0 !important;
+  }
+
+  .page-home .home-search-panel,
+  .page-home .search-panel {
+    grid-template-columns: auto minmax(0, 1fr) !important;
+  }
+
+  .page-home .home-search-panel span,
+  .page-home .search-panel span {
+    grid-column: 1 / -1 !important;
+    justify-content: center !important;
+    width: 100% !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+}
+
+/* Professional hero CTA redesign: strong contrast, consistent sizing, readable actions. */
+.page-home .home-launchpad {
+  min-height: clamp(500px, 62vh, 700px) !important;
+}
+
+.page-home .home-launchpad-copy {
+  gap: 26px !important;
+}
+
+.page-home .home-product-lockup > div {
+  gap: 12px !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  max-width: 980px !important;
+  font-size: clamp(64px, 7.4vw, 104px) !important;
+  line-height: .94 !important;
+  font-weight: 920 !important;
+  letter-spacing: 0 !important;
+  color: #f7fbff !important;
+}
+
+.page-home .company-attribution,
+.page-home .home-product-lockup .company-attribution {
+  color: #9fd0ff !important;
+  font-size: clamp(18px, 1.8vw, 26px) !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+.page-home .home-cta-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(300px, 410px)) !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  width: min(860px, 100%) !important;
+  margin: 2px auto 0 !important;
+}
+
+.page-home .home-login-row {
+  display: flex !important;
+  justify-content: center !important;
+  width: min(520px, 100%) !important;
+  margin: -6px auto 0 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 0 22px !important;
+  border-radius: 14px !important;
+  border: 1px solid transparent !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .28) !important;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, filter .18s ease !important;
+}
+
+.page-home .home-cta-primary {
+  background: linear-gradient(135deg, #f8fbff 0%, #d8eaff 100%) !important;
+  border-color: rgba(255, 255, 255, .72) !important;
+  color: #06111d !important;
+}
+
+.page-home .home-cta-secondary {
+  background: linear-gradient(135deg, rgba(42, 171, 238, .24), rgba(15, 85, 132, .46)) !important;
+  border-color: rgba(111, 202, 255, .62) !important;
+  color: #e8f8ff !important;
+}
+
+.page-home .home-cta-login {
+  background: linear-gradient(135deg, #ffcf70 0%, #f59e0b 100%) !important;
+  border-color: rgba(255, 218, 139, .82) !important;
+  color: #1a1204 !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-3px) !important;
+  filter: saturate(1.08) brightness(1.04) !important;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, .34) !important;
+}
+
+.page-home .home-cta-primary:focus-visible,
+.page-home .home-cta-secondary:focus-visible,
+.page-home .home-cta-login:focus-visible {
+  outline: 3px solid rgba(141, 195, 255, .82) !important;
+  outline-offset: 4px !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  padding: 8px !important;
+  border-radius: 11px !important;
+  stroke-width: 2.35 !important;
+}
+
+.page-home .home-cta-primary svg {
+  background: rgba(6, 17, 29, .11) !important;
+  color: #06111d !important;
+  stroke: #06111d !important;
+}
+
+.page-home .home-cta-secondary svg {
+  background: rgba(111, 202, 255, .18) !important;
+  color: #bfeeff !important;
+  stroke: #bfeeff !important;
+}
+
+.page-home .home-cta-login svg {
+  background: rgba(26, 18, 4, .12) !important;
+  color: #1a1204 !important;
+  stroke: #1a1204 !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  color: inherit !important;
+  text-align: left !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  display: block !important;
+  color: inherit !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+  white-space: normal !important;
+}
+
+@media (max-width: 760px) {
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(44px, 12vw, 64px) !important;
+  }
+
+  .page-home .home-cta-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: min(100%, 390px) !important;
+  }
+
+  .page-home .home-login-row {
+    width: min(100%, 390px) !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    height: 62px !important;
+    min-height: 62px !important;
+    padding: 0 18px !important;
+  }
+}
+
