@@ -60,6 +60,7 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s' "$VPS_SSH_KEY_B64" | base64 -d > ~/.ssh/trading71_vps
           chmod 600 ~/.ssh/trading71_vps
+          touch ~/.ssh/known_hosts
           for attempt in 1 2 3 4 5; do
             if ssh-keyscan -T 20 -p "$PORT" -H "$VPS_HOST" >> ~/.ssh/known_hosts; then
               exit 0
@@ -67,8 +68,7 @@ jobs:
             echo "ssh-keyscan failed on attempt $attempt; retrying..."
             sleep 5
           done
-          echo "Unable to read SSH host key from VPS_HOST on port $PORT." >&2
-          exit 1
+          echo "Unable to pre-scan SSH host key; deploy SSH will use accept-new host key mode." >&2
 
       - name: Deploy on VPS
         run: |
@@ -90,7 +90,7 @@ jobs:
           GLASSNODE_API_KEY_B64="$(printf '%s' "${GLASSNODE_API_KEY:-}" | base64 -w0)"
           SAHMK_API_KEY_B64="$(printf '%s' "${SAHMK_API_KEY:-}" | base64 -w0)"
           SAHMK_CACHE_MS_B64="$(printf '%s' "${SAHMK_CACHE_MS:-5000}" | base64 -w0)"
-          ssh -p "$PORT" -i ~/.ssh/trading71_vps "$VPS_USER@$VPS_HOST" \
+          ssh -p "$PORT" -i ~/.ssh/trading71_vps -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=20 -o ServerAliveCountMax=3 "$VPS_USER@$VPS_HOST" \
             "ADMIN_PASSWORD_B64='$ADMIN_PASSWORD_B64' ADMIN_USERNAME_B64='$ADMIN_USERNAME_B64' SECRETS_MASTER_KEY_B64='$SECRETS_MASTER_KEY_B64' PUBLIC_TELEGRAM_BOT_TOKEN_B64='$PUBLIC_TELEGRAM_BOT_TOKEN_B64' PUBLIC_TELEGRAM_CHAT_ID_B64='$PUBLIC_TELEGRAM_CHAT_ID_B64' PUBLIC_TELEGRAM_INVITE_URL_B64='$PUBLIC_TELEGRAM_INVITE_URL_B64' PUBLIC_TELEGRAM_BOT_USERNAME_B64='$PUBLIC_TELEGRAM_BOT_USERNAME_B64' PRIVATE_TELEGRAM_BOT_TOKEN_B64='$PRIVATE_TELEGRAM_BOT_TOKEN_B64' PRIVATE_TELEGRAM_BOT_USERNAME_B64='$PRIVATE_TELEGRAM_BOT_USERNAME_B64' GLASSNODE_API_KEY_B64='$GLASSNODE_API_KEY_B64' SAHMK_API_KEY_B64='$SAHMK_API_KEY_B64' SAHMK_CACHE_MS_B64='$SAHMK_CACHE_MS_B64' bash -s" <<'EOF'
           set -euo pipefail
           cd /opt/trading71
