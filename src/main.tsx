@@ -5556,33 +5556,27 @@ function AutoTradePage({
           <span>Management</span>
         </div>
         {visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
-          <div className="execution-sidebar-main-wrap">
-            <button
-              type="button"
-              className="execution-sidebar-main"
-              onClick={() => {
-                setAdminWorkspaceTab(tab.id);
-                if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
-                if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
-              }}
-            >
-              <span className="execution-sidebar-icon" aria-hidden="true">
-                {tab.id === 'portfolio' ? <Wallet size={16} /> : tab.id === 'strategies' ? <Target size={16} /> : tab.id === 'users' ? <Users size={16} /> : <KeyRound size={16} />}
-              </span>
-              <span className="execution-sidebar-copy">
-                <strong>{tab.label}</strong>
-              </span>
-            </button>
-            <button
-              type="button"
-              className="execution-sidebar-toggle"
-              onClick={() => setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }))}
-              aria-label={`${sidebarSectionOpen[tab.id] ? 'Collapse' : 'Expand'} ${tab.label}`}
-              aria-expanded={sidebarSectionOpen[tab.id]}
-            >
+          <button
+            type="button"
+            className="execution-sidebar-main"
+            onClick={() => {
+              setAdminWorkspaceTab(tab.id);
+              setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }));
+              if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
+              if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
+            }}
+            aria-expanded={sidebarSectionOpen[tab.id]}
+          >
+            <span className="execution-sidebar-icon" aria-hidden="true">
+              {tab.id === 'portfolio' ? <Wallet size={16} /> : tab.id === 'strategies' ? <Target size={16} /> : tab.id === 'users' ? <Users size={16} /> : <KeyRound size={16} />}
+            </span>
+            <span className="execution-sidebar-copy">
+              <strong>{tab.label}</strong>
+            </span>
+            <span className="execution-sidebar-chevron" aria-hidden="true">
               {sidebarSectionOpen[tab.id] ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-            </button>
-          </div>
+            </span>
+          </button>
           {tab.id === 'portfolio' && sidebarSectionOpen.portfolio && <div className="execution-sidebar-subnav">
             {([
               ['summary', 'Summary'],
@@ -5654,7 +5648,13 @@ function AutoTradePage({
                 draggable={false}
                 style={{ transform: `translate(${avatarCropOffset.x}px, ${avatarCropOffset.y}px) scale(${avatarCropZoom})` }}
               />
-              <span aria-hidden="true" />
+              <span className="avatar-crop-mask" aria-hidden="true" />
+              <span className="avatar-face-guide" aria-hidden="true">
+                <i className="center-line" />
+                <i className="eye-line" />
+                <i className="face-oval" />
+                <b>Align eyes</b>
+              </span>
             </div>
             <div className="avatar-crop-controls">
               <label>
@@ -5672,6 +5672,7 @@ function AutoTradePage({
           <div className="avatar-crop-actions">
             <button type="button" className="ghost" onClick={() => avatarInputRef.current?.click()}>Choose another</button>
             <button type="button" className="ghost" onClick={() => { setAvatarCropZoom(0.72); setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
+            <button type="button" className="ghost" onClick={() => setAvatarCropOffset({ x: 0, y: -10 })}>Center face</button>
             <button type="button" className="ghost" onClick={closeAvatarCropper}>Cancel</button>
             <button type="button" onClick={saveCroppedAvatar}>Save photo</button>
           </div>
