@@ -3657,7 +3657,7 @@ function AutoTradePage({
       const next = typeof reader.result === 'string' ? reader.result : '';
       if (!next) return;
       setAvatarCropImage(next);
-      setAvatarCropZoom(0.72);
+      setAvatarCropZoom(1);
       setAvatarCropOffset({ x: 0, y: 0 });
     };
     reader.readAsDataURL(file);
@@ -3666,7 +3666,7 @@ function AutoTradePage({
 
   const closeAvatarCropper = () => {
     setAvatarCropImage('');
-    setAvatarCropZoom(0.72);
+    setAvatarCropZoom(1);
     setAvatarCropOffset({ x: 0, y: 0 });
     cropDragRef.current = null;
   };
@@ -3676,18 +3676,24 @@ function AutoTradePage({
     const image = new Image();
     image.onload = () => {
       const outputSize = 512;
-      const frameSize = 280;
+      const frameSize = 320;
+      const cropInset = 20;
+      const cropSize = frameSize - cropInset * 2;
       const canvas = document.createElement('canvas');
       canvas.width = outputSize;
       canvas.height = outputSize;
       const context = canvas.getContext('2d');
       if (!context) return;
-      const baseScale = Math.max(frameSize / image.width, frameSize / image.height);
-      const scale = baseScale * avatarCropZoom;
-      const drawWidth = image.width * scale * (outputSize / frameSize);
-      const drawHeight = image.height * scale * (outputSize / frameSize);
-      const drawX = (outputSize - drawWidth) / 2 + avatarCropOffset.x * (outputSize / frameSize);
-      const drawY = (outputSize - drawHeight) / 2 + avatarCropOffset.y * (outputSize / frameSize);
+      const containScale = Math.min(frameSize / image.width, frameSize / image.height);
+      const renderedWidth = image.width * containScale * avatarCropZoom;
+      const renderedHeight = image.height * containScale * avatarCropZoom;
+      const imageLeft = (frameSize - renderedWidth) / 2 + avatarCropOffset.x;
+      const imageTop = (frameSize - renderedHeight) / 2 + avatarCropOffset.y;
+      const outputScale = outputSize / cropSize;
+      const drawWidth = renderedWidth * outputScale;
+      const drawHeight = renderedHeight * outputScale;
+      const drawX = (imageLeft - cropInset) * outputScale;
+      const drawY = (imageTop - cropInset) * outputScale;
       context.imageSmoothingEnabled = true;
       context.imageSmoothingQuality = 'high';
       context.fillStyle = '#000';
@@ -5671,8 +5677,8 @@ function AutoTradePage({
           </div>
           <div className="avatar-crop-actions">
             <button type="button" className="ghost" onClick={() => avatarInputRef.current?.click()}>Choose another</button>
-            <button type="button" className="ghost" onClick={() => { setAvatarCropZoom(0.72); setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
-            <button type="button" className="ghost" onClick={() => setAvatarCropOffset({ x: 0, y: -10 })}>Center face</button>
+            <button type="button" className="ghost" onClick={() => { setAvatarCropZoom(1); setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
+            <button type="button" className="ghost" onClick={() => setAvatarCropOffset({ x: 0, y: -8 })}>Center face</button>
             <button type="button" className="ghost" onClick={closeAvatarCropper}>Cancel</button>
             <button type="button" onClick={saveCroppedAvatar}>Save photo</button>
           </div>
