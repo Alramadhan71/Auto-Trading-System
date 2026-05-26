@@ -98,13 +98,13 @@ jobs:
           if [ ! -s "$keyscan_output" ]; then
             if [ "$PORT" = "22" ] && { [ "$VPS_HOST" = "trading71.uk" ] || [ "$VPS_HOST" = "72.61.192.179" ]; }; then
               cat >> ~/.ssh/known_hosts <<'KNOWN_HOSTS'
-trading71.uk ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/ERw5xPM+eFXUaAhfbUgDlh0z6zzh+mxyCa6bf6UtTmM+OTrxdlI16tPPGmCpqyTzDdvLwPDVCsjMpl3hbUfa0nG9914Ql1YI8iRK9WGZhn30q9hyURjUnPU3SkoaaWw8LNmIRk4sepgJNc+g6jsWpYpboDOvnzOTDm0Gkaw6IqeTCtYqGvqndVKDmojDtlBXdZ6pocMIfcOae822NDi1+Th/TlcnkiK4mdBaXvWrKKjtEAFKwKLaoCbja/RXIUcn3Ck50q1cP5VdeRBgKaHTpyQymQ9pMNAdZco+lBV8IA1BVanYGVADWfeqct+YU3CBFgan5+p00rp7gVPs7mydGXNxQqUDQhCgCcYfZo/tbuWbnWEUQnn0R9l/7OVrTXzEpatj3FQmQJIGRjNKK7oDk3Fb8sqJxuI1kbre1N82bBHLSAu5SgS3VdjPXyg58oudFGgNcngT+HzLFPcAQoroo0rtDyOSmi6v80khY7gG0whByXL0daDmWCothBCyKSE=
-trading71.uk ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHXwT0upVQ/nn6alKo/o74epkn8KyU+1LcgffVVwiP+BcCUv84tpobm6W8Ta2G3YFaTgwaB2VfnL3XiYOwR1lrQ=
-trading71.uk ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF07CzaN/UWe2h5vcDhfIp7mN3Gkkd4RpqsxAA/vkPfY
-72.61.192.179 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/ERw5xPM+eFXUaAhfbUgDlh0z6zzh+mxyCa6bf6UtTmM+OTrxdlI16tPPGmCpqyTzDdvLwPDVCsjMpl3hbUfa0nG9914Ql1YI8iRK9WGZhn30q9hyURjUnPU3SkoaaWw8LNmIRk4sepgJNc+g6jsWpYpboDOvnzOTDm0Gkaw6IqeTCtYqGvqndVKDmojDtlBXdZ6pocMIfcOae822NDi1+Th/TlcnkiK4mdBaXvWrKKjtEAFKwKLaoCbja/RXIUcn3Ck50q1cP5VdeRBgKaHTpyQymQ9pMNAdZco+lBV8IA1BVanYGVADWfeqct+YU3CBFgan5+p00rp7gVPs7mydGXNxQqUDQhCgCcYfZo/tbuWbnWEUQnn0R9l/7OVrTXzEpatj3FQmQJIGRjNKK7oDk3Fb8sqJxuI1kbre1N82bBHLSAu5SgS3VdjPXyg58oudFGgNcngT+HzLFPcAQoroo0rtDyOSmi6v80khY7gG0whByXL0daDmWCothBCyKSE=
-72.61.192.179 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHXwT0upVQ/nn6alKo/o74epkn8KyU+1LcgffVVwiP+BcCUv84tpobm6W8Ta2G3YFaTgwaB2VfnL3XiYOwR1lrQ=
-72.61.192.179 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF07CzaN/UWe2h5vcDhfIp7mN3Gkkd4RpqsxAA/vkPfY
-KNOWN_HOSTS
+          trading71.uk ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/ERw5xPM+eFXUaAhfbUgDlh0z6zzh+mxyCa6bf6UtTmM+OTrxdlI16tPPGmCpqyTzDdvLwPDVCsjMpl3hbUfa0nG9914Ql1YI8iRK9WGZhn30q9hyURjUnPU3SkoaaWw8LNmIRk4sepgJNc+g6jsWpYpboDOvnzOTDm0Gkaw6IqeTCtYqGvqndVKDmojDtlBXdZ6pocMIfcOae822NDi1+Th/TlcnkiK4mdBaXvWrKKjtEAFKwKLaoCbja/RXIUcn3Ck50q1cP5VdeRBgKaHTpyQymQ9pMNAdZco+lBV8IA1BVanYGVADWfeqct+YU3CBFgan5+p00rp7gVPs7mydGXNxQqUDQhCgCcYfZo/tbuWbnWEUQnn0R9l/7OVrTXzEpatj3FQmQJIGRjNKK7oDk3Fb8sqJxuI1kbre1N82bBHLSAu5SgS3VdjPXyg58oudFGgNcngT+HzLFPcAQoroo0rtDyOSmi6v80khY7gG0whByXL0daDmWCothBCyKSE=
+          trading71.uk ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHXwT0upVQ/nn6alKo/o74epkn8KyU+1LcgffVVwiP+BcCUv84tpobm6W8Ta2G3YFaTgwaB2VfnL3XiYOwR1lrQ=
+          trading71.uk ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF07CzaN/UWe2h5vcDhfIp7mN3Gkkd4RpqsxAA/vkPfY
+          72.61.192.179 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/ERw5xPM+eFXUaAhfbUgDlh0z6zzh+mxyCa6bf6UtTmM+OTrxdlI16tPPGmCpqyTzDdvLwPDVCsjMpl3hbUfa0nG9914Ql1YI8iRK9WGZhn30q9hyURjUnPU3SkoaaWw8LNmIRk4sepgJNc+g6jsWpYpboDOvnzOTDm0Gkaw6IqeTCtYqGvqndVKDmojDtlBXdZ6pocMIfcOae822NDi1+Th/TlcnkiK4mdBaXvWrKKjtEAFKwKLaoCbja/RXIUcn3Ck50q1cP5VdeRBgKaHTpyQymQ9pMNAdZco+lBV8IA1BVanYGVADWfeqct+YU3CBFgan5+p00rp7gVPs7mydGXNxQqUDQhCgCcYfZo/tbuWbnWEUQnn0R9l/7OVrTXzEpatj3FQmQJIGRjNKK7oDk3Fb8sqJxuI1kbre1N82bBHLSAu5SgS3VdjPXyg58oudFGgNcngT+HzLFPcAQoroo0rtDyOSmi6v80khY7gG0whByXL0daDmWCothBCyKSE=
+          72.61.192.179 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHXwT0upVQ/nn6alKo/o74epkn8KyU+1LcgffVVwiP+BcCUv84tpobm6W8Ta2G3YFaTgwaB2VfnL3XiYOwR1lrQ=
+          72.61.192.179 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF07CzaN/UWe2h5vcDhfIp7mN3Gkkd4RpqsxAA/vkPfY
+          KNOWN_HOSTS
             else
               getent ahosts "$VPS_HOST" || true
               echo "::error title=VPS SSH is unreachable::Unable to read the SSH host key from VPS_HOST on port $PORT. Fix VPS_HOST/VPS_PORT, open the SSH port in the VPS firewall/security group, and make sure sshd is running."
