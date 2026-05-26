@@ -33951,7 +33951,8 @@ body,
   color: var(--accent-contrast, #fff);
 }
 
-.page-auto-trade .auto-trade-headbar.execution-content-header {
+.page-auto-trade .auto-trade-headbar.execution-content-header,
+.page-dashboard .auto-trade-headbar.execution-content-header {
   display: flex !important;
   align-items: end !important;
   min-height: 88px !important;

@@ -3391,6 +3391,144 @@ function buildClearedShadowProfile(profileId: string, baseShadowProfile: ShadowR
   };
 }
 
+function useSidebarAvatarEditor() {
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const cropDragRef = useRef<{ pointerId: number; x: number; y: number; offsetX: number; offsetY: number } | null>(null);
+  const [sidebarAvatar, setSidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
+  const [avatarCropImage, setAvatarCropImage] = useState('');
+  const [avatarCropZoom, setAvatarCropZoom] = useState(1);
+  const [avatarCropOffset, setAvatarCropOffset] = useState({ x: 0, y: 0 });
+
+  const updateSidebarAvatar = (file?: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const next = typeof reader.result === 'string' ? reader.result : '';
+      if (!next) return;
+      setAvatarCropImage(next);
+      setAvatarCropZoom(1);
+      setAvatarCropOffset({ x: 0, y: 0 });
+    };
+    reader.readAsDataURL(file);
+    if (avatarInputRef.current) avatarInputRef.current.value = '';
+  };
+
+  const closeAvatarCropper = () => {
+    setAvatarCropImage('');
+    setAvatarCropZoom(1);
+    setAvatarCropOffset({ x: 0, y: 0 });
+    cropDragRef.current = null;
+  };
+
+  const saveCroppedAvatar = () => {
+    if (!avatarCropImage) return;
+    const image = new Image();
+    image.onload = () => {
+      const outputSize = 512;
+      const frameSize = 320;
+      const cropInset = 20;
+      const cropSize = frameSize - cropInset * 2;
+      const canvas = document.createElement('canvas');
+      canvas.width = outputSize;
+      canvas.height = outputSize;
+      const context = canvas.getContext('2d');
+      if (!context) return;
+      const containScale = Math.min(frameSize / image.width, frameSize / image.height);
+      const renderedWidth = image.width * containScale * avatarCropZoom;
+      const renderedHeight = image.height * containScale * avatarCropZoom;
+      const imageLeft = (frameSize - renderedWidth) / 2 + avatarCropOffset.x;
+      const imageTop = (frameSize - renderedHeight) / 2 + avatarCropOffset.y;
+      const outputScale = outputSize / cropSize;
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      context.fillStyle = '#000';
+      context.fillRect(0, 0, outputSize, outputSize);
+      context.drawImage(image, (imageLeft - cropInset) * outputScale, (imageTop - cropInset) * outputScale, renderedWidth * outputScale, renderedHeight * outputScale);
+      const next = canvas.toDataURL('image/jpeg', 0.92);
+      setSidebarAvatar(next);
+      try {
+        localStorage.setItem('autoTrade.sidebarAvatar', next);
+      } catch {
+        // Avatar upload remains optional if local storage is full or blocked.
+      }
+      closeAvatarCropper();
+    };
+    image.src = avatarCropImage;
+  };
+
+  const startAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    cropDragRef.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      offsetX: avatarCropOffset.x,
+      offsetY: avatarCropOffset.y
+    };
+  };
+
+  const moveAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = cropDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    setAvatarCropOffset({
+      x: Math.max(-140, Math.min(140, drag.offsetX + event.clientX - drag.x)),
+      y: Math.max(-140, Math.min(140, drag.offsetY + event.clientY - drag.y))
+    });
+  };
+
+  const stopAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (cropDragRef.current?.pointerId === event.pointerId) cropDragRef.current = null;
+  };
+
+  return { avatarInputRef, sidebarAvatar, avatarCropImage, avatarCropZoom, avatarCropOffset, updateSidebarAvatar, closeAvatarCropper, saveCroppedAvatar, startAvatarDrag, moveAvatarDrag, stopAvatarDrag, setAvatarCropZoom, setAvatarCropOffset };
+}
+
+function SidebarAvatarCropper({ editor }: { editor: ReturnType<typeof useSidebarAvatarEditor> }) {
+  if (!editor.avatarCropImage) return null;
+  return <div className="avatar-cropper-backdrop" role="presentation" onClick={editor.closeAvatarCropper}>
+    <div className="avatar-cropper-modal" role="dialog" aria-modal="true" aria-label="Edit profile photo" onClick={event => event.stopPropagation()}>
+      <div className="avatar-cropper-head">
+        <div>
+          <strong>Edit profile photo</strong>
+          <span>Drag to position, then confirm the circular avatar.</span>
+        </div>
+        <button type="button" onClick={editor.closeAvatarCropper} aria-label="Close profile photo editor">x</button>
+      </div>
+      <div className="avatar-cropper-body">
+        <div className="avatar-crop-frame" onPointerDown={editor.startAvatarDrag} onPointerMove={editor.moveAvatarDrag} onPointerUp={editor.stopAvatarDrag} onPointerCancel={editor.stopAvatarDrag}>
+          <img src={editor.avatarCropImage} alt="" draggable={false} style={{ transform: `translate(${editor.avatarCropOffset.x}px, ${editor.avatarCropOffset.y}px) scale(${editor.avatarCropZoom})` }} />
+          <span className="avatar-crop-mask" aria-hidden="true" />
+          <span className="avatar-face-guide" aria-hidden="true">
+            <i className="center-line" />
+            <i className="eye-line" />
+            <i className="face-oval" />
+            <b>Align eyes</b>
+          </span>
+        </div>
+        <div className="avatar-crop-controls">
+          <label>
+            <span>Zoom</span>
+            <input type="range" min="0.35" max="3" step="0.01" value={editor.avatarCropZoom} onChange={event => editor.setAvatarCropZoom(Number(event.target.value))} />
+          </label>
+          <div className="avatar-crop-preview">
+            <span>Preview</span>
+            <div>
+              <img src={editor.avatarCropImage} alt="" style={{ transform: `translate(${editor.avatarCropOffset.x / 4}px, ${editor.avatarCropOffset.y / 4}px) scale(${editor.avatarCropZoom})` }} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="avatar-crop-actions">
+        <button type="button" className="ghost" onClick={() => editor.avatarInputRef.current?.click()}>Choose another</button>
+        <button type="button" className="ghost" onClick={() => { editor.setAvatarCropZoom(1); editor.setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
+        <button type="button" className="ghost" onClick={() => editor.setAvatarCropOffset({ x: 0, y: -8 })}>Center face</button>
+        <button type="button" className="ghost" onClick={editor.closeAvatarCropper}>Cancel</button>
+        <button type="button" onClick={editor.saveCroppedAvatar}>Save photo</button>
+      </div>
+    </div>
+  </div>;
+}
+
 function AutoTradePage({
   signals,
   strategies,
@@ -5657,59 +5795,7 @@ function AutoTradePage({
       </aside>
 
       <main className="execution-workspace-main">
-      {avatarCropImage && <div className="avatar-cropper-backdrop" role="presentation" onClick={closeAvatarCropper}>
-        <div className="avatar-cropper-modal" role="dialog" aria-modal="true" aria-label="Edit profile photo" onClick={event => event.stopPropagation()}>
-          <div className="avatar-cropper-head">
-            <div>
-              <strong>Edit profile photo</strong>
-              <span>Drag to position, then confirm the circular avatar.</span>
-            </div>
-            <button type="button" onClick={closeAvatarCropper} aria-label="Close profile photo editor">x</button>
-          </div>
-          <div className="avatar-cropper-body">
-            <div
-              className="avatar-crop-frame"
-              onPointerDown={startAvatarDrag}
-              onPointerMove={moveAvatarDrag}
-              onPointerUp={stopAvatarDrag}
-              onPointerCancel={stopAvatarDrag}
-            >
-              <img
-                src={avatarCropImage}
-                alt=""
-                draggable={false}
-                style={{ transform: `translate(${avatarCropOffset.x}px, ${avatarCropOffset.y}px) scale(${avatarCropZoom})` }}
-              />
-              <span className="avatar-crop-mask" aria-hidden="true" />
-              <span className="avatar-face-guide" aria-hidden="true">
-                <i className="center-line" />
-                <i className="eye-line" />
-                <i className="face-oval" />
-                <b>Align eyes</b>
-              </span>
-            </div>
-            <div className="avatar-crop-controls">
-              <label>
-                <span>Zoom</span>
-                <input type="range" min="0.35" max="3" step="0.01" value={avatarCropZoom} onChange={event => setAvatarCropZoom(Number(event.target.value))} />
-              </label>
-              <div className="avatar-crop-preview">
-                <span>Preview</span>
-                <div>
-                  <img src={avatarCropImage} alt="" style={{ transform: `translate(${avatarCropOffset.x / 4}px, ${avatarCropOffset.y / 4}px) scale(${avatarCropZoom})` }} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="avatar-crop-actions">
-            <button type="button" className="ghost" onClick={() => avatarInputRef.current?.click()}>Choose another</button>
-            <button type="button" className="ghost" onClick={() => { setAvatarCropZoom(1); setAvatarCropOffset({ x: 0, y: 0 }); }}>Fit</button>
-            <button type="button" className="ghost" onClick={() => setAvatarCropOffset({ x: 0, y: -8 })}>Center face</button>
-            <button type="button" className="ghost" onClick={closeAvatarCropper}>Cancel</button>
-            <button type="button" onClick={saveCroppedAvatar}>Save photo</button>
-          </div>
-        </div>
-      </div>}
+      <SidebarAvatarCropper editor={{ avatarInputRef, sidebarAvatar, avatarCropImage, avatarCropZoom, avatarCropOffset, updateSidebarAvatar, closeAvatarCropper, saveCroppedAvatar, startAvatarDrag, moveAvatarDrag, stopAvatarDrag, setAvatarCropZoom, setAvatarCropOffset }} />
 
       <div className="auto-trade-headbar execution-content-header">
         <div className="execution-content-title">
@@ -7067,28 +7153,11 @@ function DashboardPage({
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
   const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'ledger' | 'options' | 'routing' | 'performance' | 'notifications'>('ledger');
   const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: true });
-  const dashboardAvatarInputRef = useRef<HTMLInputElement | null>(null);
-  const [sidebarAvatar, setSidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
+  const avatarEditor = useSidebarAvatarEditor();
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
     if (tab === 'performance' || tab === 'notifications') setDashboardSidebarOpen(prev => ({ ...prev, analysis: true }));
-  };
-  const updateDashboardSidebarAvatar = (file?: File) => {
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const next = typeof reader.result === 'string' ? reader.result : '';
-      if (!next) return;
-      setSidebarAvatar(next);
-      try {
-        localStorage.setItem('autoTrade.sidebarAvatar', next);
-      } catch {
-        // Avatar remains visible for this session if storage is unavailable.
-      }
-    };
-    reader.readAsDataURL(file);
-    if (dashboardAvatarInputRef.current) dashboardAvatarInputRef.current.value = '';
   };
   return <section className="auto-trade-page dashboard-execution-page">
     <div className="premium-workspace-grid">
@@ -7154,16 +7223,16 @@ function DashboardPage({
           }
         </div>
         <div className="execution-sidebar-footer">
-          <button type="button" className="execution-profile-button" onClick={() => dashboardAvatarInputRef.current?.click()}>
+          <button type="button" className="execution-profile-button" onClick={() => avatarEditor.avatarInputRef.current?.click()}>
             <span className="execution-profile-avatar">
-              {sidebarAvatar ? <img src={sidebarAvatar} alt="" /> : <UserCog size={18} />}
+              {avatarEditor.sidebarAvatar ? <img src={avatarEditor.sidebarAvatar} alt="" /> : <UserCog size={18} />}
             </span>
             <span>
               <strong>{activeName}</strong>
               <small>{roleLabel}</small>
             </span>
           </button>
-          <input ref={dashboardAvatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => updateDashboardSidebarAvatar(event.target.files?.[0])} />
+          <input ref={avatarEditor.avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => avatarEditor.updateSidebarAvatar(event.target.files?.[0])} />
           <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
@@ -7172,6 +7241,7 @@ function DashboardPage({
       </aside>
 
       <main className="execution-workspace-main">
+        <SidebarAvatarCropper editor={avatarEditor} />
         <div id="dashboard-overview" className="auto-trade-headbar execution-content-header">
           <div className="execution-content-title">
             <span>Dashboard Console</span>
