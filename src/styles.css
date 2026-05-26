@@ -32534,9 +32534,17 @@ b.bad {
   --ui-surface-2: #111e2d;
   --ui-border: rgba(169, 187, 207, .20);
   --ui-border-strong: rgba(115, 173, 255, .46);
-  --hero-ambient-a: rgba(115, 173, 255, .13);
-  --hero-ambient-b: rgba(45, 127, 240, .08);
-  --hero-ambient-c: rgba(7, 16, 27, 0);
+  --hero-bg: linear-gradient(135deg, #050b12 0%, #071321 36%, #0d2945 68%, #05090f 100%);
+  --hero-border: rgba(115, 173, 255, .34);
+  --hero-text: #f7fbff;
+  --hero-company: #9ecaff;
+  --hero-company-hover: #d7ebff;
+  --hero-cta-bg: rgba(10, 20, 32, .78);
+  --hero-cta-text: #f7fbff;
+  --hero-cta-border: rgba(115, 173, 255, .44);
+  --hero-primary-bg: rgba(10, 20, 32, .92);
+  --hero-primary-text: #f7fbff;
+  --hero-primary-border: rgba(158, 202, 255, .62);
   --card-lift-shadow: rgba(0, 0, 0, .18);
   --cta-primary-bg: #111c2b;
   --cta-primary-text: #f7fbff;
@@ -32579,9 +32587,17 @@ b.bad {
   --ui-surface-2: #eef3f8;
   --ui-border: rgba(15, 28, 45, .13);
   --ui-border-strong: rgba(45, 127, 240, .36);
-  --hero-ambient-a: rgba(45, 127, 240, .08);
-  --hero-ambient-b: rgba(115, 173, 255, .06);
-  --hero-ambient-c: rgba(255, 255, 255, 0);
+  --hero-bg: linear-gradient(135deg, #ffffff 0%, #f3f8ff 34%, #dcecff 67%, #f8fbff 100%);
+  --hero-border: rgba(45, 127, 240, .28);
+  --hero-text: #0e1726;
+  --hero-company: #174f91;
+  --hero-company-hover: #2d6fbd;
+  --hero-cta-bg: rgba(255, 255, 255, .82);
+  --hero-cta-text: #10213b;
+  --hero-cta-border: rgba(45, 127, 240, .36);
+  --hero-primary-bg: rgba(255, 255, 255, .94);
+  --hero-primary-text: #0e1726;
+  --hero-primary-border: rgba(23, 79, 145, .42);
   --card-lift-shadow: rgba(15, 28, 45, .08);
   --logo-blue: #2d6fbd;
   --logo-blue-strong: #174f91;
@@ -32647,9 +32663,17 @@ b.bad {
   --ui-page: #02060b;
   --ui-surface: #070d14;
   --ui-surface-2: #0d1622;
-  --hero-ambient-a: rgba(83, 171, 255, .12);
-  --hero-ambient-b: rgba(45, 127, 240, .07);
-  --hero-ambient-c: rgba(2, 6, 11, 0);
+  --hero-bg: linear-gradient(135deg, #02060b 0%, #050b12 33%, #0a2038 68%, #02060b 100%);
+  --hero-border: rgba(83, 171, 255, .36);
+  --hero-text: #ffffff;
+  --hero-company: #9bd7ff;
+  --hero-company-hover: #e5f4ff;
+  --hero-cta-bg: rgba(7, 13, 20, .84);
+  --hero-cta-text: #f8fbff;
+  --hero-cta-border: rgba(155, 215, 255, .40);
+  --hero-primary-bg: rgba(7, 13, 20, .94);
+  --hero-primary-text: #f8fbff;
+  --hero-primary-border: rgba(155, 215, 255, .58);
   --card-lift-shadow: rgba(0, 0, 0, .24);
   --cta-primary-bg: #0d1622;
   --cta-primary-text: #f8fbff;
@@ -32735,11 +32759,17 @@ body,
   isolation: isolate !important;
   min-height: clamp(315px, 36vh, 400px) !important;
   padding: clamp(26px, 3.2vw, 42px) clamp(16px, 3vw, 42px) !important;
-  border: 1px solid var(--ui-border) !important;
+  border: 1px solid var(--hero-border) !important;
   border-radius: 14px !important;
-  background: var(--ui-surface) !important;
+  background: var(--hero-bg) !important;
   box-shadow: none !important;
   overflow: hidden !important;
+}
+
+:root[data-theme] .page-home .home-launchpad,
+:root[data-theme-style] .page-home .home-launchpad {
+  border-color: var(--hero-border) !important;
+  background: var(--hero-bg) !important;
 }
 
 .page-home .home-launchpad::after,
@@ -32753,14 +32783,7 @@ body,
 }
 
 .page-home .crypto-market-hero::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  display: block !important;
-  z-index: -1 !important;
-  pointer-events: none !important;
-  background:
-    radial-gradient(ellipse at 50% 63%, var(--hero-ambient-a) 0%, var(--hero-ambient-b) 26%, var(--hero-ambient-c) 62%) !important;
+  display: none !important;
 }
 
 .page-home .home-launchpad-copy {
@@ -32792,7 +32815,7 @@ body,
 .page-home .home-launchpad h1 {
   max-width: 780px !important;
   margin: 0 !important;
-  color: var(--brand-text) !important;
+  color: var(--hero-text) !important;
   font-size: clamp(46px, 5.1vw, 74px) !important;
   line-height: .95 !important;
   font-weight: 940 !important;
@@ -32811,11 +32834,11 @@ body,
   margin-top: 22px !important;
   padding: 0 0 3px !important;
   border: 0 !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--logo-blue) 62%, transparent) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--hero-company) 62%, transparent) !important;
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  color: var(--logo-blue) !important;
+  color: var(--hero-company) !important;
   font-size: clamp(16px, 1.18vw, 19px) !important;
   font-weight: 820 !important;
   line-height: 1.2 !important;
@@ -32842,7 +32865,7 @@ body,
 
 .company-attribution:hover,
 .market-select-company:hover {
-  color: var(--logo-ice) !important;
+  color: var(--hero-company-hover) !important;
   border-bottom-color: currentColor !important;
 }
 
@@ -32902,21 +32925,38 @@ body,
 }
 
 .page-home .home-cta-primary {
-  background: var(--cta-primary-bg) !important;
-  border-color: var(--cta-primary-border) !important;
-  color: var(--cta-primary-text) !important;
+  background: var(--hero-primary-bg) !important;
+  border-color: var(--hero-primary-border) !important;
+  color: var(--hero-primary-text) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-primary span,
+.page-home .home-cta-primary strong {
+  color: var(--hero-primary-text) !important;
+  stroke: var(--hero-primary-text) !important;
 }
 
 .page-home .home-cta-secondary {
-  background: var(--cta-telegram-bg) !important;
-  border-color: var(--cta-telegram-border) !important;
-  color: var(--cta-telegram-text) !important;
+  background: var(--hero-cta-bg) !important;
+  border-color: var(--hero-cta-border) !important;
+  color: var(--hero-cta-text) !important;
 }
 
 .page-home .home-cta-login {
-  background: var(--cta-login-bg) !important;
-  border-color: var(--cta-login-border) !important;
-  color: var(--cta-login-text) !important;
+  background: var(--hero-cta-bg) !important;
+  border-color: var(--hero-cta-border) !important;
+  color: var(--hero-cta-text) !important;
+}
+
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login svg,
+.page-home .home-cta-login span,
+.page-home .home-cta-login strong {
+  color: var(--hero-cta-text) !important;
+  stroke: var(--hero-cta-text) !important;
 }
 
 .page-home .home-cta-primary:hover,
