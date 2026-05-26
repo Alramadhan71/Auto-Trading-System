@@ -33615,6 +33615,80 @@ body,
   color: var(--text) !important;
 }
 
+.workspace-subtabs {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin: 0 0 14px !important;
+  padding: 5px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 88%, transparent) !important;
+}
+
+.workspace-subtabs button {
+  display: grid !important;
+  gap: 2px !important;
+  min-height: 48px !important;
+  padding: 8px 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.workspace-subtabs button strong {
+  color: inherit !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+.workspace-subtabs button span {
+  color: inherit !important;
+  font-size: 11px !important;
+  font-weight: 720 !important;
+  line-height: 1.25 !important;
+}
+
+.workspace-subtabs button.active {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)) !important;
+  background: color-mix(in srgb, var(--accent) 11%, var(--surface-raised, var(--surface))) !important;
+  color: var(--text) !important;
+}
+
+.public-ops-panel .public-strategy-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.public-ops-panel .public-strategy-card {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-columns: minmax(180px, 1.4fr) minmax(120px, 0.8fr) minmax(74px, 0.35fr) 1fr minmax(46px, auto) !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.public-ops-panel article.public-strategy-card {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+
+.public-ops-panel article.public-strategy-card > button:first-child {
+  display: grid !important;
+  grid-template-columns: minmax(180px, 1.4fr) minmax(120px, 0.8fr) minmax(74px, 0.35fr) 1fr minmax(46px, auto) !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.public-ops-panel .public-strategy-card .scoreline {
+  margin: 0 !important;
+}
+
+.workspace-summary-panel .trade-extremes-row {
+  margin-top: 0 !important;
+}
+
 .portfolio-workspace-panel,
 .public-ops-panel,
 .admin-panel.users-workspace-panel,
@@ -33675,6 +33749,22 @@ body,
   .admin-workspace-tabs button {
     flex: 0 0 190px !important;
     scroll-snap-align: start !important;
+  }
+
+  .workspace-subtabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+  }
+
+  .workspace-subtabs button {
+    flex: 0 0 170px !important;
+    scroll-snap-align: start !important;
+  }
+
+  .public-ops-panel .public-strategy-card,
+  .public-ops-panel article.public-strategy-card > button:first-child {
+    grid-template-columns: 1fr auto !important;
   }
 
   .page-auto-trade .auto-trade-headbar {

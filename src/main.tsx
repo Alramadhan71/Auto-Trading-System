@@ -3307,6 +3307,8 @@ function AutoTradePage({
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
+  const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
+  const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'visibility' | 'list' | 'broadcast'>('visibility');
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
@@ -5540,7 +5542,17 @@ function AutoTradePage({
             </div>
             <span className="nav-badge glow">Portfolio View</span>
           </div>
-          {autoMode === 'shadow' && <section className="portfolio-card">
+          <nav className="workspace-subtabs" aria-label="Portfolio sections">
+            {([
+              ['summary', 'Summary', 'Wallet and headline metrics'],
+              ['rules', 'Rules', 'Execution controls'],
+              ['ledger', 'Ledger', 'Trades and filters']
+            ] as const).map(([id, label, summary]) => <button key={id} type="button" className={portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => setPortfolioWorkspaceTab(id)}>
+              <strong>{label}</strong>
+              <span>{summary}</span>
+            </button>)}
+          </nav>
+          {portfolioWorkspaceTab === 'summary' && autoMode === 'shadow' && <section className="portfolio-card">
             <div className="shadow-profile-grid">
               {shadowProfiles.map(profile => <article key={profile.id} className={selectedShadowProfileId === profile.id ? 'shadow-profile-card active' : 'shadow-profile-card'}>
                 <div className="shadow-profile-topline">
@@ -5746,7 +5758,7 @@ function AutoTradePage({
             </div>
             </>}
           </section>}
-          {autoMode === 'live' && <section className={`portfolio-card live-rules-shell ${liveRulesOpen ? 'open' : 'collapsed'}`}>
+          {portfolioWorkspaceTab === 'rules' && autoMode === 'live' && <section className={`portfolio-card live-rules-shell ${liveRulesOpen ? 'open' : 'collapsed'}`}>
             <button type="button" className="live-rules-toggle" onClick={() => setLiveRulesOpen(value => !value)} aria-expanded={liveRulesOpen}>
               <div className="live-rules-toggle-main">
                 <strong>Live Auto Rules</strong>
@@ -5947,7 +5959,40 @@ function AutoTradePage({
             </div>
             </>}
           </section>}
-          {autoMode === 'live' && binanceConnection.saved && <section className="capital-group binance-wallet-panel">
+          {portfolioWorkspaceTab === 'summary' && <section className="portfolio-card workspace-summary-panel">
+            <div className="portfolio-card-head">
+              <strong>Portfolio Summary</strong>
+              <span>{autoMode === 'live' ? 'Live capital snapshot' : selectedShadowProfile?.name ?? 'Shadow snapshot'}</span>
+            </div>
+            <div className="trade-extremes-row trade-extremes-row-top">
+              <button type="button" className="trade-extreme-card">
+                <span>{autoMode === 'live' ? 'Wallet Total' : 'Starting Capital'}</span>
+                <strong>{autoMode === 'live' && binanceConnection.saved ? `${fmtMoney(binanceWalletTotalUsdt)} USDT` : `$${fmt(effectiveStartingCapital || 0)}`}</strong>
+                <small>{autoMode === 'live' ? 'Current tracked live balance' : 'Saved starting capital'}</small>
+              </button>
+              <button type="button" className="trade-extreme-card">
+                <span>{autoMode === 'live' ? 'Live Capital' : 'Current Capital'}</span>
+                <strong className={effectiveCurrentCapital >= effectiveStartingCapital ? 'good' : 'bad'}>{`$${fmt(effectiveCurrentCapital || 0)}`}</strong>
+                <small>{`${activePortfolioChangePct >= 0 ? '+' : ''}${activePortfolioChangePct.toFixed(2)}% total`}</small>
+              </button>
+              <button type="button" className="trade-extreme-card">
+                <span>Accepted</span>
+                <strong className="good">{effectiveAcceptedTotal}</strong>
+                <small>Trades accepted into the portfolio ledger</small>
+              </button>
+              <button type="button" className="trade-extreme-card">
+                <span>Rejected</span>
+                <strong className={effectiveRejectedTotal > 0 ? 'bad' : ''}>{effectiveRejectedTotal}</strong>
+                <small>Signals blocked by active rules</small>
+              </button>
+              <button type="button" className="trade-extreme-card">
+                <span>Net PnL</span>
+                <strong className={effectivePortfolioPnlCards.netPnl >= 0 ? 'good' : 'bad'}>{`${effectivePortfolioPnlCards.netPnl >= 0 ? '+' : ''}${effectivePortfolioPnlCards.netPnl.toFixed(2)}%`}</strong>
+                <small>Open and closed portfolio performance</small>
+              </button>
+            </div>
+          </section>}
+          {portfolioWorkspaceTab === 'summary' && autoMode === 'live' && binanceConnection.saved && <section className="capital-group binance-wallet-panel">
             <div className="capital-group-head binance-wallet-head">
               <div>
                 <strong>Binance Wallet</strong>
@@ -6013,7 +6058,7 @@ function AutoTradePage({
                 : <p className="binance-wallet-empty">{hideSmallBinanceAssets ? 'No assets above 1 USD after filtering.' : 'Connect Binance and enable Reading to view live holdings here.'}</p>}
             </div>
           </section>}
-          <section className="portfolio-card portfolio-ledger-section">
+          {portfolioWorkspaceTab === 'ledger' && <section className="portfolio-card portfolio-ledger-section">
             <div className="portfolio-card-head">
               <strong>{autoMode === 'shadow' ? 'Shadow Portfolio Ledger' : 'Live Portfolio Ledger'}</strong>
               <span>{autoMode === 'shadow' ? selectedShadowProfile?.name ?? 'Shadow profile' : portalView === 'admin' ? 'Admin live workspace' : 'User live workspace'}</span>
@@ -6209,7 +6254,8 @@ function AutoTradePage({
                 </table>
               </div>}
             </div>}
-          </section>
+          </section>}
+          {portfolioWorkspaceTab === 'ledger' && <>
           <div className="portfolio-detail-grid">
             <section className="portfolio-card portfolio-rejected-full">
               {!livePortfolioLoading && <div className="trade-ledger-shell portfolio-ledger-shell">
@@ -6281,6 +6327,7 @@ function AutoTradePage({
               </div>}
             </section>
           </div>
+          </>}
         </section>
       </section>}
 
@@ -6296,18 +6343,28 @@ function AutoTradePage({
           </div>
         </button>
         {(publicOpsOpen || adminWorkspaceTab === 'strategies') && <div className="public-ops-body">
-          <section className="public-strategies-card">
+          <nav className="workspace-subtabs" aria-label="Strategies sections">
+            {([
+              ['visibility', 'Visibility', 'Filters and activation scope'],
+              ['list', 'Strategy List', 'Active public and lab strategies'],
+              ['broadcast', 'Broadcast', 'Channel and reset actions']
+            ] as const).map(([id, label, summary]) => <button key={id} type="button" className={strategyWorkspaceTab === id ? 'active' : ''} onClick={() => setStrategyWorkspaceTab(id)}>
+              <strong>{label}</strong>
+              <span>{summary}</span>
+            </button>)}
+          </nav>
+          {strategyWorkspaceTab !== 'broadcast' && <section className="public-strategies-card">
             <div className="public-strategies-head">
               <div>
                 <span>Strategy Visibility</span>
                 <strong>{adminStrategyViews.size === 2 ? 'Public + Lab Strategies' : adminStrategyViews.has('public') ? 'Public Strategies' : 'Lab Strategies'}</strong>
               </div>
-              <div className="public-card-actions">
+              {strategyWorkspaceTab === 'visibility' && <div className="public-card-actions">
                 <button type="button" onClick={() => toggleAllPublicStrategies(true)}>Enable All</button>
                 <button type="button" className="ghost" onClick={() => toggleAllPublicStrategies(false)}>Disable All</button>
-              </div>
+              </div>}
             </div>
-            <div className="public-strategy-tools">
+            {strategyWorkspaceTab === 'visibility' && <div className="public-strategy-tools">
               <div className="access-filter-pills">
                 <button className={adminStrategyViews.has('public') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('public', 'admin')}>Public Strategies</button>
                 <button className={adminStrategyViews.has('lab') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('lab', 'admin')}>Lab Strategies</button>
@@ -6325,8 +6382,8 @@ function AutoTradePage({
                   {timeframe}
                 </button>)}
               </div>
-            </div>
-            {adminStrategyViews.has('public') && <div className="public-strategy-grid">
+            </div>}
+            {strategyWorkspaceTab === 'list' && adminStrategyViews.has('public') && <div className="public-strategy-grid">
               {publicStrategies.length === 0 && <p className="empty">No public strategies yet.</p>}
               {publicStrategies.map(strategy => {
                 const isActive = selected.has(strategy.id);
@@ -6340,7 +6397,7 @@ function AutoTradePage({
                 </button>;
               })}
             </div>}
-            {adminStrategyViews.has('lab') && <div className="public-strategy-grid">
+            {strategyWorkspaceTab === 'list' && adminStrategyViews.has('lab') && <div className="public-strategy-grid">
               {labStrategies.length === 0 && <p className="empty">No lab strategies yet.</p>}
               {labStrategies.map(strategy => {
                 const isActive = selected.has(strategy.id);
@@ -6356,8 +6413,8 @@ function AutoTradePage({
                 </article>;
               })}
             </div>}
-          </section>
-          <div className="public-ops-bottomline">
+          </section>}
+          {strategyWorkspaceTab === 'broadcast' && <div className="public-ops-bottomline">
             <section className="public-broadcast-card">
               <div className="public-card-copy">
                 <span>Public Channel Broadcast</span>
@@ -6384,7 +6441,7 @@ function AutoTradePage({
                 <button type="button" className="danger" onClick={() => setDashboardResetConfirmOpen(true)}>Reset Dashboard Data</button>
               </div>
             </section>
-          </div>
+          </div>}
         </div>}
       </section>}
 
