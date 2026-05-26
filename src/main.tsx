@@ -1322,10 +1322,10 @@ function App() {
             <small>By {companyName}</small>
           </div>
         </button>
-        {!authEntryPage && !isMarketPicker && <nav className="shell-nav" aria-label="Primary navigation">
+        {!authEntryPage && !isMarketPicker && page !== 'auto-trade' && <nav className="shell-nav" aria-label="Primary navigation">
           <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><span>{marketLabel}</span></button>
           <button className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}><span>Dashboard</span></button>
-          <button className={page === 'auto-trade' ? 'active premium' : 'premium'} onClick={openAutoTradeLogin}><span>Execution</span></button>
+          <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
           {authEntryPage && <button type="button" className="auth-return-home" onClick={returnToMarketPicker}>
@@ -1383,7 +1383,7 @@ function App() {
           selected={selected}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3385,6 +3385,9 @@ function AutoTradePage({
   saveSelection,
   logoutSignal = 0,
   logoutBusy = false,
+  marketLabel = 'Crypto Market',
+  onMarketHome,
+  onDashboard,
   onLogout,
   onAuthChange,
   onPortalViewChange
@@ -3399,12 +3402,16 @@ function AutoTradePage({
   saveSelection: (nextSelected?: Set<string>, nextTimeframes?: Set<Timeframe>, nextExitModes?: Set<ExitMode>, nextMarketScope?: StrategyMarketScope) => Promise<void>;
   logoutSignal?: number;
   logoutBusy?: boolean;
+  marketLabel?: string;
+  onMarketHome?: () => void;
+  onDashboard?: () => void;
   onLogout?: () => void;
   onAuthChange?: (user: AuthSessionUser | null) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
   const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
+  const [managementOpen, setManagementOpen] = useState(true);
   const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
   const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'strategies' | 'broadcast'>('strategies');
   const [settingsWorkspaceTab, setSettingsWorkspaceTab] = useState<'binance' | 'access'>('binance');
@@ -3518,7 +3525,11 @@ function AutoTradePage({
   const lead = insightRows[0] ?? null;
   const [sessionUser, setSessionUser] = useState<AuthSessionUser | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const cropDragRef = useRef<{ pointerId: number; x: number; y: number; offsetX: number; offsetY: number } | null>(null);
   const [sidebarAvatar, setSidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
+  const [avatarCropImage, setAvatarCropImage] = useState('');
+  const [avatarCropZoom, setAvatarCropZoom] = useState(1);
+  const [avatarCropOffset, setAvatarCropOffset] = useState({ x: 0, y: 0 });
   const [memberName, setMemberName] = useState('Premium Member');
   const [adminName, setAdminName] = useState('Admin');
   const [adminUsername, setAdminUsername] = useState('admin');
@@ -3640,14 +3651,77 @@ function AutoTradePage({
     reader.onload = () => {
       const next = typeof reader.result === 'string' ? reader.result : '';
       if (!next) return;
+      setAvatarCropImage(next);
+      setAvatarCropZoom(1);
+      setAvatarCropOffset({ x: 0, y: 0 });
+    };
+    reader.readAsDataURL(file);
+    if (avatarInputRef.current) avatarInputRef.current.value = '';
+  };
+
+  const closeAvatarCropper = () => {
+    setAvatarCropImage('');
+    setAvatarCropZoom(1);
+    setAvatarCropOffset({ x: 0, y: 0 });
+    cropDragRef.current = null;
+  };
+
+  const saveCroppedAvatar = async () => {
+    if (!avatarCropImage) return;
+    const image = new Image();
+    image.onload = () => {
+      const outputSize = 512;
+      const frameSize = 280;
+      const canvas = document.createElement('canvas');
+      canvas.width = outputSize;
+      canvas.height = outputSize;
+      const context = canvas.getContext('2d');
+      if (!context) return;
+      const baseScale = Math.max(frameSize / image.width, frameSize / image.height);
+      const scale = baseScale * avatarCropZoom;
+      const drawWidth = image.width * scale * (outputSize / frameSize);
+      const drawHeight = image.height * scale * (outputSize / frameSize);
+      const drawX = (outputSize - drawWidth) / 2 + avatarCropOffset.x * (outputSize / frameSize);
+      const drawY = (outputSize - drawHeight) / 2 + avatarCropOffset.y * (outputSize / frameSize);
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      context.fillStyle = '#000';
+      context.fillRect(0, 0, outputSize, outputSize);
+      context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+      const next = canvas.toDataURL('image/jpeg', 0.92);
       setSidebarAvatar(next);
       try {
         localStorage.setItem('autoTrade.sidebarAvatar', next);
       } catch {
         // Avatar upload remains optional if local storage is full or blocked.
       }
+      closeAvatarCropper();
     };
-    reader.readAsDataURL(file);
+    image.src = avatarCropImage;
+  };
+
+  const startAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    cropDragRef.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      offsetX: avatarCropOffset.x,
+      offsetY: avatarCropOffset.y
+    };
+  };
+
+  const moveAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = cropDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    setAvatarCropOffset({
+      x: Math.max(-140, Math.min(140, drag.offsetX + event.clientX - drag.x)),
+      y: Math.max(-140, Math.min(140, drag.offsetY + event.clientY - drag.y))
+    });
+  };
+
+  const stopAvatarDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (cropDragRef.current?.pointerId === event.pointerId) cropDragRef.current = null;
   };
 
   const getNextUserId = (requests = accessRequests) => {
@@ -5451,13 +5525,35 @@ function AutoTradePage({
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Execution workspace navigation">
         <div className="execution-sidebar-brand">
-          <img src={brandLogoSrc} alt="" aria-hidden="true" />
           <div>
             <strong>Execution</strong>
             <span>{portalView === 'admin' ? 'Admin console' : 'Trading workspace'}</span>
           </div>
         </div>
-        {visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
+        <div className="execution-sidebar-section">
+          <span>Markets</span>
+          <button type="button" className="execution-sidebar-main market-context" onClick={onMarketHome}>
+            <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
+          </button>
+        </div>
+        <div className="execution-sidebar-section">
+          <span>Workspace</span>
+          <button type="button" className="execution-sidebar-main" onClick={onDashboard}>
+            <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
+          </button>
+          <button type="button" className="execution-sidebar-main active">
+            <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
+            <span className="execution-sidebar-copy"><strong>Execution</strong></span>
+          </button>
+        </div>
+        <div className="execution-sidebar-section management-section">
+          <button type="button" className="execution-sidebar-section-toggle" onClick={() => setManagementOpen(value => !value)} aria-expanded={managementOpen}>
+            <span>Management</span>
+            {managementOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
+        {managementOpen && visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
           <button
             type="button"
             className="execution-sidebar-main"
@@ -5472,7 +5568,6 @@ function AutoTradePage({
             </span>
             <span className="execution-sidebar-copy">
               <strong>{tab.label}</strong>
-              <span>{tab.summary}</span>
             </span>
           </button>
           {tab.id === 'portfolio' && <div className="execution-sidebar-subnav">
@@ -5506,10 +5601,6 @@ function AutoTradePage({
           </div>}
         </div>)}
         <div className="execution-sidebar-footer">
-          <div className="execution-sidebar-status">
-            <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
-            <span>{binanceConnection.connected ? 'Verified' : binanceConnection.saved ? 'Saved' : 'No Keys'}</span>
-          </div>
           <button type="button" className="execution-profile-button" onClick={() => avatarInputRef.current?.click()}>
             <span className="execution-profile-avatar">
               {sidebarAvatar ? <img src={sidebarAvatar} alt="" /> : <UserCog size={18} />}
@@ -5527,16 +5618,57 @@ function AutoTradePage({
         </div>
       </aside>
 
+      {avatarCropImage && <div className="avatar-cropper-backdrop" role="presentation" onClick={closeAvatarCropper}>
+        <div className="avatar-cropper-modal" role="dialog" aria-modal="true" aria-label="Edit profile photo" onClick={event => event.stopPropagation()}>
+          <div className="avatar-cropper-head">
+            <div>
+              <strong>Edit profile photo</strong>
+              <span>Drag to position, then confirm the circular avatar.</span>
+            </div>
+            <button type="button" onClick={closeAvatarCropper} aria-label="Close profile photo editor">x</button>
+          </div>
+          <div className="avatar-cropper-body">
+            <div
+              className="avatar-crop-frame"
+              onPointerDown={startAvatarDrag}
+              onPointerMove={moveAvatarDrag}
+              onPointerUp={stopAvatarDrag}
+              onPointerCancel={stopAvatarDrag}
+            >
+              <img
+                src={avatarCropImage}
+                alt=""
+                draggable={false}
+                style={{ transform: `translate(${avatarCropOffset.x}px, ${avatarCropOffset.y}px) scale(${avatarCropZoom})` }}
+              />
+              <span aria-hidden="true" />
+            </div>
+            <div className="avatar-crop-controls">
+              <label>
+                <span>Zoom</span>
+                <input type="range" min="1" max="3" step="0.01" value={avatarCropZoom} onChange={event => setAvatarCropZoom(Number(event.target.value))} />
+              </label>
+              <div className="avatar-crop-preview">
+                <span>Preview</span>
+                <div>
+                  <img src={avatarCropImage} alt="" style={{ transform: `translate(${avatarCropOffset.x / 4}px, ${avatarCropOffset.y / 4}px) scale(${avatarCropZoom})` }} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="avatar-crop-actions">
+            <button type="button" className="ghost" onClick={() => avatarInputRef.current?.click()}>Choose another</button>
+            <button type="button" className="ghost" onClick={closeAvatarCropper}>Cancel</button>
+            <button type="button" onClick={saveCroppedAvatar}>Save photo</button>
+          </div>
+        </div>
+      </div>}
+
       <div className="auto-trade-headbar">
         <div>
           <div className="welcome-lockup">
             <strong>{greetingLine}</strong>
           </div>
-        </div>
-        <div className="auto-trade-head-actions workspace-status-strip" aria-label="Workspace status">
-          <span>{autoMode === 'live' ? 'LIVE' : 'TEST'}</span>
-          <span>{venueMode === 'both' ? 'Spot + Futures' : venueMode === 'spot' ? 'Spot' : 'Futures'}</span>
-          {portalView === 'admin' && <span>{binanceConnection.connected ? 'Binance Verified' : binanceConnection.saved ? 'Binance Saved' : 'Binance Disconnected'}</span>}
         </div>
       </div>
 
