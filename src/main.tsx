@@ -7047,7 +7047,13 @@ function DashboardPage({
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
-  const scrollDashboardSection = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'overview' | 'ledger' | 'options' | 'routing' | 'performance' | 'notifications'>('overview');
+  const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: false });
+  const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
+    setDashboardWorkspaceTab(tab);
+    if (tab === 'ledger' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
+    if (tab === 'performance' || tab === 'notifications') setDashboardSidebarOpen(prev => ({ ...prev, analysis: true }));
+  };
   return <section className="auto-trade-page dashboard-execution-page">
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
@@ -7065,7 +7071,7 @@ function DashboardPage({
         </div>
         <div className="execution-sidebar-section">
           <span>Workspace</span>
-          <button type="button" className="execution-sidebar-main active" onClick={() => scrollDashboardSection('dashboard-overview')}>
+          <button type="button" className={dashboardWorkspaceTab === 'overview' ? 'execution-sidebar-main active' : 'execution-sidebar-main'} onClick={() => selectDashboardTab('overview')}>
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
           </button>
@@ -7077,28 +7083,39 @@ function DashboardPage({
         <div className="execution-sidebar-section management-section">
           <span>Simulation</span>
         </div>
-        <div className="execution-sidebar-group active">
-          <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('simulation-profiles')}>
+        <div className={['ledger', 'options', 'routing'].includes(dashboardWorkspaceTab) ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
+          <button
+            type="button"
+            className="execution-sidebar-main"
+            onClick={() => setDashboardSidebarOpen(prev => ({ ...prev, profiles: !prev.profiles }))}
+            aria-expanded={dashboardSidebarOpen.profiles}
+          >
             <span className="execution-sidebar-icon" aria-hidden="true"><Target size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Profiles</strong></span>
-            <span className="execution-sidebar-chevron" aria-hidden="true"><ChevronUp size={14} /></span>
+            <span className="execution-sidebar-chevron" aria-hidden="true">{dashboardSidebarOpen.profiles ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
           </button>
-          <div className="execution-sidebar-subnav">
-            <button type="button" onClick={() => scrollDashboardSection('dashboard-trade-ledger')}>Trade Ledger</button>
-            <button type="button" onClick={() => scrollDashboardSection('simulation-profiles')}>Options</button>
-            <button type="button" onClick={() => scrollDashboardSection('signal-routing')}>Signal Routing</button>
-          </div>
+          {dashboardSidebarOpen.profiles && <div className="execution-sidebar-subnav">
+            <button type="button" className={dashboardWorkspaceTab === 'ledger' ? 'active' : ''} onClick={() => selectDashboardTab('ledger')}>Trade Ledger</button>
+            <button type="button" className={dashboardWorkspaceTab === 'options' ? 'active' : ''} onClick={() => selectDashboardTab('options')}>Options</button>
+            <button type="button" className={dashboardWorkspaceTab === 'routing' ? 'active' : ''} onClick={() => selectDashboardTab('routing')}>Signal Routing</button>
+          </div>}
         </div>
-        <div className="execution-sidebar-group">
-          <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('performance-command')}>
+        <div className={['performance', 'notifications'].includes(dashboardWorkspaceTab) ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
+          <button
+            type="button"
+            className="execution-sidebar-main"
+            onClick={() => setDashboardSidebarOpen(prev => ({ ...prev, analysis: !prev.analysis }))}
+            aria-expanded={dashboardSidebarOpen.analysis}
+          >
             <span className="execution-sidebar-icon" aria-hidden="true"><Activity size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Analysis</strong></span>
-            <span className="execution-sidebar-chevron" aria-hidden="true"><ChevronDown size={14} /></span>
+            <span className="execution-sidebar-chevron" aria-hidden="true">{dashboardSidebarOpen.analysis ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
           </button>
-          <div className="execution-sidebar-subnav">
-            <button type="button" onClick={() => scrollDashboardSection('performance-command')}>Performance</button>
-            <button type="button" onClick={() => scrollDashboardSection('dashboard-notifications')}>Notifications</button>
+          {dashboardSidebarOpen.analysis && <div className="execution-sidebar-subnav">
+            <button type="button" className={dashboardWorkspaceTab === 'performance' ? 'active' : ''} onClick={() => selectDashboardTab('performance')}>Performance</button>
+            <button type="button" className={dashboardWorkspaceTab === 'notifications' ? 'active' : ''} onClick={() => selectDashboardTab('notifications')}>Notifications</button>
           </div>
+          }
         </div>
         <div className="execution-sidebar-footer">
           <button type="button" className="execution-profile-button">
@@ -7118,14 +7135,14 @@ function DashboardPage({
       <main className="execution-workspace-main">
         <div id="dashboard-overview" className="auto-trade-headbar execution-content-header">
           <div className="execution-content-title">
-            <span>Simulation Console</span>
+            <span>Execution Console</span>
             <h1>{`Ready for today, ${activeName}`}</h1>
           </div>
         </div>
-        <ScanProgressCard dashboard={dashboard} />
-        <SimulationProfiles stats={stats} signals={signals} dashboard={dashboard} selected={selected} />
-        <SignalRoutingPreview signals={signals} stats={stats} />
-        <PerformanceChart
+        {dashboardWorkspaceTab === 'overview' && <ScanProgressCard dashboard={dashboard} />}
+        {dashboardWorkspaceTab === 'options' && <SimulationProfiles stats={stats} signals={signals} dashboard={dashboard} selected={selected} />}
+        {dashboardWorkspaceTab === 'routing' && <SignalRoutingPreview signals={signals} stats={stats} />}
+        {(['ledger', 'performance', 'notifications'].includes(dashboardWorkspaceTab)) && <PerformanceChart
           stats={stats}
           signals={signals}
           tickers={tickers}
@@ -7138,7 +7155,8 @@ function DashboardPage({
           onCommandCustomFromChange={setCommandCustomFrom}
           onCommandCustomToChange={setCommandCustomTo}
           selected={selected}
-        />
+          dashboardView={dashboardWorkspaceTab as 'ledger' | 'performance' | 'notifications'}
+        />}
       </main>
     </div>
   </section>;
@@ -7824,7 +7842,8 @@ function PerformanceChart({
   commandCustomTo,
   onCommandCustomFromChange,
   onCommandCustomToChange,
-  selected
+  selected,
+  dashboardView
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -7839,6 +7858,7 @@ function PerformanceChart({
   onCommandCustomFromChange?: (value: string) => void;
   onCommandCustomToChange?: (value: string) => void;
   selected?: Set<string>;
+  dashboardView?: 'ledger' | 'performance' | 'notifications';
 }) {
   const performanceCommandRef = useRef<HTMLElement | null>(null);
   const tradeLedgerRef = useRef<HTMLDivElement | null>(null);
@@ -7876,6 +7896,9 @@ function PerformanceChart({
   const effectiveCommandCustomTo = commandCustomTo ?? customTo;
   const setEffectiveCommandCustomFrom = onCommandCustomFromChange ?? setCustomFrom;
   const setEffectiveCommandCustomTo = onCommandCustomToChange ?? setCustomTo;
+  const showPerformance = !dashboardView || dashboardView === 'performance';
+  const showLedger = !dashboardView || dashboardView === 'ledger';
+  const showNotifications = !dashboardView || dashboardView === 'notifications';
   const commandRangeStart = effectiveCommandRange === 'custom'
     ? new Date(`${effectiveCommandCustomFrom}T00:00:00`).getTime() || 0
     : getRangeStart(effectiveCommandRange);
@@ -8174,7 +8197,7 @@ function PerformanceChart({
     return () => window.clearTimeout(timer);
   }, [ledgerSimulationDraft, ledgerSimulationSettings]);
   return <section className="panel performance-command" id="performance-command" ref={performanceCommandRef}>
-    <div className="section-title dashboard-section-title performance-command-head">
+    {showPerformance && <div className="section-title dashboard-section-title performance-command-head">
       <h2>Performance Command Center</h2>
       {!compact && <div className="dashboard-command-filter in-command">
         <span className="dashboard-range-label">{getRangeLabel(effectiveCommandRange)}</span>
@@ -8189,9 +8212,9 @@ function PerformanceChart({
           <CustomDateField label="To" value={effectiveCommandCustomTo} min={effectiveCommandCustomFrom} onChange={setEffectiveCommandCustomTo} />
         </div>}
       </div>}
-    </div>
+    </div>}
 
-    {!compact && <div className="strategy-scorecards">
+    {showPerformance && !compact && <div className="strategy-scorecards">
       <button className={selectedStrategyId === 'all' ? 'scorecard active' : 'scorecard'} onClick={() => setSelectedStrategyId('all')}>
         <span>Portfolio</span>
         <strong>All Strategies</strong>
@@ -8206,7 +8229,7 @@ function PerformanceChart({
       </button>)}
     </div>}
 
-    {!compact && <section className="performance-summary">
+    {showPerformance && !compact && <section className="performance-summary">
       <div className="section-title compact dashboard-section-title"><h2>Performance Summary</h2></div>
       <div className="command-summary">
         <article className="selected-brief">
@@ -8224,7 +8247,7 @@ function PerformanceChart({
       </div>
     </section>}
 
-    {!compact && <PerformanceCharts
+    {showPerformance && !compact && <PerformanceCharts
       stats={stats}
       signals={rangedSignals}
       tickers={tickers}
@@ -8239,7 +8262,7 @@ function PerformanceChart({
       onCustomToChange={setCustomTo}
     />}
 
-    <div id="dashboard-trade-ledger" className="ledger-wrap" ref={tradeLedgerRef}>
+    {showLedger && <div id="dashboard-trade-ledger" className="ledger-wrap" ref={tradeLedgerRef}>
       <div className="section-title compact dashboard-section-title"><h2>Trade Ledger</h2></div>
       <div className="ledger-range-filter">
         <span className="dashboard-range-label">{getRangeLabel(ledgerRange)}</span>
@@ -8549,9 +8572,9 @@ function PerformanceChart({
           <article><span>All Strategy Futures PnL</span><strong className={allStrategyPnlCards.futuresPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(allStrategyPnlCards.futuresPnl)}</strong><small>{`${allStrategyPnlCards.futuresCount} futures trades`}</small></article>
         </div>
       </>}
-    </div>
+    </div>}
 
-    {!compact && <NotificationsPanel notifications={notifications} signals={signals} onSelectTrade={focusTrade} />}
+    {showNotifications && !compact && <NotificationsPanel notifications={notifications} signals={signals} onSelectTrade={focusTrade} />}
     <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
 }
