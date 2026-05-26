@@ -33362,3 +33362,387 @@ b.bad {
   }
 }
 
+/* Final professional pass: compact shell, theme-safe CTAs, true inline icons. */
+:root {
+  --hero-cta-primary-bg: #101827;
+  --hero-cta-primary-text: #ffffff;
+  --hero-cta-primary-border: rgba(255, 255, 255, .16);
+  --hero-cta-secondary-bg: #178a5b;
+  --hero-cta-secondary-text: #ffffff;
+  --hero-cta-secondary-border: rgba(23, 138, 91, .34);
+  --hero-cta-login-bg: #f4f1e8;
+  --hero-cta-login-text: #111827;
+  --hero-cta-login-border: rgba(244, 241, 232, .42);
+}
+
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"],
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  --hero-cta-primary-bg: #23c982;
+  --hero-cta-primary-text: #04120c;
+  --hero-cta-primary-border: rgba(142, 240, 184, .44);
+  --hero-cta-secondary-bg: #1d84b5;
+  --hero-cta-secondary-text: #ffffff;
+  --hero-cta-secondary-border: rgba(125, 215, 255, .34);
+  --hero-cta-login-bg: #f4f1e8;
+  --hero-cta-login-text: #111827;
+  --hero-cta-login-border: rgba(255, 255, 255, .35);
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  --hero-cta-primary-bg: #111827;
+  --hero-cta-primary-text: #ffffff;
+  --hero-cta-primary-border: rgba(17, 24, 39, .28);
+  --hero-cta-secondary-bg: #1f7a4d;
+  --hero-cta-secondary-text: #ffffff;
+  --hero-cta-secondary-border: rgba(31, 122, 77, .32);
+  --hero-cta-login-bg: #2f372f;
+  --hero-cta-login-text: #ffffff;
+  --hero-cta-login-border: rgba(47, 55, 47, .28);
+}
+
+.shell-header,
+.shell-header.home-header,
+.shell-header.auth-header,
+.shell-header.app-header {
+  min-height: 76px !important;
+  padding: 12px 24px !important;
+  align-items: center !important;
+}
+
+.shell-brand {
+  gap: 10px !important;
+  min-height: 48px !important;
+}
+
+.shell-brand-mark,
+.brand-logo-mark {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+}
+
+.shell-brand-mark img,
+.brand-logo-mark img {
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: contain !important;
+}
+
+.shell-brand-copy {
+  gap: 2px !important;
+}
+
+.shell-brand-copy strong {
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 920 !important;
+  letter-spacing: 0 !important;
+}
+
+.shell-brand-copy small {
+  font-size: 12px !important;
+  line-height: 1.15 !important;
+  font-weight: 760 !important;
+}
+
+.page-frame {
+  padding-top: 18px !important;
+}
+
+.page-home .home-launchpad {
+  min-height: clamp(330px, 39vh, 430px) !important;
+  padding: clamp(28px, 3.6vw, 46px) clamp(16px, 3vw, 42px) !important;
+  border-radius: 14px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.page-home .home-launchpad-copy {
+  width: min(920px, 100%) !important;
+  gap: 16px !important;
+}
+
+.page-home .home-product-lockup {
+  gap: 8px !important;
+}
+
+.page-home .home-product-lockup img {
+  width: clamp(58px, 5.5vw, 82px) !important;
+  height: clamp(58px, 5.5vw, 82px) !important;
+  filter: drop-shadow(0 10px 20px rgba(35, 201, 130, .16)) !important;
+}
+
+.page-home .home-product-lockup > div {
+  gap: 6px !important;
+}
+
+.page-home .home-product-lockup h1,
+.page-home .home-launchpad h1 {
+  max-width: 780px !important;
+  font-size: clamp(46px, 5.1vw, 74px) !important;
+  line-height: .94 !important;
+  font-weight: 940 !important;
+}
+
+.page-home .company-attribution,
+.page-home .home-product-lockup .company-attribution {
+  color: var(--accent-strong) !important;
+  font-size: clamp(15px, 1.2vw, 19px) !important;
+  font-weight: 880 !important;
+  line-height: 1.1 !important;
+}
+
+:root[data-theme="dark"] .page-home .company-attribution,
+:root[data-theme-style][data-theme="dark"] .page-home .company-attribution,
+:root[data-theme="black"] .page-home .company-attribution,
+:root[data-theme-style][data-theme="black"] .page-home .company-attribution {
+  color: #8ef0b8 !important;
+}
+
+.page-home .home-cta-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  width: min(820px, 100%) !important;
+  gap: 14px !important;
+  margin: 2px auto 0 !important;
+}
+
+.page-home .home-login-row {
+  width: min(400px, 100%) !important;
+  margin: -2px auto 0 !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  padding: 0 20px !important;
+  border-radius: 12px !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .18) !important;
+}
+
+.page-home .home-cta-primary {
+  background: var(--hero-cta-primary-bg) !important;
+  border-color: var(--hero-cta-primary-border) !important;
+  color: var(--hero-cta-primary-text) !important;
+}
+
+.page-home .home-cta-secondary {
+  background: var(--hero-cta-secondary-bg) !important;
+  border-color: var(--hero-cta-secondary-border) !important;
+  color: var(--hero-cta-secondary-text) !important;
+}
+
+.page-home .home-cta-login {
+  background: var(--hero-cta-login-bg) !important;
+  border-color: var(--hero-cta-login-border) !important;
+  color: var(--hero-cta-login-text) !important;
+}
+
+.page-home .home-cta-primary:hover,
+.page-home .home-cta-secondary:hover,
+.page-home .home-cta-login:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.05) saturate(1.04) !important;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, .24) !important;
+}
+
+.page-home .home-cta-primary svg,
+.page-home .home-cta-secondary svg,
+.page-home .home-cta-login svg {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  flex: 0 0 30px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 2.55 !important;
+}
+
+.page-home .home-cta-primary span,
+.page-home .home-cta-secondary span,
+.page-home .home-cta-login span {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: inherit !important;
+  min-width: 0 !important;
+}
+
+.page-home .home-cta-primary strong,
+.page-home .home-cta-secondary strong,
+.page-home .home-cta-login strong {
+  color: inherit !important;
+  font-size: 17px !important;
+  line-height: 1.15 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  white-space: normal !important;
+}
+
+.shell-tools {
+  gap: 8px !important;
+}
+
+.shell-header.home-header .market-return-cta,
+.shell-header.auth-header .auth-return-home,
+.home-header-cta,
+.auth-return-home,
+.market-return-cta,
+.theme-control .theme-toggle,
+.theme-studio .theme-toggle {
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 15px !important;
+  border-radius: 12px !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+.theme-control,
+.theme-studio {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.theme-toggle-icon,
+.theme-control .theme-toggle-icon,
+.theme-studio .theme-toggle-icon {
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: currentColor !important;
+}
+
+.shell-header.home-header .market-return-cta svg,
+.shell-header.auth-header .auth-return-home svg,
+.home-header-cta svg,
+.auth-return-home svg,
+.market-return-cta svg,
+.theme-toggle-icon svg {
+  width: 19px !important;
+  height: 19px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.home-market-switch,
+.venue-switch,
+.spot-futures-switch {
+  min-height: 40px !important;
+  padding: 3px !important;
+  border-radius: 12px !important;
+}
+
+.home-market-switch button,
+.venue-switch button,
+.spot-futures-switch button {
+  min-height: 32px !important;
+  height: 32px !important;
+  padding: 0 20px !important;
+  border-radius: 9px !important;
+}
+
+.page-home .home-search-panel,
+.page-home .search-panel {
+  min-height: 54px !important;
+  padding: 0 16px !important;
+  gap: 12px !important;
+  border-radius: 12px !important;
+}
+
+.page-home .home-search-panel > svg,
+.page-home .search-panel > svg {
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-search-panel input,
+.page-home .search-panel input {
+  height: 52px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-search-panel span,
+.page-home .search-panel span {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 860px) {
+  .page-home .home-cta-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: min(100%, 420px) !important;
+  }
+
+  .page-home .home-login-row {
+    width: min(100%, 420px) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .shell-header,
+  .shell-header.home-header,
+  .shell-header.auth-header,
+  .shell-header.app-header {
+    min-height: 68px !important;
+    padding: 10px 14px !important;
+  }
+
+  .page-home .home-launchpad {
+    padding: 28px 14px !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1 {
+    font-size: clamp(38px, 11vw, 56px) !important;
+  }
+
+  .page-home .home-cta-primary,
+  .page-home .home-cta-secondary,
+  .page-home .home-cta-login {
+    height: 56px !important;
+    min-height: 56px !important;
+  }
+}
+

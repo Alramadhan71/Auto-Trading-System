@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Flame, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, Moon, Newspaper, Rocket, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -1305,8 +1305,8 @@ function App() {
             <img src={brandLogoSrc} alt="" />
           </span>
           <div className="shell-brand-copy">
-            <strong>{isMarketPicker ? productName : `${marketLabel}`}</strong>
-            {!authEntryPage && <small>By {companyName}</small>}
+            <strong>{productName}</strong>
+            <small>By {companyName}</small>
           </div>
         </button>
         {!authEntryPage && !isMarketPicker && <nav className="shell-nav" aria-label="Primary navigation">
@@ -2196,7 +2196,7 @@ function USStockHomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Bot size={22} />
+            <Rocket size={30} />
             <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
@@ -2206,7 +2206,7 @@ function USStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={24} />
+            <KeyRound size={30} />
             <span><strong>Log in to your account</strong></span>
           </button>
         </div>
@@ -2520,7 +2520,7 @@ function SaudiStockHomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Bot size={22} />
+            <Rocket size={30} />
             <span><strong>Join Auto Trading System</strong></span>
           </button>
           <a className="home-cta-secondary" href="https://t.me/Autotradingbot71" target="_blank" rel="noopener noreferrer">
@@ -2530,7 +2530,7 @@ function SaudiStockHomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={24} />
+            <KeyRound size={30} />
             <span><strong>Log in to your account</strong></span>
           </button>
         </div>
@@ -2783,7 +2783,7 @@ function HomePage({
         </div>
         <div className="home-cta-row">
           <button type="button" className="home-cta-primary" onClick={openAutoTradeLogin}>
-            <Bot size={22} />
+            <Rocket size={30} />
             <span>
               <strong>Join Auto Trading System</strong>
             </span>
@@ -2797,7 +2797,7 @@ function HomePage({
         </div>
         <div className="home-login-row">
           <button type="button" className="home-cta-login" onClick={openAutoTradeLogin}>
-            <LogIn size={24} />
+            <KeyRound size={30} />
             <span>
               <strong>Log in to your account</strong>
             </span>
