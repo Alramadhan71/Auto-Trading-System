@@ -6684,6 +6684,38 @@ video {
   max-height: 360px;
 }
 .ledger-wrap { display: grid; gap: 10px; }
+.strategy-lab-selector {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.strategy-lab-selector button {
+  display: grid;
+  gap: 4px;
+  min-height: 62px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.strategy-lab-selector button.active {
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--border));
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+.strategy-lab-selector strong {
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+.strategy-lab-selector small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+}
 .ledger-range-filter { display: grid; gap: 8px; justify-items: end; max-width: 760px; margin-left: auto; }
 .ledger-range-filter p { color: var(--muted); font-size: 13px; line-height: 1.5; text-align: right; }
 .ledger-custom-range { margin-top: -2px; }
@@ -34440,6 +34472,16 @@ body,
 }
 
 @media (max-width: 760px) {
+  .strategy-lab-selector {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .strategy-lab-selector button {
+    flex: 0 0 178px;
+  }
+
   .shell-header.auth-header .shell-tools,
   .shell-header.app-header .shell-tools {
     flex: 0 0 auto !important;

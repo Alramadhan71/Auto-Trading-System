@@ -720,6 +720,26 @@ const averageMinutes = (values: number[]) => values.length ? values.reduce((sum,
 
 const activeExitModeOptions: ('all' | ExitMode)[] = ['all', 'strategy-defined'];
 
+type StrategyLabId = 'balanced' | 'conservative' | 'aggressive' | 'trend' | 'low-drawdown';
+
+const strategyLabs: { id: StrategyLabId; name: string; summary: string }[] = [
+  { id: 'balanced', name: 'Balanced Core', summary: 'All accepted simulation trades.' },
+  { id: 'conservative', name: 'Conservative', summary: 'Medium-risk, higher-confidence trades.' },
+  { id: 'aggressive', name: 'Aggressive', summary: 'Higher-reward or high-risk opportunities.' },
+  { id: 'trend', name: 'Trend Only', summary: 'Trend pullback and compression setups.' },
+  { id: 'low-drawdown', name: 'Low Drawdown', summary: 'Tighter-risk trades with cleaner reward.' }
+];
+
+function strategyLabSignalMatches(labId: StrategyLabId, signal: Signal, strategyRiskMap: Map<string, Risk>) {
+  const risk = strategyRiskMap.get(signal.strategyId) ?? 'medium';
+  const rewardMultiple = signal.riskPct > 0 ? signal.expectedProfitPct / signal.riskPct : Infinity;
+  if (labId === 'balanced') return true;
+  if (labId === 'conservative') return risk === 'medium' && signal.confidence >= 68 && signal.riskPct <= 1.6;
+  if (labId === 'aggressive') return risk === 'high' || signal.expectedProfitPct >= 2.2 || rewardMultiple >= 2.4;
+  if (labId === 'trend') return signal.setupType === 'trend-pullback' || signal.setupType === 'compression-breakout';
+  return signal.riskPct <= 1.2 && rewardMultiple >= 1.8 && signal.confidence >= 62;
+}
+
 const formatExitModeLabel = (mode: ExitMode) =>
   mode === 'strategy-defined' ? 'Strategy Plan' : mode === 'quick' ? 'Quick' : mode === 'extended' ? 'Extended' : 'Balanced';
 
@@ -7202,12 +7222,12 @@ function DashboardPage({
             aria-expanded={dashboardSidebarOpen.profiles}
           >
             <span className="execution-sidebar-icon" aria-hidden="true"><Target size={16} /></span>
-            <span className="execution-sidebar-copy"><strong>Profiles</strong></span>
+            <span className="execution-sidebar-copy"><strong>Strategy Labs</strong></span>
             <span className="execution-sidebar-chevron" aria-hidden="true">{dashboardSidebarOpen.profiles ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
           </button>
           {dashboardSidebarOpen.profiles && <div className="execution-sidebar-subnav">
             <button type="button" className={dashboardWorkspaceTab === 'ledger' ? 'active' : ''} onClick={() => selectDashboardTab('ledger')}>Trade Ledger</button>
-            <button type="button" className={dashboardWorkspaceTab === 'options' ? 'active' : ''} onClick={() => selectDashboardTab('options')}>Options</button>
+            <button type="button" className={dashboardWorkspaceTab === 'options' ? 'active' : ''} onClick={() => selectDashboardTab('options')}>Lab Options</button>
             <button type="button" className={dashboardWorkspaceTab === 'routing' ? 'active' : ''} onClick={() => selectDashboardTab('routing')}>Signal Routing</button>
           </div>}
         </div>
@@ -7983,6 +8003,7 @@ function PerformanceChart({
   const [ledgerMarketFilter, setLedgerMarketFilter] = useState<'all' | 'spot' | 'futures'>('all');
   const [ledgerTimeframeFilter, setLedgerTimeframeFilter] = useState<'all' | Timeframe>('all');
   const [ledgerExecutionProfileFilter, setLedgerExecutionProfileFilter] = useState<'all' | ExitMode>('all');
+  const [activeStrategyLabId, setActiveStrategyLabId] = useState<StrategyLabId>('balanced');
   const [ledgerMetricScope, setLedgerMetricScope] = useState<'accepted' | 'strategies'>('accepted');
   const [ledgerTradeQuery, setLedgerTradeQuery] = useState('');
   const [rejectedLedgerTradeQuery, setRejectedLedgerTradeQuery] = useState('');
@@ -8066,6 +8087,7 @@ function PerformanceChart({
       .map(item => ({ id: item.strategyId, name: item.name, risk: item.risk }))
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [stats]);
+  const strategyRiskMap = useMemo(() => new Map(stats.map(item => [item.strategyId, item.risk])), [stats]);
   const selectedStats = selectedStrategyId === 'all' ? null : stats.find(item => item.strategyId === selectedStrategyId);
   const performanceSignals = selectedStrategyId === 'all'
     ? commandSignals
@@ -8090,18 +8112,19 @@ function PerformanceChart({
     const stamp = rangeSignalTimestamp(signal);
     return stamp >= ledgerRangeStart && stamp <= ledgerRangeEnd;
   }), [signals, ledgerRangeStart, ledgerRangeEnd]);
+  const labLedgerRangeSignals = useMemo(() => ledgerRangeSignals.filter(signal => strategyLabSignalMatches(activeStrategyLabId, signal, strategyRiskMap)), [activeStrategyLabId, ledgerRangeSignals, strategyRiskMap]);
   const filterScopeSignals = useMemo(() => ledgerMetricScope === 'accepted'
-    ? ledgerRangeSignals.filter(signal => signal.ledgerSimulationStatus !== 'rejected' && signal.ledgerPnlEligible !== false)
-    : ledgerRangeSignals.filter(signal => signal.ledgerStrategyLedgerEligible !== false), [ledgerMetricScope, ledgerRangeSignals]);
+    ? labLedgerRangeSignals.filter(signal => signal.ledgerSimulationStatus !== 'rejected' && signal.ledgerPnlEligible !== false)
+    : labLedgerRangeSignals.filter(signal => signal.ledgerStrategyLedgerEligible !== false), [ledgerMetricScope, labLedgerRangeSignals]);
   const filterCounts = useMemo(() => getSignalFilterCounts(filterScopeSignals, ledgerStatusFilter, ledgerSideFilter), [filterScopeSignals, ledgerStatusFilter, ledgerSideFilter]);
-  const ledgerSignals = useMemo(() => ledgerRangeSignals.filter(signal => {
+  const ledgerSignals = useMemo(() => labLedgerRangeSignals.filter(signal => {
     const marketMatches = ledgerMarketFilter === 'all' ? true : (signal.market ?? 'spot') === ledgerMarketFilter;
     return statusMatches(signal, ledgerStatusFilter)
       && sideMatches(signal, ledgerSideFilter)
       && marketMatches
       && (ledgerTimeframeFilter === 'all' || signal.timeframe === ledgerTimeframeFilter)
       && (ledgerExecutionProfileFilter === 'all' || signal.exitMode === ledgerExecutionProfileFilter);
-  }), [ledgerRangeSignals, ledgerStatusFilter, ledgerSideFilter, ledgerMarketFilter, ledgerTimeframeFilter, ledgerExecutionProfileFilter]);
+  }), [labLedgerRangeSignals, ledgerStatusFilter, ledgerSideFilter, ledgerMarketFilter, ledgerTimeframeFilter, ledgerExecutionProfileFilter]);
   const tradeRows = useMemo(() => ledgerSignals.map(signal => {
     const liveMarketPrice = signal.market === 'futures' ? futuresTickers.get(signal.symbol)?.price : tickers.get(signal.symbol)?.price;
     const exitPrice = signal.status === 'OPEN'
@@ -8144,6 +8167,10 @@ function PerformanceChart({
   const acceptedLedgerPnlCards = useMemo(() => summarizeTradeRowPnl(acceptedTradeRows), [acceptedTradeRows]);
   const allStrategyPnlCards = useMemo(() => summarizeTradeRowPnl(allStrategyTradeRows), [allStrategyTradeRows]);
   const ledgerMetricScopeLabel = ledgerMetricScope === 'accepted' ? 'Accepted Simulation' : 'All Strategies';
+  const activeStrategyLab = strategyLabs.find(lab => lab.id === activeStrategyLabId) ?? strategyLabs[0];
+  const labSpotCapital = (ledgerSimulationDraft?.spotCapitalUsdt ?? 0) + acceptedLedgerPnlCards.spotUsdt;
+  const labFuturesCapital = (ledgerSimulationDraft?.futuresCapitalUsdt ?? 0) + acceptedLedgerPnlCards.futuresUsdt;
+  const labCurrentCapital = labSpotCapital + labFuturesCapital;
   const performanceRows = useMemo(() => performanceSignals.map(signal => {
     const marketPrice = tickers.get(signal.symbol)?.price;
     return { pnl: getSignalPnl(signal, marketPrice) };
@@ -8378,7 +8405,24 @@ function PerformanceChart({
     />}
 
     {showLedger && <div id="dashboard-trade-ledger" className="ledger-wrap" ref={tradeLedgerRef}>
-      <div className="section-title compact dashboard-section-title"><h2>Trade Ledger</h2></div>
+      <div className="section-title compact dashboard-section-title">
+        <h2>{`Trade Ledger - ${activeStrategyLab.name}`}</h2>
+      </div>
+      <div className="strategy-lab-selector" role="group" aria-label="Strategy Labs">
+        {strategyLabs.map(lab => <button
+          key={lab.id}
+          type="button"
+          className={activeStrategyLabId === lab.id ? 'active' : ''}
+          onClick={() => {
+            setActiveStrategyLabId(lab.id);
+            setFocusedTradeId(null);
+            resetLedgerScroll();
+          }}
+        >
+          <strong>{lab.name}</strong>
+          <small>{lab.summary}</small>
+        </button>)}
+      </div>
       <div className="ledger-range-filter">
         <span className="dashboard-range-label">{getRangeLabel(ledgerRange)}</span>
         <div className="range-pills">
@@ -8469,15 +8513,15 @@ function PerformanceChart({
       {ledgerSimulationDraft && <div className="ledger-simulation-panel">
         <div className="ledger-simulation-head">
           <div>
-            <span>Ledger Simulation</span>
-            <strong>{`${(ledgerSimulationSnapshot?.currentCapital ?? ledgerSimulationDraft.startingCapitalUsdt).toFixed(2)} USDT`}</strong>
-            <small>{`Spot ${(ledgerSimulationSnapshot?.spot?.availableCapital ?? 0).toFixed(2)} free | Futures ${(ledgerSimulationSnapshot?.futures?.availableCapital ?? 0).toFixed(2)} free`}</small>
+            <span>{`${activeStrategyLab.name} Virtual Portfolio`}</span>
+            <strong>{`${labCurrentCapital.toFixed(2)} USDT`}</strong>
+            <small>{`Spot ${labSpotCapital.toFixed(2)} | Futures ${labFuturesCapital.toFixed(2)}`}</small>
           </div>
           <small className={ledgerSimulationSaving ? 'ledger-save-state saving' : 'ledger-save-state'}>{ledgerSimulationSaving ? 'Saving...' : 'Auto saved'}</small>
         </div>
         <div className="ledger-wallet-panels">
           <section className="ledger-wallet-panel ledger-wallet-spot">
-            <div className="ledger-wallet-head"><span>Spot Wallet</span><strong>{`${(ledgerSimulationSnapshot?.spot?.currentCapital ?? ledgerSimulationDraft.spotCapitalUsdt).toFixed(2)} USDT`}</strong><small>{`${(ledgerSimulationSnapshot?.spot?.availableCapital ?? 0).toFixed(2)} available`}</small></div>
+            <div className="ledger-wallet-head"><span>Spot Wallet</span><strong>{`${labSpotCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.spotUsdt)} lab PnL`}</small></div>
             <div className="ledger-simulation-grid wallet-grid">
               <label><span>Capital</span><input type="number" min={0} step={5} value={ledgerSimulationDraft.spotCapitalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotCapitalUsdt: Number(event.target.value) })} /></label>
               <label><span>Reserve %</span><input type="number" min={0} max={95} step={1} value={ledgerSimulationDraft.spotReserveRatio} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotReserveRatio: Number(event.target.value) })} /></label>
@@ -8486,7 +8530,7 @@ function PerformanceChart({
             </div>
           </section>
           <section className="ledger-wallet-panel ledger-wallet-futures">
-            <div className="ledger-wallet-head"><span>Futures Wallet</span><strong>{`${(ledgerSimulationSnapshot?.futures?.currentCapital ?? ledgerSimulationDraft.futuresCapitalUsdt).toFixed(2)} USDT`}</strong><small>{`${(ledgerSimulationSnapshot?.futures?.availableCapital ?? 0).toFixed(2)} available`}</small></div>
+            <div className="ledger-wallet-head"><span>Futures Wallet</span><strong>{`${labFuturesCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.futuresUsdt)} lab PnL`}</small></div>
             <div className="ledger-simulation-grid wallet-grid">
               <label><span>Capital</span><input type="number" min={0} step={5} value={ledgerSimulationDraft.futuresCapitalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresCapitalUsdt: Number(event.target.value) })} /></label>
               <label><span>Reserve %</span><input type="number" min={0} max={95} step={1} value={ledgerSimulationDraft.futuresReserveRatio} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresReserveRatio: Number(event.target.value) })} /></label>
