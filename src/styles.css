@@ -33525,6 +33525,14 @@ body,
   align-self: start;
 }
 
+.page-auto-trade .execution-workspace-main {
+  grid-column: 2;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  align-self: start;
+}
+
 .execution-sidebar-group {
   display: grid;
   gap: 3px;
@@ -34186,6 +34194,10 @@ body,
   }
 
   .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar) {
+    grid-column: 1;
+  }
+
+  .page-auto-trade .execution-workspace-main {
     grid-column: 1;
   }
 

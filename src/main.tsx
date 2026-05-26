@@ -5631,6 +5631,7 @@ function AutoTradePage({
         </div>
       </aside>
 
+      <main className="execution-workspace-main">
       {avatarCropImage && <div className="avatar-cropper-backdrop" role="presentation" onClick={closeAvatarCropper}>
         <div className="avatar-cropper-modal" role="dialog" aria-modal="true" aria-label="Edit profile photo" onClick={event => event.stopPropagation()}>
           <div className="avatar-cropper-head">
@@ -6999,6 +7000,7 @@ function AutoTradePage({
           </div>
         </div>
       </div>}
+      </main>
     </div>
     <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
