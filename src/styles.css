@@ -4937,34 +4937,6 @@ video {
   cursor: pointer;
   text-align: left;
 }
-.public-strategy-card.lab {
-  display: grid;
-  align-items: stretch;
-  gap: 8px;
-}
-.public-strategy-card.lab > button:first-child {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-}
-.public-strategy-card .move {
-  min-height: 30px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--panel-soft) 80%, transparent);
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 900;
-}
 .public-strategy-card span {
   min-width: 0;
   font-size: 13px;
@@ -5258,15 +5230,6 @@ video {
   text-align: left;
   cursor: pointer;
   padding: 0;
-}
-.admin-strategy-move {
-  min-height: 34px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--panel-soft) 80%, transparent);
-  color: var(--muted);
-  cursor: pointer;
-  font-weight: 800;
 }
 .admin-strategy-card div {
   display: grid;
@@ -14924,16 +14887,14 @@ video {
   min-width: 0;
 }
 
-.public-strategy-card,
-.public-strategy-card.lab > button:first-child {
+.public-strategy-card {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) auto auto auto;
   align-items: center;
   gap: 10px;
 }
 
-.public-strategy-card strong,
-.public-strategy-card.lab strong {
+.public-strategy-card strong {
   min-width: 0;
   overflow-wrap: anywhere;
   line-height: 1.05;
@@ -15014,8 +14975,7 @@ video {
     min-height: 220px;
   }
 
-  .page-auto-trade .public-strategy-card,
-  .page-auto-trade .public-strategy-card.lab > button:first-child {
+  .page-auto-trade .public-strategy-card {
     grid-template-columns: minmax(0, 1fr);
     align-content: space-between;
     justify-items: start;
@@ -15175,8 +15135,7 @@ video {
   min-width: 0;
 }
 
-.page-auto-trade .public-strategy-card,
-.page-auto-trade .public-strategy-card.lab > button:first-child {
+.page-auto-trade .public-strategy-card {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas:
@@ -15189,11 +15148,6 @@ video {
   min-height: 118px;
   padding: 14px;
   text-align: left;
-}
-
-.page-auto-trade .public-strategy-card.lab {
-  grid-template-columns: 1fr;
-  gap: 8px;
 }
 
 .page-auto-trade .public-strategy-card strong {
@@ -15320,8 +15274,7 @@ video {
     gap: 5px;
   }
 
-  .page-auto-trade .public-strategy-card,
-  .page-auto-trade .public-strategy-card.lab > button:first-child {
+  .page-auto-trade .public-strategy-card {
     grid-template-columns: 1fr;
     grid-template-areas:
       "name"
@@ -15401,8 +15354,7 @@ video {
   min-width: 0 !important;
 }
 
-.page-auto-trade .public-strategy-card,
-.page-auto-trade .public-strategy-card.lab > button:first-child {
+.page-auto-trade .public-strategy-card {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
@@ -15418,11 +15370,6 @@ video {
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), color-mix(in srgb, var(--panel) 98%, transparent));
   text-align: left;
-}
-
-.page-auto-trade .public-strategy-card.lab {
-  display: grid;
-  gap: 8px;
 }
 
 .page-auto-trade .public-strategy-card strong {
@@ -15494,8 +15441,7 @@ video {
     gap: 5px;
   }
 
-  .page-auto-trade .public-strategy-card,
-  .page-auto-trade .public-strategy-card.lab > button:first-child {
+  .page-auto-trade .public-strategy-card {
     grid-template-columns: 1fr;
     grid-template-areas:
       "name"
@@ -22105,8 +22051,7 @@ body,
 .showcase-screen,
 .toast,
 .toast-duration-grid button,
-.public-strategy-card,
-.public-strategy-card.lab > button:first-child {
+.public-strategy-card {
   background: var(--card-surface) !important;
 }
 

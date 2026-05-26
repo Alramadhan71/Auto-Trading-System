@@ -851,13 +851,6 @@ function App() {
   const [query, setQuery] = useState('');
   const [marketMode, setMarketMode] = useState<MarketMode>('spot');
   const [strategies, setStrategies] = useState<Strategy[]>([]);
-  const [labStrategyIds, setLabStrategyIds] = useState<string[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem('autoTrade.labStrategyIds') ?? '[]');
-    } catch {
-      return [];
-    }
-  });
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [timeframes, setTimeframes] = useState<Set<Timeframe>>(new Set(allTimeframes));
   const [exitModes, setExitModes] = useState<Set<ExitMode>>(new Set(['strategy-defined']));
@@ -914,10 +907,6 @@ function App() {
     localStorage.setItem('alertsEnabled', String(alertsEnabled));
     if (!alertsEnabled) setToasts([]);
   }, [alertsEnabled]);
-
-  useEffect(() => {
-    localStorage.setItem('autoTrade.labStrategyIds', JSON.stringify(labStrategyIds));
-  }, [labStrategyIds]);
 
   useEffect(() => {
     api<{ ok: boolean; user: AuthSessionUser | null }>('/api/auth/session')
@@ -1392,10 +1381,9 @@ function App() {
           futuresTickers={futuresTickers}
           notifications={deferredNotifications}
           selected={selected}
-          labStrategyIds={labStrategyIds}
           dashboard={dashboard}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} labStrategyIds={labStrategyIds} setLabStrategyIds={setLabStrategyIds} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3389,8 +3377,6 @@ function buildClearedShadowProfile(profileId: string, baseShadowProfile: ShadowR
 function AutoTradePage({
   signals,
   strategies,
-  labStrategyIds,
-  setLabStrategyIds,
   strategyMarketScope,
   tickers,
   futuresTickers,
@@ -3403,8 +3389,6 @@ function AutoTradePage({
 }: {
   signals: Signal[];
   strategies: Strategy[];
-  labStrategyIds: string[];
-  setLabStrategyIds: React.Dispatch<React.SetStateAction<string[]>>;
   strategyMarketScope: StrategyMarketScope;
   tickers: Map<string, Ticker>;
   futuresTickers: Map<string, Ticker>;
@@ -3611,8 +3595,6 @@ function AutoTradePage({
   const [telegramActionLevel, setTelegramActionLevel] = useState<'info' | 'success' | 'warning'>('info');
   const [rulesSaveMessage, setRulesSaveMessage] = useState('');
   const [adminControlMessage, setAdminControlMessage] = useState('');
-  const [adminStrategyViews, setAdminStrategyViews] = useState<Set<'public' | 'lab'>>(new Set(['public']));
-  const [userStrategyViews, setUserStrategyViews] = useState<Set<'public' | 'lab'>>(new Set(['public']));
   const [dashboardResetConfirmOpen, setDashboardResetConfirmOpen] = useState(false);
   const [liveModeConfirmOpen, setLiveModeConfirmOpen] = useState(false);
   const [userSelectedStrategies, setUserSelectedStrategies] = useState<Set<string>>(() => {
@@ -3739,7 +3721,6 @@ function AutoTradePage({
     saveSelection(nextSelected, nextTimeframes, undefined, 'all').then(() => {
       setAdminControlMessage(enabled ? 'All strategies, both venues, and all timeframes enabled.' : 'All strategies disabled and filters reset.');
     }).catch(() => setAdminControlMessage('Bulk strategy update failed.'));
-    setAdminStrategyViews(new Set(['public', 'lab']));
   };
   const toggleAdminTimeframe = (timeframe: Timeframe) => {
     const nextTimeframes = new Set(timeframes);
@@ -3753,10 +3734,6 @@ function AutoTradePage({
     saveSelection(selected, undefined, undefined, scope).then(() => {
       setAdminControlMessage(`Strategy market set to ${scope.toUpperCase()}.`);
     }).catch(() => setAdminControlMessage('Market scope update failed.'));
-  };
-  const moveLabStrategyToPublic = (strategyId: string) => {
-    setLabStrategyIds(prev => prev.filter(id => id !== strategyId));
-    setAdminControlMessage('Strategy moved to Public.');
   };
   const resetDashboardData = async () => {
     try {
@@ -3794,19 +3771,6 @@ function AutoTradePage({
     });
     const nextTimeframes = enabled ? new Set(allTimeframes) : new Set<Timeframe>();
     saveSelection(nextSelected, nextTimeframes, undefined, 'all').catch(() => undefined);
-    setUserStrategyViews(new Set(['public', 'lab']));
-  };
-  const toggleStrategyViewFilter = (view: 'public' | 'lab', owner: 'admin' | 'user') => {
-    const setter = owner === 'admin' ? setAdminStrategyViews : setUserStrategyViews;
-    const current = owner === 'admin' ? adminStrategyViews : userStrategyViews;
-    const next = new Set(current);
-    if (next.has(view)) {
-      if (next.size === 1) return;
-      next.delete(view);
-    } else {
-      next.add(view);
-    }
-    setter(next);
   };
   const toggleStrategyMarketScope = (scope: Exclude<StrategyMarketScope, 'all'>) => {
     const current = new Set<Exclude<StrategyMarketScope, 'all'>>();
@@ -5240,15 +5204,13 @@ function AutoTradePage({
     };
   }
 
-  const labStrategySet = useMemo(() => new Set(labStrategyIds), [labStrategyIds]);
   const adminWorkspaceTabs = [
     { id: 'portfolio', label: 'Portfolio', summary: 'Capital, wallet, and ledgers' },
     { id: 'strategies', label: 'Strategies', summary: 'Public broadcast and strategy visibility' },
     { id: 'users', label: 'Users', summary: 'Member access and approvals' },
     { id: 'settings', label: 'Settings', summary: 'Binance, Telegram, and admin access' }
   ] as const;
-  const publicStrategies = useMemo(() => strategies.filter(strategy => !labStrategySet.has(strategy.id)), [labStrategySet, strategies]);
-  const labStrategies = useMemo(() => strategies.filter(strategy => labStrategySet.has(strategy.id)), [labStrategySet, strategies]);
+  const publicStrategies = strategies;
   const adminStrategyMetrics = useMemo(() => {
     const metrics = new Map<string, { total: number; closed: number; wins: number; winRate: number }>();
     for (const strategy of strategies) {
@@ -5547,15 +5509,11 @@ function AutoTradePage({
 
       {portalView === 'user' && <section className="admin-strategy-control user-strategy-control">
         <div className="portfolio-card-head">
-          <strong>{userStrategyViews.size === 2 ? 'Public + Lab Strategies' : userStrategyViews.has('public') ? 'Public Strategies' : 'Lab Strategies'}</strong>
+          <strong>Strategies</strong>
           <span>{`${[...userSelectedStrategies].length}/${strategies.length} active`}</span>
         </div>
         <div className="admin-strategy-toolbar">
           <div className="admin-strategy-toolbar-row">
-            <div className="access-filter-pills">
-              <button className={userStrategyViews.has('public') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('public', 'user')}>Public Strategies</button>
-              <button className={userStrategyViews.has('lab') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('lab', 'user')}>Lab Strategies</button>
-            </div>
             <div className="access-filter-pills">
               {([
                 ['spot', 'Spot'],
@@ -5573,7 +5531,7 @@ function AutoTradePage({
             <button type="button" className="ghost" onClick={() => toggleAllUserStrategies(false)}>Disable All</button>
           </div>
         </div>
-        {userStrategyViews.has('public') && <div className="admin-strategy-grid">
+        <div className="admin-strategy-grid">
           {publicStrategies.map(strategy => {
             const isActive = userSelectedStrategies.has(strategy.id);
             return <button key={strategy.id} type="button" className={isActive ? 'admin-strategy-card active' : 'admin-strategy-card'} onClick={() => toggleUserStrategy(strategy.id)}>
@@ -5584,17 +5542,7 @@ function AutoTradePage({
               <b>{isActive ? 'ON' : 'OFF'}</b>
             </button>;
           })}
-        </div>}
-        {userStrategyViews.has('lab') && <div className="admin-strategy-grid">
-          {labStrategies.length === 0 && <p className="empty">No lab strategies visible right now.</p>}
-          {labStrategies.map(strategy => <article key={strategy.id} className="admin-strategy-card admin-strategy-shell">
-            <div>
-              <strong>{strategy.name}</strong>
-              <span>{strategyMarketLabel(strategy)} • {strategy.risk === 'high' ? 'High risk' : 'Medium risk'}</span>
-            </div>
-            <b>LAB</b>
-          </article>)}
-        </div>}
+        </div>
       </section>}
 
       {portalView === 'user' && <section className="telegram-delivery-panel">
@@ -6412,7 +6360,7 @@ function AutoTradePage({
         <div className="public-ops-toggle">
           <div>
             <h2>Public Controls</h2>
-            <span>{telegramConfig.publicChannelEnabled ? 'Broadcast ON' : 'Broadcast OFF'} | {publicStrategies.length} public strategies | {[...selected].filter(id => !labStrategySet.has(id)).length} active</span>
+            <span>{telegramConfig.publicChannelEnabled ? 'Broadcast ON' : 'Broadcast OFF'} | {publicStrategies.length} strategies | {[...selected].length} active</span>
           </div>
           <div className="live-rules-badge-row">
             <span className={`nav-badge ${telegramConfig.publicChannelEnabled ? 'glow' : 'subtle'}`}>Public</span>
@@ -6432,7 +6380,7 @@ function AutoTradePage({
             <div className="public-strategies-head">
               <div>
                 <span>Strategy Visibility</span>
-                <strong>{adminStrategyViews.size === 2 ? 'Public + Lab Strategies' : adminStrategyViews.has('public') ? 'Public Strategies' : 'Lab Strategies'}</strong>
+                <strong>Strategies</strong>
               </div>
               <div className="public-card-actions">
                 <button type="button" onClick={() => toggleAllPublicStrategies(true)}>Enable All</button>
@@ -6440,10 +6388,6 @@ function AutoTradePage({
               </div>
             </div>
             <div className="public-strategy-tools">
-              <div className="access-filter-pills">
-                <button className={adminStrategyViews.has('public') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('public', 'admin')}>Public Strategies</button>
-                <button className={adminStrategyViews.has('lab') ? 'active' : ''} onClick={() => toggleStrategyViewFilter('lab', 'admin')}>Lab Strategies</button>
-              </div>
               <div className="access-filter-pills">
                 {([
                   ['spot', 'Spot'],
@@ -6458,7 +6402,7 @@ function AutoTradePage({
                 </button>)}
               </div>
             </div>
-            {adminStrategyViews.has('public') && <div className="public-strategy-grid">
+            <div className="public-strategy-grid">
               {publicStrategies.length === 0 && <p className="empty">No public strategies yet.</p>}
               {publicStrategies.map(strategy => {
                 const isActive = selected.has(strategy.id);
@@ -6471,23 +6415,7 @@ function AutoTradePage({
                   <b>{isActive ? 'ON' : 'OFF'}</b>
                 </button>;
               })}
-            </div>}
-            {adminStrategyViews.has('lab') && <div className="public-strategy-grid">
-              {labStrategies.length === 0 && <p className="empty">No lab strategies yet.</p>}
-              {labStrategies.map(strategy => {
-                const isActive = selected.has(strategy.id);
-                return <article key={strategy.id} className={isActive ? 'public-strategy-card active lab' : 'public-strategy-card lab'}>
-                  <button type="button" onClick={() => toggleAdminStrategy(strategy.id)}>
-                    <strong>{strategy.name}</strong>
-                    <small>{strategyMarketLabel(strategy)}</small>
-                    <small>{adminStrategyMetrics.get(strategy.id)?.winRate ?? 0}% WR</small>
-                    <div className="scoreline"><i style={{ width: `${adminStrategyMetrics.get(strategy.id)?.winRate ?? 0}%` }} /></div>
-                    <b>{isActive ? 'ON' : 'OFF'}</b>
-                  </button>
-                  <button type="button" className="move" onClick={() => moveLabStrategyToPublic(strategy.id)}>Move To Public</button>
-                </article>;
-              })}
-            </div>}
+            </div>
           </section>}
           {strategyWorkspaceTab === 'broadcast' && <div className="public-ops-bottomline">
             <section className="public-broadcast-card">
@@ -6615,58 +6543,6 @@ function AutoTradePage({
             >
               {telegramActionBusyId === 'ADMIN' ? 'Checking...' : 'Link/Test Telegram'}
             </button>
-          </div>
-        </section>}
-        {false && <section className="admin-strategy-control">
-          <div className="portfolio-card-head">
-            <strong>Lab Strategies</strong>
-            <span>{`${labStrategies.filter(strategy => selected.has(strategy.id)).length}/${labStrategies.length} active`}</span>
-          </div>
-          <div className="admin-strategy-toolbar">
-            <div className="admin-strategy-toolbar-row">
-              <div className="access-filter-pills">
-                {([
-                  ['spot', 'Spot'],
-                  ['futures', 'Futures']
-                ] as const).map(([value, label]) => <button key={value} className={marketScopeButtonActive(strategyMarketScope, value) ? 'active' : ''} onClick={() => toggleStrategyMarketScope(value)}>
-                  {label}
-                </button>)}
-              </div>
-            </div>
-            <div className="admin-split-actions">
-              {adminControlMessage && <small className={adminControlMessage.includes('failed') ? 'admin-credential-message' : 'admin-credential-message good'}>{adminControlMessage}</small>}
-            </div>
-          </div>
-          {false && <div className="admin-strategy-grid">
-            {publicStrategies.length === 0 && <p className="empty">No public strategies yet.</p>}
-            {publicStrategies.map(strategy => {
-              const isActive = selected.has(strategy.id);
-              return <article key={strategy.id} className={isActive ? 'admin-strategy-card active admin-strategy-shell' : 'admin-strategy-card admin-strategy-shell'}>
-                <button type="button" className="admin-strategy-main" onClick={() => toggleAdminStrategy(strategy.id)}>
-                  <div>
-                    <strong>{strategy.name}</strong>
-                    <span>{strategyMarketLabel(strategy)} • {strategy.risk === 'high' ? 'High risk' : 'Medium risk'} • {allTimeframes.filter(timeframe => timeframes.has(timeframe)).join(' / ')}</span>
-                  </div>
-                  <b>{isActive ? 'ON' : 'OFF'}</b>
-                </button>
-              </article>;
-            })}
-          </div>}
-          <div className="admin-strategy-grid">
-            {labStrategies.length === 0 && <p className="empty">No lab strategies yet. Move a strategy here to test it before making it public.</p>}
-            {labStrategies.map(strategy => {
-              const isActive = selected.has(strategy.id);
-              return <article key={strategy.id} className={isActive ? 'admin-strategy-card active admin-strategy-shell' : 'admin-strategy-card admin-strategy-shell'}>
-                <button type="button" className="admin-strategy-main" onClick={() => toggleAdminStrategy(strategy.id)}>
-                  <div>
-                    <strong>{strategy.name}</strong>
-                    <span>{strategyMarketLabel(strategy)} • {strategy.risk === 'high' ? 'High risk' : 'Medium risk'}</span>
-                  </div>
-                  <b>{isActive ? 'ON' : 'OFF'}</b>
-                </button>
-                <button type="button" className="admin-strategy-move" onClick={() => moveLabStrategyToPublic(strategy.id)}>Move To Public</button>
-              </article>;
-            })}
           </div>
         </section>}
         {adminWorkspaceTab === 'users' && <div className="admin-control-grid">
@@ -6924,7 +6800,6 @@ function DashboardPage({
   futuresTickers,
   notifications,
   selected,
-  labStrategyIds,
   dashboard
 }: {
   stats: Stat[];
@@ -6933,32 +6808,23 @@ function DashboardPage({
   futuresTickers: Map<string, Ticker>;
   notifications: Notification[];
   selected: Set<string>;
-  labStrategyIds: string[];
   dashboard: DashboardPayload;
 }) {
-  const [strategyBoardView, setStrategyBoardView] = useState<'public' | 'lab'>('public');
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
-  const filteredSignals = useMemo(() => signals.filter(signal => strategyBoardView === 'lab' ? labStrategyIds.includes(signal.strategyId) : !labStrategyIds.includes(signal.strategyId)), [signals, strategyBoardView, labStrategyIds]);
-  const filteredStats = useMemo(() => stats.filter(stat => strategyBoardView === 'lab' ? labStrategyIds.includes(stat.strategyId) : !labStrategyIds.includes(stat.strategyId)), [stats, strategyBoardView, labStrategyIds]);
-  const filteredSelected = useMemo(() => new Set([...selected].filter(id => strategyBoardView === 'lab' ? labStrategyIds.includes(id) : !labStrategyIds.includes(id))), [selected, strategyBoardView, labStrategyIds]);
   return <>
     <section className="dashboard-hero">
       <div className="dashboard-heading-row">
         <div className="dashboard-heading-copy">
           <h1>Dashboard</h1>
         </div>
-        <div className="home-market-switch">
-          <button type="button" className={strategyBoardView === 'public' ? 'active' : ''} onClick={() => setStrategyBoardView('public')}>Public Strategies</button>
-          <button type="button" className={strategyBoardView === 'lab' ? 'active' : ''} onClick={() => setStrategyBoardView('lab')}>Lab Strategies</button>
-        </div>
       </div>
     </section>
     <ScanProgressCard dashboard={dashboard} />
     <PerformanceChart
-      stats={filteredStats}
-      signals={filteredSignals}
+      stats={stats}
+      signals={signals}
       tickers={tickers}
       futuresTickers={futuresTickers}
       notifications={notifications}
@@ -6968,7 +6834,7 @@ function DashboardPage({
       commandCustomTo={commandCustomTo}
       onCommandCustomFromChange={setCommandCustomFrom}
       onCommandCustomToChange={setCommandCustomTo}
-      selected={filteredSelected}
+      selected={selected}
     />
   </>;
 }
