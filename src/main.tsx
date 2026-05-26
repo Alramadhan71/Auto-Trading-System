@@ -3407,6 +3407,9 @@ function AutoTradePage({
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
+  useEffect(() => {
+    if (portalView === 'user' && adminWorkspaceTab === 'users') setAdminWorkspaceTab('portfolio');
+  }, [adminWorkspaceTab, portalView]);
   const [capital] = useState(() => readAutoTradeSetting('autoTrade.capital', '25000'));
   const [venueMode, setVenueMode] = useState<ExecutionVenueMode>(() => {
     const savedVenue = readAutoTradeSetting('autoTrade.venueMode', 'spot');
@@ -5204,12 +5207,15 @@ function AutoTradePage({
     };
   }
 
-  const adminWorkspaceTabs = [
+  const executionWorkspaceTabs = [
     { id: 'portfolio', label: 'Portfolio', summary: 'Capital, wallet, and ledgers' },
     { id: 'strategies', label: 'Strategies', summary: 'Public broadcast and strategy visibility' },
     { id: 'users', label: 'Users', summary: 'Member access and approvals' },
     { id: 'settings', label: 'Settings', summary: 'Binance, Telegram, and admin access' }
   ] as const;
+  const visibleExecutionTabs = portalView === 'admin'
+    ? executionWorkspaceTabs
+    : executionWorkspaceTabs.filter(tab => tab.id !== 'users');
   const publicStrategies = strategies;
   const adminStrategyMetrics = useMemo(() => {
     const metrics = new Map<string, { total: number; closed: number; wins: number; winRate: number }>();
@@ -5433,20 +5439,54 @@ function AutoTradePage({
       </div>
     </div>
 
-    {portalView === 'admin' && <nav className="admin-workspace-tabs" aria-label="Admin workspace sections">
-      {adminWorkspaceTabs.map(tab => <button
-        key={tab.id}
-        type="button"
-        className={adminWorkspaceTab === tab.id ? 'active' : ''}
-        onClick={() => setAdminWorkspaceTab(tab.id)}
-      >
-        <strong>{tab.label}</strong>
-        <span>{tab.summary}</span>
-      </button>)}
-    </nav>}
-
     <div className="premium-workspace-grid">
-      {portalView === 'user' && <section className="admin-split-panel user-access-panel">
+      <aside className="execution-sidebar" aria-label="Execution workspace navigation">
+        {visibleExecutionTabs.map(tab => <div key={tab.id} className={adminWorkspaceTab === tab.id ? 'execution-sidebar-group active' : 'execution-sidebar-group'}>
+          <button
+            type="button"
+            className="execution-sidebar-main"
+            onClick={() => {
+              setAdminWorkspaceTab(tab.id);
+              if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
+              if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
+            }}
+          >
+            <strong>{tab.label}</strong>
+            <span>{tab.summary}</span>
+          </button>
+          {tab.id === 'portfolio' && <div className="execution-sidebar-subnav">
+            {([
+              ['summary', 'Summary'],
+              ['rules', 'Rules'],
+              ['ledger', 'Ledger']
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'portfolio' && portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('portfolio'); setPortfolioWorkspaceTab(id); }}>
+              {label}
+            </button>)}
+          </div>}
+          {tab.id === 'strategies' && <div className="execution-sidebar-subnav">
+            {(portalView === 'admin' ? [
+              ['strategies', 'Strategies'],
+              ['broadcast', 'Broadcast']
+            ] as const : [
+              ['strategies', 'Strategies']
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'strategies' && strategyWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('strategies'); setStrategyWorkspaceTab(id); }}>
+              {label}
+            </button>)}
+          </div>}
+          {tab.id === 'settings' && <div className="execution-sidebar-subnav">
+            {(portalView === 'admin' ? [
+              ['binance', 'Binance'],
+              ['access', 'Access']
+            ] as const : [
+              ['access', 'Access']
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'settings' && settingsWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('settings'); setSettingsWorkspaceTab(id); }}>
+              {label}
+            </button>)}
+          </div>}
+        </div>)}
+      </aside>
+
+      {portalView === 'user' && adminWorkspaceTab === 'settings' && <section className="admin-split-panel user-access-panel">
         <div className="admin-split-head">
           <div>
             <span>User Access</span>
@@ -5507,7 +5547,7 @@ function AutoTradePage({
         </form>}
       </section>}
 
-      {portalView === 'user' && <section className="admin-strategy-control user-strategy-control">
+      {portalView === 'user' && adminWorkspaceTab === 'strategies' && <section className="admin-strategy-control user-strategy-control">
         <div className="portfolio-card-head">
           <strong>Strategies</strong>
           <span>{`${[...userSelectedStrategies].length}/${strategies.length} active`}</span>
@@ -5545,7 +5585,7 @@ function AutoTradePage({
         </div>
       </section>}
 
-      {portalView === 'user' && <section className="telegram-delivery-panel">
+      {portalView === 'user' && adminWorkspaceTab === 'settings' && <section className="telegram-delivery-panel">
         <div>
           <span>Telegram Notifications</span>
           <strong>{activeUserRecord?.telegram && activeUserRecord.telegram !== '-' ? activeUserRecord.telegram : 'No Telegram account'}</strong>
@@ -5577,7 +5617,7 @@ function AutoTradePage({
         </div>
       </section>}
 
-      {(portalView !== 'admin' || adminWorkspaceTab === 'portfolio') && <section className="premium-panel workspace-panel portfolio-workspace-panel">
+      {adminWorkspaceTab === 'portfolio' && <section className="premium-panel workspace-panel portfolio-workspace-panel">
         <div className="premium-panel-heading">
           <div>
             <h2>Capital</h2>
@@ -5591,16 +5631,6 @@ function AutoTradePage({
             </div>
             <span className="nav-badge glow">Portfolio View</span>
           </div>
-          <nav className="workspace-subtabs" aria-label="Portfolio sections">
-            {([
-              ['summary', 'Summary', 'Wallet and headline metrics'],
-              ['rules', 'Rules', 'Execution controls'],
-              ['ledger', 'Ledger', 'Trades and filters']
-            ] as const).map(([id, label, summary]) => <button key={id} type="button" className={portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => setPortfolioWorkspaceTab(id)}>
-              <strong>{label}</strong>
-              <span>{summary}</span>
-            </button>)}
-          </nav>
           {portfolioWorkspaceTab === 'summary' && autoMode === 'shadow' && <section className="portfolio-card">
             <div className="shadow-profile-grid">
               {shadowProfiles.map(profile => <article key={profile.id} className={selectedShadowProfileId === profile.id ? 'shadow-profile-card active' : 'shadow-profile-card'}>
@@ -6367,15 +6397,6 @@ function AutoTradePage({
           </div>
         </div>
         <div className="public-ops-body">
-          <nav className="workspace-subtabs workspace-subtabs-duo" aria-label="Strategies sections">
-            {([
-              ['strategies', 'Strategies', 'Filters and active strategy list'],
-              ['broadcast', 'Broadcast', 'Channel and reset actions']
-            ] as const).map(([id, label, summary]) => <button key={id} type="button" className={strategyWorkspaceTab === id ? 'active' : ''} onClick={() => setStrategyWorkspaceTab(id)}>
-              <strong>{label}</strong>
-              <span>{summary}</span>
-            </button>)}
-          </nav>
           {strategyWorkspaceTab === 'strategies' && <section className="public-strategies-card">
             <div className="public-strategies-head">
               <div>
@@ -6459,15 +6480,6 @@ function AutoTradePage({
           </div>
         </div>
         <>
-        {adminWorkspaceTab === 'settings' && <nav className="workspace-subtabs workspace-subtabs-duo settings-subtabs" aria-label="Settings sections">
-          {([
-            ['binance', 'Binance', 'Exchange keys and verification'],
-            ['access', 'Access', 'Admin profile and alerts']
-          ] as const).map(([id, label, summary]) => <button key={id} type="button" className={settingsWorkspaceTab === id ? 'active' : ''} onClick={() => setSettingsWorkspaceTab(id)}>
-            <strong>{label}</strong>
-            <span>{summary}</span>
-          </button>)}
-        </nav>}
         {adminWorkspaceTab === 'settings' && settingsWorkspaceTab === 'binance' && autoMode === 'live' && <section className="binance-connect-panel admin-binance-panel">
           <div className="binance-admin-head">
             <div>

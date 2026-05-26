@@ -33482,100 +33482,95 @@ body,
   font-weight: 850 !important;
 }
 
-.admin-workspace-tabs {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 10px !important;
-  margin: 12px 0 !important;
-  padding: 6px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 14px !important;
-  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 90%, transparent) !important;
+.page-auto-trade .premium-workspace-grid {
+  grid-template-columns: minmax(210px, 250px) minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 16px !important;
 }
 
-.admin-workspace-tabs button {
-  display: grid !important;
-  gap: 3px !important;
-  min-height: 54px !important;
-  padding: 9px 12px !important;
-  border: 1px solid transparent !important;
-  border-radius: 10px !important;
-  background: transparent !important;
-  color: var(--muted) !important;
-  text-align: left !important;
-  box-shadow: none !important;
+.execution-sidebar {
+  position: sticky;
+  top: 86px;
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 90%, transparent);
 }
 
-.admin-workspace-tabs button strong {
-  color: inherit !important;
-  font-size: 13px !important;
-  font-weight: 900 !important;
+.page-auto-trade .premium-workspace-grid > :not(.execution-sidebar) {
+  grid-column: 2;
+  min-width: 0;
 }
 
-.admin-workspace-tabs button span {
-  color: inherit !important;
-  font-size: 11px !important;
-  font-weight: 720 !important;
-  line-height: 1.25 !important;
+.execution-sidebar-group {
+  display: grid;
+  gap: 5px;
 }
 
-.admin-workspace-tabs button.active {
-  border-color: color-mix(in srgb, var(--accent) 42%, var(--border)) !important;
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface-raised, var(--surface))) !important;
-  color: var(--text) !important;
+.execution-sidebar-main {
+  display: grid;
+  gap: 3px;
+  min-height: 52px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
 }
 
-.admin-workspace-tabs button:focus-visible,
-.admin-workspace-tabs button:hover {
-  border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important;
-  color: var(--text) !important;
+.execution-sidebar-main strong {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 900;
 }
 
-.workspace-subtabs {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 8px !important;
-  margin: 0 0 14px !important;
-  padding: 5px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 12px !important;
-  background: color-mix(in srgb, var(--surface-raised, var(--surface)) 88%, transparent) !important;
+.execution-sidebar-main span {
+  color: inherit;
+  font-size: 11px;
+  font-weight: 720;
+  line-height: 1.25;
 }
 
-.workspace-subtabs.workspace-subtabs-duo {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+.execution-sidebar-group.active .execution-sidebar-main,
+.execution-sidebar-main:hover,
+.execution-sidebar-main:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 11%, var(--surface-raised, var(--surface)));
+  color: var(--text);
 }
 
-.workspace-subtabs button {
-  display: grid !important;
-  gap: 2px !important;
-  min-height: 48px !important;
-  padding: 8px 10px !important;
-  border: 1px solid transparent !important;
-  border-radius: 9px !important;
-  background: transparent !important;
-  color: var(--muted) !important;
-  text-align: left !important;
-  box-shadow: none !important;
+.execution-sidebar-subnav {
+  display: grid;
+  gap: 4px;
+  padding: 0 0 2px 12px;
+  border-left: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
 }
 
-.workspace-subtabs button strong {
-  color: inherit !important;
-  font-size: 13px !important;
-  font-weight: 900 !important;
+.execution-sidebar-subnav button {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 850;
 }
 
-.workspace-subtabs button span {
-  color: inherit !important;
-  font-size: 11px !important;
-  font-weight: 720 !important;
-  line-height: 1.25 !important;
-}
-
-.workspace-subtabs button.active {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)) !important;
-  background: color-mix(in srgb, var(--accent) 11%, var(--surface-raised, var(--surface))) !important;
-  color: var(--text) !important;
+.execution-sidebar-subnav button.active,
+.execution-sidebar-subnav button:hover,
+.execution-sidebar-subnav button:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface-raised, var(--surface)));
+  color: var(--text);
 }
 
 .public-ops-panel .public-strategy-grid {
@@ -33690,26 +33685,30 @@ body,
 }
 
 @media (max-width: 980px) {
-  .admin-workspace-tabs {
+  .page-auto-trade .premium-workspace-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar) {
+    grid-column: 1;
+  }
+
+  .execution-sidebar {
+    position: static;
     display: flex !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
+    align-items: stretch;
   }
 
-  .admin-workspace-tabs button {
-    flex: 0 0 190px !important;
+  .execution-sidebar-group {
+    flex: 0 0 190px;
     scroll-snap-align: start !important;
   }
 
-  .workspace-subtabs {
-    display: flex !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-  }
-
-  .workspace-subtabs button {
-    flex: 0 0 170px !important;
-    scroll-snap-align: start !important;
+  .execution-sidebar-subnav {
+    padding-left: 0;
+    border-left: 0;
   }
 
   .public-ops-panel .public-strategy-card,
