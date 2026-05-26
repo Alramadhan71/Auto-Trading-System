@@ -1382,6 +1382,7 @@ function App() {
           notifications={deferredNotifications}
           selected={selected}
           dashboard={dashboard}
+          activeName={appSessionUser?.username || appSessionUser?.name || 'Muslim Alramadhan'}
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
       </main>
@@ -1480,7 +1481,7 @@ function NotificationsPanel({
   onSelectTrade?: (tradeId: number | null) => void;
 }) {
   const signalSideById = new Map(signals.map(signal => [signal.id, signal.side]));
-  return <section className="panel dashboard-notifications-panel">
+  return <section id="dashboard-notifications" className="panel dashboard-notifications-panel">
     <div className="section-title"><h2>Notifications</h2><p>Trade entries and exits.</p></div>
     <div className="notifications">
       {notifications.map(n => {
@@ -7013,7 +7014,8 @@ function DashboardPage({
   futuresTickers,
   notifications,
   selected,
-  dashboard
+  dashboard,
+  activeName
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -7022,34 +7024,75 @@ function DashboardPage({
   notifications: Notification[];
   selected: Set<string>;
   dashboard: DashboardPayload;
+  activeName: string;
 }) {
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
-  return <>
-    <section className="dashboard-hero">
-      <div className="dashboard-heading-row">
-        <div className="dashboard-heading-copy">
-          <h1>Dashboard</h1>
+  const scrollDashboardSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return <section className="dashboard-workspace premium-workspace-grid">
+    <aside className="execution-sidebar dashboard-sidebar" aria-label="Dashboard workspace navigation">
+      <div className="execution-sidebar-brand">
+        <div>
+          <strong>Dashboard</strong>
+          <span>Simulation console</span>
         </div>
       </div>
-    </section>
-    <ScanProgressCard dashboard={dashboard} />
-    <PerformanceChart
-      stats={stats}
-      signals={signals}
-      tickers={tickers}
-      futuresTickers={futuresTickers}
-      notifications={notifications}
-      commandRange={commandRange}
-      onCommandRangeChange={setCommandRange}
-      commandCustomFrom={commandCustomFrom}
-      commandCustomTo={commandCustomTo}
-      onCommandCustomFromChange={setCommandCustomFrom}
-      onCommandCustomToChange={setCommandCustomTo}
-      selected={selected}
-    />
-  </>;
+      <div className="execution-sidebar-section">
+        <span>Lab</span>
+        <button type="button" className="execution-sidebar-main active" onClick={() => scrollDashboardSection('dashboard-overview')}>
+          <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
+          <span className="execution-sidebar-copy"><strong>Overview</strong></span>
+        </button>
+        <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('simulation-profiles')}>
+          <span className="execution-sidebar-icon" aria-hidden="true"><Target size={16} /></span>
+          <span className="execution-sidebar-copy"><strong>Profiles</strong></span>
+        </button>
+        <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('signal-routing')}>
+          <span className="execution-sidebar-icon" aria-hidden="true"><Activity size={16} /></span>
+          <span className="execution-sidebar-copy"><strong>Signal Routing</strong></span>
+        </button>
+      </div>
+      <div className="execution-sidebar-section management-section">
+        <span>Review</span>
+        <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('performance-command')}>
+          <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
+          <span className="execution-sidebar-copy"><strong>Performance</strong></span>
+        </button>
+        <button type="button" className="execution-sidebar-main" onClick={() => scrollDashboardSection('dashboard-notifications')}>
+          <span className="execution-sidebar-icon" aria-hidden="true"><Bell size={16} /></span>
+          <span className="execution-sidebar-copy"><strong>Notifications</strong></span>
+        </button>
+      </div>
+    </aside>
+    <main className="dashboard-workspace-main execution-workspace-main">
+      <div id="dashboard-overview" className="auto-trade-headbar execution-content-header dashboard-content-header">
+        <div className="execution-content-title">
+          <span>Simulation Console</span>
+          <h1>{`Ready for simulation, ${activeName}`}</h1>
+        </div>
+      </div>
+      <ScanProgressCard dashboard={dashboard} />
+      <SimulationProfiles stats={stats} signals={signals} dashboard={dashboard} selected={selected} />
+      <SignalRoutingPreview signals={signals} stats={stats} />
+      <PerformanceChart
+        stats={stats}
+        signals={signals}
+        tickers={tickers}
+        futuresTickers={futuresTickers}
+        notifications={notifications}
+        commandRange={commandRange}
+        onCommandRangeChange={setCommandRange}
+        commandCustomFrom={commandCustomFrom}
+        commandCustomTo={commandCustomTo}
+        onCommandCustomFromChange={setCommandCustomFrom}
+        onCommandCustomToChange={setCommandCustomTo}
+        selected={selected}
+      />
+    </main>
+  </section>;
 }
 
 function ScanProgressCard({ dashboard }: { dashboard: DashboardPayload }) {
@@ -7071,6 +7114,78 @@ function ScanProgressCard({ dashboard }: { dashboard: DashboardPayload }) {
       <div className="scan-progress-track"><i style={{ width: `${scanPercent}%` }} /></div>
       <small>{`${scanStatusLabel} | ${scanDetail}`}</small>
     </article>
+  </section>;
+}
+
+function SimulationProfiles({
+  stats,
+  signals,
+  dashboard,
+  selected
+}: {
+  stats: Stat[];
+  signals: Signal[];
+  dashboard: DashboardPayload;
+  selected: Set<string>;
+}) {
+  const activeStrategies = stats.filter(item => selected.has(item.strategyId)).length || dashboard.selectedStrategies || stats.length;
+  const openSignals = signals.filter(signal => signal.status === 'OPEN').length;
+  const closedSignals = signals.length - openSignals;
+  const profileCards = [
+    { name: 'Simple Gate', mode: 'Loose rules', scope: 'All strategies', metric: signals.length, detail: `${activeStrategies} feeds` },
+    { name: 'Strict Gate', mode: 'Tighter filters', scope: 'All strategies', metric: closedSignals, detail: 'Risk-first review' },
+    { name: 'BTC / ETH Gate', mode: 'Major pairs', scope: 'BTCUSDT + ETHUSDT', metric: signals.filter(signal => ['BTCUSDT', 'ETHUSDT'].includes(signal.symbol)).length, detail: 'Focused liquidity' },
+    { name: 'Direction Gate', mode: 'Long / short bias', scope: 'Side testing', metric: signals.filter(signal => signal.side === 'LONG').length, detail: `${signals.filter(signal => signal.side === 'SHORT').length} shorts tracked` }
+  ];
+  return <section id="simulation-profiles" className="dashboard-lab-panel">
+    <div className="execution-workspace-title">
+      <div>
+        <span>Simulation Lab</span>
+        <h2>Execution Profiles</h2>
+      </div>
+      <span className="nav-badge subtle">Demo gates</span>
+    </div>
+    <div className="simulation-profile-grid">
+      {profileCards.map(profile => <article key={profile.name} className="simulation-profile-card">
+        <div>
+          <span>{profile.mode}</span>
+          <strong>{profile.name}</strong>
+          <small>{profile.scope}</small>
+        </div>
+        <b>{profile.metric.toLocaleString('en-US')}</b>
+        <small>{profile.detail}</small>
+      </article>)}
+    </div>
+  </section>;
+}
+
+function SignalRoutingPreview({ signals, stats }: { signals: Signal[]; stats: Stat[] }) {
+  const recentSignals = signals.slice(0, 4);
+  return <section id="signal-routing" className="dashboard-lab-panel">
+    <div className="execution-workspace-title">
+      <div>
+        <span>Signal Routing</span>
+        <h2>Multi-Profile Flow</h2>
+      </div>
+      <span className="nav-badge subtle">{`${stats.length} strategies`}</span>
+    </div>
+    <div className="signal-routing-list">
+      {recentSignals.length ? recentSignals.map(signal => <article key={signal.id} className="signal-routing-row">
+        <div>
+          <strong>{signal.symbol}</strong>
+          <span>{`${signal.strategyName} | ${signal.side} | ${signal.timeframe}`}</span>
+        </div>
+        <div>
+          <span>Simple</span>
+          <span>Strict</span>
+          <span>BTC/ETH</span>
+          <span>Direction</span>
+        </div>
+      </article>) : <article className="signal-routing-empty">
+        <strong>No routed signals yet</strong>
+        <span>New strategy signals will appear here and route through every simulation profile.</span>
+      </article>}
+    </div>
   </section>;
 }
 
