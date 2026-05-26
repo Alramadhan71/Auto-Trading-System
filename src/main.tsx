@@ -1249,6 +1249,8 @@ function App() {
     setPage(nextPage);
   };
 
+  const getAuthenticatedPortalView = (user = appSessionUser): 'user' | 'admin' => user?.role === 'admin' ? 'admin' : 'user';
+
   const openAutoTradeLogin = () => {
     if (!activeMarketFamily) setActiveMarketFamily('crypto');
     try {
@@ -1257,7 +1259,15 @@ function App() {
       // Keep navigation working even if storage is unavailable.
     }
     if (!isAuthenticated) setAutoTradePortalView('login');
+    else setAutoTradePortalView(getAuthenticatedPortalView());
     setPage('auto-trade');
+  };
+
+  const enterDashboardAfterLogin = (user: AuthSessionUser) => {
+    if (!activeMarketFamily) setActiveMarketFamily('crypto');
+    setAppSessionUser(user);
+    setAutoTradePortalView(getAuthenticatedPortalView(user));
+    setPage('dashboard');
   };
 
   const returnToMarketPicker = () => {
@@ -1390,7 +1400,7 @@ function App() {
           onLogout={handleAppLogout}
           logoutBusy={logoutBusy}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3397,7 +3407,9 @@ function AutoTradePage({
   onDashboard,
   onLogout,
   onAuthChange,
-  onPortalViewChange
+  onLoginSuccess,
+  onPortalViewChange,
+  initialPortalView = 'login'
 }: {
   signals: Signal[];
   strategies: Strategy[];
@@ -3414,9 +3426,11 @@ function AutoTradePage({
   onDashboard?: () => void;
   onLogout?: () => void;
   onAuthChange?: (user: AuthSessionUser | null) => void;
+  onLoginSuccess?: (user: AuthSessionUser) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
+  initialPortalView?: 'login' | 'user' | 'admin';
 }) {
-  const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>('login');
+  const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>(initialPortalView);
   const [adminWorkspaceTab, setAdminWorkspaceTab] = useState<'portfolio' | 'strategies' | 'users' | 'settings'>('portfolio');
   const [sidebarSectionOpen, setSidebarSectionOpen] = useState<Record<'portfolio' | 'strategies' | 'users' | 'settings', boolean>>({
     portfolio: true,
@@ -3430,6 +3444,9 @@ function AutoTradePage({
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
+  useEffect(() => {
+    if (initialPortalView !== portalView) setPortalView(initialPortalView);
+  }, [initialPortalView]);
   useEffect(() => {
     if (portalView === 'user' && adminWorkspaceTab === 'users') setAdminWorkspaceTab('portfolio');
   }, [adminWorkspaceTab, portalView]);
@@ -4205,6 +4222,7 @@ function AutoTradePage({
         saveAccessRequests([toAccessRequest(response.user)]);
         setPortalView('user');
       }
+      onLoginSuccess?.(response.user);
     } catch (error) {
       setAuthMessage(error instanceof Error ? error.message : 'Login failed.');
     }
@@ -7049,11 +7067,28 @@ function DashboardPage({
   const [commandCustomTo, setCommandCustomTo] = useState(() => toDateInput(Date.now()));
   const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'ledger' | 'options' | 'routing' | 'performance' | 'notifications'>('ledger');
   const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: true });
-  const [sidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
+  const dashboardAvatarInputRef = useRef<HTMLInputElement | null>(null);
+  const [sidebarAvatar, setSidebarAvatar] = useState(() => localStorage.getItem('autoTrade.sidebarAvatar') ?? '');
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
     if (tab === 'performance' || tab === 'notifications') setDashboardSidebarOpen(prev => ({ ...prev, analysis: true }));
+  };
+  const updateDashboardSidebarAvatar = (file?: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const next = typeof reader.result === 'string' ? reader.result : '';
+      if (!next) return;
+      setSidebarAvatar(next);
+      try {
+        localStorage.setItem('autoTrade.sidebarAvatar', next);
+      } catch {
+        // Avatar remains visible for this session if storage is unavailable.
+      }
+    };
+    reader.readAsDataURL(file);
+    if (dashboardAvatarInputRef.current) dashboardAvatarInputRef.current.value = '';
   };
   return <section className="auto-trade-page dashboard-execution-page">
     <div className="premium-workspace-grid">
@@ -7119,7 +7154,7 @@ function DashboardPage({
           }
         </div>
         <div className="execution-sidebar-footer">
-          <button type="button" className="execution-profile-button">
+          <button type="button" className="execution-profile-button" onClick={() => dashboardAvatarInputRef.current?.click()}>
             <span className="execution-profile-avatar">
               {sidebarAvatar ? <img src={sidebarAvatar} alt="" /> : <UserCog size={18} />}
             </span>
@@ -7128,6 +7163,7 @@ function DashboardPage({
               <small>{roleLabel}</small>
             </span>
           </button>
+          <input ref={dashboardAvatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => updateDashboardSidebarAvatar(event.target.files?.[0])} />
           <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
@@ -8610,9 +8646,9 @@ function PerformanceCharts({
   onCustomToChange: (value: string) => void;
 }) {
   const [openLeaderSections, setOpenLeaderSections] = useState<Record<string, boolean>>({
-    'Timeframe Leaders': false,
-    'Performance Leaders': false,
-    'Direction Leaders': false
+    'Timeframe Leaders': true,
+    'Performance Leaders': true,
+    'Direction Leaders': true
   });
   const riskMap = new Map(stats.map(stat => [stat.strategyId, stat.risk]));
   const groupedRows = new Map<string, {
