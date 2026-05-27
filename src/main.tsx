@@ -1355,6 +1355,36 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
+  const mobileNavItems = [
+    {
+      key: 'home',
+      label: 'Home',
+      icon: <Home size={19} />,
+      active: isMarketPicker,
+      onClick: returnToMarketPicker
+    },
+    {
+      key: 'markets',
+      label: 'Markets',
+      icon: <Globe2 size={19} />,
+      active: page === 'home' && Boolean(activeMarketFamily),
+      onClick: () => enterMarket(activeMarketFamily ?? 'crypto')
+    },
+    {
+      key: 'portfolio',
+      label: 'Portfolio',
+      icon: <Wallet size={19} />,
+      active: page === 'dashboard',
+      onClick: () => navigateToPage('dashboard')
+    },
+    {
+      key: 'execution',
+      label: isAuthenticated ? 'Trade' : 'Login',
+      icon: isAuthenticated ? <Bot size={19} /> : <LogIn size={19} />,
+      active: page === 'auto-trade',
+      onClick: openAutoTradeLogin
+    }
+  ];
   const showSessionLogout = false;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
@@ -1374,11 +1404,7 @@ function App() {
           <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
-          {authEntryPage && <button type="button" className="auth-return-home" onClick={returnToMarketPicker}>
-            <Home size={16} />
-            <span>Back to Home</span>
-          </button>}
-          {!authEntryPage && !isMarketPicker && page === 'home' && activeMarketFamily && <button type="button" className="home-header-cta market-return-cta" onClick={returnToMarketPicker}>
+          {!isMarketPicker && <button type="button" className="mobile-home-action" onClick={returnToMarketPicker} aria-label="Back to Home">
             <Home size={16} />
             <span>Back to Home</span>
           </button>}
@@ -1438,6 +1464,18 @@ function App() {
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
+      <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
+        {mobileNavItems.map(item => <button
+          type="button"
+          key={item.key}
+          className={item.active ? 'active' : ''}
+          onClick={item.onClick}
+          aria-current={item.active ? 'page' : undefined}
+        >
+          {item.icon}
+          <span>{item.label}</span>
+        </button>)}
+      </nav>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
         symbol={chartSymbol}
