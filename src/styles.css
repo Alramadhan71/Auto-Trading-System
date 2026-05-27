@@ -368,8 +368,8 @@ button, input { font: inherit; }
   --swatch-c: var(--warning);
   --swatch-d: var(--success);
 }
-.theme-studio.dark, .theme-showcase-card.dark { --swatch-a: #FAF9F6; --swatch-b: #010013; --swatch-c: #0b0920; --swatch-d: #2fdf8f; }
-.theme-studio.light, .theme-showcase-card.light { --swatch-a: #010013; --swatch-b: #FAF9F6; --swatch-c: #f4f2ec; --swatch-d: #178a5b; }
+.theme-studio.dark, .theme-showcase-card.dark { --swatch-a: #1687ff; --swatch-b: #000000; --swatch-c: #d8ecff; --swatch-d: #2fdf8f; }
+.theme-studio.light, .theme-showcase-card.light { --swatch-a: #0057ff; --swatch-b: #ffffff; --swatch-c: #dceaff; --swatch-d: #178a5b; }
 .theme-studio.style-1, .theme-showcase-card.style-1 { --swatch-a: #4f8cff; --swatch-b: #181c23; --swatch-c: #d8ad5f; --swatch-d: #35c77f; }
 .theme-studio.style-2, .theme-showcase-card.style-2 { --swatch-a: #67a8ff; --swatch-b: #07090d; --swatch-c: #f0ba55; --swatch-d: #24d17e; }
 .theme-studio.style-3, .theme-showcase-card.style-3 { --swatch-a: #8ab4f8; --swatch-b: #1b1f24; --swatch-c: #c8a15b; --swatch-d: #49b87d; }
@@ -32463,147 +32463,165 @@ b.bad {
 :root,
 :root[data-theme],
 :root[data-theme-style] {
-  --logo-blue: #FAF9F6;
-  --logo-blue-strong: #FAF9F6;
-  --logo-ice: #0b0920;
-  --logo-steel: rgba(250, 249, 246, .64);
-  --ui-page: #010013;
-  --ui-surface: #060519;
-  --ui-surface-2: #0b0920;
-  --ui-border: rgba(250, 249, 246, .14);
-  --ui-border-strong: rgba(250, 249, 246, .30);
-  --hero-bg: #010013;
-  --hero-border: rgba(250, 249, 246, .16);
-  --hero-text: #FAF9F6;
-  --hero-company: #FAF9F6;
-  --hero-company-hover: #FAF9F6;
-  --hero-cta-bg: #060519;
-  --hero-cta-text: #FAF9F6;
-  --hero-cta-border: rgba(250, 249, 246, .18);
-  --hero-primary-bg: #060519;
-  --hero-primary-text: #FAF9F6;
-  --hero-primary-border: rgba(250, 249, 246, .26);
+  --logo-blue: #73adff;
+  --logo-blue-strong: #2d7ff0;
+  --logo-ice: #d7ebff;
+  --logo-steel: #a9bbcf;
+  --ui-page: #07101b;
+  --ui-surface: #0d1724;
+  --ui-surface-2: #111e2d;
+  --ui-border: rgba(169, 187, 207, .20);
+  --ui-border-strong: rgba(115, 173, 255, .46);
+  --hero-bg: linear-gradient(135deg, #050b12 0%, #071321 36%, #0d2945 68%, #05090f 100%);
+  --hero-border: rgba(115, 173, 255, .34);
+  --hero-text: #f7fbff;
+  --hero-company: #9ecaff;
+  --hero-company-hover: #d7ebff;
+  --hero-cta-bg: rgba(10, 20, 32, .78);
+  --hero-cta-text: #f7fbff;
+  --hero-cta-border: rgba(115, 173, 255, .44);
+  --hero-primary-bg: rgba(10, 20, 32, .92);
+  --hero-primary-text: #f7fbff;
+  --hero-primary-border: rgba(158, 202, 255, .62);
   --card-lift-shadow: rgba(0, 0, 0, .18);
-  --cta-primary-bg: #060519;
-  --cta-primary-text: #FAF9F6;
-  --cta-primary-border: rgba(250, 249, 246, .18);
-  --cta-telegram-bg: #060519;
-  --cta-telegram-text: #FAF9F6;
-  --cta-telegram-border: rgba(250, 249, 246, .18);
-  --cta-login-bg: #060519;
-  --cta-login-text: #FAF9F6;
-  --cta-login-border: rgba(250, 249, 246, .18);
+  --cta-primary-bg: #111c2b;
+  --cta-primary-text: #f7fbff;
+  --cta-primary-border: rgba(115, 173, 255, .44);
+  --cta-telegram-bg: #111c2b;
+  --cta-telegram-text: #f7fbff;
+  --cta-telegram-border: rgba(115, 173, 255, .44);
+  --cta-login-bg: #111c2b;
+  --cta-login-text: #f7fbff;
+  --cta-login-border: rgba(115, 173, 255, .44);
 }
 
 :root[data-theme="light"],
 :root[data-theme-style][data-theme="light"] {
   color-scheme: light !important;
-  --bg: #FAF9F6 !important;
-  --app-bg: #FAF9F6 !important;
-  --sidebar: #FAF9F6 !important;
-  --surface: #fffefa !important;
-  --surface-soft: #f4f2ec !important;
-  --surface-raised: #fffefa !important;
-  --panel: #fffefa !important;
-  --panel-soft: #f4f2ec !important;
-  --panel-strong: #edeae2 !important;
-  --card: #fffefa !important;
-  --border: rgba(1, 0, 19, .12) !important;
-  --border-strong: rgba(1, 0, 19, .28) !important;
-  --text: #010013 !important;
-  --muted: rgba(1, 0, 19, .62) !important;
-  --soft-text: rgba(1, 0, 19, .78) !important;
-  --brand-text: #010013 !important;
-  --accent: #010013 !important;
-  --accent-strong: #010013 !important;
-  --accent-soft: rgba(1, 0, 19, .07) !important;
+  --bg: #f4f7fb !important;
+  --app-bg: #f4f7fb !important;
+  --sidebar: #ffffff !important;
+  --surface: #ffffff !important;
+  --surface-soft: #eef3f8 !important;
+  --surface-raised: #ffffff !important;
+  --panel: #ffffff !important;
+  --panel-soft: #f8fafc !important;
+  --panel-strong: #e9eff6 !important;
+  --card: #ffffff !important;
+  --border: rgba(15, 28, 45, .13) !important;
+  --border-strong: rgba(45, 127, 240, .36) !important;
+  --text: #0e1726 !important;
+  --muted: #64748b !important;
+  --soft-text: #334155 !important;
+  --brand-text: #0e1726 !important;
+  --accent: #2d7ff0 !important;
+  --accent-strong: #174f91 !important;
+  --accent-soft: rgba(45, 127, 240, .10) !important;
   --success: #16815b !important;
   --danger: #c43f54 !important;
-  --warning: #8a6728 !important;
-  --ui-page: #FAF9F6;
-  --ui-surface: #fffefa;
-  --ui-surface-2: #f4f2ec;
-  --ui-border: rgba(1, 0, 19, .12);
-  --ui-border-strong: rgba(1, 0, 19, .28);
-  --hero-bg: #FAF9F6;
-  --hero-border: rgba(1, 0, 19, .14);
-  --hero-text: #010013;
-  --hero-company: #010013;
-  --hero-company-hover: #010013;
-  --hero-cta-bg: #fffefa;
-  --hero-cta-text: #010013;
-  --hero-cta-border: rgba(1, 0, 19, .16);
-  --hero-primary-bg: #fffefa;
-  --hero-primary-text: #010013;
-  --hero-primary-border: rgba(1, 0, 19, .22);
-  --card-lift-shadow: rgba(1, 0, 19, .08);
-  --logo-blue: #010013;
-  --logo-blue-strong: #010013;
-  --logo-ice: #f4f2ec;
-  --logo-steel: rgba(1, 0, 19, .62);
-  --cta-primary-bg: #fffefa;
-  --cta-primary-text: #010013;
-  --cta-primary-border: rgba(1, 0, 19, .16);
-  --cta-telegram-bg: #fffefa;
-  --cta-telegram-text: #010013;
-  --cta-telegram-border: rgba(1, 0, 19, .16);
-  --cta-login-bg: #fffefa;
-  --cta-login-text: #010013;
-  --cta-login-border: rgba(1, 0, 19, .16);
+  --warning: #986820 !important;
+  --ui-page: #f4f7fb;
+  --ui-surface: #ffffff;
+  --ui-surface-2: #eef3f8;
+  --ui-border: rgba(15, 28, 45, .13);
+  --ui-border-strong: rgba(45, 127, 240, .36);
+  --hero-bg: linear-gradient(135deg, #ffffff 0%, #f3f8ff 34%, #dcecff 67%, #f8fbff 100%);
+  --hero-border: rgba(45, 127, 240, .28);
+  --hero-text: #0e1726;
+  --hero-company: #174f91;
+  --hero-company-hover: #2d6fbd;
+  --hero-cta-bg: rgba(255, 255, 255, .82);
+  --hero-cta-text: #10213b;
+  --hero-cta-border: rgba(45, 127, 240, .36);
+  --hero-primary-bg: rgba(255, 255, 255, .94);
+  --hero-primary-text: #0e1726;
+  --hero-primary-border: rgba(23, 79, 145, .42);
+  --card-lift-shadow: rgba(15, 28, 45, .08);
+  --logo-blue: #2d6fbd;
+  --logo-blue-strong: #174f91;
+  --logo-ice: #dcecff;
+  --logo-steel: #52677f;
+  --cta-primary-bg: #ffffff;
+  --cta-primary-text: #10213b;
+  --cta-primary-border: rgba(45, 127, 240, .38);
+  --cta-telegram-bg: #ffffff;
+  --cta-telegram-text: #10213b;
+  --cta-telegram-border: rgba(45, 127, 240, .38);
+  --cta-login-bg: #ffffff;
+  --cta-login-text: #10213b;
+  --cta-login-border: rgba(45, 127, 240, .38);
 }
 
 :root[data-theme="dark"],
 :root[data-theme-style][data-theme="dark"] {
   color-scheme: dark !important;
-  --bg: #010013 !important;
-  --app-bg: #010013 !important;
-  --sidebar: #010013 !important;
-  --surface: #060519 !important;
-  --surface-soft: #030217 !important;
-  --surface-raised: #0b0920 !important;
-  --panel: #060519 !important;
-  --panel-soft: #0b0920 !important;
-  --panel-strong: #010013 !important;
-  --card: #060519 !important;
-  --border: rgba(250, 249, 246, .14) !important;
-  --border-strong: rgba(250, 249, 246, .30) !important;
-  --text: #FAF9F6 !important;
-  --muted: rgba(250, 249, 246, .64) !important;
-  --soft-text: rgba(250, 249, 246, .82) !important;
-  --brand-text: #FAF9F6 !important;
-  --accent: #FAF9F6 !important;
-  --accent-strong: #FAF9F6 !important;
-  --accent-soft: rgba(250, 249, 246, .08) !important;
-  --ui-page: #010013;
-  --ui-surface: #060519;
-  --ui-surface-2: #0b0920;
-  --ui-border: rgba(250, 249, 246, .14);
-  --ui-border-strong: rgba(250, 249, 246, .30);
-  --hero-bg: #010013;
-  --hero-border: rgba(250, 249, 246, .16);
-  --hero-text: #FAF9F6;
-  --hero-company: #FAF9F6;
-  --hero-company-hover: #FAF9F6;
-  --hero-cta-bg: #060519;
-  --hero-cta-text: #FAF9F6;
-  --hero-cta-border: rgba(250, 249, 246, .18);
-  --hero-primary-bg: #060519;
-  --hero-primary-text: #FAF9F6;
-  --hero-primary-border: rgba(250, 249, 246, .26);
-  --card-lift-shadow: rgba(0, 0, 0, .30);
-  --logo-blue: #FAF9F6;
-  --logo-blue-strong: #FAF9F6;
-  --logo-ice: #0b0920;
-  --logo-steel: rgba(250, 249, 246, .64);
-  --cta-primary-bg: #060519;
-  --cta-primary-text: #FAF9F6;
-  --cta-primary-border: rgba(250, 249, 246, .18);
-  --cta-telegram-bg: #060519;
-  --cta-telegram-text: #FAF9F6;
-  --cta-telegram-border: rgba(250, 249, 246, .18);
-  --cta-login-bg: #060519;
-  --cta-login-text: #FAF9F6;
-  --cta-login-border: rgba(250, 249, 246, .18);
+  --bg: #07101b !important;
+  --app-bg: #07101b !important;
+  --sidebar: #09131f !important;
+  --surface: #0d1724 !important;
+  --surface-soft: #0a1420 !important;
+  --surface-raised: #111e2d !important;
+  --panel: #0d1724 !important;
+  --panel-soft: #111e2d !important;
+  --panel-strong: #080f19 !important;
+  --card: #0d1724 !important;
+  --border: rgba(169, 187, 207, .18) !important;
+  --border-strong: rgba(115, 173, 255, .46) !important;
+  --text: #f7fbff !important;
+  --muted: #9aabba !important;
+  --soft-text: #d5e0eb !important;
+  --brand-text: #f7fbff !important;
+  --accent: #73adff !important;
+  --accent-strong: #a7d1ff !important;
+  --accent-soft: rgba(115, 173, 255, .12) !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark !important;
+  --bg: #02060b !important;
+  --app-bg: #02060b !important;
+  --sidebar: #050a10 !important;
+  --surface: #070d14 !important;
+  --surface-soft: #050b12 !important;
+  --surface-raised: #0d1622 !important;
+  --panel: #070d14 !important;
+  --panel-soft: #0d1622 !important;
+  --panel-strong: #02060b !important;
+  --card: #070d14 !important;
+  --border: rgba(169, 187, 207, .16) !important;
+  --border-strong: rgba(83, 171, 255, .50) !important;
+  --text: #f8fbff !important;
+  --muted: #91a4b8 !important;
+  --soft-text: #d7e5f7 !important;
+  --brand-text: #ffffff !important;
+  --accent: #53abff !important;
+  --accent-strong: #9bd7ff !important;
+  --accent-soft: rgba(83, 171, 255, .13) !important;
+  --ui-page: #02060b;
+  --ui-surface: #070d14;
+  --ui-surface-2: #0d1622;
+  --hero-bg: linear-gradient(135deg, #02060b 0%, #050b12 33%, #0a2038 68%, #02060b 100%);
+  --hero-border: rgba(83, 171, 255, .36);
+  --hero-text: #ffffff;
+  --hero-company: #9bd7ff;
+  --hero-company-hover: #e5f4ff;
+  --hero-cta-bg: rgba(7, 13, 20, .84);
+  --hero-cta-text: #f8fbff;
+  --hero-cta-border: rgba(155, 215, 255, .40);
+  --hero-primary-bg: rgba(7, 13, 20, .94);
+  --hero-primary-text: #f8fbff;
+  --hero-primary-border: rgba(155, 215, 255, .58);
+  --card-lift-shadow: rgba(0, 0, 0, .24);
+  --cta-primary-bg: #0d1622;
+  --cta-primary-text: #f8fbff;
+  --cta-primary-border: rgba(155, 215, 255, .40);
+  --cta-telegram-bg: #0d1622;
+  --cta-telegram-text: #f8fbff;
+  --cta-telegram-border: rgba(155, 215, 255, .40);
+  --cta-login-bg: #0d1622;
+  --cta-login-text: #f8fbff;
+  --cta-login-border: rgba(155, 215, 255, .40);
 }
 
 *,
@@ -33210,42 +33228,72 @@ body,
 :root[data-theme-style][data-theme="light"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme="light"] .page-frame.page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="light"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
-  --auth-page: #FAF9F6;
-  --auth-panel: #fffefa;
-  --auth-panel-soft: #f4f2ec;
-  --auth-field: #FAF9F6;
-  --auth-border: rgba(1, 0, 19, .14);
-  --auth-border-strong: rgba(1, 0, 19, .28);
-  --auth-text: #010013;
-  --auth-muted: rgba(1, 0, 19, .62);
-  --auth-accent: #010013;
-  --auth-accent-strong: #010013;
-  --auth-brand-panel: #FAF9F6;
-  --auth-brand-text: #010013;
-  --auth-brand-muted: rgba(1, 0, 19, .62);
-  --auth-brand-chip: #fffefa;
-  --auth-brand-chip-border: rgba(1, 0, 19, .14);
+  --auth-page: #f4f8fd;
+  --auth-panel: #ffffff;
+  --auth-panel-soft: #f7faff;
+  --auth-field: #f8fbff;
+  --auth-border: rgba(45, 127, 240, .22);
+  --auth-border-strong: rgba(23, 79, 145, .42);
+  --auth-text: #0e1726;
+  --auth-muted: #52677f;
+  --auth-accent: #174f91;
+  --auth-accent-strong: #0f3e76;
+  --auth-brand-panel:
+    linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, .055) 1px, transparent 1px),
+    linear-gradient(135deg, #0b3f8d 0%, #0a326f 44%, #061b3c 100%);
+  --auth-brand-text: #ffffff;
+  --auth-brand-muted: rgba(235, 246, 255, .86);
+  --auth-brand-chip: rgba(255, 255, 255, .12);
+  --auth-brand-chip-border: rgba(202, 230, 255, .34);
 }
 
 :root[data-theme="dark"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="dark"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme="dark"] .page-frame.page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="dark"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
-  --auth-page: #010013;
-  --auth-panel: #060519;
-  --auth-panel-soft: #0b0920;
-  --auth-field: #010013;
-  --auth-border: rgba(250, 249, 246, .16);
-  --auth-border-strong: rgba(250, 249, 246, .30);
-  --auth-text: #FAF9F6;
-  --auth-muted: rgba(250, 249, 246, .64);
-  --auth-accent: #FAF9F6;
-  --auth-accent-strong: #FAF9F6;
-  --auth-brand-panel: #010013;
-  --auth-brand-text: #FAF9F6;
-  --auth-brand-muted: rgba(250, 249, 246, .64);
-  --auth-brand-chip: #060519;
-  --auth-brand-chip-border: rgba(250, 249, 246, .16);
+  --auth-page: #07101b;
+  --auth-panel: #0d1724;
+  --auth-panel-soft: #111e2d;
+  --auth-field: #0a1420;
+  --auth-border: rgba(115, 173, 255, .28);
+  --auth-border-strong: rgba(158, 202, 255, .52);
+  --auth-text: #f7fbff;
+  --auth-muted: #a9bbcf;
+  --auth-accent: #73adff;
+  --auth-accent-strong: #a7d1ff;
+  --auth-brand-panel:
+    linear-gradient(90deg, rgba(115, 173, 255, .065) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(115, 173, 255, .055) 1px, transparent 1px),
+    linear-gradient(135deg, #050b12 0%, #071321 38%, #0d2945 100%);
+  --auth-brand-text: #f7fbff;
+  --auth-brand-muted: rgba(215, 235, 255, .82);
+  --auth-brand-chip: rgba(115, 173, 255, .10);
+  --auth-brand-chip-border: rgba(158, 202, 255, .30);
+}
+
+:root[data-theme="black"] .page-auto-trade:has(.auto-auth-shell),
+:root[data-theme-style][data-theme="black"] .page-auto-trade:has(.auto-auth-shell),
+:root[data-theme="black"] .page-frame.page-auto-trade:has(.auto-auth-shell),
+:root[data-theme-style][data-theme="black"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
+  --auth-page: #02060b;
+  --auth-panel: #070d14;
+  --auth-panel-soft: #0d1622;
+  --auth-field: #050b12;
+  --auth-border: rgba(83, 171, 255, .32);
+  --auth-border-strong: rgba(155, 215, 255, .56);
+  --auth-text: #f8fbff;
+  --auth-muted: #9fb5ca;
+  --auth-accent: #9bd7ff;
+  --auth-accent-strong: #e5f4ff;
+  --auth-brand-panel:
+    linear-gradient(90deg, rgba(155, 215, 255, .055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(155, 215, 255, .05) 1px, transparent 1px),
+    linear-gradient(135deg, #02060b 0%, #050b12 36%, #0a2038 100%);
+  --auth-brand-text: #ffffff;
+  --auth-brand-muted: rgba(229, 244, 255, .82);
+  --auth-brand-chip: rgba(155, 215, 255, .09);
+  --auth-brand-chip-border: rgba(155, 215, 255, .28);
 }
 
 :root[data-theme] .page-auto-trade:has(.auto-auth-shell),
@@ -33268,6 +33316,7 @@ body,
 :root[data-theme] .page-frame.page-auto-trade .auto-auth-marketing,
 :root[data-theme-style] .page-frame.page-auto-trade .auto-auth-marketing {
   background: var(--auth-brand-panel) !important;
+  background-size: 58px 58px, 58px 58px, 100% 100% !important;
   color: var(--auth-brand-text) !important;
 }
 
@@ -33304,7 +33353,9 @@ body,
 :root[data-theme-style] .page-auto-trade .auto-auth-card,
 :root[data-theme] .page-frame.page-auto-trade .auto-auth-card,
 :root[data-theme-style] .page-frame.page-auto-trade .auto-auth-card {
-  background: var(--auth-page) !important;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--auth-panel-soft) 62%, transparent), transparent 48%),
+    var(--auth-page) !important;
 }
 
 :root[data-theme] .page-auto-trade .auto-auth-card form,
@@ -33363,7 +33414,6 @@ body,
 :root[data-theme-style] .page-frame.page-auto-trade .role-switch button.active {
   background: var(--auth-panel) !important;
   color: var(--auth-accent-strong) !important;
-  box-shadow: 0 14px 34px color-mix(in srgb, var(--auth-text) 10%, transparent) !important;
 }
 
 :root[data-theme] .page-auto-trade .auth-input-shell input,
@@ -33421,9 +33471,9 @@ body,
 :root[data-theme-style] .page-auto-trade .auth-action-stack > button[type="submit"],
 :root[data-theme] .page-frame.page-auto-trade .auth-action-stack > button[type="submit"],
 :root[data-theme-style] .page-frame.page-auto-trade .auth-action-stack > button[type="submit"] {
-  background: var(--auth-accent) !important;
+  background: linear-gradient(135deg, var(--auth-accent), var(--auth-accent-strong)) !important;
   color: #02060b !important;
-  box-shadow: 0 18px 42px color-mix(in srgb, var(--auth-text) 14%, transparent) !important;
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--auth-accent) 24%, transparent) !important;
 }
 
 :root[data-theme="light"] .page-auto-trade .auth-action-stack > button[type="submit"],
