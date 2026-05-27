@@ -34527,3 +34527,441 @@ body,
   }
 }
 
+/* Muslim Solutions UI Reference v1: two themes, restrained surfaces, consistent controls. */
+:root,
+:root[data-theme="dark"],
+:root[data-theme-style][data-theme="dark"] {
+  color-scheme: dark !important;
+  --bg: #010013 !important;
+  --app-bg: #010013 !important;
+  --sidebar: #05041a !important;
+  --surface: #090821 !important;
+  --surface-soft: #06051a !important;
+  --surface-raised: #100f2b !important;
+  --panel: #090821 !important;
+  --panel-soft: #100f2b !important;
+  --panel-strong: #05041a !important;
+  --card: #090821 !important;
+  --border: rgba(196, 205, 238, .14) !important;
+  --border-strong: rgba(96, 152, 255, .46) !important;
+  --text: #f8f9ff !important;
+  --muted: #9da5c2 !important;
+  --soft-text: #d4d8ea !important;
+  --brand-text: #ffffff !important;
+  --accent: #6098ff !important;
+  --accent-strong: #9fc2ff !important;
+  --accent-soft: rgba(96, 152, 255, .12) !important;
+  --success: #28d694 !important;
+  --danger: #ff5f73 !important;
+  --warning: #f0bd63 !important;
+  --hover: rgba(96, 152, 255, .10) !important;
+  --ui-page: #010013 !important;
+  --ui-surface: #090821 !important;
+  --ui-surface-2: #100f2b !important;
+  --ui-border: rgba(196, 205, 238, .14) !important;
+  --ui-border-strong: rgba(96, 152, 255, .46) !important;
+  --hero-bg: #010013 !important;
+  --hero-border: rgba(96, 152, 255, .24) !important;
+  --hero-text: #ffffff !important;
+  --hero-company: #9fc2ff !important;
+  --hero-company-hover: #dce9ff !important;
+  --hero-cta-bg: #090821 !important;
+  --hero-cta-text: #f8f9ff !important;
+  --hero-cta-border: rgba(196, 205, 238, .16) !important;
+  --hero-primary-bg: #f8f9ff !important;
+  --hero-primary-text: #010013 !important;
+  --hero-primary-border: #f8f9ff !important;
+  --card-lift-shadow: rgba(0, 0, 0, .22) !important;
+  --shadow-soft: none !important;
+  --shadow-tight: none !important;
+}
+
+:root[data-theme="light"],
+:root[data-theme-style][data-theme="light"] {
+  color-scheme: light !important;
+  --bg: #FAF9F6 !important;
+  --app-bg: #FAF9F6 !important;
+  --sidebar: #ffffff !important;
+  --surface: #ffffff !important;
+  --surface-soft: #f1eee7 !important;
+  --surface-raised: #f7f4ed !important;
+  --panel: #ffffff !important;
+  --panel-soft: #f7f4ed !important;
+  --panel-strong: #f1eee7 !important;
+  --card: #ffffff !important;
+  --border: rgba(31, 34, 44, .13) !important;
+  --border-strong: rgba(25, 95, 214, .38) !important;
+  --text: #111827 !important;
+  --muted: #647084 !important;
+  --soft-text: #334155 !important;
+  --brand-text: #111827 !important;
+  --accent: #195fd6 !important;
+  --accent-strong: #0e459f !important;
+  --accent-soft: rgba(25, 95, 214, .10) !important;
+  --success: #087a55 !important;
+  --danger: #c03d4f !important;
+  --warning: #93621b !important;
+  --hover: rgba(25, 95, 214, .08) !important;
+  --ui-page: #FAF9F6 !important;
+  --ui-surface: #ffffff !important;
+  --ui-surface-2: #f7f4ed !important;
+  --ui-border: rgba(31, 34, 44, .13) !important;
+  --ui-border-strong: rgba(25, 95, 214, .38) !important;
+  --hero-bg: #FAF9F6 !important;
+  --hero-border: rgba(31, 34, 44, .13) !important;
+  --hero-text: #111827 !important;
+  --hero-company: #0e459f !important;
+  --hero-company-hover: #195fd6 !important;
+  --hero-cta-bg: #ffffff !important;
+  --hero-cta-text: #111827 !important;
+  --hero-cta-border: rgba(31, 34, 44, .13) !important;
+  --hero-primary-bg: #111827 !important;
+  --hero-primary-text: #ffffff !important;
+  --hero-primary-border: #111827 !important;
+  --card-lift-shadow: rgba(31, 34, 44, .08) !important;
+  --shadow-soft: none !important;
+  --shadow-tight: none !important;
+}
+
+:root[data-theme="black"],
+:root[data-theme-style][data-theme="black"] {
+  color-scheme: dark !important;
+  --bg: #010013 !important;
+  --app-bg: #010013 !important;
+  --sidebar: #05041a !important;
+  --surface: #090821 !important;
+  --surface-soft: #06051a !important;
+  --surface-raised: #100f2b !important;
+  --panel: #090821 !important;
+  --panel-soft: #100f2b !important;
+  --panel-strong: #05041a !important;
+  --card: #090821 !important;
+  --border: rgba(196, 205, 238, .14) !important;
+  --border-strong: rgba(96, 152, 255, .46) !important;
+  --text: #f8f9ff !important;
+  --muted: #9da5c2 !important;
+  --soft-text: #d4d8ea !important;
+  --brand-text: #ffffff !important;
+  --accent: #6098ff !important;
+  --accent-strong: #9fc2ff !important;
+  --accent-soft: rgba(96, 152, 255, .12) !important;
+  --ui-page: #010013 !important;
+  --ui-surface: #090821 !important;
+  --ui-surface-2: #100f2b !important;
+  --hero-bg: #010013 !important;
+  --hero-border: rgba(96, 152, 255, .24) !important;
+  --hero-text: #ffffff !important;
+  --hero-company: #9fc2ff !important;
+  --hero-company-hover: #dce9ff !important;
+  --hero-cta-bg: #090821 !important;
+  --hero-cta-text: #f8f9ff !important;
+  --hero-cta-border: rgba(196, 205, 238, .16) !important;
+  --hero-primary-bg: #f8f9ff !important;
+  --hero-primary-text: #010013 !important;
+  --hero-primary-border: #f8f9ff !important;
+}
+
+body,
+#root,
+.app-shell,
+.page-frame,
+.page-home,
+.page-dashboard,
+.page-auto-trade,
+.auto-trade-page {
+  background: var(--app-bg) !important;
+  color: var(--text) !important;
+}
+
+*,
+*::before,
+*::after {
+  text-shadow: none !important;
+}
+
+.shell-header,
+.shell-header.home-header,
+.shell-header.auth-header,
+.shell-header.app-header {
+  background: var(--surface-soft) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+.shell-brand-mark img,
+.brand-logo-mark img,
+.page-home .home-product-lockup img,
+.auth-product-lockup img {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.shell-nav,
+.theme-mode-switch,
+.home-market-switch,
+.venue-switch,
+.spot-futures-switch,
+.range-pills,
+.signal-filters,
+.selection-pill-row,
+.access-filter-pills {
+  background: var(--surface-soft) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+.shell-nav button,
+.shell-header.home-header .market-return-cta,
+.shell-header.auth-header .auth-return-home,
+.home-header-cta,
+.auth-return-home,
+.market-return-cta,
+.session-logout-button,
+.theme-toggle,
+.theme-control .theme-toggle,
+.theme-studio .theme-toggle,
+.notification-settings-trigger,
+.home-market-switch button,
+.venue-switch button,
+.spot-futures-switch button,
+.theme-mode-switch button,
+.range-pills button,
+.signal-filters button,
+.selection-pill-row button,
+.access-filter-pills button {
+  height: 40px !important;
+  min-height: 40px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--soft-text) !important;
+  box-shadow: none !important;
+  filter: none !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  transform: none !important;
+}
+
+.notification-settings-trigger {
+  gap: 10px !important;
+  padding: 0 12px !important;
+}
+
+.notification-settings-title {
+  height: 100% !important;
+  gap: 8px !important;
+}
+
+.notification-settings-trigger strong {
+  min-width: 36px !important;
+  height: 22px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--danger) 11%, var(--surface-raised)) !important;
+  border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--border)) !important;
+  color: var(--danger) !important;
+  box-shadow: none !important;
+  font-size: 10px !important;
+}
+
+.notification-settings.enabled .notification-settings-trigger strong {
+  background: color-mix(in srgb, var(--success) 12%, var(--surface-raised)) !important;
+  border-color: color-mix(in srgb, var(--success) 42%, var(--border)) !important;
+  color: var(--success) !important;
+}
+
+.shell-nav button:hover,
+.shell-nav button.active,
+.shell-nav button.premium:hover,
+.shell-nav button.premium.active,
+.theme-mode-switch button.active,
+.home-market-switch button.active,
+.venue-switch button.active,
+.spot-futures-switch button.active,
+.range-pills button.active,
+.signal-filters button.active,
+.selection-pill-row button.active,
+.access-filter-pills button.active,
+.mobile-bottom-nav button.active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface)) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--accent-strong) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent) !important;
+}
+
+.shell-nav button.premium,
+.shell-nav button.premium:hover {
+  color: var(--soft-text) !important;
+}
+
+.shell-nav button.premium.active,
+.shell-nav button.premium:focus-visible {
+  color: var(--accent-strong) !important;
+}
+
+.page-home .home-launchpad,
+:root[data-theme] .page-home .home-launchpad,
+:root[data-theme-style] .page-home .home-launchpad,
+.market-select-page {
+  background: var(--app-bg) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-secondary,
+.page-home .home-cta-login,
+.home-top-market-card,
+.price-card,
+.market-card,
+.home-intel-card,
+.home-fear-card,
+.home-fear-history-card,
+.home-signal-card,
+.home-leader-card,
+.home-marketcap-shell,
+.home-news-shell,
+.panel,
+.dashboard-card,
+.admin-card,
+.user-card,
+.strategy-card,
+.trade-list,
+.chart-block,
+.trade-ledger-shell,
+.ledger-wallet-panel,
+.ledger-simulation-panel,
+.portfolio-panel,
+.settings-panel,
+.trade-extreme-card,
+.experiment-details-panel,
+.ledger-range-filter,
+.custom-range-panel,
+.signal-filters {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+}
+
+.page-home .home-top-market-card:hover,
+.page-home .home-signal-card:hover,
+.page-home .home-news-card:hover,
+.price-card:hover,
+.market-card:hover,
+.trade-extreme-card:hover {
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface)) !important;
+  border-color: var(--border-strong) !important;
+  box-shadow: none !important;
+  transform: translateY(-1px) !important;
+}
+
+.eyebrow,
+.nav-badge,
+.status-pill,
+.risk-badge,
+.side-badge {
+  background: var(--surface-raised) !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+}
+
+.workspace-status-strip,
+.execution-workspace-title > .nav-badge,
+.execution-content-title > .nav-badge,
+.dashboard-section-title .nav-badge {
+  display: none !important;
+}
+
+.role-switch button.active,
+:root[data-theme] .page-auto-trade .role-switch button.active,
+:root[data-theme-style] .page-auto-trade .role-switch button.active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface)) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--accent-strong) !important;
+  box-shadow: none !important;
+}
+
+.page-auto-trade .auth-action-stack > button[type="submit"],
+:root[data-theme] .page-auto-trade .auth-action-stack > button[type="submit"],
+:root[data-theme-style] .page-auto-trade .auth-action-stack > button[type="submit"] {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.execution-sidebar-main.active,
+.execution-sidebar-group.active .execution-sidebar-main,
+.execution-sidebar-main:hover,
+.execution-sidebar-subnav button.active,
+.execution-sidebar-subnav button:hover {
+  color: var(--accent-strong) !important;
+  border-color: var(--border-strong) !important;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface)) !important;
+  box-shadow: none !important;
+}
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    padding-bottom: 76px !important;
+  }
+
+  .shell-nav {
+    display: none !important;
+  }
+
+  .page-frame {
+    padding: 12px !important;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    z-index: 70;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--surface-soft) 94%, transparent);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .20);
+  }
+
+  .mobile-bottom-nav button {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 3px;
+    min-height: 50px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 850;
+  }
+
+  .mobile-bottom-nav button.active::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    width: 20px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .mobile-bottom-nav svg {
+    color: currentColor;
+    stroke: currentColor;
+  }
+}
+

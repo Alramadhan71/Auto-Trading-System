@@ -293,7 +293,7 @@ type TelegramSubscriber = {
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
 type MarketFamily = 'crypto' | 'us-stocks' | 'saudi-stocks';
-type Theme = 'light' | 'dark' | 'black';
+type Theme = 'light' | 'dark';
 type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
@@ -649,8 +649,7 @@ const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role
 
 const themes: { id: Theme; name: string }[] = [
   { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' },
-  { id: 'black', name: 'Execution' }
+  { id: 'dark', name: 'Dark' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
@@ -901,9 +900,10 @@ function App() {
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
     if (!migratedDefault && (!saved || ['executive', 'navy', 'emerald', 'graphite'].includes(saved))) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
-      return 'black';
+      return 'dark';
     }
-    return themes.some(item => item.id === saved) ? saved as Theme : 'black';
+    if (saved === 'black') return 'dark';
+    return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
@@ -1438,6 +1438,20 @@ function App() {
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
+      {!isMarketPicker && !authEntryPage && <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+        <button type="button" className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}>
+          <Home size={19} />
+          <span>Home</span>
+        </button>
+        <button type="button" className={page === 'dashboard' ? 'active' : ''} onClick={() => navigateToPage('dashboard')}>
+          <BarChart3 size={19} />
+          <span>Research</span>
+        </button>
+        <button type="button" className={page === 'auto-trade' ? 'active' : ''} onClick={openAutoTradeLogin}>
+          <Gauge size={19} />
+          <span>Execution</span>
+        </button>
+      </nav>}
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
         symbol={chartSymbol}
@@ -1972,8 +1986,8 @@ function ThemeStudio({
   onPick: (theme: Theme) => void;
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
-  const nextTheme = currentTheme === 'light' ? 'black' : currentTheme === 'black' ? 'dark' : 'light';
-  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Gauge size={18} /> : <Moon size={18} />;
+  const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
@@ -2011,7 +2025,7 @@ function ThemePanel({
       </header>
       <div className="theme-mode-switch" aria-label="Theme mode">
         {themes.map(item => <button key={item.id} className={currentTheme === item.id ? 'active' : ''} onClick={() => onPick(item.id)}>
-          {item.id === 'light' ? <Sun size={16} /> : item.id === 'black' ? <Gauge size={16} /> : <Moon size={16} />}
+          {item.id === 'light' ? <Sun size={16} /> : <Moon size={16} />}
           <span>{item.name}</span>
         </button>)}
       </div>

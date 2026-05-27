@@ -1,53 +1,101 @@
-# Muslim Soliotions Product Design System
+# Muslim Soliotions Product UI Reference
 
-Use this guide for every Muslim Soliotions product. A product may have its own logo, name, accent, and domain language, but it must still feel like it belongs to one product family.
-
-## Product Lockup
-
-Every product must present identity in this order:
-
-1. Product logo or product mark.
-2. Product name.
-3. `By Muslim Soliotions`.
-
-The logo may change per project, but all marks should share a similar grid, stroke weight, corner radius, and simple geometric construction.
+Use this reference for this product and every Muslim Soliotions product. New pages, fields, cards, filters, and navigation must follow these rules instead of creating page-specific visual decisions.
 
 ## Themes
 
-Each product must support three themes:
+Products support two themes only:
 
-- `Light`: daily work, readability, settings, forms, and general browsing.
-- `Dark`: long sessions, dashboards, and low-light work.
-- `Execution`: high-focus operational mode with stronger contrast, tighter surfaces, clear status colors, and minimal decoration.
+- `Dark`: primary operational theme. Base page color is `#010013`.
+- `Light`: daily readable theme. Base page color is `#FAF9F6`.
 
-Do not hardcode colors in components. Use tokens such as `--bg`, `--panel`, `--panel-strong`, `--border`, `--text`, `--muted`, `--accent`, `--success`, `--danger`, and `--warning`.
+Do not add extra theme modes. The old `Execution` theme is now `Dark`; the old separate dark theme is removed.
+
+## Tokens
+
+Use tokens for all UI:
+
+- Page: `--app-bg`
+- Surface: `--surface`
+- Raised surface: `--surface-raised`
+- Muted surface: `--surface-soft`
+- Border: `--border`
+- Active border: `--border-strong`
+- Text: `--text`
+- Muted text: `--muted`
+- Brand/action color: `--accent`
+
+Do not hardcode colors inside components unless defining tokens.
+
+## Surfaces
+
+Cards, filters, tables, wallets, ledgers, and panels must come from the same surface family. A filter must not look like a different theme from the card next to it.
+
+Use border and spacing for hierarchy before using shadow. Repeated operational cards should have no decorative glow.
+
+## Glow And Effects
+
+Glow is not a decoration system.
+
+Allowed:
+
+- A small active navigation indicator.
+- A critical live/saving/connected state when the state matters.
+
+Avoid:
+
+- Glow under logos.
+- Glow on login role text.
+- Glow on market cards.
+- Glow on normal buttons.
+- Different hover glows per feature.
+
+## Buttons
+
+Button sizes:
+
+- Icon: `36px`
+- Default: `40px`
+- Large action: `48px` or `52px` only when the layout needs it.
+
+Header buttons such as `Execution`, `Alerts`, theme toggle, logout, and back buttons must share the same shell: height, radius, border, padding, font weight, and hover behavior.
+
+Hover is restrained: slight background or border change only. No hover glow and no layout movement in headers.
+
+## Badges
+
+Badges are for state only:
+
+- `Live`
+- `Paused`
+- `Accepted`
+- `Rejected`
+- `Saving`
+- `Connected`
+
+Do not use badges as decoration or repeated section labels.
+
+## Navigation
+
+Desktop navigation:
+
+- Icon and label use muted color by default.
+- Selected item uses brand color and a clear active indicator.
+- No glow-heavy active states.
+
+Mobile navigation:
+
+- Use a bottom navigation bar.
+- Keep it to the primary destinations: Home, Research, Execution.
+- Selected item uses brand color and an active indicator.
+- Do not compress desktop sidebars into long vertical mobile layouts.
 
 ## Layout
 
-Desktop should use wider, denser layouts with clear navigation, dashboards, tables, and multi-column work areas.
+Desktop can be dense, but sections must be flat. Do not create cards inside cards unless the inner card is a repeated data item.
 
-Mobile must not be a smaller desktop. Use focused screens, bottom navigation, compact summaries, sheets for filters, and sticky primary actions when the user is executing a task.
+Mobile needs its own layout. Use compact summaries, bottom navigation, sheets/dropdowns for filters, and horizontal scrolling for dense ledgers when needed.
 
-## Gradients And Effects
+## Implementation Rule
 
-Use gradients only for brand focus, status emphasis, or hero atmosphere. Avoid gradients inside tables, forms, repeated cards, and execution screens.
-
-Use shadows, blur, glow, and animation only to clarify depth, interaction, or state. Effects should never carry the design by themselves.
-
-## AI Prompt
-
-```text
-Design this product as part of the Muslim Soliotions product family.
-
-Always show the product identity as: product logo, product name, and “By Muslim Soliotions”.
-
-Support Light, Dark, and Execution themes using design tokens. Do not hardcode visual values inside individual components.
-
-Keep the interface technical, clean, structured, and operational. Use restrained surfaces, consistent spacing, 6px-10px radius, clear hierarchy, and status colors only when they communicate state.
-
-Mobile must be designed as its own experience, not a compressed desktop. Use bottom navigation, focused screens, compact summaries, sheets for filters, and sticky execution actions where useful.
-
-Use gradients only when they communicate focus, status, or brand atmosphere. Avoid decorative gradients in tables, forms, and repeated operational cards.
-
-Every new button, card, form, table, modal, and page must fit the same tokens, radius, spacing, typography, and theme behavior.
-```
+When adding UI, first choose the existing token and component pattern. If a new pattern is needed, add it to this reference before using it in the app.
