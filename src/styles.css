@@ -23662,15 +23662,15 @@ textarea,
 
 .shell-header.auth-header .auth-return-home,
 .shell-header.auth-header .theme-control .theme-toggle {
-  height: 42px !important;
-  min-height: 42px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   min-width: 132px !important;
   padding: 0 16px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  border-radius: 999px !important;
+  border-radius: 12px !important;
   border: 1px solid var(--border) !important;
   background: color-mix(in srgb, var(--panel-strong) 88%, transparent) !important;
   color: var(--text) !important;
@@ -23682,8 +23682,8 @@ textarea,
 
 .shell-header.auth-header .theme-control,
 .shell-header.auth-header .theme-studio {
-  height: 42px !important;
-  min-height: 42px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   padding: 0 !important;
   border: 0 !important;
   background: transparent !important;
@@ -33239,9 +33239,9 @@ body,
   --auth-accent: #174f91;
   --auth-accent-strong: #0f3e76;
   --auth-brand-panel:
-    linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 255, 255, .055) 1px, transparent 1px),
-    linear-gradient(135deg, #0b3f8d 0%, #0a326f 44%, #061b3c 100%);
+    linear-gradient(90deg, rgba(255, 255, 255, .032) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, .028) 1px, transparent 1px),
+    linear-gradient(135deg, #0b3f8d 0%, #0d4a97 34%, #eef5fc 100%);
   --auth-brand-text: #ffffff;
   --auth-brand-muted: rgba(235, 246, 255, .86);
   --auth-brand-chip: rgba(255, 255, 255, .12);
@@ -33263,9 +33263,9 @@ body,
   --auth-accent: #73adff;
   --auth-accent-strong: #a7d1ff;
   --auth-brand-panel:
-    linear-gradient(90deg, rgba(115, 173, 255, .065) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(115, 173, 255, .055) 1px, transparent 1px),
-    linear-gradient(135deg, #050b12 0%, #071321 38%, #0d2945 100%);
+    linear-gradient(90deg, rgba(115, 173, 255, .034) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(115, 173, 255, .03) 1px, transparent 1px),
+    linear-gradient(135deg, #050b12 0%, #071321 42%, #07101b 100%);
   --auth-brand-text: #f7fbff;
   --auth-brand-muted: rgba(215, 235, 255, .82);
   --auth-brand-chip: rgba(115, 173, 255, .10);
@@ -33287,9 +33287,9 @@ body,
   --auth-accent: #9bd7ff;
   --auth-accent-strong: #e5f4ff;
   --auth-brand-panel:
-    linear-gradient(90deg, rgba(155, 215, 255, .055) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(155, 215, 255, .05) 1px, transparent 1px),
-    linear-gradient(135deg, #02060b 0%, #050b12 36%, #0a2038 100%);
+    linear-gradient(90deg, rgba(155, 215, 255, .03) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(155, 215, 255, .026) 1px, transparent 1px),
+    linear-gradient(135deg, #02060b 0%, #050b12 42%, #02060b 100%);
   --auth-brand-text: #ffffff;
   --auth-brand-muted: rgba(229, 244, 255, .82);
   --auth-brand-chip: rgba(155, 215, 255, .09);
@@ -33316,7 +33316,7 @@ body,
 :root[data-theme] .page-frame.page-auto-trade .auto-auth-marketing,
 :root[data-theme-style] .page-frame.page-auto-trade .auto-auth-marketing {
   background: var(--auth-brand-panel) !important;
-  background-size: 58px 58px, 58px 58px, 100% 100% !important;
+  background-size: 72px 72px, 72px 72px, 100% 100% !important;
   color: var(--auth-brand-text) !important;
 }
 
@@ -33406,6 +33406,7 @@ body,
 :root[data-theme] .page-frame.page-auto-trade .auth-message,
 :root[data-theme-style] .page-frame.page-auto-trade .auth-message {
   color: var(--auth-muted) !important;
+  text-shadow: none !important;
 }
 
 :root[data-theme] .page-auto-trade .role-switch button.active,
@@ -33414,6 +33415,8 @@ body,
 :root[data-theme-style] .page-frame.page-auto-trade .role-switch button.active {
   background: var(--auth-panel) !important;
   color: var(--auth-accent-strong) !important;
+  box-shadow: 0 1px 0 color-mix(in srgb, #ffffff 18%, transparent) inset, 0 1px 3px color-mix(in srgb, #000000 14%, transparent) !important;
+  text-shadow: none !important;
 }
 
 :root[data-theme] .page-auto-trade .auth-input-shell input,
@@ -33473,7 +33476,8 @@ body,
 :root[data-theme-style] .page-frame.page-auto-trade .auth-action-stack > button[type="submit"] {
   background: linear-gradient(135deg, var(--auth-accent), var(--auth-accent-strong)) !important;
   color: #02060b !important;
-  box-shadow: 0 16px 34px color-mix(in srgb, var(--auth-accent) 24%, transparent) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 :root[data-theme="light"] .page-auto-trade .auth-action-stack > button[type="submit"],
@@ -34215,7 +34219,8 @@ body,
 
 .shell-tools .theme-toggle,
 .alerts-button {
-  min-height: 36px !important;
+  height: 40px !important;
+  min-height: 40px !important;
   border-radius: 12px !important;
 }
 
