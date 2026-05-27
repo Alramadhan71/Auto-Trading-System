@@ -6348,12 +6348,10 @@ video {
   }
 }
 .ledger-simulation-panel {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px;
+  padding: 0;
   display: grid;
   gap: 12px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 76%, transparent), color-mix(in srgb, var(--panel-strong) 96%, black));
+  background: transparent;
 }
 .ledger-simulation-head {
   display: flex;
@@ -6377,8 +6375,10 @@ video {
 .experiment-details-panel {
   display: grid;
   gap: 6px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--panel-strong) 78%, transparent);
 }
 .experiment-details-panel div {
   display: flex;
@@ -6478,32 +6478,22 @@ video {
   background: #111316;
   color: #f4f7fb;
 }
-.ledger-option-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+.ledger-dropdown-control {
+  position: relative;
+  display: block;
 }
-.ledger-option-row button {
-  min-width: 0;
-  min-height: 38px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--panel-strong) 88%, black);
-  color: var(--muted);
-  font: inherit;
+.ledger-dropdown-control select {
+  cursor: pointer;
   font-size: 12px;
   font-weight: 800;
-  line-height: 1.15;
-  padding: 6px 7px;
 }
-.ledger-option-row button:hover {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border-strong));
-  color: var(--text);
-}
-.ledger-option-row button.active {
-  border-color: color-mix(in srgb, var(--accent) 70%, var(--border-strong));
-  background: color-mix(in srgb, var(--accent) 16%, var(--panel-strong));
-  color: var(--text);
+.ledger-dropdown-control svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
 }
 .ledger-simulation-grid input[type="number"] {
   appearance: textfield;
@@ -6752,6 +6742,16 @@ video {
 .simulation-compare-card {
   min-height: 158px;
   cursor: default;
+}
+.simulation-compare-card > small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.simulation-compare-card .simulation-net-pnl {
+  font-size: clamp(30px, 2.7vw, 42px);
+  line-height: .95;
 }
 .simulation-compare-card div {
   display: grid;
@@ -15897,12 +15897,6 @@ video {
     padding: 6px 7px;
     border-radius: 9px;
     font-size: 11px;
-  }
-
-  .page-dashboard .ledger-option-row button {
-    min-height: 30px;
-    padding: 5px 6px;
-    font-size: 9px;
   }
 
   .page-dashboard .ledger-save-state {

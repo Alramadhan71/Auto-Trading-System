@@ -7436,16 +7436,38 @@ function SimulationCompare({ signals, stats, tickers, futuresTickers }: { signal
     <div className="simulation-compare-grid">
       {experimentSummaries.map(({ experiment, rows, pnl }) => <article key={experiment.id} className="trade-extreme-card simulation-compare-card">
         <span>{experiment.name}</span>
-        <strong className={pnl.netPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(pnl.netPnl)}</strong>
-        <small>{`Net ${formatSignedUsdtValue(pnl.netUsdt)}`}</small>
+        <small>Net PnL</small>
+        <strong className={`simulation-net-pnl ${pnl.netPnl >= 0 ? 'good' : 'bad'}`}>{formatSignedPct(pnl.netPnl)}</strong>
         <div>
-          <b>Open</b><span className={pnl.openPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(pnl.openPnl)}</span>
-          <b>Closed</b><span className={pnl.closedPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(pnl.closedPnl)}</span>
+          <b>Open PnL</b><span className={pnl.openPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(pnl.openPnl)}</span>
+          <b>Closed PnL</b><span className={pnl.closedPnl >= 0 ? 'good' : 'bad'}>{formatSignedPct(pnl.closedPnl)}</span>
           <b>Wins / Losses</b><span><i className="good">{rows.filter(row => row.status === 'WIN').length}</i> / <i className="bad">{rows.filter(row => row.status === 'LOSS').length}</i></span>
         </div>
       </article>)}
     </div>
   </section>;
+}
+
+function LedgerOptionDropdown<T extends string>({
+  label,
+  value,
+  options,
+  onChange
+}: {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (value: T) => void;
+}) {
+  return <label className="ledger-option-field ledger-dropdown-field">
+    <span>{label}</span>
+    <span className="ledger-dropdown-control">
+      <select value={value} onChange={event => onChange(event.target.value as T)}>
+        {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+      </select>
+      <ChevronDown size={16} aria-hidden="true" />
+    </span>
+  </label>;
 }
 
 function SignalFilterBar({
@@ -8219,6 +8241,7 @@ function PerformanceChart({
   const acceptedLedgerPnlCards = useMemo(() => summarizeTradeRowPnl(acceptedTradeRows), [acceptedTradeRows]);
   const activeSimulationExperiment = simulationNavItems.find(item => item.id === simulationLedgerId) ?? simulationNavItems[0];
   const activeExperimentDetails = simulationExperiments.find(experiment => experiment.id === simulationLedgerId);
+  const hasExperimentSimulationControls = simulationLedgerId !== 'all-strategies';
   const experimentSpotCapital = (ledgerSimulationDraft?.spotCapitalUsdt ?? 0) + acceptedLedgerPnlCards.spotUsdt;
   const experimentFuturesCapital = (ledgerSimulationDraft?.futuresCapitalUsdt ?? 0) + acceptedLedgerPnlCards.futuresUsdt;
   const experimentCurrentCapital = experimentSpotCapital + experimentFuturesCapital;
@@ -8541,14 +8564,14 @@ function PerformanceChart({
         setTimeframeFilter={setLedgerTimeframeFilter}
         counts={filterCounts}
       />
-      {ledgerSimulationDraft && <div className="ledger-simulation-panel">
-        {activeExperimentDetails && <section className="experiment-details-panel">
+      {hasExperimentSimulationControls && activeExperimentDetails && <section className="experiment-details-panel">
           <div>
             <span>Experiment Details</span>
             <strong>Methodology</strong>
           </div>
           <p>{activeExperimentDetails.methodology}</p>
         </section>}
+      {hasExperimentSimulationControls && ledgerSimulationDraft && <div className="ledger-simulation-panel">
         <div className="ledger-simulation-head">
           <div>
             <span>Virtual Wallet</span>
@@ -8573,12 +8596,12 @@ function PerformanceChart({
               <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('futuresMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('futuresMaxOpenTrades')} onChange={event => updateLedgerNumberInput('futuresMaxOpenTrades', event.target.value)} /></label>
               <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('futuresMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('futuresMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('futuresMinNotionalUsdt', event.target.value)} /></label>
               <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={getLedgerNumberInputValue('futuresLeverage')} onBlur={() => clearLedgerNumberInput('futuresLeverage')} onChange={event => updateLedgerNumberInput('futuresLeverage', event.target.value)} /></label>
-              <label className="ledger-option-field"><span>Direction</span><div className="ledger-option-row">{ledgerDirectionOptions.map(option => <button key={option.value} type="button" className={ledgerSimulationDraft.allowedDirection === option.value ? 'active' : ''} onClick={() => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection: option.value })}>{option.label}</button>)}</div></label>
+              <LedgerOptionDropdown label="Direction" value={ledgerSimulationDraft.allowedDirection} options={ledgerDirectionOptions} onChange={allowedDirection => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection })} />
             </div>
           </section>
         </div>
         <div className="ledger-simulation-grid ledger-shared-grid">
-          <label className="ledger-option-field"><span>Market Scope</span><div className="ledger-option-row">{ledgerMarketScopeOptions.map(option => <button key={option.value} type="button" className={ledgerSimulationDraft.marketScope === option.value ? 'active' : ''} onClick={() => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope: option.value })}>{option.label}</button>)}</div></label>
+          <LedgerOptionDropdown label="Market Scope" value={ledgerSimulationDraft.marketScope} options={ledgerMarketScopeOptions} onChange={marketScope => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope })} />
         </div>
       </div>}
         {tradeRows.length === 0 && <p className="empty">No trades generated for this selection yet.</p>}
