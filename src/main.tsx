@@ -194,6 +194,24 @@ const defaultLedgerSimulationSettings: LedgerSimulationSettings = {
   maxSameMarketDirectionOpen: 1,
   maxSameBaseAssetOpen: 1
 };
+type LedgerNumberField =
+  | 'spotCapitalUsdt'
+  | 'spotMaxOpenTrades'
+  | 'spotMinNotionalUsdt'
+  | 'futuresCapitalUsdt'
+  | 'futuresMaxOpenTrades'
+  | 'futuresMinNotionalUsdt'
+  | 'futuresLeverage';
+const ledgerDirectionOptions: { value: LedgerSimulationSettings['allowedDirection']; label: string }[] = [
+  { value: 'both', label: 'Both' },
+  { value: 'long-only', label: 'Long only' },
+  { value: 'short-only', label: 'Short only' }
+];
+const ledgerMarketScopeOptions: { value: LedgerSimulationSettings['marketScope']; label: string }[] = [
+  { value: 'both', label: 'Spot + Futures' },
+  { value: 'spot', label: 'Spot only' },
+  { value: 'futures', label: 'Futures only' }
+];
 const defaultLedgerSimulationSnapshot = (settings = defaultLedgerSimulationSettings): LedgerSimulationSnapshot => {
   const spotDeployable = settings.spotCapitalUsdt * (1 - settings.spotReserveRatio / 100);
   const futuresDeployable = settings.futuresCapitalUsdt * (1 - settings.futuresReserveRatio / 100);
@@ -724,16 +742,16 @@ type SimulationExperimentId = 'experiment-1' | 'experiment-2' | 'experiment-3' |
 type SimulationLedgerId = 'all-strategies' | SimulationExperimentId;
 type SimulationViewId = SimulationLedgerId | 'compare';
 
-const simulationExperiments: { id: SimulationExperimentId; name: string }[] = [
-  { id: 'experiment-1', name: 'Experiment 1' },
-  { id: 'experiment-2', name: 'Experiment 2' },
-  { id: 'experiment-3', name: 'Experiment 3' },
-  { id: 'experiment-4', name: 'Experiment 4' }
+const simulationExperiments: { id: SimulationExperimentId; name: string; methodology: string }[] = [
+  { id: 'experiment-1', name: 'Experiment 1', methodology: 'Baseline replay for generated trades before applying specialized experiment filters.' },
+  { id: 'experiment-2', name: 'Experiment 2', methodology: 'Medium-risk signals with confidence at 68% or higher and risk capped at 1.6%.' },
+  { id: 'experiment-3', name: 'Experiment 3', methodology: 'Momentum-biased sample using high-risk signals, profit targets from 2.2%, or reward multiples from 2.4R.' },
+  { id: 'experiment-4', name: 'Experiment 4', methodology: 'Controlled-risk sample capped at 1.2% risk with at least 1.8R reward and 62% confidence.' }
 ];
 
 const simulationNavItems: { id: SimulationViewId; name: string }[] = [
-  { id: 'all-strategies', name: 'All Strategies' },
-  { id: 'compare', name: 'Compare' },
+  { id: 'all-strategies', name: 'Unfiltered Trades' },
+  { id: 'compare', name: 'Benchmark' },
   ...simulationExperiments
 ];
 
@@ -1352,7 +1370,7 @@ function App() {
         </button>
         {!authEntryPage && !isMarketPicker && page !== 'auto-trade' && page !== 'dashboard' && <nav className="shell-nav" aria-label="Primary navigation">
           <button className={page === 'home' ? 'active' : ''} onClick={() => navigateToPage('home')}><span>{marketLabel}</span></button>
-          <button onClick={() => navigateToPage('dashboard')}><span>Dashboard</span></button>
+          <button onClick={() => navigateToPage('dashboard')}><span>Research Lab</span></button>
           <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
@@ -5732,7 +5750,7 @@ function AutoTradePage({
           <span>Workspace</span>
           <button type="button" className="execution-sidebar-main" onClick={onDashboard}>
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
-            <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
+            <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
           <button type="button" className="execution-sidebar-main active">
             <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
@@ -7183,7 +7201,7 @@ function DashboardPage({
       <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
         <div className="execution-sidebar-brand">
           <div>
-            <strong>Dashboard</strong>
+            <strong>Research Lab</strong>
             <span>Simulation console</span>
           </div>
         </div>
@@ -7197,7 +7215,7 @@ function DashboardPage({
           <span>Workspace</span>
           <button type="button" className="execution-sidebar-main active">
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
-            <span className="execution-sidebar-copy"><strong>Dashboard</strong></span>
+            <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
           <button type="button" className="execution-sidebar-main" onClick={onExecution}>
             <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
@@ -7275,7 +7293,7 @@ function DashboardPage({
         <SidebarAvatarCropper editor={avatarEditor} />
         <div id="dashboard-overview" className="auto-trade-headbar execution-content-header">
           <div className="execution-content-title">
-            <span>Dashboard Console</span>
+            <span>Research Lab</span>
             <h1>{`Ready for today, ${activeName}`}</h1>
           </div>
         </div>
@@ -7414,7 +7432,7 @@ function SimulationCompare({ signals, stats, tickers, futuresTickers }: { signal
     return { experiment, rows, pnl: summarizeTradeRowPnl(rows) };
   }), [futuresTickers, signals, strategyRiskMap, tickers]);
   return <section className="simulation-compare-panel">
-    <div className="section-title compact dashboard-section-title"><h2>Simulation Compare</h2></div>
+    <div className="section-title compact dashboard-section-title"><h2>Simulation Benchmark</h2></div>
     <div className="simulation-compare-grid">
       {experimentSummaries.map(({ experiment, rows, pnl }) => <article key={experiment.id} className="trade-extreme-card simulation-compare-card">
         <span>{experiment.name}</span>
@@ -8050,6 +8068,7 @@ function PerformanceChart({
   const [ledgerSimulationSettings, setLedgerSimulationSettings] = useState<LedgerSimulationSettings | null>(null);
   const [ledgerSimulationDraft, setLedgerSimulationDraft] = useState<LedgerSimulationSettings | null>(null);
   const [ledgerSimulationSnapshot, setLedgerSimulationSnapshot] = useState<LedgerSimulationSnapshot | null>(null);
+  const [ledgerNumberInputs, setLedgerNumberInputs] = useState<Partial<Record<LedgerNumberField, string>>>({});
   const [ledgerSimulationSaving, setLedgerSimulationSaving] = useState(false);
   const [chartTrade, setChartTrade] = useState<TradeChartTrade | null>(null);
   const [ledgerRange, setLedgerRange] = useState<PerformanceRange>('24h');
@@ -8199,6 +8218,7 @@ function PerformanceChart({
   const metricPnlCards = useMemo(() => summarizeTradeRowPnl(metricRows), [metricRows]);
   const acceptedLedgerPnlCards = useMemo(() => summarizeTradeRowPnl(acceptedTradeRows), [acceptedTradeRows]);
   const activeSimulationExperiment = simulationNavItems.find(item => item.id === simulationLedgerId) ?? simulationNavItems[0];
+  const activeExperimentDetails = simulationExperiments.find(experiment => experiment.id === simulationLedgerId);
   const experimentSpotCapital = (ledgerSimulationDraft?.spotCapitalUsdt ?? 0) + acceptedLedgerPnlCards.spotUsdt;
   const experimentFuturesCapital = (ledgerSimulationDraft?.futuresCapitalUsdt ?? 0) + acceptedLedgerPnlCards.futuresUsdt;
   const experimentCurrentCapital = experimentSpotCapital + experimentFuturesCapital;
@@ -8333,6 +8353,24 @@ function PerformanceChart({
     setFocusedTradeId(null);
     setLedgerStatusFilter(prev => prev === 'closed' ? 'all' : 'closed');
     resetLedgerScroll();
+  };
+  const getLedgerNumberInputValue = (field: LedgerNumberField) => {
+    if (!ledgerSimulationDraft) return '';
+    return ledgerNumberInputs[field] ?? String(ledgerSimulationDraft[field]);
+  };
+  const updateLedgerNumberInput = (field: LedgerNumberField, rawValue: string) => {
+    setLedgerNumberInputs(prev => ({ ...prev, [field]: rawValue }));
+    if (!ledgerSimulationDraft || rawValue.trim() === '') return;
+    const value = Number(rawValue);
+    if (!Number.isFinite(value)) return;
+    setLedgerSimulationDraft(current => current ? { ...current, [field]: value } : current);
+  };
+  const clearLedgerNumberInput = (field: LedgerNumberField) => {
+    if (ledgerNumberInputs[field] === '') return;
+    setLedgerNumberInputs(prev => {
+      const { [field]: _field, ...rest } = prev;
+      return rest;
+    });
   };
   const saveLedgerSimulation = async (nextSettings = ledgerSimulationDraft) => {
     if (!nextSettings) return;
@@ -8504,6 +8542,13 @@ function PerformanceChart({
         counts={filterCounts}
       />
       {ledgerSimulationDraft && <div className="ledger-simulation-panel">
+        {activeExperimentDetails && <section className="experiment-details-panel">
+          <div>
+            <span>Experiment Details</span>
+            <strong>Methodology</strong>
+          </div>
+          <p>{activeExperimentDetails.methodology}</p>
+        </section>}
         <div className="ledger-simulation-head">
           <div>
             <span>Virtual Wallet</span>
@@ -8516,24 +8561,24 @@ function PerformanceChart({
           <section className="ledger-wallet-panel ledger-wallet-spot">
             <div className="ledger-wallet-head"><span>Spot Wallet</span><strong>{`${experimentSpotCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.spotUsdt)} experiment PnL`}</small></div>
             <div className="ledger-simulation-grid wallet-grid">
-              <label><span>Capital</span><input type="number" min={0} step={5} value={ledgerSimulationDraft.spotCapitalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotCapitalUsdt: Number(event.target.value) })} /></label>
-              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={ledgerSimulationDraft.spotMaxOpenTrades} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotMaxOpenTrades: Number(event.target.value) })} /></label>
-              <label><span>Min Order</span><input type="number" min={1} step={1} value={ledgerSimulationDraft.spotMinNotionalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, spotMinNotionalUsdt: Number(event.target.value) })} /></label>
+              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('spotCapitalUsdt')} onBlur={() => clearLedgerNumberInput('spotCapitalUsdt')} onChange={event => updateLedgerNumberInput('spotCapitalUsdt', event.target.value)} /></label>
+              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('spotMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('spotMaxOpenTrades')} onChange={event => updateLedgerNumberInput('spotMaxOpenTrades', event.target.value)} /></label>
+              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('spotMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('spotMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('spotMinNotionalUsdt', event.target.value)} /></label>
             </div>
           </section>
           <section className="ledger-wallet-panel ledger-wallet-futures">
             <div className="ledger-wallet-head"><span>Futures Wallet</span><strong>{`${experimentFuturesCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.futuresUsdt)} experiment PnL`}</small></div>
             <div className="ledger-simulation-grid wallet-grid">
-              <label><span>Capital</span><input type="number" min={0} step={5} value={ledgerSimulationDraft.futuresCapitalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresCapitalUsdt: Number(event.target.value) })} /></label>
-              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={ledgerSimulationDraft.futuresMaxOpenTrades} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresMaxOpenTrades: Number(event.target.value) })} /></label>
-              <label><span>Min Order</span><input type="number" min={1} step={1} value={ledgerSimulationDraft.futuresMinNotionalUsdt} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresMinNotionalUsdt: Number(event.target.value) })} /></label>
-              <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={ledgerSimulationDraft.futuresLeverage} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, futuresLeverage: Number(event.target.value) })} /></label>
-              <label><span>Direction</span><select value={ledgerSimulationDraft.allowedDirection} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection: event.target.value as LedgerSimulationSettings['allowedDirection'] })}><option value="both">Both</option><option value="long-only">Long only</option><option value="short-only">Short only</option></select></label>
+              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('futuresCapitalUsdt')} onBlur={() => clearLedgerNumberInput('futuresCapitalUsdt')} onChange={event => updateLedgerNumberInput('futuresCapitalUsdt', event.target.value)} /></label>
+              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('futuresMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('futuresMaxOpenTrades')} onChange={event => updateLedgerNumberInput('futuresMaxOpenTrades', event.target.value)} /></label>
+              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('futuresMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('futuresMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('futuresMinNotionalUsdt', event.target.value)} /></label>
+              <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={getLedgerNumberInputValue('futuresLeverage')} onBlur={() => clearLedgerNumberInput('futuresLeverage')} onChange={event => updateLedgerNumberInput('futuresLeverage', event.target.value)} /></label>
+              <label className="ledger-option-field"><span>Direction</span><div className="ledger-option-row">{ledgerDirectionOptions.map(option => <button key={option.value} type="button" className={ledgerSimulationDraft.allowedDirection === option.value ? 'active' : ''} onClick={() => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection: option.value })}>{option.label}</button>)}</div></label>
             </div>
           </section>
         </div>
         <div className="ledger-simulation-grid ledger-shared-grid">
-          <label><span>Market Scope</span><select value={ledgerSimulationDraft.marketScope} onChange={event => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope: event.target.value as LedgerSimulationSettings['marketScope'] })}><option value="both">Spot + Futures</option><option value="spot">Spot only</option><option value="futures">Futures only</option></select></label>
+          <label className="ledger-option-field"><span>Market Scope</span><div className="ledger-option-row">{ledgerMarketScopeOptions.map(option => <button key={option.value} type="button" className={ledgerSimulationDraft.marketScope === option.value ? 'active' : ''} onClick={() => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope: option.value })}>{option.label}</button>)}</div></label>
         </div>
       </div>}
         {tradeRows.length === 0 && <p className="empty">No trades generated for this selection yet.</p>}
