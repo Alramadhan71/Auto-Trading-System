@@ -649,8 +649,7 @@ const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role
 
 const themes: { id: Theme; name: string }[] = [
   { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' },
-  { id: 'black', name: 'Execution' }
+  { id: 'black', name: 'Dark' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
@@ -903,6 +902,7 @@ function App() {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
       return 'black';
     }
+    if (saved === 'dark') return 'black';
     return themes.some(item => item.id === saved) ? saved as Theme : 'black';
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
@@ -1972,7 +1972,7 @@ function ThemeStudio({
   onPick: (theme: Theme) => void;
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
-  const nextTheme = currentTheme === 'light' ? 'black' : currentTheme === 'black' ? 'dark' : 'light';
+  const nextTheme = currentTheme === 'light' ? 'black' : 'light';
   const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Gauge size={18} /> : <Moon size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
