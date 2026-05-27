@@ -6450,8 +6450,7 @@ video {
 .ledger-option-field {
   min-width: 0;
 }
-.ledger-simulation-grid input,
-.ledger-simulation-grid select {
+.ledger-simulation-grid input {
   width: 100%;
   min-width: 0;
   border: 1px solid var(--border);
@@ -6461,39 +6460,73 @@ video {
   padding: 8px 9px;
   font: inherit;
 }
-.ledger-simulation-grid select {
-  appearance: none;
-  background:
-    linear-gradient(45deg, transparent 50%, var(--muted) 50%) right 16px center / 6px 6px no-repeat,
-    linear-gradient(135deg, var(--muted) 50%, transparent 50%) right 11px center / 6px 6px no-repeat,
-    linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 80%, black), color-mix(in srgb, var(--panel-strong) 96%, black));
-  padding-right: 30px;
-}
-.ledger-simulation-grid select:focus {
-  outline: none;
-  border-color: color-mix(in srgb, var(--warning) 48%, var(--border-strong));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 14%, transparent);
-}
-.ledger-simulation-grid option {
-  background: #111316;
-  color: #f4f7fb;
+.ledger-dropdown-field {
+  display: grid;
+  gap: 5px;
 }
 .ledger-dropdown-control {
   position: relative;
   display: block;
 }
-.ledger-dropdown-control select {
+.ledger-dropdown-trigger {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-soft) 78%, transparent), color-mix(in srgb, var(--panel-strong) 96%, black));
+  color: var(--text);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 30px 8px 9px;
+  text-align: left;
+}
+.ledger-dropdown-trigger strong {
   font-size: 12px;
   font-weight: 800;
+  line-height: 1.2;
 }
 .ledger-dropdown-control svg {
   position: absolute;
   right: 10px;
-  top: 50%;
+  top: 18px;
   transform: translateY(-50%);
   color: var(--muted);
   pointer-events: none;
+}
+.ledger-dropdown-field.open .ledger-dropdown-control svg {
+  color: var(--text);
+}
+.ledger-dropdown-menu {
+  position: absolute;
+  z-index: 8;
+  inset: calc(100% + 5px) 0 auto 0;
+  display: grid;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel-strong) 96%, black);
+  box-shadow: 0 18px 36px rgba(0,0,0,.28);
+}
+.ledger-dropdown-menu button {
+  min-height: 32px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 8px;
+  text-align: left;
+}
+.ledger-dropdown-menu button:hover,
+.ledger-dropdown-menu button.active {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel-strong));
+  color: var(--text);
 }
 .ledger-simulation-grid input[type="number"] {
   appearance: textfield;
@@ -15892,12 +15925,13 @@ video {
   }
 
   .page-dashboard .ledger-simulation-grid input,
-  .page-dashboard .ledger-simulation-grid select {
+  .page-dashboard .ledger-dropdown-trigger {
     min-height: 30px;
-    padding: 6px 7px;
+    padding: 6px 24px 6px 7px;
     border-radius: 9px;
     font-size: 11px;
   }
+  .page-dashboard .ledger-dropdown-trigger strong { font-size: 11px; }
 
   .page-dashboard .ledger-save-state {
     font-size: 9px;
@@ -15991,11 +16025,12 @@ video {
   }
 
   .page-dashboard .ledger-simulation-grid input,
-  .page-dashboard .ledger-simulation-grid select {
+  .page-dashboard .ledger-dropdown-trigger {
     min-height: 28px;
-    padding: 5px 6px;
+    padding: 5px 22px 5px 6px;
     font-size: 10px;
   }
+  .page-dashboard .ledger-dropdown-trigger strong { font-size: 10px; }
 
   .page-dashboard .trade-ledger {
     width: 1060px !important;
@@ -16158,11 +16193,12 @@ video {
   }
 
   .page-dashboard .ledger-simulation-grid input,
-  .page-dashboard .ledger-simulation-grid select {
+  .page-dashboard .ledger-dropdown-trigger {
     min-height: 26px;
-    padding: 4px 5px;
+    padding: 4px 20px 4px 5px;
     font-size: 9px;
   }
+  .page-dashboard .ledger-dropdown-trigger strong { font-size: 9px; }
 }
 
 @media (max-width: 820px) {

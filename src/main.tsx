@@ -7459,15 +7459,37 @@ function LedgerOptionDropdown<T extends string>({
   options: { value: T; label: string }[];
   onChange: (value: T) => void;
 }) {
-  return <label className="ledger-option-field ledger-dropdown-field">
+  const [open, setOpen] = useState(false);
+  const selected = options.find(option => option.value === value) ?? options[0];
+
+  return <div
+    className={`ledger-option-field ledger-dropdown-field${open ? ' open' : ''}`}
+    onBlur={event => {
+      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+    }}
+  >
     <span>{label}</span>
     <span className="ledger-dropdown-control">
-      <select value={value} onChange={event => onChange(event.target.value as T)}>
-        {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-      </select>
+      <button type="button" className="ledger-dropdown-trigger" onClick={() => setOpen(current => !current)}>
+        <strong>{selected.label}</strong>
+      </button>
       <ChevronDown size={16} aria-hidden="true" />
+      {open && <span className="ledger-dropdown-menu">
+        {options.map(option => <button
+          key={option.value}
+          type="button"
+          className={option.value === value ? 'active' : ''}
+          onMouseDown={event => event.preventDefault()}
+          onClick={() => {
+            onChange(option.value);
+            setOpen(false);
+          }}
+        >
+          {option.label}
+        </button>)}
+      </span>}
     </span>
-  </label>;
+  </div>;
 }
 
 function SignalFilterBar({
@@ -8486,6 +8508,46 @@ function PerformanceChart({
     />}
 
     {showLedger && <div id="dashboard-trade-ledger" className="ledger-wrap" ref={tradeLedgerRef}>
+      {hasExperimentSimulationControls && activeExperimentDetails && <section className="experiment-details-panel">
+          <div>
+            <span>Experiment Details</span>
+            <strong>Methodology</strong>
+          </div>
+          <p>{activeExperimentDetails.methodology}</p>
+        </section>}
+      {hasExperimentSimulationControls && ledgerSimulationDraft && <div className="ledger-simulation-panel">
+        <div className="ledger-simulation-head">
+          <div>
+            <span>Virtual Wallet</span>
+            <strong>{`${experimentCurrentCapital.toFixed(2)} USDT`}</strong>
+            <small>{`Spot ${experimentSpotCapital.toFixed(2)} | Futures ${experimentFuturesCapital.toFixed(2)}`}</small>
+          </div>
+          <small className={ledgerSimulationSaving ? 'ledger-save-state saving' : 'ledger-save-state'}>{ledgerSimulationSaving ? 'Saving...' : 'Auto saved'}</small>
+        </div>
+        <div className="ledger-wallet-panels">
+          <section className="ledger-wallet-panel ledger-wallet-spot">
+            <div className="ledger-wallet-head"><span>Spot Wallet</span><strong>{`${experimentSpotCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.spotUsdt)} experiment PnL`}</small></div>
+            <div className="ledger-simulation-grid wallet-grid">
+              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('spotCapitalUsdt')} onBlur={() => clearLedgerNumberInput('spotCapitalUsdt')} onChange={event => updateLedgerNumberInput('spotCapitalUsdt', event.target.value)} /></label>
+              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('spotMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('spotMaxOpenTrades')} onChange={event => updateLedgerNumberInput('spotMaxOpenTrades', event.target.value)} /></label>
+              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('spotMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('spotMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('spotMinNotionalUsdt', event.target.value)} /></label>
+            </div>
+          </section>
+          <section className="ledger-wallet-panel ledger-wallet-futures">
+            <div className="ledger-wallet-head"><span>Futures Wallet</span><strong>{`${experimentFuturesCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.futuresUsdt)} experiment PnL`}</small></div>
+            <div className="ledger-simulation-grid wallet-grid">
+              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('futuresCapitalUsdt')} onBlur={() => clearLedgerNumberInput('futuresCapitalUsdt')} onChange={event => updateLedgerNumberInput('futuresCapitalUsdt', event.target.value)} /></label>
+              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('futuresMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('futuresMaxOpenTrades')} onChange={event => updateLedgerNumberInput('futuresMaxOpenTrades', event.target.value)} /></label>
+              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('futuresMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('futuresMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('futuresMinNotionalUsdt', event.target.value)} /></label>
+              <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={getLedgerNumberInputValue('futuresLeverage')} onBlur={() => clearLedgerNumberInput('futuresLeverage')} onChange={event => updateLedgerNumberInput('futuresLeverage', event.target.value)} /></label>
+              <LedgerOptionDropdown label="Direction" value={ledgerSimulationDraft.allowedDirection} options={ledgerDirectionOptions} onChange={allowedDirection => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection })} />
+            </div>
+          </section>
+        </div>
+        <div className="ledger-simulation-grid ledger-shared-grid">
+          <LedgerOptionDropdown label="Market Scope" value={ledgerSimulationDraft.marketScope} options={ledgerMarketScopeOptions} onChange={marketScope => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope })} />
+        </div>
+      </div>}
       <div className="section-title compact dashboard-section-title">
         <h2>{`${activeSimulationExperiment.name} Trade Ledger`}</h2>
       </div>
@@ -8564,46 +8626,6 @@ function PerformanceChart({
         setTimeframeFilter={setLedgerTimeframeFilter}
         counts={filterCounts}
       />
-      {hasExperimentSimulationControls && activeExperimentDetails && <section className="experiment-details-panel">
-          <div>
-            <span>Experiment Details</span>
-            <strong>Methodology</strong>
-          </div>
-          <p>{activeExperimentDetails.methodology}</p>
-        </section>}
-      {hasExperimentSimulationControls && ledgerSimulationDraft && <div className="ledger-simulation-panel">
-        <div className="ledger-simulation-head">
-          <div>
-            <span>Virtual Wallet</span>
-            <strong>{`${experimentCurrentCapital.toFixed(2)} USDT`}</strong>
-            <small>{`Spot ${experimentSpotCapital.toFixed(2)} | Futures ${experimentFuturesCapital.toFixed(2)}`}</small>
-          </div>
-          <small className={ledgerSimulationSaving ? 'ledger-save-state saving' : 'ledger-save-state'}>{ledgerSimulationSaving ? 'Saving...' : 'Auto saved'}</small>
-        </div>
-        <div className="ledger-wallet-panels">
-          <section className="ledger-wallet-panel ledger-wallet-spot">
-            <div className="ledger-wallet-head"><span>Spot Wallet</span><strong>{`${experimentSpotCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.spotUsdt)} experiment PnL`}</small></div>
-            <div className="ledger-simulation-grid wallet-grid">
-              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('spotCapitalUsdt')} onBlur={() => clearLedgerNumberInput('spotCapitalUsdt')} onChange={event => updateLedgerNumberInput('spotCapitalUsdt', event.target.value)} /></label>
-              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('spotMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('spotMaxOpenTrades')} onChange={event => updateLedgerNumberInput('spotMaxOpenTrades', event.target.value)} /></label>
-              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('spotMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('spotMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('spotMinNotionalUsdt', event.target.value)} /></label>
-            </div>
-          </section>
-          <section className="ledger-wallet-panel ledger-wallet-futures">
-            <div className="ledger-wallet-head"><span>Futures Wallet</span><strong>{`${experimentFuturesCapital.toFixed(2)} USDT`}</strong><small>{`${formatSignedUsdtValue(acceptedLedgerPnlCards.futuresUsdt)} experiment PnL`}</small></div>
-            <div className="ledger-simulation-grid wallet-grid">
-              <label><span>Capital</span><input type="number" min={0} step={5} value={getLedgerNumberInputValue('futuresCapitalUsdt')} onBlur={() => clearLedgerNumberInput('futuresCapitalUsdt')} onChange={event => updateLedgerNumberInput('futuresCapitalUsdt', event.target.value)} /></label>
-              <label><span>Max Open</span><input type="number" min={1} max={200} step={1} value={getLedgerNumberInputValue('futuresMaxOpenTrades')} onBlur={() => clearLedgerNumberInput('futuresMaxOpenTrades')} onChange={event => updateLedgerNumberInput('futuresMaxOpenTrades', event.target.value)} /></label>
-              <label><span>Min Order</span><input type="number" min={1} step={1} value={getLedgerNumberInputValue('futuresMinNotionalUsdt')} onBlur={() => clearLedgerNumberInput('futuresMinNotionalUsdt')} onChange={event => updateLedgerNumberInput('futuresMinNotionalUsdt', event.target.value)} /></label>
-              <label><span>Leverage</span><input type="number" min={1} max={20} step={1} value={getLedgerNumberInputValue('futuresLeverage')} onBlur={() => clearLedgerNumberInput('futuresLeverage')} onChange={event => updateLedgerNumberInput('futuresLeverage', event.target.value)} /></label>
-              <LedgerOptionDropdown label="Direction" value={ledgerSimulationDraft.allowedDirection} options={ledgerDirectionOptions} onChange={allowedDirection => setLedgerSimulationDraft({ ...ledgerSimulationDraft, allowedDirection })} />
-            </div>
-          </section>
-        </div>
-        <div className="ledger-simulation-grid ledger-shared-grid">
-          <LedgerOptionDropdown label="Market Scope" value={ledgerSimulationDraft.marketScope} options={ledgerMarketScopeOptions} onChange={marketScope => setLedgerSimulationDraft({ ...ledgerSimulationDraft, marketScope })} />
-        </div>
-      </div>}
         {tradeRows.length === 0 && <p className="empty">No trades generated for this selection yet.</p>}
       {tradeRows.length > 0 && <div className="trade-ledger-shell trade-ledger-shell-accepted">
         <div className="trade-ledger-toolbar">
