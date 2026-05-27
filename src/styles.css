@@ -33228,7 +33228,7 @@ body,
 :root[data-theme-style][data-theme="light"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme="light"] .page-frame.page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="light"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
-  --auth-page: #f4f8fd;
+  --auth-page: linear-gradient(112deg, #0b3f8d 0%, #2f67a5 30%, #d8e8f7 66%, #f4f8fd 100%);
   --auth-panel: #ffffff;
   --auth-panel-soft: #f7faff;
   --auth-field: #f8fbff;
@@ -33238,10 +33238,7 @@ body,
   --auth-muted: #52677f;
   --auth-accent: #174f91;
   --auth-accent-strong: #0f3e76;
-  --auth-brand-panel:
-    linear-gradient(90deg, rgba(255, 255, 255, .032) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 255, 255, .028) 1px, transparent 1px),
-    linear-gradient(135deg, #0b3f8d 0%, #0d4a97 34%, #eef5fc 100%);
+  --auth-brand-panel: transparent;
   --auth-brand-text: #ffffff;
   --auth-brand-muted: rgba(235, 246, 255, .86);
   --auth-brand-chip: rgba(255, 255, 255, .12);
@@ -33252,7 +33249,7 @@ body,
 :root[data-theme-style][data-theme="dark"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme="dark"] .page-frame.page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="dark"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
-  --auth-page: #07101b;
+  --auth-page: linear-gradient(112deg, #050b12 0%, #071321 42%, #07101b 100%);
   --auth-panel: #0d1724;
   --auth-panel-soft: #111e2d;
   --auth-field: #0a1420;
@@ -33262,10 +33259,7 @@ body,
   --auth-muted: #a9bbcf;
   --auth-accent: #73adff;
   --auth-accent-strong: #a7d1ff;
-  --auth-brand-panel:
-    linear-gradient(90deg, rgba(115, 173, 255, .034) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(115, 173, 255, .03) 1px, transparent 1px),
-    linear-gradient(135deg, #050b12 0%, #071321 42%, #07101b 100%);
+  --auth-brand-panel: transparent;
   --auth-brand-text: #f7fbff;
   --auth-brand-muted: rgba(215, 235, 255, .82);
   --auth-brand-chip: rgba(115, 173, 255, .10);
@@ -33276,7 +33270,7 @@ body,
 :root[data-theme-style][data-theme="black"] .page-auto-trade:has(.auto-auth-shell),
 :root[data-theme="black"] .page-frame.page-auto-trade:has(.auto-auth-shell),
 :root[data-theme-style][data-theme="black"] .page-frame.page-auto-trade:has(.auto-auth-shell) {
-  --auth-page: #02060b;
+  --auth-page: linear-gradient(112deg, #02060b 0%, #050b12 44%, #02060b 100%);
   --auth-panel: #070d14;
   --auth-panel-soft: #0d1622;
   --auth-field: #050b12;
@@ -33286,10 +33280,7 @@ body,
   --auth-muted: #9fb5ca;
   --auth-accent: #9bd7ff;
   --auth-accent-strong: #e5f4ff;
-  --auth-brand-panel:
-    linear-gradient(90deg, rgba(155, 215, 255, .03) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(155, 215, 255, .026) 1px, transparent 1px),
-    linear-gradient(135deg, #02060b 0%, #050b12 42%, #02060b 100%);
+  --auth-brand-panel: transparent;
   --auth-brand-text: #ffffff;
   --auth-brand-muted: rgba(229, 244, 255, .82);
   --auth-brand-chip: rgba(155, 215, 255, .09);
@@ -33316,7 +33307,7 @@ body,
 :root[data-theme] .page-frame.page-auto-trade .auto-auth-marketing,
 :root[data-theme-style] .page-frame.page-auto-trade .auto-auth-marketing {
   background: var(--auth-brand-panel) !important;
-  background-size: 72px 72px, 72px 72px, 100% 100% !important;
+  background-size: auto !important;
   color: var(--auth-brand-text) !important;
 }
 
@@ -33353,9 +33344,7 @@ body,
 :root[data-theme-style] .page-auto-trade .auto-auth-card,
 :root[data-theme] .page-frame.page-auto-trade .auto-auth-card,
 :root[data-theme-style] .page-frame.page-auto-trade .auto-auth-card {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--auth-panel-soft) 62%, transparent), transparent 48%),
-    var(--auth-page) !important;
+  background: transparent !important;
 }
 
 :root[data-theme] .page-auto-trade .auto-auth-card form,
