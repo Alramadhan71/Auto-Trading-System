@@ -293,7 +293,7 @@ type TelegramSubscriber = {
 };
 type Page = 'home' | 'dashboard' | 'auto-trade';
 type MarketFamily = 'crypto' | 'us-stocks' | 'saudi-stocks';
-type Theme = 'light' | 'dark' | 'black';
+type Theme = 'light' | 'dark';
 type ThemeStyle = '1' | '2' | '3' | '4';
 type PerformanceRange = '24h' | '7d' | '30d' | '90d' | 'all' | 'custom';
   type BinanceConnection = {
@@ -649,8 +649,7 @@ const loginStorageKey = (role: 'user' | 'admin') => `autoTrade.savedLogin.${role
 
 const themes: { id: Theme; name: string }[] = [
   { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' },
-  { id: 'black', name: 'Execution' }
+  { id: 'dark', name: 'Dark' }
 ];
 const themeStyles: { id: ThemeStyle; name: string; summary: string }[] = [
   { id: '1', name: 'Trading Desk', summary: 'Balanced surfaces, quiet brand signal' },
@@ -901,9 +900,10 @@ function App() {
     const migratedDefault = localStorage.getItem('themeDefaultGraphiteV2') === 'true';
     if (!migratedDefault && (!saved || ['executive', 'navy', 'emerald', 'graphite'].includes(saved))) {
       localStorage.setItem('themeDefaultGraphiteV2', 'true');
-      return 'black';
+      return 'dark';
     }
-    return themes.some(item => item.id === saved) ? saved as Theme : 'black';
+    if (saved === 'black') return 'dark';
+    return themes.some(item => item.id === saved) ? saved as Theme : 'dark';
   });
   const [toastDuration, setToastDuration] = useState(() => Number(localStorage.getItem('toastDuration') ?? 2000));
   const [alertsEnabled, setAlertsEnabled] = useState(() => localStorage.getItem('alertsEnabled') !== 'false');
@@ -1972,8 +1972,8 @@ function ThemeStudio({
   onPick: (theme: Theme) => void;
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
-  const nextTheme = currentTheme === 'light' ? 'black' : currentTheme === 'black' ? 'dark' : 'light';
-  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Gauge size={18} /> : <Moon size={18} />;
+  const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
@@ -2011,7 +2011,7 @@ function ThemePanel({
       </header>
       <div className="theme-mode-switch" aria-label="Theme mode">
         {themes.map(item => <button key={item.id} className={currentTheme === item.id ? 'active' : ''} onClick={() => onPick(item.id)}>
-          {item.id === 'light' ? <Sun size={16} /> : item.id === 'black' ? <Gauge size={16} /> : <Moon size={16} />}
+          {item.id === 'light' ? <Sun size={16} /> : <Moon size={16} />}
           <span>{item.name}</span>
         </button>)}
       </div>
