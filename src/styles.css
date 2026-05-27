@@ -34553,7 +34553,7 @@ body,
 
   .app-shell {
     min-height: 100svh;
-    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
     overflow-x: clip;
   }
 
@@ -34566,8 +34566,8 @@ body,
     z-index: 70 !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto !important;
-    min-height: 64px !important;
-    padding: calc(7px + env(safe-area-inset-top)) 12px 7px !important;
+    min-height: 72px !important;
+    padding: calc(8px + env(safe-area-inset-top)) 12px 8px !important;
     background: color-mix(in srgb, var(--app-bg, var(--bg)) 74%, transparent) !important;
     border-bottom: 1px solid color-mix(in srgb, var(--border) 74%, transparent) !important;
     backdrop-filter: blur(18px) saturate(1.15) !important;
@@ -34575,15 +34575,16 @@ body,
 
   .shell-brand {
     min-width: 0 !important;
-    height: 50px !important;
+    height: 56px !important;
     overflow: visible !important;
+    gap: 10px !important;
   }
 
   .shell-brand-mark,
   .brand-logo-mark {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
     overflow: visible !important;
   }
 
@@ -34598,7 +34599,7 @@ body,
 
   .shell-brand-copy {
     min-width: 0 !important;
-    max-width: min(36vw, 168px) !important;
+    max-width: min(42vw, 178px) !important;
   }
 
   .shell-brand-copy strong,
@@ -34610,11 +34611,11 @@ body,
   }
 
   .shell-brand-copy strong {
-    font-size: 14px !important;
+    font-size: 15px !important;
   }
 
   .shell-brand-copy small {
-    font-size: 10px !important;
+    font-size: 10.5px !important;
   }
 
   .shell-nav {
@@ -34633,17 +34634,30 @@ body,
   .shell-tools .theme-toggle,
   .notification-settings-trigger,
   .alerts-button {
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 38px !important;
-    min-height: 38px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
     padding: 0 !important;
     border-radius: 12px !important;
     border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border)) !important;
     background: color-mix(in srgb, var(--panel-strong) 62%, transparent) !important;
     color: var(--text) !important;
     overflow: hidden !important;
+  }
+
+  .theme-toggle-icon,
+  .shell-tools .theme-toggle svg,
+  .notification-settings-trigger svg,
+  .mobile-home-action svg {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: var(--accent) !important;
+    stroke: var(--accent) !important;
   }
 
   .mobile-home-action span,
@@ -34661,7 +34675,7 @@ body,
 
   .notification-settings-popover {
     position: fixed !important;
-    top: calc(64px + env(safe-area-inset-top)) !important;
+    top: calc(72px + env(safe-area-inset-top)) !important;
     right: 10px !important;
     left: 10px !important;
     width: auto !important;
@@ -34678,6 +34692,103 @@ body,
     overflow-x: clip !important;
   }
 
+  .market-select-page {
+    gap: 16px !important;
+    padding: 18px 12px 18px !important;
+    border-radius: 14px !important;
+  }
+
+  .market-select-lockup {
+    gap: 10px !important;
+  }
+
+  .market-select-lockup h1 {
+    font-size: clamp(30px, 9vw, 42px) !important;
+    line-height: .98 !important;
+  }
+
+  .market-select-company {
+    margin-top: 4px !important;
+  }
+
+  .market-select-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .market-select-card {
+    min-height: 112px !important;
+    height: 112px !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .market-select-card.saudi {
+    grid-column: 1 / -1 !important;
+  }
+
+  .market-select-card strong {
+    font-size: clamp(22px, 7vw, 30px) !important;
+    line-height: .98 !important;
+  }
+
+  .market-select-copy small {
+    font-size: 10px !important;
+  }
+
+  .market-select-action {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-launchpad {
+    display: none !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-live-board,
+  .page-home:not(:has(.market-select-page)) .home-intel-card,
+  .page-home:not(:has(.market-select-page)) .home-signal-shell,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-shell,
+  .page-home:not(:has(.market-select-page)) .home-leader-shell,
+  .page-home:not(:has(.market-select-page)) .home-news-shell {
+    padding: 12px !important;
+    gap: 10px !important;
+    margin-bottom: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-live-board-head h2,
+  .page-home:not(:has(.market-select-page)) .home-intel-head h3 {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-history-row:nth-child(n+3),
+  .page-home:not(:has(.market-select-page)) .home-marketcap-row:nth-child(n+5),
+  .page-home:not(:has(.market-select-page)) .home-leader-row:nth-child(n+5),
+  .page-home:not(:has(.market-select-page)) .home-news-card:nth-child(n+4) {
+    display: none !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-card {
+    min-height: 0 !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-hero {
+    gap: 8px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-gauge {
+    width: 118px !important;
+    height: 78px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-news-card {
+    min-height: 96px !important;
+  }
+
   .mobile-bottom-nav {
     position: fixed;
     left: 10px;
@@ -34688,7 +34799,7 @@ body,
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 5px;
     min-height: 62px;
-    padding: 7px;
+    padding: 6px;
     border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
     border-radius: 18px;
     background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
@@ -34701,7 +34812,7 @@ body,
     place-items: center;
     gap: 3px;
     min-width: 0;
-    min-height: 48px;
+    min-height: 46px;
     padding: 5px 3px;
     border: 1px solid transparent;
     border-radius: 13px;
@@ -34724,6 +34835,67 @@ body,
     background: color-mix(in srgb, var(--accent) 16%, var(--panel-soft));
     color: var(--accent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .page-frame.page-auto-trade .auto-auth-shell {
+    gap: 14px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-card {
+    padding: 20px !important;
+    border-radius: 14px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-head {
+    gap: 7px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-head img {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-head h1 {
+    font-size: 25px !important;
+    line-height: 1.05 !important;
+  }
+
+  .page-frame.page-auto-trade .auth-input-shell,
+  .page-frame.page-auto-trade .auth-action-stack > button,
+  .page-frame.page-auto-trade .auth-secondary-actions button,
+  .page-frame.page-auto-trade .auth-secondary-actions a {
+    min-height: 46px !important;
+    height: 46px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-marketing {
+    min-height: 0 !important;
+    padding: 10px 0 0 !important;
+    gap: 10px !important;
+  }
+
+  .page-frame.page-auto-trade .auth-logo-watermark,
+  .page-frame.page-auto-trade .auth-market-graph,
+  .page-frame.page-auto-trade .auto-auth-marketing h2 {
+    display: none !important;
+  }
+
+  .page-frame.page-auto-trade .auth-product-lockup h1,
+  .page-frame.page-auto-trade .auto-auth-marketing h1 {
+    font-size: 28px !important;
+    line-height: 1 !important;
+  }
+
+  .page-frame.page-auto-trade .auth-value-stack {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .page-frame.page-auto-trade .auth-value-stack strong {
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    border-radius: 11px !important;
+    font-size: 13px !important;
   }
 
   .premium-workspace-grid,

@@ -1357,25 +1357,25 @@ function App() {
   const isMarketPicker = page === 'home' && !activeMarketFamily;
   const mobileNavItems = [
     {
-      key: 'home',
-      label: 'Home',
-      icon: <Home size={19} />,
-      active: isMarketPicker,
-      onClick: returnToMarketPicker
-    },
-    {
-      key: 'markets',
-      label: 'Markets',
+      key: 'crypto',
+      label: 'Crypto',
       icon: <Globe2 size={19} />,
-      active: page === 'home' && Boolean(activeMarketFamily),
-      onClick: () => enterMarket(activeMarketFamily ?? 'crypto')
+      active: page === 'home' && activeMarketFamily === 'crypto',
+      onClick: () => enterMarket('crypto')
     },
     {
-      key: 'portfolio',
-      label: 'Portfolio',
-      icon: <Wallet size={19} />,
-      active: page === 'dashboard',
-      onClick: () => navigateToPage('dashboard')
+      key: 'us-stocks',
+      label: 'US',
+      icon: <BarChart3 size={19} />,
+      active: page === 'home' && activeMarketFamily === 'us-stocks',
+      onClick: () => enterMarket('us-stocks')
+    },
+    {
+      key: 'saudi-stocks',
+      label: 'Saudi',
+      icon: <Landmark size={19} />,
+      active: page === 'home' && activeMarketFamily === 'saudi-stocks',
+      onClick: () => enterMarket('saudi-stocks')
     },
     {
       key: 'execution',
@@ -2011,7 +2011,7 @@ function ThemeStudio({
 }) {
   const currentThemeItem = themes.find(item => item.id === currentTheme) ?? themes[0];
   const nextTheme = currentTheme === 'light' ? 'black' : 'light';
-  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : currentTheme === 'black' ? <Gauge size={18} /> : <Moon size={18} />;
+  const themeIcon = currentTheme === 'light' ? <Sun size={18} /> : <Moon size={18} />;
   return <div className={`theme-studio theme-control ${currentTheme}`}>
     <button
       type="button"
