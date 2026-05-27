@@ -5642,11 +5642,10 @@ function AutoTradePage({
             </div>
           </div>
           <h2>Trade Crypto, US Stocks, and Saudi Stocks with confidence.</h2>
-          <div className="auth-value-stack" aria-label="Supported markets">
-            <strong><ShieldAlert size={18} /> Crypto</strong>
-            <strong><BarChart3 size={18} /> US Stocks</strong>
-            <strong><Landmark size={18} /> Saudi Market</strong>
-            <strong><TrendingUp size={18} /> Live Signals</strong>
+          <div className="auth-value-stack" aria-label="Platform advantages">
+            <strong><ShieldAlert size={18} /> Secure & Private</strong>
+            <strong><BarChart3 size={18} /> Smart & Reliable</strong>
+            <strong><TrendingUp size={18} /> All Markets. One System.</strong>
           </div>
         </div>
         <div className="auto-auth-card">
