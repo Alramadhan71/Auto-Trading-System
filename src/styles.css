@@ -34542,6 +34542,11 @@ body,
   display: none;
 }
 
+.mobile-trade-subnav,
+.mobile-trade-bottom-nav {
+  display: none;
+}
+
 @media (max-width: 760px) {
   html,
   body,
@@ -34555,6 +34560,10 @@ body,
     min-height: 100svh;
     padding-bottom: calc(76px + env(safe-area-inset-bottom));
     overflow-x: clip;
+  }
+
+  .app-shell:has(.mobile-trade-bottom-nav) {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
   }
 
   .shell-header,
@@ -34690,6 +34699,10 @@ body,
     max-width: 100% !important;
     padding: 12px 10px 20px !important;
     overflow-x: clip !important;
+  }
+
+  .page-frame.page-auto-trade:has(.mobile-trade-bottom-nav) {
+    padding-top: 8px !important;
   }
 
   .market-select-page {
@@ -34835,6 +34848,119 @@ body,
     background: color-mix(in srgb, var(--accent) 16%, var(--panel-soft));
     color: var(--accent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) {
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-sidebar {
+    display: none !important;
+  }
+
+  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-workspace-main {
+    display: grid !important;
+    grid-column: 1 !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-trade-subnav {
+    position: sticky;
+    top: calc(72px + env(safe-area-inset-top));
+    z-index: 58;
+    display: flex;
+    gap: 7px;
+    width: 100%;
+    padding: 5px;
+    overflow-x: auto;
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
+    backdrop-filter: blur(16px) saturate(1.1);
+  }
+
+  .mobile-trade-subnav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-trade-subnav button {
+    flex: 1 0 auto;
+    min-width: 92px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .mobile-trade-subnav button.active {
+    border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
+    background: color-mix(in srgb, var(--accent) 15%, var(--panel-soft));
+    color: var(--text);
+  }
+
+  .mobile-trade-bottom-nav {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    z-index: 82;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    min-height: 64px;
+    padding: 6px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .34);
+    backdrop-filter: blur(20px) saturate(1.2);
+  }
+
+  .mobile-trade-bottom-nav button {
+    display: grid;
+    place-items: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 48px;
+    padding: 5px 2px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 9.5px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .mobile-trade-bottom-nav button svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.35;
+  }
+
+  .mobile-trade-bottom-nav button.active {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    background: color-mix(in srgb, var(--accent) 17%, var(--panel-soft));
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  .page-auto-trade .auto-trade-headbar.execution-content-header {
+    min-height: auto !important;
+    padding: 8px 0 10px !important;
+  }
+
+  .page-auto-trade .execution-content-title h1 {
+    font-size: clamp(24px, 7.2vw, 34px) !important;
   }
 
   .page-frame.page-auto-trade .auto-auth-shell {

@@ -1464,7 +1464,7 @@ function App() {
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
-      <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
+      {!(page === 'auto-trade' && isAuthenticated) && <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
         {mobileNavItems.map(item => <button
           type="button"
           key={item.key}
@@ -1475,7 +1475,7 @@ function App() {
           {item.icon}
           <span>{item.label}</span>
         </button>)}
-      </nav>
+      </nav>}
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
         symbol={chartSymbol}
@@ -5561,6 +5561,78 @@ function AutoTradePage({
     ? executionWorkspaceTabs
     : executionWorkspaceTabs.filter(tab => tab.id !== 'users');
   const publicStrategies = strategies;
+  const selectExecutionTab = (tabId: 'portfolio' | 'strategies' | 'users' | 'settings') => {
+    setAdminWorkspaceTab(tabId);
+    setSidebarSectionOpen(prev => ({ ...prev, [tabId]: true }));
+    if (portalView === 'user' && tabId === 'settings') setSettingsWorkspaceTab('access');
+    if (portalView === 'user' && tabId === 'strategies') setStrategyWorkspaceTab('strategies');
+  };
+  const mobileTradeNavItems = [
+    {
+      key: 'market',
+      label: 'Market',
+      icon: <Globe2 size={18} />,
+      active: false,
+      onClick: onMarketHome
+    },
+    {
+      key: 'research',
+      label: 'Research',
+      icon: <BarChart3 size={18} />,
+      active: false,
+      onClick: onDashboard
+    },
+    {
+      key: 'portfolio',
+      label: 'Portfolio',
+      icon: <Wallet size={18} />,
+      active: adminWorkspaceTab === 'portfolio',
+      onClick: () => selectExecutionTab('portfolio')
+    },
+    {
+      key: 'strategies',
+      label: 'Strategies',
+      icon: <Target size={18} />,
+      active: adminWorkspaceTab === 'strategies',
+      onClick: () => selectExecutionTab('strategies')
+    },
+    {
+      key: 'account',
+      label: 'Account',
+      icon: portalView === 'admin' ? <Users size={18} /> : <KeyRound size={18} />,
+      active: adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings',
+      onClick: () => selectExecutionTab(portalView === 'admin' ? 'users' : 'settings')
+    }
+  ];
+  const mobileTradeSubnav = adminWorkspaceTab === 'portfolio'
+    ? ([
+      ['summary', 'Summary', () => setPortfolioWorkspaceTab('summary'), portfolioWorkspaceTab === 'summary'],
+      ['rules', 'Rules', () => setPortfolioWorkspaceTab('rules'), portfolioWorkspaceTab === 'rules'],
+      ['ledger', 'Ledger', () => setPortfolioWorkspaceTab('ledger'), portfolioWorkspaceTab === 'ledger']
+    ] as const)
+    : adminWorkspaceTab === 'strategies'
+      ? (portalView === 'admin'
+        ? ([
+          ['strategies', 'Strategies', () => setStrategyWorkspaceTab('strategies'), strategyWorkspaceTab === 'strategies'],
+          ['broadcast', 'Broadcast', () => setStrategyWorkspaceTab('broadcast'), strategyWorkspaceTab === 'broadcast']
+        ] as const)
+        : ([
+          ['strategies', 'Strategies', () => setStrategyWorkspaceTab('strategies'), strategyWorkspaceTab === 'strategies']
+        ] as const))
+      : adminWorkspaceTab === 'settings'
+        ? (portalView === 'admin'
+          ? ([
+            ['binance', 'Binance', () => setSettingsWorkspaceTab('binance'), settingsWorkspaceTab === 'binance'],
+            ['access', 'Access', () => setSettingsWorkspaceTab('access'), settingsWorkspaceTab === 'access']
+          ] as const)
+          : ([
+            ['access', 'Access', () => setSettingsWorkspaceTab('access'), settingsWorkspaceTab === 'access']
+          ] as const))
+        : adminWorkspaceTab === 'users'
+          ? ([
+            ['users', 'Users', () => selectExecutionTab('users'), true]
+          ] as const)
+          : [];
   const adminStrategyMetrics = useMemo(() => {
     const metrics = new Map<string, { total: number; closed: number; wins: number; winRate: number }>();
     for (const strategy of strategies) {
@@ -5803,10 +5875,8 @@ function AutoTradePage({
             type="button"
             className="execution-sidebar-main"
             onClick={() => {
-              setAdminWorkspaceTab(tab.id);
+              selectExecutionTab(tab.id);
               setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }));
-              if (portalView === 'user' && tab.id === 'settings') setSettingsWorkspaceTab('access');
-              if (portalView === 'user' && tab.id === 'strategies') setStrategyWorkspaceTab('strategies');
             }}
             aria-expanded={sidebarSectionOpen[tab.id]}
           >
@@ -5870,6 +5940,12 @@ function AutoTradePage({
 
       <main className="execution-workspace-main">
       <SidebarAvatarCropper editor={{ avatarInputRef, sidebarAvatar, avatarCropImage, avatarCropZoom, avatarCropOffset, updateSidebarAvatar, closeAvatarCropper, saveCroppedAvatar, startAvatarDrag, moveAvatarDrag, stopAvatarDrag, setAvatarCropZoom, setAvatarCropOffset }} />
+
+      <nav className="mobile-trade-subnav" aria-label="Trade section navigation">
+        {mobileTradeSubnav.map(([id, label, onClick, active]) => <button key={id} type="button" className={active ? 'active' : ''} onClick={onClick}>
+          {label}
+        </button>)}
+      </nav>
 
       <div className="auto-trade-headbar execution-content-header">
         <div className="execution-content-title">
@@ -7186,6 +7262,12 @@ function AutoTradePage({
         </div>
       </div>}
       </main>
+      <nav className="mobile-trade-bottom-nav" aria-label="Trade workspace navigation">
+        {mobileTradeNavItems.map(item => <button key={item.key} type="button" className={item.active ? 'active' : ''} onClick={item.onClick} aria-current={item.active ? 'page' : undefined}>
+          {item.icon}
+          <span>{item.label}</span>
+        </button>)}
+      </nav>
     </div>
     <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
