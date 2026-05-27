@@ -6193,7 +6193,7 @@ function AutoTradePage({
               </div>
               <div className="live-rules-badge-row">
                 <span className="nav-badge subtle">{venueMode === 'both' ? 'Both' : venueMode === 'spot' ? 'Spot' : 'Futures'}</span>
-                <span className={`nav-badge ${liveExecutionMode === 'live' ? 'glow' : 'subtle'}`}>{liveExecutionMode === 'live' ? 'Live' : 'Test'}</span>
+                <span className="nav-badge subtle">{liveExecutionMode === 'live' ? 'Live' : 'Test'}</span>
               </div>
             </div>
             <>
@@ -6740,7 +6740,7 @@ function AutoTradePage({
             <span>{telegramConfig.publicChannelEnabled ? 'Broadcast ON' : 'Broadcast OFF'} | {publicStrategies.length} strategies | {[...selected].length} active</span>
           </div>
           <div className="live-rules-badge-row">
-            <span className={`nav-badge ${telegramConfig.publicChannelEnabled ? 'glow' : 'subtle'}`}>Public</span>
+            <span className="nav-badge subtle">Public</span>
           </div>
         </div>
         <div className="public-ops-body">
@@ -6823,7 +6823,7 @@ function AutoTradePage({
             <span>{binanceConnection.connected ? 'Binance verified' : binanceConnection.saved ? 'Binance saved' : 'Binance disconnected'} | {activeUsers.filter(request => request.enabled).length} active users</span>
           </div>
           <div className="live-rules-badge-row">
-            <span className="nav-badge glow">Admin</span>
+            <span className="nav-badge subtle">Admin</span>
           </div>
         </div>
         <>
@@ -6833,7 +6833,7 @@ function AutoTradePage({
               <strong>Binance Connection</strong>
               <span>{binanceConnection.connected ? 'Verified with Binance' : binanceConnection.saved ? 'Save Only' : 'No Binance account connected'}</span>
             </div>
-            <span className={`nav-badge ${binanceConnection.connected ? 'glow' : 'subtle'}`}>{binanceConnection.connected ? 'Verified' : binanceConnection.saved ? 'Save Only' : 'Disconnected'}</span>
+            <span className="nav-badge subtle">{binanceConnection.connected ? 'Verified' : binanceConnection.saved ? 'Save Only' : 'Disconnected'}</span>
           </div>
           {!binanceEditorOpen && <div className="binance-admin-grid">
             <article><span>Fingerprint</span><strong>{binanceConnection.keyFingerprint ?? '-'}</strong></article>
@@ -7026,7 +7026,7 @@ function AutoTradePage({
               <span>{adminUsername || 'admin'} | Telegram {adminTelegramNotificationEnabled ? 'ON' : 'OFF'}</span>
             </div>
             <div className="live-rules-badge-row">
-              <span className={`nav-badge ${adminTelegramNotificationEnabled ? 'glow' : 'subtle'}`}>Personal</span>
+              <span className="nav-badge subtle">Personal</span>
             </div>
           </div>
           <div className="admin-personal-body">
