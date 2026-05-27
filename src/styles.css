@@ -33336,8 +33336,8 @@ body,
 :root[data-theme-style] .page-auto-trade .auth-value-stack svg,
 :root[data-theme] .page-frame.page-auto-trade .auth-value-stack svg,
 :root[data-theme-style] .page-frame.page-auto-trade .auth-value-stack svg {
-  color: var(--auth-accent) !important;
-  stroke: var(--auth-accent) !important;
+  color: var(--auth-brand-text) !important;
+  stroke: var(--auth-brand-text) !important;
 }
 
 :root[data-theme] .page-auto-trade .auto-auth-card,
