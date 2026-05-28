@@ -21922,12 +21922,21 @@ body {
 .home-news-tags b,
 .home-marketcap-rank,
 .home-fear-history-row b,
+.home-news-top span,
 .theme-toggle,
 .theme-studio,
 .theme-control,
 .home-market-switch,
 .home-market-switch button {
   background: var(--card-surface-raised) !important;
+}
+
+.home-fear-history-row b,
+.home-news-top span,
+.home-news-badge,
+.home-news-badge svg {
+  color: var(--soft-text) !important;
+  border-color: var(--border) !important;
 }
 
 /* Final home surface cleanup: keep the hero card visually aligned with the market cards. */
@@ -33150,8 +33159,8 @@ body,
 .page-home .home-signal-card:hover,
 .page-home .home-news-card:hover {
   transform: translateY(-3px) !important;
-  border-color: var(--ui-border-strong) !important;
-  background: color-mix(in srgb, var(--accent) 6%, var(--ui-surface)) !important;
+  border-color: var(--border) !important;
+  background: var(--surface-raised) !important;
   box-shadow: 0 14px 30px var(--card-lift-shadow) !important;
 }
 
@@ -33165,8 +33174,8 @@ body,
 .page-home .home-marketcap-row:hover,
 .page-home .home-fear-history-row:hover {
   transform: none !important;
-  border-color: var(--ui-border-strong) !important;
-  background: color-mix(in srgb, var(--accent) 7%, var(--ui-surface)) !important;
+  border-color: var(--border) !important;
+  background: var(--surface-raised) !important;
   box-shadow: none !important;
 }
 
@@ -34778,13 +34787,6 @@ body,
     line-height: 1.05 !important;
   }
 
-  .page-home:not(:has(.market-select-page)) .home-fear-history-row:nth-child(n+3),
-  .page-home:not(:has(.market-select-page)) .home-marketcap-row:nth-child(n+5),
-  .page-home:not(:has(.market-select-page)) .home-leader-row:nth-child(n+5),
-  .page-home:not(:has(.market-select-page)) .home-news-card:nth-child(n+4) {
-    display: none !important;
-  }
-
   .page-home:not(:has(.market-select-page)) .home-fear-card {
     min-height: 0 !important;
   }
@@ -34800,6 +34802,63 @@ body,
 
   .page-home:not(:has(.market-select-page)) .home-news-card {
     min-height: 96px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-leader-columns,
+  .page-home:not(:has(.market-select-page)) .home-news-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-history-row,
+  .page-home:not(:has(.market-select-page)) .home-leader-row,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-row {
+    display: grid !important;
+    align-items: center !important;
+    min-width: 0 !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-fear-history-row {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-leader-row {
+    grid-template-columns: minmax(0, 1fr) minmax(72px, auto) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-marketcap-row {
+    grid-template-columns: auto minmax(0, 1fr) minmax(78px, auto) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-leader-row strong,
+  .page-home:not(:has(.market-select-page)) .home-leader-row small,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-copy strong,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-copy small,
+  .page-home:not(:has(.market-select-page)) .home-news-card strong,
+  .page-home:not(:has(.market-select-page)) .home-news-top span {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-leader-row strong,
+  .page-home:not(:has(.market-select-page)) .home-leader-row small,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-copy strong,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-copy small,
+  .page-home:not(:has(.market-select-page)) .home-news-top span {
+    white-space: nowrap !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-leader-values,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-values {
+    min-width: 0 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-news-top {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
   }
 
   .mobile-bottom-nav {
@@ -35102,6 +35161,35 @@ body,
   .home-leader-card,
   .home-marketcap-row {
     min-width: 0 !important;
+  }
+
+  .page-frame,
+  .panel,
+  .chart-block,
+  .trade-list,
+  .portfolio-card,
+  .capital-group,
+  .home-live-card,
+  .home-signal-card,
+  .home-news-card,
+  .home-leader-card,
+  .home-marketcap-row,
+  .dashboard-card,
+  .admin-card,
+  .user-card,
+  .strategy-card,
+  .live-rules-panel,
+  .portfolio-panel,
+  .settings-panel {
+    min-width: 0 !important;
+  }
+
+  .page-frame :where(h1, h2, h3, h4, p, span, small, strong, b, button, td, th) {
+    max-width: 100%;
+  }
+
+  .page-frame :where(p, h1, h2, h3, h4) {
+    overflow-wrap: anywhere;
   }
 }
 
