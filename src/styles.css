@@ -32403,13 +32403,13 @@ b.bad {
 .market-select-card.crypto,
 .market-select-card.stocks,
 .market-select-card.saudi {
-  --market-accent: var(--accent) !important;
-  --market-accent-2: var(--accent-strong) !important;
+  --market-accent: var(--muted) !important;
+  --market-accent-2: var(--soft-text) !important;
 }
 
 .market-select-card:hover {
-  background: color-mix(in srgb, var(--accent) 7%, var(--surface)) !important;
-  border-color: var(--border-strong) !important;
+  background: var(--surface-raised) !important;
+  border-color: var(--border) !important;
 }
 
 @media (max-width: 980px) {
@@ -32472,36 +32472,36 @@ b.bad {
 :root,
 :root[data-theme],
 :root[data-theme-style] {
-  --logo-blue: #73adff;
-  --logo-blue-strong: #2d7ff0;
-  --logo-ice: #d7ebff;
+  --logo-blue: #9ca3af;
+  --logo-blue-strong: #64748b;
+  --logo-ice: #e5e7eb;
   --logo-steel: #a9bbcf;
   --ui-page: #07101b;
   --ui-surface: #0d1724;
   --ui-surface-2: #111e2d;
   --ui-border: rgba(169, 187, 207, .20);
-  --ui-border-strong: rgba(115, 173, 255, .46);
-  --hero-bg: linear-gradient(135deg, #050b12 0%, #071321 36%, #0d2945 68%, #05090f 100%);
-  --hero-border: rgba(115, 173, 255, .34);
+  --ui-border-strong: rgba(148, 163, 184, .34);
+  --hero-bg: linear-gradient(135deg, #05070a 0%, #0b1118 42%, #111827 100%);
+  --hero-border: rgba(148, 163, 184, .28);
   --hero-text: #f7fbff;
-  --hero-company: #9ecaff;
-  --hero-company-hover: #d7ebff;
+  --hero-company: #d1d5db;
+  --hero-company-hover: #f3f4f6;
   --hero-cta-bg: rgba(10, 20, 32, .78);
   --hero-cta-text: #f7fbff;
-  --hero-cta-border: rgba(115, 173, 255, .44);
+  --hero-cta-border: rgba(148, 163, 184, .32);
   --hero-primary-bg: rgba(10, 20, 32, .92);
   --hero-primary-text: #f7fbff;
-  --hero-primary-border: rgba(158, 202, 255, .62);
+  --hero-primary-border: rgba(209, 213, 219, .42);
   --card-lift-shadow: rgba(0, 0, 0, .18);
   --cta-primary-bg: #111c2b;
   --cta-primary-text: #f7fbff;
-  --cta-primary-border: rgba(115, 173, 255, .44);
+  --cta-primary-border: rgba(148, 163, 184, .32);
   --cta-telegram-bg: #111c2b;
   --cta-telegram-text: #f7fbff;
-  --cta-telegram-border: rgba(115, 173, 255, .44);
+  --cta-telegram-border: rgba(148, 163, 184, .32);
   --cta-login-bg: #111c2b;
   --cta-login-text: #f7fbff;
-  --cta-login-border: rgba(115, 173, 255, .44);
+  --cta-login-border: rgba(148, 163, 184, .32);
 }
 
 :root[data-theme="light"],
@@ -32511,54 +32511,54 @@ b.bad {
   --app-bg: #f4f7fb !important;
   --sidebar: #ffffff !important;
   --surface: #ffffff !important;
-  --surface-soft: #eef3f8 !important;
+  --surface-soft: #f3f4f6 !important;
   --surface-raised: #ffffff !important;
   --panel: #ffffff !important;
   --panel-soft: #f8fafc !important;
-  --panel-strong: #e9eff6 !important;
+  --panel-strong: #e5e7eb !important;
   --card: #ffffff !important;
   --border: rgba(15, 28, 45, .13) !important;
-  --border-strong: rgba(45, 127, 240, .36) !important;
+  --border-strong: rgba(71, 85, 105, .30) !important;
   --text: #0e1726 !important;
   --muted: #64748b !important;
   --soft-text: #334155 !important;
   --brand-text: #0e1726 !important;
-  --accent: #2d7ff0 !important;
-  --accent-strong: #174f91 !important;
-  --accent-soft: rgba(45, 127, 240, .10) !important;
+  --accent: #64748b !important;
+  --accent-strong: #334155 !important;
+  --accent-soft: rgba(100, 116, 139, .10) !important;
   --success: #16815b !important;
   --danger: #c43f54 !important;
   --warning: #986820 !important;
   --ui-page: #f4f7fb;
   --ui-surface: #ffffff;
-  --ui-surface-2: #eef3f8;
+  --ui-surface-2: #f3f4f6;
   --ui-border: rgba(15, 28, 45, .13);
-  --ui-border-strong: rgba(45, 127, 240, .36);
-  --hero-bg: linear-gradient(135deg, #ffffff 0%, #f3f8ff 34%, #dcecff 67%, #f8fbff 100%);
-  --hero-border: rgba(45, 127, 240, .28);
+  --ui-border-strong: rgba(71, 85, 105, .30);
+  --hero-bg: linear-gradient(135deg, #ffffff 0%, #f8fafc 48%, #f1f5f9 100%);
+  --hero-border: rgba(71, 85, 105, .18);
   --hero-text: #0e1726;
-  --hero-company: #174f91;
-  --hero-company-hover: #2d6fbd;
+  --hero-company: #475569;
+  --hero-company-hover: #0f172a;
   --hero-cta-bg: rgba(255, 255, 255, .82);
   --hero-cta-text: #10213b;
-  --hero-cta-border: rgba(45, 127, 240, .36);
+  --hero-cta-border: rgba(71, 85, 105, .22);
   --hero-primary-bg: rgba(255, 255, 255, .94);
   --hero-primary-text: #0e1726;
-  --hero-primary-border: rgba(23, 79, 145, .42);
+  --hero-primary-border: rgba(71, 85, 105, .24);
   --card-lift-shadow: rgba(15, 28, 45, .08);
-  --logo-blue: #2d6fbd;
-  --logo-blue-strong: #174f91;
-  --logo-ice: #dcecff;
+  --logo-blue: #64748b;
+  --logo-blue-strong: #334155;
+  --logo-ice: #e5e7eb;
   --logo-steel: #52677f;
   --cta-primary-bg: #ffffff;
   --cta-primary-text: #10213b;
-  --cta-primary-border: rgba(45, 127, 240, .38);
+  --cta-primary-border: rgba(71, 85, 105, .22);
   --cta-telegram-bg: #ffffff;
   --cta-telegram-text: #10213b;
-  --cta-telegram-border: rgba(45, 127, 240, .38);
+  --cta-telegram-border: rgba(71, 85, 105, .22);
   --cta-login-bg: #ffffff;
   --cta-login-text: #10213b;
-  --cta-login-border: rgba(45, 127, 240, .38);
+  --cta-login-border: rgba(71, 85, 105, .22);
 }
 
 :root[data-theme="dark"],
@@ -32575,14 +32575,14 @@ b.bad {
   --panel-strong: #080f19 !important;
   --card: #0d1724 !important;
   --border: rgba(169, 187, 207, .18) !important;
-  --border-strong: rgba(115, 173, 255, .46) !important;
+  --border-strong: rgba(148, 163, 184, .34) !important;
   --text: #f7fbff !important;
   --muted: #9aabba !important;
   --soft-text: #d5e0eb !important;
   --brand-text: #f7fbff !important;
-  --accent: #73adff !important;
-  --accent-strong: #a7d1ff !important;
-  --accent-soft: rgba(115, 173, 255, .12) !important;
+  --accent: #94a3b8 !important;
+  --accent-strong: #e2e8f0 !important;
+  --accent-soft: rgba(148, 163, 184, .12) !important;
 }
 
 :root[data-theme="black"],
@@ -32599,38 +32599,38 @@ b.bad {
   --panel-strong: #02060b !important;
   --card: #070d14 !important;
   --border: rgba(169, 187, 207, .16) !important;
-  --border-strong: rgba(83, 171, 255, .50) !important;
+  --border-strong: rgba(148, 163, 184, .34) !important;
   --text: #f8fbff !important;
   --muted: #91a4b8 !important;
   --soft-text: #d7e5f7 !important;
   --brand-text: #ffffff !important;
-  --accent: #53abff !important;
-  --accent-strong: #9bd7ff !important;
-  --accent-soft: rgba(83, 171, 255, .13) !important;
+  --accent: #94a3b8 !important;
+  --accent-strong: #e2e8f0 !important;
+  --accent-soft: rgba(148, 163, 184, .12) !important;
   --ui-page: #02060b;
   --ui-surface: #070d14;
   --ui-surface-2: #0d1622;
-  --hero-bg: linear-gradient(135deg, #02060b 0%, #050b12 33%, #0a2038 68%, #02060b 100%);
-  --hero-border: rgba(83, 171, 255, .36);
+  --hero-bg: linear-gradient(135deg, #02060b 0%, #050b12 48%, #0d1622 100%);
+  --hero-border: rgba(148, 163, 184, .28);
   --hero-text: #ffffff;
-  --hero-company: #9bd7ff;
-  --hero-company-hover: #e5f4ff;
+  --hero-company: #d1d5db;
+  --hero-company-hover: #f8fafc;
   --hero-cta-bg: rgba(7, 13, 20, .84);
   --hero-cta-text: #f8fbff;
-  --hero-cta-border: rgba(155, 215, 255, .40);
+  --hero-cta-border: rgba(148, 163, 184, .30);
   --hero-primary-bg: rgba(7, 13, 20, .94);
   --hero-primary-text: #f8fbff;
-  --hero-primary-border: rgba(155, 215, 255, .58);
+  --hero-primary-border: rgba(209, 213, 219, .36);
   --card-lift-shadow: rgba(0, 0, 0, .24);
   --cta-primary-bg: #0d1622;
   --cta-primary-text: #f8fbff;
-  --cta-primary-border: rgba(155, 215, 255, .40);
+  --cta-primary-border: rgba(148, 163, 184, .30);
   --cta-telegram-bg: #0d1622;
   --cta-telegram-text: #f8fbff;
-  --cta-telegram-border: rgba(155, 215, 255, .40);
+  --cta-telegram-border: rgba(148, 163, 184, .30);
   --cta-login-bg: #0d1622;
   --cta-login-text: #f8fbff;
-  --cta-login-border: rgba(155, 215, 255, .40);
+  --cta-login-border: rgba(148, 163, 184, .30);
 }
 
 *,
@@ -32797,7 +32797,7 @@ body,
 :root[data-theme-style][data-theme="light"] .company-attribution,
 :root[data-theme="light"] .market-select-company,
 :root[data-theme-style][data-theme="light"] .market-select-company {
-  color: var(--logo-blue-strong) !important;
+  color: var(--soft-text) !important;
 }
 
 .company-attribution svg,
@@ -32820,7 +32820,7 @@ body,
 :root[data-theme-style][data-theme="light"] .company-attribution:hover,
 :root[data-theme="light"] .market-select-company:hover,
 :root[data-theme-style][data-theme="light"] .market-select-company:hover {
-  color: var(--logo-blue) !important;
+  color: var(--text) !important;
 }
 
 .page-home .home-cta-row {
@@ -33092,7 +33092,7 @@ body,
 .venue-switch button.active,
 .spot-futures-switch button.active,
 .theme-mode-switch button.active {
-  background: color-mix(in srgb, var(--accent) 13%, var(--ui-surface)) !important;
+  background: var(--surface-raised) !important;
   color: var(--text) !important;
   box-shadow: none !important;
 }
@@ -33150,9 +33150,28 @@ body,
 .page-home .home-top-market-card,
 .page-home .home-signal-card,
 .page-home .home-news-card {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
   transform: translateY(0) !important;
   will-change: transform !important;
   transition: transform .16s ease, border-color .16s ease, background-color .16s ease, box-shadow .16s ease !important;
+}
+
+.page-home .home-fear-history-row,
+.page-home .home-leader-row,
+.page-home .home-marketcap-row,
+.page-home .home-news-top span,
+.page-home .home-news-tags b {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+}
+
+.page-home .home-news-badge,
+.page-home .home-news-badge svg,
+.page-home .home-news-top span,
+.page-home .home-news-tags b,
+.market-select-card small {
+  color: var(--soft-text) !important;
 }
 
 .page-home .home-top-market-card:hover,
@@ -34659,8 +34678,8 @@ body,
     min-height: 40px !important;
     padding: 0 !important;
     border-radius: 12px !important;
-    border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border)) !important;
-    background: color-mix(in srgb, var(--panel-strong) 62%, transparent) !important;
+    border: 1px solid var(--border) !important;
+    background: color-mix(in srgb, var(--panel-strong) 72%, transparent) !important;
     color: var(--text) !important;
     overflow: hidden !important;
   }
@@ -34674,8 +34693,8 @@ body,
     justify-content: center !important;
     width: 20px !important;
     height: 20px !important;
-    color: var(--accent) !important;
-    stroke: var(--accent) !important;
+    color: var(--soft-text) !important;
+    stroke: var(--soft-text) !important;
   }
 
   .mobile-home-action span,
@@ -34741,7 +34760,7 @@ body,
 
   .market-select-card {
     min-height: 112px !important;
-    height: 112px !important;
+    height: auto !important;
     padding: 14px !important;
     border-radius: 12px !important;
   }
@@ -34751,8 +34770,9 @@ body,
   }
 
   .market-select-card strong {
-    font-size: clamp(22px, 7vw, 30px) !important;
-    line-height: .98 !important;
+    font-size: clamp(20px, 6.2vw, 28px) !important;
+    line-height: 1 !important;
+    overflow-wrap: anywhere !important;
   }
 
   .market-select-copy small {
@@ -34872,7 +34892,7 @@ body,
     gap: 5px;
     min-height: 62px;
     padding: 6px;
-    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    border: 1px solid var(--border);
     border-radius: 18px;
     background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
     box-shadow: 0 18px 40px rgba(0, 0, 0, .34);
@@ -34903,10 +34923,10 @@ body,
   }
 
   .mobile-bottom-nav button.active {
-    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-    background: color-mix(in srgb, var(--accent) 16%, var(--panel-soft));
-    color: var(--accent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+    border-color: var(--border);
+    background: var(--surface-raised);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--soft-text) 12%, transparent);
   }
 
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) {
@@ -34935,7 +34955,7 @@ body,
     width: 100%;
     padding: 5px;
     overflow-x: auto;
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+    border: 1px solid var(--border);
     border-radius: 14px;
     background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
     backdrop-filter: blur(16px) saturate(1.1);
@@ -34960,8 +34980,8 @@ body,
   }
 
   .mobile-trade-subnav button.active {
-    border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
-    background: color-mix(in srgb, var(--accent) 15%, var(--panel-soft));
+    border-color: var(--border);
+    background: var(--surface-raised);
     color: var(--text);
   }
 
@@ -34976,7 +34996,7 @@ body,
     gap: 4px;
     min-height: 64px;
     padding: 6px;
-    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    border: 1px solid var(--border);
     border-radius: 18px;
     background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
     box-shadow: 0 18px 40px rgba(0, 0, 0, .34);
@@ -35007,10 +35027,10 @@ body,
   }
 
   .mobile-trade-bottom-nav button.active {
-    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-    background: color-mix(in srgb, var(--accent) 17%, var(--panel-soft));
-    color: var(--accent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+    border-color: var(--border);
+    background: var(--surface-raised);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--soft-text) 12%, transparent);
   }
 
   .page-auto-trade .auto-trade-headbar.execution-content-header {
