@@ -24412,9 +24412,9 @@ body,
   body,
   #root {
     width: 100%;
-    min-width: 900px;
-    max-width: none;
-    overflow-x: auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .app-shell,
@@ -24424,9 +24424,9 @@ body,
   .page-auto-trade,
   .auto-trade-page,
   .dashboard-shell {
-    min-width: 900px !important;
-    max-width: none !important;
-    overflow-x: visible !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 
   .app-shell,
@@ -24452,7 +24452,7 @@ body,
   .page-dashboard .premium-workspace-grid,
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) {
     display: grid !important;
-    grid-template-columns: 180px minmax(0, 1fr) !important;
+    grid-template-columns: clamp(132px, 34vw, 160px) minmax(0, 1fr) !important;
   }
 
   .page-auto-trade .premium-workspace-grid > .execution-sidebar,
@@ -24470,5 +24470,27 @@ body,
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-workspace-main {
     grid-column: 2 !important;
     min-width: 0 !important;
+  }
+
+  .shell-header,
+  .shell-brand,
+  .shell-tools,
+  .premium-workspace-grid,
+  .execution-sidebar,
+  .execution-workspace-main,
+  .home-live-board,
+  .home-intel-card,
+  .home-signal-shell,
+  .home-marketcap-shell,
+  .home-leader-shell,
+  .home-news-shell,
+  .auto-auth-shell,
+  .auto-auth-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .execution-sidebar {
+    overflow-x: hidden !important;
   }
 }
