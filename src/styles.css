@@ -24612,21 +24612,14 @@ body,
 
   .page-auto-trade .execution-workspace-main,
   .page-dashboard .execution-workspace-main {
-    transform: none !important;
-  }
-
-  .page-auto-trade .execution-workspace-main > section,
-  .page-auto-trade .execution-flat-workspace,
-  .page-dashboard .dashboard-simulation-panel,
-  .page-dashboard .ledger-wrap {
-    --mobile-scale: .70;
+    --mobile-scale: .66;
     width: calc(100% / var(--mobile-scale)) !important;
     max-width: none !important;
     min-width: 0 !important;
-    zoom: var(--mobile-scale);
+    transform: scale(var(--mobile-scale)) !important;
+    transform-origin: top left !important;
   }
 
-  .page-auto-trade .execution-workspace-main > section,
   .page-auto-trade .execution-flat-workspace,
   .page-dashboard .dashboard-simulation-panel {
     gap: 12px !important;
