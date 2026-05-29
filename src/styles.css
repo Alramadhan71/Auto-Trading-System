@@ -24440,6 +24440,7 @@ body,
     grid-template-columns: minmax(0, 1fr) auto !important;
     gap: 8px !important;
     padding: 8px 10px !important;
+    z-index: 90 !important;
   }
 
   .shell-brand-copy strong,
@@ -24451,6 +24452,8 @@ body,
   }
 
   .shell-tools {
+    position: relative !important;
+    z-index: 91 !important;
     gap: 6px !important;
   }
 
@@ -24482,14 +24485,20 @@ body,
   }
 
   .market-select-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
   }
 
   .market-select-card {
     min-height: 116px !important;
-    padding: 16px !important;
+    padding: 12px !important;
     align-items: center !important;
     overflow: hidden !important;
+  }
+
+  .market-select-card.saudi {
+    grid-column: 1 / -1 !important;
   }
 
   .market-select-card strong,
@@ -24499,8 +24508,43 @@ body,
   }
 
   .market-select-card strong {
-    font-size: clamp(28px, 9vw, 38px) !important;
+    font-size: clamp(22px, 7.2vw, 34px) !important;
     line-height: 1.02 !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) {
+    padding: 10px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-launchpad {
+    min-height: auto !important;
+    padding: 28px 16px !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-top-market-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-live-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-intel-grid {
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-top-market-card,
+  .page-home:not(:has(.market-select-page)) .home-live-card,
+  .page-home:not(:has(.market-select-page)) .home-intel-card,
+  .page-home:not(:has(.market-select-page)) .home-news-shell,
+  .page-home:not(:has(.market-select-page)) .home-marketcap-shell {
+    min-width: 0 !important;
+  }
+
+  .page-home:not(:has(.market-select-page)) .home-top-market-card strong,
+  .page-home:not(:has(.market-select-page)) .home-live-card strong {
+    font-size: clamp(14px, 4.2vw, 22px) !important;
+    overflow-wrap: anywhere !important;
   }
 
   .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
@@ -24565,7 +24609,7 @@ body,
     grid-column: 1 !important;
     width: 100% !important;
     min-width: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   .mobile-menu-open .execution-sidebar {
@@ -24693,10 +24737,6 @@ body,
     overflow-wrap: anywhere !important;
   }
 
-  .market-select-grid,
-  .home-top-market-strip,
-  .home-live-grid,
-  .home-intel-grid,
   .dashboard-profile-grid,
   .page-auto-trade .auto-auth-shell {
     grid-template-columns: minmax(0, 1fr) !important;
@@ -24741,13 +24781,38 @@ body,
   .portfolio-ledger-scroll,
   .ledger-wrap {
     max-width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    overflow-x: hidden !important;
   }
 
   .trade-ledger,
   .portfolio-ledger-shell table {
-    min-width: 720px !important;
+    min-width: 0 !important;
+    width: 100% !important;
     table-layout: auto !important;
+  }
+
+  .trade-ledger th,
+  .trade-ledger td {
+    width: auto !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    padding: 8px 6px !important;
+    font-size: 10px !important;
+  }
+
+  .signal-filters,
+  .trade-ledger-toolbar,
+  .portfolio-ledger-toolbar,
+  .ledger-range-filter,
+  .range-pills {
+    grid-template-columns: minmax(0, 1fr) !important;
+    max-width: 100% !important;
+  }
+
+  .range-pills,
+  .signal-filters > div {
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
 }
