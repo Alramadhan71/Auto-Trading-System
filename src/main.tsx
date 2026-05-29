@@ -893,6 +893,7 @@ function App() {
   const [activeMarketFamily, setActiveMarketFamily] = useState<MarketFamily | null>(null);
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [autoTradePortalView, setAutoTradePortalView] = useState<'login' | 'user' | 'admin'>('login');
+  const [workspaceMenuSignal, setWorkspaceMenuSignal] = useState(0);
   const [logoutSignal, setLogoutSignal] = useState(0);
   const [logoutBusy, setLogoutBusy] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
@@ -1355,6 +1356,7 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
+  const showWorkspaceMenu = isAuthenticated && (page === 'dashboard' || (page === 'auto-trade' && !authEntryPage));
   const showSessionLogout = false;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
@@ -1374,6 +1376,9 @@ function App() {
           <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
+          {showWorkspaceMenu && <button type="button" className="mobile-menu-trigger" onClick={() => setWorkspaceMenuSignal(value => value + 1)} aria-label="Open navigation menu">
+            <Menu size={18} />
+          </button>}
           {!isMarketPicker && <button type="button" className="mobile-home-action" onClick={returnToMarketPicker} aria-label="Back to Home">
             <Home size={16} />
             <span>Back to Home</span>
@@ -1431,8 +1436,9 @@ function App() {
           onExecution={openAutoTradeLogin}
           onLogout={handleAppLogout}
           logoutBusy={logoutBusy}
+          mobileMenuSignal={workspaceMenuSignal}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} mobileMenuSignal={workspaceMenuSignal} />}
       </main>
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
@@ -3579,6 +3585,7 @@ function AutoTradePage({
   onAuthChange,
   onLoginSuccess,
   onPortalViewChange,
+  mobileMenuSignal = 0,
   initialPortalView = 'login'
 }: {
   signals: Signal[];
@@ -3598,6 +3605,7 @@ function AutoTradePage({
   onAuthChange?: (user: AuthSessionUser | null) => void;
   onLoginSuccess?: (user: AuthSessionUser) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
+  mobileMenuSignal?: number;
   initialPortalView?: 'login' | 'user' | 'admin';
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>(initialPortalView);
@@ -3622,6 +3630,9 @@ function AutoTradePage({
   useEffect(() => {
     if (portalView === 'user' && adminWorkspaceTab === 'users') setAdminWorkspaceTab('portfolio');
   }, [adminWorkspaceTab, portalView]);
+  useEffect(() => {
+    if (mobileMenuSignal > 0 && portalView !== 'login') setMobileMenuOpen(true);
+  }, [mobileMenuSignal, portalView]);
   const [capital] = useState(() => readAutoTradeSetting('autoTrade.capital', '25000'));
   const [venueMode, setVenueMode] = useState<ExecutionVenueMode>(() => {
     const savedVenue = readAutoTradeSetting('autoTrade.venueMode', 'spot');
@@ -5736,10 +5747,6 @@ function AutoTradePage({
   }
 
   return <section className={`auto-trade-page${mobileMenuOpen ? ' mobile-menu-open' : ''}`}>
-    <button type="button" className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)} aria-label="Open navigation menu">
-      <Menu size={18} />
-      <span>Menu</span>
-    </button>
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Execution workspace navigation">
         <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
@@ -7178,7 +7185,8 @@ function DashboardPage({
   onMarketHome,
   onExecution,
   onLogout,
-  logoutBusy
+  logoutBusy,
+  mobileMenuSignal = 0
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -7194,6 +7202,7 @@ function DashboardPage({
   onExecution: () => void;
   onLogout: () => void;
   logoutBusy: boolean;
+  mobileMenuSignal?: number;
 }) {
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
@@ -7204,16 +7213,15 @@ function DashboardPage({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const avatarEditor = useSidebarAvatarEditor();
   const closeMobileMenu = () => setMobileMenuOpen(false);
+  useEffect(() => {
+    if (mobileMenuSignal > 0) setMobileMenuOpen(true);
+  }, [mobileMenuSignal]);
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'compare' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
     if (tab === 'performance' || tab === 'notifications') setDashboardSidebarOpen(prev => ({ ...prev, analysis: true }));
   };
   return <section className={`auto-trade-page dashboard-execution-page${mobileMenuOpen ? ' mobile-menu-open' : ''}`}>
-    <button type="button" className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)} aria-label="Open navigation menu">
-      <Menu size={18} />
-      <span>Menu</span>
-    </button>
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
         <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
