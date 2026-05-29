@@ -24616,8 +24616,8 @@ body,
     width: calc(100% / var(--mobile-scale)) !important;
     max-width: none !important;
     min-width: 0 !important;
-    transform: scale(var(--mobile-scale)) !important;
-    transform-origin: top left !important;
+    transform: none !important;
+    zoom: var(--mobile-scale);
   }
 
   .page-auto-trade .execution-flat-workspace,
