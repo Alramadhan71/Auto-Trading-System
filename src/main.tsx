@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, FlaskConical, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, LogOut, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, FlaskConical, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, LogOut, Menu, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet, X } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -1355,36 +1355,6 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
-  const mobileNavItems = [
-    {
-      key: 'crypto',
-      label: 'Crypto',
-      icon: <Globe2 size={19} />,
-      active: page === 'home' && activeMarketFamily === 'crypto',
-      onClick: () => enterMarket('crypto')
-    },
-    {
-      key: 'us-stocks',
-      label: 'US',
-      icon: <BarChart3 size={19} />,
-      active: page === 'home' && activeMarketFamily === 'us-stocks',
-      onClick: () => enterMarket('us-stocks')
-    },
-    {
-      key: 'saudi-stocks',
-      label: 'Saudi',
-      icon: <Landmark size={19} />,
-      active: page === 'home' && activeMarketFamily === 'saudi-stocks',
-      onClick: () => enterMarket('saudi-stocks')
-    },
-    {
-      key: 'execution',
-      label: isAuthenticated ? 'Trade' : 'Login',
-      icon: isAuthenticated ? <Bot size={19} /> : <LogIn size={19} />,
-      active: page === 'auto-trade',
-      onClick: openAutoTradeLogin
-    }
-  ];
   const showSessionLogout = false;
   const shell = (
     <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
@@ -1464,18 +1434,6 @@ function App() {
         />}
         {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
-      {!(page === 'auto-trade' && isAuthenticated) && <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
-        {mobileNavItems.map(item => <button
-          type="button"
-          key={item.key}
-          className={item.active ? 'active' : ''}
-          onClick={item.onClick}
-          aria-current={item.active ? 'page' : undefined}
-        >
-          {item.icon}
-          <span>{item.label}</span>
-        </button>)}
-      </nav>}
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
         symbol={chartSymbol}
@@ -3653,6 +3611,8 @@ function AutoTradePage({
   const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
   const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'strategies' | 'broadcast'>('strategies');
   const [settingsWorkspaceTab, setSettingsWorkspaceTab] = useState<'binance' | 'access'>('binance');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
@@ -5567,72 +5527,6 @@ function AutoTradePage({
     if (portalView === 'user' && tabId === 'settings') setSettingsWorkspaceTab('access');
     if (portalView === 'user' && tabId === 'strategies') setStrategyWorkspaceTab('strategies');
   };
-  const mobileTradeNavItems = [
-    {
-      key: 'market',
-      label: 'Market',
-      icon: <Globe2 size={18} />,
-      active: false,
-      onClick: onMarketHome
-    },
-    {
-      key: 'research',
-      label: 'Research',
-      icon: <BarChart3 size={18} />,
-      active: false,
-      onClick: onDashboard
-    },
-    {
-      key: 'portfolio',
-      label: 'Portfolio',
-      icon: <Wallet size={18} />,
-      active: adminWorkspaceTab === 'portfolio',
-      onClick: () => selectExecutionTab('portfolio')
-    },
-    {
-      key: 'strategies',
-      label: 'Strategies',
-      icon: <Target size={18} />,
-      active: adminWorkspaceTab === 'strategies',
-      onClick: () => selectExecutionTab('strategies')
-    },
-    {
-      key: 'account',
-      label: 'Account',
-      icon: portalView === 'admin' ? <Users size={18} /> : <KeyRound size={18} />,
-      active: adminWorkspaceTab === 'users' || adminWorkspaceTab === 'settings',
-      onClick: () => selectExecutionTab(portalView === 'admin' ? 'users' : 'settings')
-    }
-  ];
-  const mobileTradeSubnav = adminWorkspaceTab === 'portfolio'
-    ? ([
-      ['summary', 'Summary', () => setPortfolioWorkspaceTab('summary'), portfolioWorkspaceTab === 'summary'],
-      ['rules', 'Rules', () => setPortfolioWorkspaceTab('rules'), portfolioWorkspaceTab === 'rules'],
-      ['ledger', 'Ledger', () => setPortfolioWorkspaceTab('ledger'), portfolioWorkspaceTab === 'ledger']
-    ] as const)
-    : adminWorkspaceTab === 'strategies'
-      ? (portalView === 'admin'
-        ? ([
-          ['strategies', 'Strategies', () => setStrategyWorkspaceTab('strategies'), strategyWorkspaceTab === 'strategies'],
-          ['broadcast', 'Broadcast', () => setStrategyWorkspaceTab('broadcast'), strategyWorkspaceTab === 'broadcast']
-        ] as const)
-        : ([
-          ['strategies', 'Strategies', () => setStrategyWorkspaceTab('strategies'), strategyWorkspaceTab === 'strategies']
-        ] as const))
-      : adminWorkspaceTab === 'settings'
-        ? (portalView === 'admin'
-          ? ([
-            ['binance', 'Binance', () => setSettingsWorkspaceTab('binance'), settingsWorkspaceTab === 'binance'],
-            ['access', 'Access', () => setSettingsWorkspaceTab('access'), settingsWorkspaceTab === 'access']
-          ] as const)
-          : ([
-            ['access', 'Access', () => setSettingsWorkspaceTab('access'), settingsWorkspaceTab === 'access']
-          ] as const))
-        : adminWorkspaceTab === 'users'
-          ? ([
-            ['users', 'Users', () => selectExecutionTab('users'), true]
-          ] as const)
-          : [];
   const adminStrategyMetrics = useMemo(() => {
     const metrics = new Map<string, { total: number; closed: number; wins: number; winRate: number }>();
     for (const strategy of strategies) {
@@ -5841,9 +5735,16 @@ function AutoTradePage({
     </section>;
   }
 
-  return <section className="auto-trade-page">
+  return <section className={`auto-trade-page${mobileMenuOpen ? ' mobile-menu-open' : ''}`}>
+    <button type="button" className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)} aria-label="Open navigation menu">
+      <Menu size={18} />
+      <span>Menu</span>
+    </button>
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Execution workspace navigation">
+        <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
+          <X size={18} />
+        </button>
         <div className="execution-sidebar-brand">
           <div>
             <strong>Execution</strong>
@@ -5852,13 +5753,13 @@ function AutoTradePage({
         </div>
         <div className="execution-sidebar-section">
           <span>Markets</span>
-          <button type="button" className="execution-sidebar-main market-context" onClick={onMarketHome}>
+          <button type="button" className="execution-sidebar-main market-context" onClick={() => { closeMobileMenu(); onMarketHome?.(); }}>
             <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
           </button>
         </div>
         <div className="execution-sidebar-section">
           <span>Workspace</span>
-          <button type="button" className="execution-sidebar-main" onClick={onDashboard}>
+          <button type="button" className="execution-sidebar-main" onClick={() => { closeMobileMenu(); onDashboard?.(); }}>
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
@@ -5877,6 +5778,7 @@ function AutoTradePage({
             onClick={() => {
               selectExecutionTab(tab.id);
               setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }));
+              if (tab.id === 'users') closeMobileMenu();
             }}
             aria-expanded={sidebarSectionOpen[tab.id]}
           >
@@ -5895,7 +5797,7 @@ function AutoTradePage({
               ['summary', 'Summary'],
               ['rules', 'Rules'],
               ['ledger', 'Ledger']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'portfolio' && portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('portfolio'); setPortfolioWorkspaceTab(id); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'portfolio' && portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('portfolio'); setPortfolioWorkspaceTab(id); closeMobileMenu(); }}>
               {label}
             </button>)}
           </div>}
@@ -5905,7 +5807,7 @@ function AutoTradePage({
               ['broadcast', 'Broadcast']
             ] as const : [
               ['strategies', 'Strategies']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'strategies' && strategyWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('strategies'); setStrategyWorkspaceTab(id); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'strategies' && strategyWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('strategies'); setStrategyWorkspaceTab(id); closeMobileMenu(); }}>
               {label}
             </button>)}
           </div>}
@@ -5915,7 +5817,7 @@ function AutoTradePage({
               ['access', 'Access']
             ] as const : [
               ['access', 'Access']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'settings' && settingsWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('settings'); setSettingsWorkspaceTab(id); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'settings' && settingsWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('settings'); setSettingsWorkspaceTab(id); closeMobileMenu(); }}>
               {label}
             </button>)}
           </div>}
@@ -5931,21 +5833,16 @@ function AutoTradePage({
             </span>
           </button>
           <input ref={avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => updateSidebarAvatar(event.target.files?.[0])} />
-          {onLogout && <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
+          {onLogout && <button type="button" className="execution-sidebar-logout" onClick={() => { closeMobileMenu(); onLogout(); }} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
           </button>}
         </div>
       </aside>
+      <button type="button" className="mobile-menu-backdrop" onClick={closeMobileMenu} aria-label="Close navigation menu" />
 
       <main className="execution-workspace-main">
       <SidebarAvatarCropper editor={{ avatarInputRef, sidebarAvatar, avatarCropImage, avatarCropZoom, avatarCropOffset, updateSidebarAvatar, closeAvatarCropper, saveCroppedAvatar, startAvatarDrag, moveAvatarDrag, stopAvatarDrag, setAvatarCropZoom, setAvatarCropOffset }} />
-
-      <nav className="mobile-trade-subnav" aria-label="Trade section navigation">
-        {mobileTradeSubnav.map(([id, label, onClick, active]) => <button key={id} type="button" className={active ? 'active' : ''} onClick={onClick}>
-          {label}
-        </button>)}
-      </nav>
 
       <div className="auto-trade-headbar execution-content-header">
         <div className="execution-content-title">
@@ -7262,12 +7159,6 @@ function AutoTradePage({
         </div>
       </div>}
       </main>
-      <nav className="mobile-trade-bottom-nav" aria-label="Trade workspace navigation">
-        {mobileTradeNavItems.map(item => <button key={item.key} type="button" className={item.active ? 'active' : ''} onClick={item.onClick} aria-current={item.active ? 'page' : undefined}>
-          {item.icon}
-          <span>{item.label}</span>
-        </button>)}
-      </nav>
     </div>
     <TradeChartModal trade={chartTrade} latestTicker={chartTrade ? (chartTrade.market === 'futures' ? futuresTickers.get(chartTrade.symbol) : tickers.get(chartTrade.symbol)) : undefined} onClose={() => setChartTrade(null)} />
   </section>;
@@ -7310,15 +7201,24 @@ function DashboardPage({
   const [dashboardWorkspaceTab, setDashboardWorkspaceTab] = useState<'ledger' | 'compare' | 'options' | 'routing' | 'performance' | 'notifications'>('ledger');
   const [activeSimulationLedgerId, setActiveSimulationLedgerId] = useState<SimulationLedgerId>('all-strategies');
   const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: true });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const avatarEditor = useSidebarAvatarEditor();
+  const closeMobileMenu = () => setMobileMenuOpen(false);
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'compare' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
     if (tab === 'performance' || tab === 'notifications') setDashboardSidebarOpen(prev => ({ ...prev, analysis: true }));
   };
-  return <section className="auto-trade-page dashboard-execution-page">
+  return <section className={`auto-trade-page dashboard-execution-page${mobileMenuOpen ? ' mobile-menu-open' : ''}`}>
+    <button type="button" className="mobile-menu-trigger" onClick={() => setMobileMenuOpen(true)} aria-label="Open navigation menu">
+      <Menu size={18} />
+      <span>Menu</span>
+    </button>
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
+        <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
+          <X size={18} />
+        </button>
         <div className="execution-sidebar-brand">
           <div>
             <strong>Research Lab</strong>
@@ -7327,7 +7227,7 @@ function DashboardPage({
         </div>
         <div className="execution-sidebar-section">
           <span>Markets</span>
-          <button type="button" className="execution-sidebar-main market-context" onClick={onMarketHome}>
+          <button type="button" className="execution-sidebar-main market-context" onClick={() => { closeMobileMenu(); onMarketHome(); }}>
             <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
           </button>
         </div>
@@ -7337,7 +7237,7 @@ function DashboardPage({
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
-          <button type="button" className="execution-sidebar-main" onClick={onExecution}>
+          <button type="button" className="execution-sidebar-main" onClick={() => { closeMobileMenu(); onExecution(); }}>
             <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Execution</strong></span>
           </button>
@@ -7364,10 +7264,12 @@ function DashboardPage({
               onClick={() => {
                 if (item.id === 'compare') {
                   selectDashboardTab('compare');
+                  closeMobileMenu();
                   return;
                 }
                 setActiveSimulationLedgerId(item.id);
                 selectDashboardTab('ledger');
+                closeMobileMenu();
               }}
             >
               {item.name}
@@ -7386,8 +7288,8 @@ function DashboardPage({
             <span className="execution-sidebar-chevron" aria-hidden="true">{dashboardSidebarOpen.analysis ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
           </button>
           {dashboardSidebarOpen.analysis && <div className="execution-sidebar-subnav">
-            <button type="button" className={dashboardWorkspaceTab === 'performance' ? 'active' : ''} onClick={() => selectDashboardTab('performance')}>Performance</button>
-            <button type="button" className={dashboardWorkspaceTab === 'notifications' ? 'active' : ''} onClick={() => selectDashboardTab('notifications')}>Notifications</button>
+            <button type="button" className={dashboardWorkspaceTab === 'performance' ? 'active' : ''} onClick={() => { selectDashboardTab('performance'); closeMobileMenu(); }}>Performance</button>
+            <button type="button" className={dashboardWorkspaceTab === 'notifications' ? 'active' : ''} onClick={() => { selectDashboardTab('notifications'); closeMobileMenu(); }}>Notifications</button>
           </div>
           }
         </div>
@@ -7402,12 +7304,13 @@ function DashboardPage({
             </span>
           </button>
           <input ref={avatarEditor.avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => avatarEditor.updateSidebarAvatar(event.target.files?.[0])} />
-          <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
+          <button type="button" className="execution-sidebar-logout" onClick={() => { closeMobileMenu(); onLogout(); }} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
           </button>
         </div>
       </aside>
+      <button type="button" className="mobile-menu-backdrop" onClick={closeMobileMenu} aria-label="Close navigation menu" />
 
       <main className="execution-workspace-main">
         <SidebarAvatarCropper editor={avatarEditor} />

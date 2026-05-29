@@ -24398,12 +24398,9 @@ body,
   font-weight: 900;
 }
 
-.mobile-bottom-nav {
-  display: none;
-}
-
-.mobile-trade-subnav,
-.mobile-trade-bottom-nav {
+.mobile-menu-trigger,
+.mobile-menu-close,
+.mobile-menu-backdrop {
   display: none;
 }
 
@@ -24429,15 +24426,8 @@ body,
     overflow-x: hidden !important;
   }
 
-  .app-shell,
-  .app-shell:has(.mobile-trade-bottom-nav) {
+  .app-shell {
     padding-bottom: 0 !important;
-  }
-
-  .mobile-bottom-nav,
-  .mobile-trade-subnav,
-  .mobile-trade-bottom-nav {
-    display: none !important;
   }
 
   .shell-nav {
@@ -24448,42 +24438,139 @@ body,
     display: grid !important;
   }
 
+  .page-frame:has(.market-select-page) {
+    padding: 12px !important;
+  }
+
+  .market-select-page {
+    min-height: calc(100dvh - 92px) !important;
+    padding: 18px 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .market-select-lockup h1 {
+    font-size: clamp(34px, 14vw, 54px) !important;
+    line-height: 1.02 !important;
+  }
+
+  .market-select-grid {
+    gap: 10px !important;
+  }
+
+  .market-select-card {
+    min-height: 96px !important;
+    padding: 16px !important;
+  }
+
+  .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+  .page-frame.page-auto-trade:has(.auto-auth-shell) {
+    min-height: calc(100dvh - 76px) !important;
+  }
+
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-height: auto !important;
+    padding: 14px !important;
+  }
+
+  .page-auto-trade .auto-auth-marketing,
+  .page-frame.page-auto-trade .auto-auth-marketing {
+    display: none !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    width: 100% !important;
+    max-width: 420px !important;
+    margin: 0 auto !important;
+  }
+
   .page-auto-trade .premium-workspace-grid,
-  .page-dashboard .premium-workspace-grid,
-  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) {
+  .page-dashboard .premium-workspace-grid {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     gap: 12px !important;
   }
 
   .page-auto-trade .premium-workspace-grid > .execution-sidebar,
-  .page-dashboard .premium-workspace-grid > .execution-sidebar,
-  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-sidebar {
+  .page-dashboard .premium-workspace-grid > .execution-sidebar {
     display: flex !important;
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 70 !important;
+    width: min(324px, 88vw) !important;
+    height: 100dvh !important;
     max-height: none !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
+    flex-direction: column !important;
     gap: 8px !important;
-    grid-column: 1 !important;
-    grid-row: auto !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    padding: 8px 0 10px !important;
-    border-right: 0 !important;
-    border-bottom: 1px solid var(--border) !important;
-    background: transparent !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+    border-right: 1px solid var(--border) !important;
+    border-bottom: 0 !important;
+    background: var(--panel-strong) !important;
+    box-shadow: 20px 0 60px rgba(0, 0, 0, .42) !important;
+    transform: translateX(-105%) !important;
+    transition: transform .22s ease !important;
   }
 
   .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar),
   .page-dashboard .premium-workspace-grid > :not(.execution-sidebar),
   .page-auto-trade .execution-workspace-main,
-  .page-dashboard .execution-workspace-main,
-  .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-workspace-main {
+  .page-dashboard .execution-workspace-main {
     grid-column: 1 !important;
     min-width: 0 !important;
+  }
+
+  .mobile-menu-open .execution-sidebar {
+    transform: translateX(0) !important;
+  }
+
+  .mobile-menu-trigger {
+    position: sticky !important;
+    top: 82px !important;
+    z-index: 25 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: max-content !important;
+    min-height: 40px !important;
+    margin: 0 0 10px !important;
+    padding: 0 13px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 11px !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+  }
+
+  .mobile-menu-close {
+    display: inline-grid !important;
+    place-items: center !important;
+    align-self: end !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+  }
+
+  .mobile-menu-open .mobile-menu-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 65 !important;
+    display: block !important;
+    border: 0 !important;
+    background: rgba(0, 0, 0, .56) !important;
   }
 
   .shell-header,
@@ -24504,31 +24591,26 @@ body,
     max-width: 100% !important;
   }
 
-  .execution-sidebar {
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-  }
-
   .execution-sidebar-brand,
   .execution-sidebar-footer,
-  .execution-sidebar-section > span,
-  .execution-sidebar-copy span,
-  .execution-sidebar-chevron {
-    display: none !important;
-  }
-
   .execution-sidebar-section,
   .execution-sidebar-group,
   .execution-sidebar-subnav {
-    display: contents !important;
+    display: grid !important;
+  }
+
+  .execution-sidebar-section > span,
+  .execution-sidebar-copy span,
+  .execution-sidebar-chevron {
+    display: inline-flex !important;
   }
 
   .execution-sidebar-main,
   .execution-sidebar-subnav button {
-    flex: 0 0 auto !important;
-    min-width: 104px !important;
+    width: 100% !important;
+    min-width: 0 !important;
     min-height: 40px !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
   }
 
   .page-home .home-product-lockup h1,
