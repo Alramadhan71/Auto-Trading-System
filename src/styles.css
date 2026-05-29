@@ -24585,7 +24585,7 @@ body,
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
-    z-index: 70 !important;
+    z-index: 110 !important;
     width: min(324px, 88vw) !important;
     height: 100dvh !important;
     max-height: none !important;
@@ -24612,7 +24612,7 @@ body,
     overflow: visible !important;
   }
 
-  .mobile-menu-open .execution-sidebar {
+  .workspace-menu-open .execution-sidebar {
     transform: translateX(0) !important;
   }
 
@@ -24676,10 +24676,10 @@ body,
     color: var(--text) !important;
   }
 
-  .mobile-menu-open .mobile-menu-backdrop {
+  .workspace-menu-open .mobile-menu-backdrop {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 65 !important;
+    z-index: 100 !important;
     display: block !important;
     border: 0 !important;
     background: rgba(0, 0, 0, .56) !important;
@@ -24691,6 +24691,12 @@ body,
   .premium-workspace-grid,
   .execution-sidebar,
   .execution-workspace-main,
+  .auto-trade-headbar,
+  .chart-block,
+  .panel,
+  .portfolio-card,
+  .capital-group,
+  .trade-extremes,
   .home-live-board,
   .home-intel-card,
   .home-signal-shell,
@@ -24747,6 +24753,7 @@ body,
   .page-auto-trade .auto-auth-card,
   .portfolio-card,
   .capital-group {
+    width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     overflow: hidden !important;
@@ -24786,19 +24793,45 @@ body,
 
   .trade-ledger,
   .portfolio-ledger-shell table {
+    display: block !important;
     min-width: 0 !important;
     width: 100% !important;
     table-layout: auto !important;
   }
 
+  .trade-ledger thead {
+    display: none !important;
+  }
+
+  .trade-ledger tbody {
+    display: grid !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .trade-ledger tr,
+  .trade-ledger-body tbody tr {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    height: auto !important;
+    padding: 8px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    background: var(--panel-strong) !important;
+  }
+
   .trade-ledger th,
   .trade-ledger td {
+    display: block !important;
     width: auto !important;
     min-width: 0 !important;
     white-space: normal !important;
     overflow-wrap: anywhere !important;
-    padding: 8px 6px !important;
+    border: 0 !important;
+    padding: 6px !important;
     font-size: 10px !important;
+    line-height: 1.35 !important;
   }
 
   .signal-filters,
