@@ -24615,40 +24615,102 @@ body,
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
+    overflow-x: clip !important;
     transform: none !important;
-    zoom: normal;
+    zoom: normal !important;
+  }
+
+  .page-auto-trade .execution-workspace-main *,
+  .page-dashboard .execution-workspace-main * {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .page-auto-trade .execution-workspace-main > section,
+  .page-dashboard .execution-workspace-main > section,
+  .page-auto-trade .execution-flat-workspace,
+  .page-dashboard .dashboard-simulation-panel,
+  .page-dashboard .ledger-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: clip !important;
   }
 
   .page-auto-trade .execution-flat-workspace,
-  .page-dashboard .dashboard-simulation-panel {
-    gap: 12px !important;
-  }
-
-  .page-auto-trade .execution-workspace-main > section > *,
-  .page-auto-trade .execution-flat-workspace > *,
-  .page-dashboard .dashboard-simulation-panel > *,
-  .page-dashboard .ledger-wrap > * {
-    min-width: 0 !important;
+  .page-dashboard .dashboard-simulation-panel,
+  .ledger-wrap,
+  .trade-extremes,
+  .performance-summary,
+  .public-ops-body,
+  .admin-personal-body {
+    gap: 10px !important;
   }
 
   .execution-content-title h1,
   .execution-workspace-title h2,
   .page-auto-trade .auto-auth-head h1 {
     max-width: 100% !important;
+    font-size: 24px !important;
+    line-height: 1.08 !important;
     white-space: normal !important;
     overflow-wrap: anywhere !important;
   }
 
-  .dashboard-profile-grid {
+  .execution-content-title span,
+  .execution-workspace-title span:not(.nav-badge) {
+    font-size: 10px !important;
+  }
+
+  .scan-progress-card {
+    grid-template-columns: auto auto minmax(0, 1fr) !important;
+    gap: 8px !important;
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .scan-progress-card strong {
+    font-size: 24px !important;
+  }
+
+  .scan-progress-card small {
+    grid-column: 1 / -1 !important;
+    font-size: 10px !important;
+  }
+
+  .dashboard-profile-grid,
+  .command-summary {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 
   .simulation-compare-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 
-  .command-summary {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  .simulation-compare-card,
+  .trade-extreme-card,
+  .dashboard-profile-card,
+  .command-summary article,
+  .ledger-pnl-split article {
+    min-height: 0 !important;
+    padding: 11px !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+
+  .simulation-compare-card .simulation-net-pnl,
+  .trade-extreme-card strong,
+  .command-summary strong,
+  .ledger-pnl-split strong {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+  }
+
+  .simulation-compare-card div {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 4px 6px !important;
+    font-size: 10px !important;
   }
 
   .trade-extremes-row,
@@ -24658,46 +24720,168 @@ body,
   .ledger-pnl-split-wide,
   .binance-wallet-hero {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 
-  .ledger-wallet-panels {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .trade-extremes span,
+  .trade-extremes small,
+  .ledger-pnl-split span,
+  .ledger-pnl-split small {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
   }
 
-  .ledger-simulation-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .ledger-simulation-grid.wallet-grid {
+  .range-pills {
+    display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
   }
 
-  .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  .range-pills button,
+  .signal-filters button,
+  .selection-pill-row button,
+  .access-filter-pills button {
+    min-width: 0 !important;
+    min-height: 32px !important;
+    padding: 0 8px !important;
+    font-size: 11px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
   }
 
-  .ledger-shared-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .scan-progress-card {
-    grid-template-columns: auto auto minmax(0, 1fr) !important;
-  }
-
-  .signal-filters {
-    grid-template-columns: 1.3fr 1fr !important;
-  }
-
-  .signal-filters,
-  .range-pills,
-  .signal-filters > div {
+  .ledger-range-filter {
+    justify-items: stretch !important;
+    margin-left: 0 !important;
     max-width: 100% !important;
   }
 
-  .range-pills,
+  .signal-filters {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+  }
+
   .signal-filters > div {
-    display: flex !important;
-    flex-wrap: wrap !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .signal-filters span {
+    margin: 0 !important;
+    font-size: 10px !important;
+  }
+
+  .ledger-wallet-panels,
+  .page-auto-trade .admin-personal-body,
+  .page-auto-trade .admin-control-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .ledger-simulation-grid,
+  .ledger-simulation-grid.wallet-grid,
+  .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+
+  .ledger-shared-grid,
+  .page-auto-trade .public-ops-bottomline {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .ledger-wallet-panel,
+  .experiment-details-panel,
+  .live-rules-shell,
+  .public-strategies-card,
+  .admin-personal-panel,
+  .admin-binance-panel,
+  .binance-connect-panel {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .ledger-wallet-panel,
+  .live-rules-panel-card,
+  .public-strategies-card,
+  .admin-personal-card {
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .ledger-simulation-grid input,
+  .ledger-option-button,
+  .selection-inline-input input {
+    min-height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  .live-rules-panel-grid,
+  .live-rules-shell.open .live-rules-panel-grid,
+  .shadow-rule-pill-groups,
+  .shadow-rule-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .live-futures-rule-card,
+  .live-protection-rule-card {
+    grid-column: 1 / -1 !important;
+  }
+
+  .live-futures-settings,
+  .live-rules-shell.open .live-futures-settings-advanced,
+  .live-protection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .selection-pill-row,
+  .access-filter-pills,
+  .page-auto-trade .public-strategy-tools {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+
+  .page-auto-trade .public-strategy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .page-auto-trade .public-strategy-card {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "name state"
+      "metrics metrics" !important;
+    min-height: 94px !important;
+    padding: 10px !important;
+  }
+
+  .page-auto-trade .public-strategy-card strong {
+    min-height: 0 !important;
+    overflow: hidden !important;
+    font-size: 12px !important;
+    line-height: 1.15 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .page-auto-trade .public-strategy-card small {
+    font-size: 10px !important;
+    white-space: normal !important;
+  }
+
+  .page-auto-trade .admin-credential-grid,
+  .page-auto-trade .admin-personal-summary,
+  .binance-admin-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 
   .trade-ledger-shell,
@@ -24743,7 +24927,7 @@ body,
   .trade-ledger tr,
   .trade-ledger-body tbody tr {
     display: table-row !important;
-    height: 60px !important;
+    height: 54px !important;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -24753,51 +24937,16 @@ body,
   .trade-ledger th,
   .trade-ledger td {
     display: table-cell !important;
-    padding: 8px 5px !important;
+    padding: 7px 4px !important;
     border-bottom: 1px solid var(--border) !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    font-size: 10px !important;
+    font-size: 9px !important;
+    line-height: 1.2 !important;
   }
 
   .trade-ledger td::before {
     content: none !important;
-  }
-
-  .page-auto-trade .public-ops-bottomline {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .page-auto-trade .public-strategy-tools {
-    grid-template-columns: repeat(2, minmax(0, max-content)) !important;
-  }
-
-  .page-auto-trade .public-strategy-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .page-auto-trade .public-strategy-card {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    grid-template-areas:
-      "name state"
-      "metrics metrics" !important;
-    min-height: 104px !important;
-  }
-
-  .page-auto-trade .public-strategy-card strong {
-    min-height: 34px !important;
-    overflow: hidden !important;
-    -webkit-line-clamp: 2 !important;
-  }
-
-  .page-auto-trade .admin-control-grid,
-  .page-auto-trade .admin-personal-body {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .page-auto-trade .admin-credential-grid,
-  .page-auto-trade .admin-personal-summary {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
