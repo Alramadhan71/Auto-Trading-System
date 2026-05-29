@@ -24612,12 +24612,11 @@ body,
 
   .page-auto-trade .execution-workspace-main,
   .page-dashboard .execution-workspace-main {
-    --mobile-scale: .66;
-    width: calc(100% / var(--mobile-scale)) !important;
-    max-width: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
     min-width: 0 !important;
     transform: none !important;
-    zoom: var(--mobile-scale);
+    zoom: normal;
   }
 
   .page-auto-trade .execution-flat-workspace,
@@ -24649,7 +24648,7 @@ body,
   }
 
   .command-summary {
-    grid-template-columns: 1.55fr repeat(7, 1fr) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 
   .trade-extremes-row,
@@ -24658,7 +24657,7 @@ body,
   .ledger-pnl-split,
   .ledger-pnl-split-wide,
   .binance-wallet-hero {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
   .ledger-wallet-panels {
@@ -24666,23 +24665,23 @@ body,
   }
 
   .ledger-simulation-grid {
-    grid-template-columns: repeat(8, minmax(92px, 1fr)) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 
   .ledger-simulation-grid.wallet-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
   .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
-    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
   .ledger-shared-grid {
-    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .scan-progress-card {
-    grid-template-columns: minmax(140px, .4fr) auto minmax(180px, 1fr) minmax(180px, .65fr) !important;
+    grid-template-columns: auto auto minmax(0, 1fr) !important;
   }
 
   .signal-filters {
@@ -24767,15 +24766,15 @@ body,
   }
 
   .page-auto-trade .public-ops-bottomline {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, .42fr) !important;
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 
   .page-auto-trade .public-strategy-tools {
-    grid-template-columns: repeat(3, minmax(0, max-content)) !important;
+    grid-template-columns: repeat(2, minmax(0, max-content)) !important;
   }
 
   .page-auto-trade .public-strategy-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .page-auto-trade .public-strategy-card {
