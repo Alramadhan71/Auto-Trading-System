@@ -24476,7 +24476,8 @@ body,
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    overflow: visible !important;
+    overflow-x: clip !important;
+    overflow-y: visible !important;
   }
 
   .mobile-menu-trigger {
@@ -24618,7 +24619,7 @@ body,
   .page-auto-trade .execution-flat-workspace,
   .page-dashboard .dashboard-simulation-panel,
   .page-dashboard .ledger-wrap {
-    --mobile-scale: .72;
+    --mobile-scale: .70;
     width: calc(100% / var(--mobile-scale)) !important;
     max-width: none !important;
     min-width: 0 !important;
@@ -24713,7 +24714,7 @@ body,
   .portfolio-ledger-scroll,
   .ledger-wrap {
     max-width: 100% !important;
-    overflow-x: auto !important;
+    overflow-x: clip !important;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -24731,12 +24732,12 @@ body,
   .trade-ledger {
     display: table !important;
     width: 100% !important;
-    min-width: 920px !important;
+    min-width: 0 !important;
     table-layout: fixed !important;
   }
 
   .portfolio-accepted-table {
-    min-width: 1480px !important;
+    min-width: 0 !important;
   }
 
   .trade-ledger thead {
@@ -24760,12 +24761,12 @@ body,
   .trade-ledger th,
   .trade-ledger td {
     display: table-cell !important;
-    padding: 10px 8px !important;
+    padding: 8px 5px !important;
     border-bottom: 1px solid var(--border) !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    font-size: 12px !important;
+    font-size: 10px !important;
   }
 
   .trade-ledger td::before {
