@@ -24636,8 +24636,108 @@ body,
   .execution-content-title h1,
   .execution-workspace-title h2,
   .page-auto-trade .auto-auth-head h1 {
+    font-size: 24px !important;
+    line-height: 1.08 !important;
     max-width: 100% !important;
     white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .page-dashboard .dashboard-simulation-panel,
+  .simulation-compare-panel,
+  .ledger-wrap,
+  .page-auto-trade .public-ops-panel,
+  .page-auto-trade .public-ops-body,
+  .page-auto-trade .public-strategies-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .scan-progress-card {
+    grid-template-columns: auto auto minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .scan-progress-card strong {
+    font-size: 24px !important;
+  }
+
+  .scan-progress-card small {
+    grid-column: 1 / -1 !important;
+  }
+
+  .scan-progress-track {
+    min-width: 0 !important;
+  }
+
+  .simulation-compare-grid,
+  .command-summary,
+  .trade-extremes-row,
+  .ledger-pnl-split,
+  .ledger-pnl-split-wide {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .simulation-compare-card,
+  .trade-extreme-card,
+  .command-summary article,
+  .ledger-pnl-split article {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    padding: 14px !important;
+    overflow: visible !important;
+  }
+
+  .simulation-compare-card strong,
+  .trade-extreme-card strong,
+  .command-summary strong,
+  .ledger-pnl-split strong {
+    font-size: 22px !important;
+    line-height: 1.08 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .simulation-compare-card div {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .experiment-details-panel,
+  .ledger-simulation-panel,
+  .ledger-wallet-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .experiment-details-panel div,
+  .ledger-simulation-head {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: start !important;
+    gap: 4px !important;
+  }
+
+  .experiment-details-panel p,
+  .ledger-wallet-head,
+  .ledger-wallet-head *,
+  .ledger-simulation-head * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     overflow-wrap: anywhere !important;
   }
 
@@ -24776,9 +24876,179 @@ body,
     max-width: 100% !important;
   }
 
-  .range-pills,
+  .ledger-range-filter {
+    justify-items: stretch !important;
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
+
+  .range-pills {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .range-pills button {
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 0 8px !important;
+    border-radius: 8px !important;
+    white-space: normal !important;
+  }
+
+  .signal-filters {
+    display: grid !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
   .signal-filters > div {
-    display: flex !important;
-    flex-wrap: wrap !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px !important;
+    overflow: visible !important;
+  }
+
+  .signal-filters > div > span {
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+    font-size: 11px !important;
+  }
+
+  .signal-filters button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 38px !important;
+    padding: 0 8px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .page-auto-trade .public-ops-toggle {
+    align-items: start !important;
+    min-height: auto !important;
+    padding: 0 0 14px !important;
+  }
+
+  .page-auto-trade .public-ops-toggle h2 {
+    font-size: 22px !important;
+  }
+
+  .page-auto-trade .public-ops-body {
+    padding: 0 !important;
+  }
+
+  .page-auto-trade .public-strategies-card {
+    display: grid !important;
+    gap: 14px !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .page-auto-trade .public-strategies-head,
+  .page-auto-trade .public-card-actions {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .page-auto-trade .public-card-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .page-auto-trade .public-card-actions button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page-auto-trade .public-strategy-tools {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .page-auto-trade .public-strategy-tools .access-filter-pills {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px !important;
+  }
+
+  .page-auto-trade .public-strategy-tools .access-filter-pills:nth-child(2) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .page-auto-trade .public-strategy-tools .access-filter-pills button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 38px !important;
+    padding: 0 8px !important;
+    white-space: normal !important;
+  }
+
+  .page-auto-trade .public-strategy-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .page-auto-trade .public-strategy-card {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "name state"
+      "venue wr" !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .page-auto-trade .public-strategy-card strong {
+    min-height: 0 !important;
+    overflow: visible !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    -webkit-line-clamp: unset !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .page-auto-trade .public-strategy-card small {
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+  }
+
+  .page-auto-trade .public-strategy-card small:first-of-type {
+    grid-area: venue !important;
+    justify-self: start !important;
+  }
+
+  .page-auto-trade .public-strategy-card small:nth-of-type(2) {
+    grid-area: wr !important;
+    justify-self: end !important;
+  }
+
+  .page-auto-trade .public-strategy-card b {
+    grid-area: state !important;
+    justify-self: end !important;
+    align-self: start !important;
+    position: static !important;
+    min-width: 38px !important;
+    max-width: 58px !important;
   }
 }
