@@ -24600,14 +24600,7 @@ body,
   }
 
   .page-auto-trade .auto-auth-shell,
-  .page-frame.page-auto-trade .auto-auth-shell,
-  .dashboard-profile-grid,
-  .trade-extremes-row,
-  .binance-wallet-hero,
-  .ledger-simulation-grid,
-  .ledger-wallet-panels,
-  .capital-form-grid,
-  .command-summary {
+  .page-frame.page-auto-trade .auto-auth-shell {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 
@@ -24616,439 +24609,202 @@ body,
     display: none !important;
   }
 
-  .page-auto-trade .auto-auth-card,
-  .page-frame.page-auto-trade .auto-auth-card,
-  .portfolio-card,
-  .capital-group,
-  .chart-block,
-  .panel,
-  .home-live-board,
-  .home-intel-card,
-  .home-signal-shell,
-  .home-marketcap-shell,
-  .home-leader-shell,
-  .home-news-shell {
-    width: 100% !important;
+  .page-auto-trade .execution-workspace-main,
+  .page-dashboard .execution-workspace-main {
+    transform: none !important;
+  }
+
+  .page-auto-trade .execution-workspace-main > section,
+  .page-auto-trade .execution-flat-workspace,
+  .page-dashboard .dashboard-simulation-panel,
+  .page-dashboard .ledger-wrap {
+    --mobile-scale: .72;
+    width: calc(100% / var(--mobile-scale)) !important;
+    max-width: none !important;
     min-width: 0 !important;
-    max-width: 100% !important;
+    zoom: var(--mobile-scale);
+  }
+
+  .page-auto-trade .execution-workspace-main > section,
+  .page-auto-trade .execution-flat-workspace,
+  .page-dashboard .dashboard-simulation-panel {
+    gap: 12px !important;
+  }
+
+  .page-auto-trade .execution-workspace-main > section > *,
+  .page-auto-trade .execution-flat-workspace > *,
+  .page-dashboard .dashboard-simulation-panel > *,
+  .page-dashboard .ledger-wrap > * {
+    min-width: 0 !important;
   }
 
   .execution-content-title h1,
   .execution-workspace-title h2,
   .page-auto-trade .auto-auth-head h1 {
-    font-size: 24px !important;
-    line-height: 1.08 !important;
     max-width: 100% !important;
     white-space: normal !important;
     overflow-wrap: anywhere !important;
   }
 
-  .page-dashboard .dashboard-simulation-panel,
-  .simulation-compare-panel,
-  .ledger-wrap,
-  .page-auto-trade .public-ops-panel,
-  .page-auto-trade .public-ops-body,
-  .page-auto-trade .public-strategies-card {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    overflow: visible !important;
+  .dashboard-profile-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .simulation-compare-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .command-summary {
+    grid-template-columns: 1.55fr repeat(7, 1fr) !important;
+  }
+
+  .trade-extremes-row,
+  .trade-extremes-row-top,
+  .trade-extremes-row-bottom,
+  .ledger-pnl-split,
+  .ledger-pnl-split-wide,
+  .binance-wallet-hero {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  .ledger-wallet-panels {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .ledger-simulation-grid {
+    grid-template-columns: repeat(8, minmax(92px, 1fr)) !important;
+  }
+
+  .ledger-simulation-grid.wallet-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  }
+
+  .ledger-shared-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
   }
 
   .scan-progress-card {
-    grid-template-columns: auto auto minmax(0, 1fr) !important;
-    gap: 10px !important;
-    padding: 12px 14px !important;
-    border-radius: 16px !important;
+    grid-template-columns: minmax(140px, .4fr) auto minmax(180px, 1fr) minmax(180px, .65fr) !important;
   }
 
-  .scan-progress-card strong {
-    font-size: 24px !important;
+  .signal-filters {
+    grid-template-columns: 1.3fr 1fr !important;
   }
 
-  .scan-progress-card small {
-    grid-column: 1 / -1 !important;
-  }
-
-  .scan-progress-track {
-    min-width: 0 !important;
-  }
-
-  .simulation-compare-grid,
-  .command-summary,
-  .trade-extremes-row,
-  .ledger-pnl-split,
-  .ledger-pnl-split-wide {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 10px !important;
-    width: 100% !important;
-    min-width: 0 !important;
+  .signal-filters,
+  .range-pills,
+  .signal-filters > div {
     max-width: 100% !important;
   }
 
-  .simulation-compare-card,
-  .trade-extreme-card,
-  .command-summary article,
-  .ledger-pnl-split article {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: auto !important;
-    padding: 14px !important;
-    overflow: visible !important;
+  .range-pills,
+  .signal-filters > div {
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
 
-  .simulation-compare-card strong,
-  .trade-extreme-card strong,
-  .command-summary strong,
-  .ledger-pnl-split strong {
-    font-size: 22px !important;
-    line-height: 1.08 !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .simulation-compare-card div {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-  }
-
-  .experiment-details-panel,
-  .ledger-simulation-panel,
-  .ledger-wallet-panel {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    padding: 12px !important;
-    overflow: visible !important;
-  }
-
-  .experiment-details-panel div,
-  .ledger-simulation-head {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    justify-items: start !important;
-    gap: 4px !important;
-  }
-
-  .experiment-details-panel p,
-  .ledger-wallet-head,
-  .ledger-wallet-head *,
-  .ledger-simulation-head * {
-    min-width: 0 !important;
-    max-width: 100% !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .ledger-wrap,
   .trade-ledger-shell,
+  .trade-ledger-scroll,
   .portfolio-ledger-shell,
-  .trade-ledger-scroll,
-  .portfolio-ledger-scroll {
-    width: 100% !important;
+  .portfolio-ledger-scroll,
+  .ledger-wrap {
     max-width: 100% !important;
-    min-width: 0 !important;
-    overflow-x: clip !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .trade-ledger-scroll,
-  .portfolio-ledger-scroll {
-    height: auto !important;
-    max-height: min(72dvh, 720px) !important;
+  .trade-ledger-scroll {
+    height: 260px !important;
+    max-height: 260px !important;
     overflow-y: auto !important;
-    padding: 10px !important;
   }
 
-  .trade-ledger,
-  .portfolio-ledger-shell table {
-    display: block !important;
+  .portfolio-ledger-scroll {
+    height: 320px !important;
+    max-height: 320px !important;
+  }
+
+  .trade-ledger {
+    display: table !important;
     width: 100% !important;
-    min-width: 0 !important;
-    table-layout: auto !important;
+    min-width: 920px !important;
+    table-layout: fixed !important;
+  }
+
+  .portfolio-accepted-table {
+    min-width: 1480px !important;
   }
 
   .trade-ledger thead {
-    display: none !important;
+    display: table-header-group !important;
   }
 
   .trade-ledger tbody {
-    display: grid !important;
-    width: 100% !important;
-    gap: 10px !important;
+    display: table-row-group !important;
   }
 
   .trade-ledger tr,
   .trade-ledger-body tbody tr {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 7px !important;
-    height: auto !important;
-    padding: 10px !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 12px !important;
-    background: var(--panel-strong) !important;
-  }
-
-  .trade-ledger .ledger-spacer-row {
-    display: none !important;
-  }
-
-  .trade-ledger td,
-  .trade-ledger th {
-    display: grid !important;
-    grid-template-columns: minmax(88px, 34%) minmax(0, 1fr) !important;
-    align-items: start !important;
-    gap: 8px !important;
-    width: auto !important;
-    min-width: 0 !important;
+    display: table-row !important;
+    height: 60px !important;
     padding: 0 !important;
     border: 0 !important;
-    color: var(--soft-text) !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    overflow-wrap: anywhere !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .trade-ledger th,
+  .trade-ledger td {
+    display: table-cell !important;
+    padding: 10px 8px !important;
+    border-bottom: 1px solid var(--border) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     font-size: 12px !important;
-    line-height: 1.35 !important;
   }
 
   .trade-ledger td::before {
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    content: "Field";
+    content: none !important;
   }
 
-  .sim-ok-table td:nth-child(1)::before,
-  .portfolio-accepted-table td:nth-child(1)::before,
-  .portfolio-rejected-table td:nth-child(1)::before,
-  .sim-rejected-table td:nth-child(1)::before { content: "Trade"; }
-  .sim-ok-table td:nth-child(2)::before,
-  .portfolio-accepted-table td:nth-child(2)::before,
-  .portfolio-rejected-table td:nth-child(2)::before,
-  .sim-rejected-table td:nth-child(2)::before { content: "Symbol"; }
-  .sim-ok-table td:nth-child(3)::before,
-  .portfolio-accepted-table td:nth-child(3)::before,
-  .portfolio-rejected-table td:nth-child(3)::before,
-  .sim-rejected-table td:nth-child(3)::before { content: "Strategy"; }
-  .sim-ok-table td:nth-child(4)::before,
-  .portfolio-accepted-table td:nth-child(4)::before,
-  .portfolio-rejected-table td:nth-child(4)::before,
-  .sim-rejected-table td:nth-child(4)::before { content: "Status"; }
-  .sim-ok-table td:nth-child(5)::before,
-  .portfolio-accepted-table td:nth-child(6)::before,
-  .portfolio-rejected-table td:nth-child(5)::before,
-  .sim-rejected-table td:nth-child(5)::before { content: "Side"; }
-  .sim-ok-table td:nth-child(6)::before,
-  .portfolio-accepted-table td:nth-child(7)::before,
-  .portfolio-rejected-table td:nth-child(6)::before,
-  .sim-rejected-table td:nth-child(6)::before { content: "Venue"; }
-  .sim-ok-table td:nth-child(7)::before,
-  .portfolio-accepted-table td:nth-child(10)::before { content: "Timeframe"; }
-  .sim-ok-table td:nth-child(8)::before,
-  .portfolio-accepted-table td:nth-child(13)::before { content: "Entry"; }
-  .sim-ok-table td:nth-child(9)::before,
-  .portfolio-accepted-table td:nth-child(14)::before { content: "Market"; }
-  .sim-ok-table td:nth-child(10)::before,
-  .portfolio-accepted-table td:nth-child(16)::before { content: "Target / Risk"; }
-  .sim-ok-table td:nth-child(11)::before { content: "Allocation"; }
-  .sim-ok-table td:nth-child(12)::before,
-  .portfolio-accepted-table td:nth-child(12)::before { content: "Duration"; }
-  .sim-ok-table td:nth-child(13)::before,
-  .portfolio-accepted-table td:nth-child(17)::before { content: "PnL"; }
-  .portfolio-accepted-table td:nth-child(5)::before { content: "Trade Status"; }
-  .portfolio-accepted-table td:nth-child(8)::before { content: "Allocation"; }
-  .portfolio-accepted-table td:nth-child(9)::before { content: "Exit"; }
-  .portfolio-accepted-table td:nth-child(11)::before { content: "Entry Time"; }
-  .portfolio-accepted-table td:nth-child(15)::before { content: "Liquidation"; }
-  .portfolio-rejected-table td:nth-child(7)::before,
-  .sim-rejected-table td:nth-child(7)::before { content: "Reason"; }
-
-  .trade-ledger-toolbar,
-  .portfolio-ledger-toolbar,
-  .signal-filters,
-  .ledger-range-filter,
-  .range-pills {
-    grid-template-columns: minmax(0, 1fr) !important;
-    max-width: 100% !important;
-  }
-
-  .ledger-range-filter {
-    justify-items: stretch !important;
-    margin-left: 0 !important;
-    text-align: left !important;
-  }
-
-  .range-pills {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-
-  .range-pills button {
-    min-width: 0 !important;
-    width: 100% !important;
-    min-height: 38px !important;
-    padding: 0 8px !important;
-    border-radius: 8px !important;
-    white-space: normal !important;
-  }
-
-  .signal-filters {
-    display: grid !important;
-    gap: 10px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-  }
-
-  .signal-filters > div {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 10px !important;
-    overflow: visible !important;
-  }
-
-  .signal-filters > div > span {
-    grid-column: 1 / -1 !important;
-    margin: 0 !important;
-    font-size: 11px !important;
-  }
-
-  .signal-filters button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 38px !important;
-    padding: 0 8px !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .page-auto-trade .public-ops-toggle {
-    align-items: start !important;
-    min-height: auto !important;
-    padding: 0 0 14px !important;
-  }
-
-  .page-auto-trade .public-ops-toggle h2 {
-    font-size: 22px !important;
-  }
-
-  .page-auto-trade .public-ops-body {
-    padding: 0 !important;
-  }
-
-  .page-auto-trade .public-strategies-card {
-    display: grid !important;
-    gap: 14px !important;
-    padding: 14px !important;
-    border-radius: 12px !important;
-  }
-
-  .page-auto-trade .public-strategies-head,
-  .page-auto-trade .public-card-actions {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    align-items: stretch !important;
-    gap: 10px !important;
-  }
-
-  .page-auto-trade .public-card-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .page-auto-trade .public-card-actions button {
-    width: 100% !important;
-    min-width: 0 !important;
+  .page-auto-trade .public-ops-bottomline {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, .42fr) !important;
   }
 
   .page-auto-trade .public-strategy-tools {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 10px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .page-auto-trade .public-strategy-tools .access-filter-pills {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 8px !important;
-  }
-
-  .page-auto-trade .public-strategy-tools .access-filter-pills:nth-child(2) {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-
-  .page-auto-trade .public-strategy-tools .access-filter-pills button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 38px !important;
-    padding: 0 8px !important;
-    white-space: normal !important;
+    grid-template-columns: repeat(3, minmax(0, max-content)) !important;
   }
 
   .page-auto-trade .public-strategy-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 10px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   }
 
   .page-auto-trade .public-strategy-card {
     grid-template-columns: minmax(0, 1fr) auto !important;
     grid-template-areas:
       "name state"
-      "venue wr" !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: auto !important;
-    padding: 12px !important;
-    overflow: visible !important;
+      "metrics metrics" !important;
+    min-height: 104px !important;
   }
 
   .page-auto-trade .public-strategy-card strong {
-    min-height: 0 !important;
-    overflow: visible !important;
-    font-size: 13px !important;
-    line-height: 1.25 !important;
-    -webkit-line-clamp: unset !important;
-    overflow-wrap: anywhere !important;
+    min-height: 34px !important;
+    overflow: hidden !important;
+    -webkit-line-clamp: 2 !important;
   }
 
-  .page-auto-trade .public-strategy-card small {
-    overflow: visible !important;
-    white-space: normal !important;
-    text-overflow: clip !important;
+  .page-auto-trade .admin-control-grid,
+  .page-auto-trade .admin-personal-body {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  .page-auto-trade .public-strategy-card small:first-of-type {
-    grid-area: venue !important;
-    justify-self: start !important;
-  }
-
-  .page-auto-trade .public-strategy-card small:nth-of-type(2) {
-    grid-area: wr !important;
-    justify-self: end !important;
-  }
-
-  .page-auto-trade .public-strategy-card b {
-    grid-area: state !important;
-    justify-self: end !important;
-    align-self: start !important;
-    position: static !important;
-    min-width: 38px !important;
-    max-width: 58px !important;
+  .page-auto-trade .admin-credential-grid,
+  .page-auto-trade .admin-personal-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
