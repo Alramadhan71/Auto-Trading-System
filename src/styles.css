@@ -24452,15 +24452,29 @@ body,
   .page-dashboard .premium-workspace-grid,
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) {
     display: grid !important;
-    grid-template-columns: clamp(132px, 34vw, 160px) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
   }
 
   .page-auto-trade .premium-workspace-grid > .execution-sidebar,
   .page-dashboard .premium-workspace-grid > .execution-sidebar,
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-sidebar {
     display: flex !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 8px !important;
     grid-column: 1 !important;
-    grid-row: 1 !important;
+    grid-row: auto !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 8px 0 10px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: transparent !important;
   }
 
   .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar),
@@ -24468,7 +24482,7 @@ body,
   .page-auto-trade .execution-workspace-main,
   .page-dashboard .execution-workspace-main,
   .page-auto-trade .premium-workspace-grid:has(.mobile-trade-bottom-nav) > .execution-workspace-main {
-    grid-column: 2 !important;
+    grid-column: 1 !important;
     min-width: 0 !important;
   }
 
@@ -24491,6 +24505,99 @@ body,
   }
 
   .execution-sidebar {
-    overflow-x: hidden !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  .execution-sidebar-brand,
+  .execution-sidebar-footer,
+  .execution-sidebar-section > span,
+  .execution-sidebar-copy span,
+  .execution-sidebar-chevron {
+    display: none !important;
+  }
+
+  .execution-sidebar-section,
+  .execution-sidebar-group,
+  .execution-sidebar-subnav {
+    display: contents !important;
+  }
+
+  .execution-sidebar-main,
+  .execution-sidebar-subnav button {
+    flex: 0 0 auto !important;
+    min-width: 104px !important;
+    min-height: 40px !important;
+    white-space: nowrap !important;
+  }
+
+  .page-home .home-product-lockup h1,
+  .page-home .home-launchpad h1,
+  .market-select-lockup h1,
+  .page-auto-trade .auto-auth-marketing h1,
+  .page-auto-trade .auto-auth-head h1,
+  .execution-content-title h1,
+  .execution-workspace-title h2 {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .market-select-grid,
+  .home-top-market-strip,
+  .home-live-grid,
+  .home-intel-grid,
+  .dashboard-profile-grid,
+  .page-auto-trade .auto-auth-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .market-select-card,
+  .page-auto-trade .auto-auth-marketing,
+  .page-auto-trade .auto-auth-card,
+  .portfolio-card,
+  .capital-group {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .trade-extremes-row,
+  .binance-wallet-hero,
+  .ledger-simulation-grid,
+  .ledger-wallet-panels,
+  .capital-form-grid,
+  .command-summary {
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)) !important;
+  }
+
+  .trade-extreme-card,
+  .binance-wallet-hero article,
+  .dashboard-profile-card {
+    min-width: 0 !important;
+  }
+
+  .trade-extreme-card *,
+  .binance-wallet-hero article *,
+  .dashboard-profile-card * {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .trade-ledger-shell,
+  .trade-ledger-scroll,
+  .portfolio-ledger-shell,
+  .portfolio-ledger-scroll,
+  .ledger-wrap {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .trade-ledger,
+  .portfolio-ledger-shell table {
+    min-width: 720px !important;
+    table-layout: auto !important;
   }
 }
