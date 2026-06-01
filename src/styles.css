@@ -23745,3 +23745,311 @@ body,
   font-size: 13px;
   font-weight: 900;
 }
+
+@media (max-width: 760px) {
+  html:has(.market-select-page),
+  body:has(.market-select-page),
+  #root:has(.market-select-page),
+  .app-shell:has(.market-select-page) {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-header,
+  .app-shell:has(.auto-auth-shell) .shell-header {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    padding: 7px 10px !important;
+    overflow: hidden !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand,
+  .app-shell:has(.auto-auth-shell) .shell-brand {
+    min-width: 0 !important;
+    gap: 9px !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand-mark.brand-logo-mark,
+  .app-shell:has(.auto-auth-shell) .shell-brand-mark.brand-logo-mark {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    background-size: 52px 52px !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand-copy strong,
+  .app-shell:has(.auto-auth-shell) .shell-brand-copy strong {
+    max-width: 190px !important;
+    font-size: 13px !important;
+    line-height: 1.05 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand-copy small,
+  .app-shell:has(.auto-auth-shell) .shell-brand-copy small {
+    max-width: 190px !important;
+    font-size: 9px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-tools,
+  .app-shell:has(.auto-auth-shell) .shell-tools {
+    min-width: 0 !important;
+    gap: 6px !important;
+  }
+
+  .app-shell:has(.market-select-page) .theme-control .theme-toggle,
+  .app-shell:has(.auto-auth-shell) .theme-control .theme-toggle {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .app-shell:has(.market-select-page) .theme-control .theme-toggle > span:not(.theme-toggle-icon),
+  .app-shell:has(.auto-auth-shell) .theme-control .theme-toggle > span:not(.theme-toggle-icon) {
+    display: none !important;
+  }
+
+  .page-frame:has(.market-select-page) {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: calc(100svh - 64px) !important;
+    max-height: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .market-select-page {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    min-height: calc(100svh - 64px) !important;
+    height: auto !important;
+    align-content: center !important;
+    gap: 18px !important;
+    padding: 22px 16px 28px !important;
+    overflow: visible !important;
+    background-size: 34px 34px, 34px 34px, 100% 100%, 100% 100% !important;
+  }
+
+  .market-select-lockup {
+    width: min(360px, 100%) !important;
+    gap: 8px !important;
+  }
+
+  .market-select-kicker {
+    min-height: 24px !important;
+    padding: 0 10px !important;
+    font-size: 9px !important;
+  }
+
+  .market-select-lockup h1 {
+    max-width: 10ch !important;
+    font-size: 34px !important;
+    line-height: .92 !important;
+  }
+
+  .market-select-company {
+    margin-top: 2px !important;
+    font-size: 11px !important;
+    gap: 5px !important;
+    text-shadow: none !important;
+  }
+
+  .market-select-company svg {
+    width: 12px !important;
+    height: 12px !important;
+    flex-basis: 12px !important;
+  }
+
+  .market-select-grid {
+    width: min(326px, calc(100vw - 64px)) !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    justify-self: start !important;
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
+
+  .market-select-card {
+    min-height: 132px !important;
+    grid-template-columns: minmax(0, 1fr) 30px !important;
+    gap: 8px !important;
+    padding: 14px !important;
+    border-radius: 9px !important;
+    align-items: end !important;
+  }
+
+  .market-select-card.saudi {
+    grid-column: 1 / -1 !important;
+    min-height: 118px !important;
+  }
+
+  .market-select-copy {
+    gap: 7px !important;
+  }
+
+  .market-select-copy small {
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .market-select-card strong {
+    max-width: 9ch !important;
+    font-size: 23px !important;
+    line-height: .9 !important;
+    letter-spacing: 0 !important;
+    overflow-wrap: normal !important;
+  }
+
+  .market-select-card.saudi strong {
+    max-width: 12ch !important;
+    font-size: 28px !important;
+  }
+
+  .market-select-action {
+    width: 30px !important;
+    height: 30px !important;
+    align-self: start !important;
+  }
+
+  .market-select-action svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .page-auto-trade:has(.auto-auth-shell),
+  .page-frame.page-auto-trade:has(.auto-auth-shell),
+  .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+  .page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    min-height: calc(100svh - 64px) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  .page-frame.page-auto-trade:has(.auto-auth-shell),
+  .page-auto-trade:has(.auto-auth-shell) {
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+  }
+
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: min(390px, calc(100vw - 28px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 24px 14px 28px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: center !important;
+    justify-items: center !important;
+    justify-self: start !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .page-auto-trade .auto-auth-marketing,
+  .page-frame.page-auto-trade .auto-auth-marketing {
+    display: none !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    width: 100% !important;
+    max-width: 390px !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .page-auto-trade .auto-auth-card form,
+  .page-frame.page-auto-trade .auto-auth-card form {
+    width: 100% !important;
+    max-width: 390px !important;
+    gap: 11px !important;
+    padding: 18px !important;
+    border-radius: 10px !important;
+  }
+
+  .page-auto-trade .auto-auth-head {
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .page-auto-trade .auto-auth-head img {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .page-auto-trade .auto-auth-head span {
+    font-size: 8px !important;
+  }
+
+  .page-auto-trade .auto-auth-head h1 {
+    font-size: 22px !important;
+    line-height: 1.05 !important;
+  }
+
+  .page-auto-trade .role-switch {
+    min-height: 36px !important;
+    padding: 3px !important;
+  }
+
+  .page-auto-trade .role-switch button {
+    min-height: 30px !important;
+    font-size: 11px !important;
+  }
+
+  .page-auto-trade .auto-auth-form {
+    gap: 9px !important;
+  }
+
+  .page-auto-trade .auth-input-shell,
+  .page-auto-trade .password-field,
+  .page-auto-trade .auto-auth-form input {
+    min-height: 42px !important;
+    font-size: 12px !important;
+  }
+
+  .page-auto-trade .auth-form-row {
+    gap: 8px !important;
+    font-size: 10px !important;
+  }
+
+  .page-auto-trade .auth-action-stack > button[type="submit"] {
+    min-height: 42px !important;
+    font-size: 12px !important;
+  }
+
+  .page-auto-trade .auth-help,
+  .page-frame.page-auto-trade .auth-help {
+    font-size: 10px !important;
+  }
+}
