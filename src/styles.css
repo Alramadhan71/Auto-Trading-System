@@ -23728,6 +23728,61 @@ body,
   padding: 14px;
 }
 
+@media (max-width: 768px) {
+  html:has(.market-select-page),
+  body:has(.market-select-page),
+  #root:has(.market-select-page),
+  .app-shell:has(.market-select-page) {
+    height: auto !important;
+    max-height: none !important;
+    overflow: auto !important;
+  }
+
+  .page-frame:has(.market-select-page) {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 10px !important;
+  }
+
+  .market-select-page {
+    height: auto !important;
+    min-height: 0 !important;
+    align-content: start !important;
+    gap: 18px !important;
+    padding: 18px 12px !important;
+    overflow: visible !important;
+  }
+
+  .page-frame.page-dashboard,
+  .page-frame.page-auto-trade {
+    min-height: 0 !important;
+    padding-bottom: 14px !important;
+  }
+
+  .page-dashboard .premium-workspace-grid,
+  .page-auto-trade .premium-workspace-grid,
+  .page-dashboard .dashboard-execution-page,
+  .page-auto-trade .auto-trade-page {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .page-dashboard .execution-sidebar,
+  .page-auto-trade .execution-sidebar {
+    position: static !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .page-dashboard .execution-sidebar-footer,
+  .page-auto-trade .execution-sidebar-footer {
+    margin-top: 0 !important;
+  }
+}
+
 
 .home-action {
   display: inline-flex;
