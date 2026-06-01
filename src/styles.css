@@ -3156,8 +3156,6 @@ h1 { font-size: clamp(28px, 4vw, 54px); }
 .live-leverage-risk-scale .high { color: var(--spectrum-high); text-align: right; }
 
 
-
-/* Responsive application shell refresh */
 html {
   min-width: 320px;
   scroll-behavior: smooth;
@@ -3423,10 +3421,6 @@ video {
 .decision-signal-row {
   min-width: 0;
 }
-
-
-
-
 
 
 .premium-panel-heading h2 {
@@ -6640,7 +6634,6 @@ video {
 }
 
 
-
 .ledger-score-cell,
 .ledger-pnl-cell,
 .ledger-allocation-cell {
@@ -7069,10 +7062,6 @@ video {
 .trade-list .loss { color: var(--danger); }
 
 
-
-
-
-/* Final responsive priority layer */
 .shell-header {
   grid-template-columns: minmax(210px, .9fr) minmax(360px, 1.4fr) minmax(250px, auto);
 }
@@ -7110,37 +7099,6 @@ video {
 }
 
 
-
-
-
-
-
-/* Compact desktop-like mobile layout */
-
-
-
-
-
-
-/* Mobile polish reset: ordered, readable, no clipped desktop squeeze */
-
-
-
-
-
-
-/* Full mobile section rebuild */
-
-
-
-
-/* Mobile desktop-parity layer: keep card geometry, shrink the system */
-
-
-
-
-/* Final layout correction: full desktop, compact non-overlapping mobile */
-@media (min-width: 821px) {
   main,
   .page-frame {
     width: 100%;
@@ -7170,24 +7128,8 @@ video {
     width: 100%;
     max-width: none;
   }
-}
 
 
-
-
-
-/* Mobile header and hero precision pass */
-
-
-/* Header tools and chart modal mobile fix */
-
-/* Requested mobile refinements */
-
-
-
-
-/* Dashboard mobile desktop-parity pass */
-@media (min-width: 821px) {
   .page-dashboard,
   .page-dashboard .dashboard-hero,
   .page-dashboard .performance-command,
@@ -7196,19 +7138,8 @@ video {
     width: 100%;
     max-width: none;
   }
-}
 
 
-
-
-
-/* Dashboard readable mobile correction */
-
-
-
-
-/* Auto Trading page responsive desktop-parity pass */
-@media (min-width: 821px) {
   .page-auto-trade,
   .page-auto-trade .auto-trade-page,
   .page-auto-trade .auto-auth-shell,
@@ -7222,13 +7153,8 @@ video {
     width: 100%;
     max-width: none;
   }
-}
 
 
-
-
-
-/* Final mobile parity/layout correction */
 .chart-empty-state {
   min-height: 300px;
   display: grid;
@@ -7241,61 +7167,12 @@ video {
 }
 
 
-
-
-
-/* Center Auto Trading login on mobile */
-
-
-
-
-/* Last-word overrides for compact production mobile layout */
-
-
-/* Mobile consistency pass: keep desktop-like rows without crushing card content */
-
-
-
-
 /* Phone fit correction: no page-wide clipped desktop rows */
-
-
-
-
-/* Final desktop-parity mobile rows */
-
-
 
 
 /* Phone natural fit: no horizontal scroll for cards/filters/strategy grids */
 
 
-/* Dashboard performance cards: keep only mobile-essential metrics */
-
-
-/* Mobile numeric fit: never truncate key values inside compact cards */
-
-
-
-
-/* Auto Trading mobile polish: dashboard-style compact cards without truncating numbers */
-
-
-
-
-/* Auto Trading live rules and public controls final mobile pass */
-
-
-/* Mobile interaction/layout fixes: filters scroll, futures rules, public cards, admin personal */
-
-
-/* Final mobile auto-trading polish: field hints, leverage fit, rejected reasons, admin personal */
-
-
-/* Hard mobile fixes for live futures handling and protected badge */
-
-
-/* Final cross-device polish: dynamic dashboard chart, public toggles, theme trigger, mobile hints */
 .theme-studio {
   cursor: pointer;
 }
@@ -7440,7 +7317,6 @@ video {
   line-height: 1;
   white-space: nowrap;
 }
-
 
 
 /* Dashboard chart, ledger modal, and public strategy final fit */
@@ -7640,7 +7516,6 @@ video {
 }
 
 
-
 /* Root refresh: restore calm chart interaction and five-column strategy rows */
 .page-dashboard .performance-command .chart {
   min-height: 340px;
@@ -7753,8 +7628,6 @@ video {
 }
 
 
-
-/* Recharts root fix: keep the chart drawable after responsive/mobile overrides. */
 .page-dashboard .chart .strategy-bars-canvas {
   display: block !important;
   position: relative;
@@ -7789,9 +7662,6 @@ video {
 }
 
 
-
-/* Final home hero positioning override. Keep this at the end so older theme/mobile
-   blocks cannot push the hero copy back to the left column. */
 .page-home .home-launchpad {
   display: flex !important;
   align-items: center !important;
@@ -7839,7 +7709,6 @@ video {
 }
 
 
-
 /* Live polish: centered desktop nav and compact Binance wallet summary */
 .shell-header {
   grid-template-columns: auto minmax(0, 1fr) auto !important;
@@ -7878,9 +7747,6 @@ video {
 }
 
 
-
-
-
 /* Home major market strip above search */
 .home-search-bridge {
   display: grid;
@@ -7917,14 +7783,6 @@ video {
 }
 
 
-
-
-
-
-
-
-
-/* Dashboard mobile parity: keep the desktop grid/table shape and scale it down. */
 .page-dashboard .sim-ok-table th:nth-child(1), .page-dashboard .sim-ok-table td:nth-child(1) { width: 6.5%; }
 .page-dashboard .sim-ok-table th:nth-child(2), .page-dashboard .sim-ok-table td:nth-child(2) { width: 8%; }
 .page-dashboard .sim-ok-table th:nth-child(3), .page-dashboard .sim-ok-table td:nth-child(3) { width: 13%; }
@@ -7955,13 +7813,6 @@ video {
   line-height: 1;
   text-align: center;
 }
-
-
-
-
-
-
-
 
 
 /* Phase 1 redesign: public home and trial/login gateway */
@@ -8307,9 +8158,6 @@ video {
 }
 
 
-
-
-
 /* Minimal public entry and simple login copy */
 .shell-header.home-header {
   grid-template-columns: auto auto !important;
@@ -8478,9 +8326,6 @@ video {
 }
 
 
-
-
-
 /* Restore pre-redesign home hero shape */
 .page-home .home-launchpad {
   display: flex !important;
@@ -8557,7 +8402,6 @@ video {
 .page-home .home-cta-secondary small {
   display: none !important;
 }
-
 
 
 /* Final header theme toggle */
@@ -9118,7 +8962,6 @@ textarea::placeholder {
 .auth-value-grid svg {
   color: var(--muted) !important;
 }
-
 
 
 /* Semantic contrast pass: neutral foundations with purposeful accents. */
@@ -9783,73 +9626,6 @@ body {
   min-height: 48px !important;
 }
 
-@media (max-height: 790px) and (min-width: 981px) {
-  .page-auto-trade:has(.auto-auth-shell) {
-    padding-block: 12px !important;
-  }
-
-  .page-auto-trade .auto-auth-shell {
-    height: calc(100vh - 96px) !important;
-    padding: 16px 20px !important;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
-    gap: 18px !important;
-  }
-
-  .auto-auth-marketing {
-    gap: 9px !important;
-  }
-
-  .auto-auth-marketing h1 {
-    font-size: clamp(38px, 4vw, 56px) !important;
-  }
-
-  .auto-auth-marketing p {
-    font-size: 14px !important;
-    line-height: 1.35 !important;
-  }
-
-  .auth-value-grid article {
-    min-height: 84px !important;
-    padding: 9px 10px !important;
-  }
-
-  .auth-value-grid strong {
-    font-size: 13px !important;
-  }
-
-  .auth-value-grid span {
-    font-size: 11px !important;
-    line-height: 1.28 !important;
-  }
-
-  .trial-proof-strip span {
-    min-height: 42px !important;
-    padding: 7px 10px !important;
-  }
-
-  .auth-marketing-cta {
-    min-height: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-card {
-    padding: 16px 18px !important;
-  }
-
-  .page-auto-trade .auto-auth-head h1 {
-    font-size: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-form input,
-  .page-auto-trade .password-field {
-    min-height: 42px !important;
-  }
-
-  .page-auto-trade .auto-auth-form > button[type="submit"] {
-    min-height: 44px !important;
-  }
-}
-
-
 
 /* Final auth rebuild: full viewport split, compact story, no centered poster. */
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
@@ -10084,66 +9860,6 @@ body {
 .page-frame.page-auto-trade .auto-auth-head h1 {
   font-size: clamp(42px, 3.2vw, 58px) !important;
 }
-
-@media (max-height: 820px) and (min-width: 981px) {
-  .page-frame.page-auto-trade .auto-auth-shell {
-    padding-block: 18px !important;
-    grid-template-columns: minmax(600px, 1fr) minmax(370px, 450px) !important;
-    gap: clamp(28px, 4vw, 64px) !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing {
-    gap: 11px !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing h1 {
-    font-size: clamp(48px, 4.7vw, 78px) !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing p {
-    font-size: 15px !important;
-    line-height: 1.34 !important;
-  }
-
-  .auth-decision-card {
-    min-height: 210px !important;
-    padding: 16px !important;
-  }
-
-  .auth-decision-card strong {
-    font-size: clamp(22px, 1.8vw, 30px) !important;
-  }
-
-  .auth-stage-list article {
-    min-height: 99px !important;
-    padding: 12px !important;
-  }
-
-  .auth-stage-list strong {
-    font-size: 15px !important;
-  }
-
-  .auth-stage-list small {
-    font-size: 11px !important;
-    line-height: 1.25 !important;
-  }
-
-  .page-frame.page-auto-trade .trial-proof-strip span {
-    min-height: 50px !important;
-    padding: 8px 12px !important;
-  }
-
-  .page-frame.page-auto-trade .auth-marketing-cta {
-    min-height: 36px !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-card {
-    padding: 18px 20px !important;
-  }
-}
-
-
-
 
 
 /* Final auth landing pass: compact, alive, and intentionally simple. */
@@ -10482,9 +10198,6 @@ body {
   font-size: 14px !important;
   line-height: 1 !important;
 }
-
-
-
 
 
 /* Auth landing final override: keep this last. */
@@ -10841,9 +10554,6 @@ body {
 }
 
 
-
-
-
 /* Auth landing final fix: theme-aware, balanced, and clean actions. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
@@ -11198,9 +10908,6 @@ body {
 }
 
 
-
-
-
 /* Auth polish pass: reduce density, keep the first viewport complete. */
 .page-frame.page-auto-trade .auto-auth-shell {
   grid-template-columns: minmax(520px, 0.95fr) minmax(390px, 440px) !important;
@@ -11461,28 +11168,6 @@ body {
 .auth-modal .register-panel-head {
   margin-bottom: 12px !important;
 }
-
-@media (max-height: 820px) and (min-width: 981px) {
-  .page-frame.page-auto-trade .auto-auth-shell {
-    padding-block: 18px !important;
-    grid-template-columns: minmax(500px, 0.95fr) minmax(370px, 420px) !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing h1 {
-    font-size: clamp(40px, 3.55vw, 58px) !important;
-  }
-
-  .auth-flow-line article {
-    min-height: 68px !important;
-  }
-
-  .auth-decision-card {
-    min-height: 112px !important;
-  }
-}
-
-
-
 
 
 /* Radical auth gateway: decision-first marketing, no clipped safe areas. */
@@ -11752,23 +11437,6 @@ body {
   background: linear-gradient(180deg, color-mix(in srgb, var(--success) 92%, white), var(--success)) !important;
 }
 
-@media (max-height: 800px) and (min-width: 981px) {
-  .page-frame.page-auto-trade .auto-auth-shell {
-    padding-block: 42px !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing h1 {
-    font-size: clamp(44px, 4.45vw, 70px) !important;
-  }
-
-  .auth-command-list {
-    gap: 6px !important;
-  }
-}
-
-
-
-
 
 /* Minimal auth: fewer words, tighter composition. */
 .page-frame.page-auto-trade .auto-auth-shell {
@@ -11927,9 +11595,6 @@ body {
   font-size: 12px !important;
   font-weight: 500 !important;
 }
-
-
-
 
 
 /* Alive minimal auth: structured motion without glow. */
@@ -12103,9 +11768,6 @@ body {
   color: var(--text) !important;
   background: color-mix(in srgb, var(--card-surface-raised) 72%, transparent) !important;
 }
-
-
-
 
 
 /* Full-page auth redesign: use the viewport, not a centered poster card. */
@@ -12325,51 +11987,6 @@ body {
 .page-auto-trade .auto-auth-head h1 {
   font-size: clamp(40px, 3.5vw, 58px) !important;
 }
-
-@media (max-height: 820px) and (min-width: 981px) {
-  .page-auto-trade .auto-auth-shell {
-    padding-block: 18px !important;
-    grid-template-columns: minmax(0, 1.2fr) minmax(360px, 450px) !important;
-  }
-
-  .auto-auth-marketing {
-    gap: 11px !important;
-  }
-
-  .auto-auth-marketing h1 {
-    font-size: clamp(44px, 4.7vw, 74px) !important;
-  }
-
-  .auto-auth-marketing p {
-    font-size: clamp(14px, 1vw, 18px) !important;
-    line-height: 1.35 !important;
-  }
-
-  .auth-system-pipeline article {
-    min-height: 126px !important;
-    padding: 12px !important;
-    gap: 7px !important;
-  }
-
-  .auth-system-pipeline small {
-    font-size: 11px !important;
-    line-height: 1.25 !important;
-  }
-
-  .trial-proof-strip span {
-    min-height: 54px !important;
-    padding: 9px 12px !important;
-  }
-
-  .auth-marketing-cta {
-    min-height: 36px !important;
-  }
-
-  .page-auto-trade .auto-auth-card {
-    padding: 18px 20px !important;
-  }
-}
-
 
 
 /* Login landing final pass: no gated nav, compact desktop fit, clearer product proof. */
@@ -12606,73 +12223,6 @@ body {
   line-height: 1.35 !important;
 }
 
-@media (max-height: 790px) and (min-width: 981px) {
-  .page-auto-trade:has(.auto-auth-shell) {
-    padding-block: 12px !important;
-  }
-
-  .page-auto-trade .auto-auth-shell {
-    height: calc(100vh - 96px) !important;
-    padding: 16px 20px !important;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
-    gap: 18px !important;
-  }
-
-  .auto-auth-marketing {
-    gap: 9px !important;
-  }
-
-  .auto-auth-marketing h1 {
-    font-size: clamp(38px, 4vw, 56px) !important;
-  }
-
-  .auto-auth-marketing p {
-    font-size: 14px !important;
-    line-height: 1.35 !important;
-  }
-
-  .auth-value-grid article {
-    min-height: 84px !important;
-    padding: 9px 10px !important;
-  }
-
-  .auth-value-grid strong {
-    font-size: 13px !important;
-  }
-
-  .auth-value-grid span {
-    font-size: 11px !important;
-    line-height: 1.28 !important;
-  }
-
-  .trial-proof-strip span {
-    min-height: 42px !important;
-    padding: 7px 10px !important;
-  }
-
-  .auth-marketing-cta {
-    min-height: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-card {
-    padding: 16px 18px !important;
-  }
-
-  .page-auto-trade .auto-auth-head h1 {
-    font-size: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-form input,
-  .page-auto-trade .password-field {
-    min-height: 42px !important;
-  }
-
-  .page-auto-trade .auto-auth-form > button[type="submit"] {
-    min-height: 44px !important;
-  }
-}
-
-
 
 /* Final auth landing balance: compact layout with distinct, theme-native surfaces. */
 .page-auto-trade .auto-auth-shell {
@@ -12701,7 +12251,6 @@ body {
 .access-request-prompt {
   background: var(--card-surface-raised) !important;
 }
-
 
 
 .shell-header.auth-header {
@@ -12866,9 +12415,6 @@ body {
   color: var(--text);
   text-decoration: none;
 }
-
-
-
 
 
 .home-fear-history-row {
@@ -13465,7 +13011,6 @@ textarea,
 }
 
 
-
 *,
 *::before,
 *::after {
@@ -13632,72 +13177,6 @@ textarea,
 
 .page-auto-trade .auto-auth-form > button[type="submit"] {
   min-height: 48px !important;
-}
-
-@media (max-height: 790px) and (min-width: 981px) {
-  .page-auto-trade:has(.auto-auth-shell) {
-    padding-block: 12px !important;
-  }
-
-  .page-auto-trade .auto-auth-shell {
-    height: calc(100vh - 96px) !important;
-    padding: 16px 20px !important;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
-    gap: 18px !important;
-  }
-
-  .auto-auth-marketing {
-    gap: 9px !important;
-  }
-
-  .auto-auth-marketing h1 {
-    font-size: clamp(38px, 4vw, 56px) !important;
-  }
-
-  .auto-auth-marketing p {
-    font-size: 14px !important;
-    line-height: 1.35 !important;
-  }
-
-  .auth-value-grid article {
-    min-height: 84px !important;
-    padding: 9px 10px !important;
-  }
-
-  .auth-value-grid strong {
-    font-size: 13px !important;
-  }
-
-  .auth-value-grid span {
-    font-size: 11px !important;
-    line-height: 1.28 !important;
-  }
-
-  .trial-proof-strip span {
-    min-height: 42px !important;
-    padding: 7px 10px !important;
-  }
-
-  .auth-marketing-cta {
-    min-height: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-card {
-    padding: 16px 18px !important;
-  }
-
-  .page-auto-trade .auto-auth-head h1 {
-    font-size: 34px !important;
-  }
-
-  .page-auto-trade .auto-auth-form input,
-  .page-auto-trade .password-field {
-    min-height: 42px !important;
-  }
-
-  .page-auto-trade .auto-auth-form > button[type="submit"] {
-    min-height: 44px !important;
-  }
 }
 
 
@@ -13936,66 +13415,6 @@ textarea,
 .page-frame.page-auto-trade .auto-auth-head h1 {
   font-size: clamp(42px, 3.2vw, 58px) !important;
 }
-
-@media (max-height: 820px) and (min-width: 981px) {
-  .page-frame.page-auto-trade .auto-auth-shell {
-    padding-block: 16px !important;
-    grid-template-columns: minmax(610px, 1fr) minmax(370px, 450px) !important;
-    gap: clamp(28px, 4vw, 64px) !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing {
-    gap: 11px !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing h1 {
-    font-size: clamp(46px, 3.85vw, 70px) !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-marketing p {
-    font-size: 15px !important;
-    line-height: 1.34 !important;
-  }
-
-  .auth-decision-card {
-    min-height: 188px !important;
-    padding: 16px !important;
-  }
-
-  .auth-decision-card strong {
-    font-size: clamp(22px, 1.55vw, 28px) !important;
-  }
-
-  .auth-stage-list article {
-    min-height: 89px !important;
-    padding: 12px !important;
-  }
-
-  .auth-stage-list strong {
-    font-size: 15px !important;
-  }
-
-  .auth-stage-list small {
-    font-size: 10.5px !important;
-    line-height: 1.25 !important;
-  }
-
-  .page-frame.page-auto-trade .trial-proof-strip span {
-    min-height: 50px !important;
-    padding: 8px 12px !important;
-  }
-
-  .page-frame.page-auto-trade .auth-marketing-cta {
-    min-height: 36px !important;
-  }
-
-  .page-frame.page-auto-trade .auto-auth-card {
-    padding: 18px 20px !important;
-  }
-}
-
-
-
 
 
 /* Active auth landing cascade: this is the version currently shipped. */
@@ -14243,7 +13662,6 @@ textarea,
   color: #06100c !important;
   background: linear-gradient(180deg, color-mix(in srgb, var(--success) 92%, white), var(--success)) !important;
 }
-
 
 
 /* Final auth landing pass: compact, alive, and intentionally simple. */
@@ -14584,9 +14002,6 @@ textarea,
 }
 
 
-
-
-
 /* Auth landing final override: keep this last. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
@@ -14756,9 +14171,6 @@ textarea,
 }
 
 
-
-
-
 /* Auth landing hardening pass: stable controls, unified theme surface, aligned actions. */
 .shell-header.auth-header {
   grid-template-columns: auto 1fr !important;
@@ -14903,7 +14315,6 @@ textarea,
   line-height: 1 !important;
   text-align: center !important;
 }
-
 
 
 /* SYSTEM DESIGN REFRESH
@@ -15334,7 +14745,6 @@ textarea::placeholder {
 }
 
 
-
 /* Final compact control override - must remain at end of file. */
 .page-auto-trade .auto-auth-card form,
 .page-frame.page-auto-trade .auto-auth-card form {
@@ -15537,7 +14947,6 @@ textarea::placeholder {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
-
 
 
 /* FINAL GLOBAL THEME + HERO OVERRIDE
@@ -15843,7 +15252,6 @@ button,
 a {
   accent-color: var(--primary) !important;
 }
-
 
 
 /* FINAL SYSTEM DESIGN ENFORCER
@@ -16246,7 +15654,6 @@ b.bad {
 }
 
 
-
 /* FINAL GLOBAL THEME + HERO OVERRIDE
    Keep this block at the very end so legacy visual layers cannot override it. */
 :root[data-theme="light"],
@@ -16553,7 +15960,6 @@ a {
 }
 
 
-
 /* TRUE FINAL HERO/THEME OVERRIDE: must stay last. */
 :root[data-theme="light"],
 :root[data-theme-style][data-theme="light"] {
@@ -16771,7 +16177,6 @@ main.page-frame,
   background: color-mix(in srgb, var(--accent) 13%, var(--theme-surface)) !important;
   color: var(--text) !important;
 }
-
 
 
 /* Absolute final global UI harmony layer: themes, hero typography, hero CTAs. */
@@ -17038,7 +16443,6 @@ main.page-frame,
   color: var(--accent) !important;
   stroke: var(--accent) !important;
 }
-
 
 
 /* Unified app polish: Light / Dark / Execution themes, hero balance, and segmented controls. */
@@ -17354,7 +16758,6 @@ main.page-frame {
   color: var(--text) !important;
   background: color-mix(in srgb, var(--accent) 9%, transparent) !important;
 }
-
 
 
 /* Warm off-white login-side background only. */
@@ -17841,7 +17244,6 @@ main.page-frame {
 }
 
 
-
 /* Login polish pass: coherent controls, blue accents, and simplified auth modals. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell) {
@@ -18220,9 +17622,6 @@ main.page-frame {
   background: color-mix(in srgb, var(--bull-blue) 18%, var(--panel-strong)) !important;
   color: var(--bull-ice) !important;
 }
-
-
-
 
 
 /* Muslim Solutions product identity system */
@@ -18680,9 +18079,6 @@ body,
 :root[data-theme="dark"] .price-card {
   border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important;
 }
-
-
-
 
 
 /* Muslim Solutions identity v3: canonical tokens and component skin */
@@ -19318,20 +18714,6 @@ td,
   stroke: var(--ms-border) !important;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 1ms !important;
-  }
-}
-
-
-
-
 
 /* Polished home hero lockup and CTA system */
 .page-home .home-launchpad {
@@ -19495,7 +18877,6 @@ td,
 }
 
 
-
 .market-select-page {
   min-height: calc(100vh - 92px);
   display: grid;
@@ -19589,7 +18970,6 @@ td,
 .market-return-cta {
   background: color-mix(in srgb, var(--panel) 92%, var(--panel-strong)) !important;
 }
-
 
 
 /* 2026 market gateway refresh */
@@ -19866,9 +19246,6 @@ td,
   background: color-mix(in srgb, var(--market-accent) 12%, var(--panel-strong));
   color: var(--market-accent);
 }
-
-
-
 
 
 /* US stock command center */
@@ -20255,9 +19632,6 @@ td,
 }
 
 
-
-
-
 /* Final bull-logo identity overrides for the market gateway. */
 :root,
 :root[data-theme-style],
@@ -20391,11 +19765,8 @@ td,
 }
 
 
-
-
-
 /* Polished gateway composition: free logo, compact hero, no desktop scroll. */
-@media (min-width: 821px) {
+
   html:has(.market-select-page),
   body:has(.market-select-page),
   #root:has(.market-select-page),
@@ -20411,7 +19782,7 @@ td,
     overflow: hidden !important;
     padding: 0 !important;
   }
-}
+
 
 .shell-brand-mark.brand-logo-mark {
   width: 58px !important;
@@ -20543,9 +19914,6 @@ td,
 }
 
 
-
-
-
 /* Unified market pages: header actions and hero system */
 .shell-header.home-header .shell-tools {
   align-items: center !important;
@@ -20656,7 +20024,6 @@ td,
   line-height: 1.12 !important;
   font-weight: 950 !important;
 }
-
 
 
 /* Final login composition override: full split-screen, market-neutral. */
@@ -21093,9 +20460,6 @@ td,
 }
 
 
-
-
-
 /* Requested fintech split-screen revision: blue marketing left, login panel right. */
 .page-auto-trade:has(.auto-auth-shell),
 .page-frame.page-auto-trade:has(.auto-auth-shell),
@@ -21210,8 +20574,6 @@ td,
 }
 
 
-
-@media (min-width: 981px) {
   .page-frame.page-auto-trade:has(.auto-auth-shell),
   .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
   .page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
@@ -21239,7 +20601,7 @@ td,
     justify-self: stretch !important;
     align-self: stretch !important;
   }
-}
+
 
 /* Final compact control override - keep this as the last stylesheet block. */
 .page-auto-trade .auto-auth-card form,
@@ -21489,7 +20851,6 @@ td,
   transform: translate(-50%, -58%) rotate(45deg) !important;
   transform-origin: center !important;
 }
-
 
 
 /* FINAL GLOBAL THEME + HERO OVERRIDE
@@ -21793,7 +21154,6 @@ a {
 }
 
 
-
 /* TRUE FINAL SYSTEM DESIGN ENFORCER */
 :root,
 :root[data-theme-style],
@@ -21972,7 +21332,6 @@ input, select, textarea, .auth-input-shell, .password-field { background: var(--
 .good, b.good { color: var(--success) !important; }
 .bad, b.bad { color: var(--danger) !important; }
 .eyebrow, .nav-badge, .status-pill, .risk-badge, .side-badge { border-color: var(--border) !important; background: color-mix(in srgb, var(--accent) 9%, var(--surface-soft)) !important; color: var(--soft-text) !important; }
-
 
 
 /* 2026 Bull identity reset: restrained fintech UI, logo-led tokens, and terminal-grade density. */
@@ -22510,9 +21869,6 @@ b.bad {
   background: var(--surface-raised) !important;
   border-color: var(--border) !important;
 }
-
-
-
 
 
 /* FINAL BRAND UI SYSTEM - keep this as the last stylesheet block. */
@@ -23244,9 +22600,6 @@ body,
   background: var(--surface-raised) !important;
   box-shadow: none !important;
 }
-
-
-
 
 
 /* Final auth access system: theme-safe split login, scoped to the login entry only. */
@@ -24376,12 +23729,7 @@ body,
 }
 
 
-
-
-
-
-
-.mobile-home-action {
+.home-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -24396,891 +23744,4 @@ body,
   cursor: pointer;
   font-size: 13px;
   font-weight: 900;
-}
-
-.mobile-menu-trigger,
-.mobile-menu-close,
-.mobile-menu-backdrop {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  html,
-  body,
-  #root {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow-x: clip;
-  }
-
-  .app-shell,
-  .page-frame,
-  .page-dashboard,
-  .page-auto-trade,
-  .dashboard-shell,
-  .auto-trade-page {
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-
-  .app-shell,
-  .page-frame {
-    overflow-x: clip !important;
-  }
-
-  .shell-header,
-  .shell-header.home-header,
-  .shell-header.auth-header {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    gap: 8px !important;
-    padding: 8px 10px !important;
-    z-index: 40 !important;
-  }
-
-  .shell-brand,
-  .shell-tools {
-    min-width: 0 !important;
-  }
-
-  .shell-tools {
-    gap: 6px !important;
-  }
-
-  .shell-brand-copy strong,
-  .shell-brand-copy small {
-    max-width: 160px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-
-  .page-frame.page-dashboard,
-  .page-frame.page-auto-trade {
-    padding: 0 12px 28px !important;
-  }
-
-  .page-auto-trade .premium-workspace-grid,
-  .page-dashboard .premium-workspace-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 12px !important;
-    min-width: 0 !important;
-  }
-
-  .page-auto-trade .premium-workspace-grid > :not(.execution-sidebar),
-  .page-dashboard .premium-workspace-grid > :not(.execution-sidebar),
-  .page-auto-trade .execution-workspace-main,
-  .page-dashboard .execution-workspace-main {
-    grid-column: 1 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    overflow-x: clip !important;
-    overflow-y: visible !important;
-  }
-
-  .mobile-menu-trigger {
-    display: inline-grid !important;
-    place-items: center !important;
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-    padding: 0 !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 12px !important;
-    background: var(--surface, var(--panel-strong)) !important;
-    color: var(--text) !important;
-  }
-
-  .mobile-home-action,
-  .theme-control .theme-toggle,
-  .notification-settings-trigger {
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    padding: 0 !important;
-    border-radius: 12px !important;
-    gap: 0 !important;
-  }
-
-  .mobile-home-action span,
-  .theme-control .theme-toggle > span:not(.theme-toggle-icon),
-  .notification-settings-title span,
-  .notification-settings-trigger > strong {
-    display: none !important;
-  }
-
-  .notification-settings-trigger,
-  .notification-settings-title {
-    justify-content: center !important;
-  }
-
-  .theme-toggle-icon,
-  .notification-settings-title {
-    width: auto !important;
-    height: auto !important;
-    background: transparent !important;
-  }
-
-  .page-auto-trade .premium-workspace-grid > .execution-sidebar,
-  .page-dashboard .premium-workspace-grid > .execution-sidebar {
-    position: fixed !important;
-    inset: 0 auto 0 0 !important;
-    z-index: 70 !important;
-    display: flex !important;
-    width: min(324px, 88vw) !important;
-    height: 100dvh !important;
-    max-height: none !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    padding: 16px !important;
-    border-right: 1px solid var(--border) !important;
-    border-bottom: 0 !important;
-    border-radius: 0 !important;
-    background: var(--panel-strong) !important;
-    box-shadow: 20px 0 60px rgba(0, 0, 0, .42) !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    transform: translate3d(-105%, 0, 0) !important;
-    transition: transform .22s ease !important;
-  }
-
-  .workspace-menu-open .premium-workspace-grid > .execution-sidebar {
-    transform: translate3d(0, 0, 0) !important;
-  }
-
-  .workspace-menu-open .mobile-menu-backdrop {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 60 !important;
-    display: block !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: rgba(0, 0, 0, .56) !important;
-  }
-
-  .mobile-menu-close {
-    display: inline-grid !important;
-    place-items: center !important;
-    align-self: end !important;
-    width: 36px !important;
-    height: 36px !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 10px !important;
-    background: var(--surface, var(--panel)) !important;
-    color: var(--text) !important;
-  }
-
-  .execution-sidebar-brand,
-  .execution-sidebar-footer,
-  .execution-sidebar-section,
-  .execution-sidebar-group,
-  .execution-sidebar-subnav {
-    display: grid !important;
-  }
-
-  .execution-sidebar-main,
-  .execution-sidebar-subnav button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 40px !important;
-    white-space: normal !important;
-  }
-
-  .execution-sidebar-copy span {
-    white-space: normal !important;
-    overflow: visible !important;
-  }
-
-  .page-auto-trade:has(.auto-auth-shell),
-  .page-frame.page-auto-trade:has(.auto-auth-shell),
-  .page-auto-trade:has(.auto-auth-shell) .auto-trade-page {
-    min-height: calc(100dvh - 76px) !important;
-  }
-
-  .page-auto-trade .auto-auth-shell,
-  .page-frame.page-auto-trade .auto-auth-shell {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .page-auto-trade .auto-auth-marketing,
-  .page-frame.page-auto-trade .auto-auth-marketing {
-    display: none !important;
-  }
-
-  .page-auto-trade .execution-workspace-main,
-  .page-dashboard .execution-workspace-main {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow-x: clip !important;
-    transform: none !important;
-    zoom: normal !important;
-  }
-
-  .page-auto-trade .execution-workspace-main *,
-  .page-dashboard .execution-workspace-main * {
-    box-sizing: border-box;
-    min-width: 0;
-  }
-
-  .page-auto-trade .execution-workspace-main > section,
-  .page-dashboard .execution-workspace-main > section,
-  .page-auto-trade .execution-flat-workspace,
-  .page-dashboard .dashboard-simulation-panel,
-  .page-dashboard .ledger-wrap {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: clip !important;
-  }
-
-  .page-auto-trade .execution-flat-workspace,
-  .page-dashboard .dashboard-simulation-panel,
-  .ledger-wrap,
-  .trade-extremes,
-  .performance-summary,
-  .public-ops-body,
-  .admin-personal-body {
-    gap: 10px !important;
-  }
-
-  .execution-content-title h1,
-  .execution-workspace-title h2,
-  .page-auto-trade .auto-auth-head h1 {
-    max-width: 100% !important;
-    font-size: 24px !important;
-    line-height: 1.08 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .execution-content-title span,
-  .execution-workspace-title span:not(.nav-badge) {
-    font-size: 10px !important;
-  }
-
-  .scan-progress-card {
-    grid-template-columns: auto auto minmax(0, 1fr) !important;
-    gap: 8px !important;
-    padding: 12px 14px !important;
-    border-radius: 16px !important;
-  }
-
-  .scan-progress-card strong {
-    font-size: 24px !important;
-  }
-
-  .scan-progress-card small {
-    grid-column: 1 / -1 !important;
-    font-size: 10px !important;
-  }
-
-  .dashboard-profile-grid,
-  .command-summary {
-    gap: 6px !important;
-  }
-
-  .command-summary {
-    grid-template-columns: 1.55fr repeat(7, minmax(0, 1fr)) !important;
-  }
-
-  .dashboard-profile-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .simulation-compare-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 7px !important;
-  }
-
-  .simulation-compare-card,
-  .trade-extreme-card,
-  .dashboard-profile-card,
-  .command-summary article,
-  .ledger-pnl-split article {
-    min-height: 0 !important;
-    padding: 7px !important;
-    border-radius: 11px !important;
-    overflow: hidden !important;
-  }
-
-  .simulation-compare-card .simulation-net-pnl,
-  .trade-extreme-card strong,
-  .command-summary strong,
-  .ledger-pnl-split strong {
-    font-size: 15px !important;
-    line-height: 1.05 !important;
-  }
-
-  .simulation-compare-card div {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    gap: 3px 4px !important;
-    font-size: 8px !important;
-  }
-
-  .trade-extremes-row,
-  .trade-extremes-row-top,
-  .trade-extremes-row-bottom,
-  .ledger-pnl-split,
-  .ledger-pnl-split-wide,
-  .binance-wallet-hero {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 6px !important;
-  }
-
-  .trade-extremes span,
-  .trade-extremes small,
-  .ledger-pnl-split span,
-  .ledger-pnl-split small {
-    font-size: 8px !important;
-    line-height: 1.18 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .range-pills {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 5px !important;
-  }
-
-  .range-pills button,
-  .signal-filters button,
-  .selection-pill-row button,
-  .access-filter-pills button {
-    min-width: 0 !important;
-    min-height: 26px !important;
-    padding: 0 5px !important;
-    font-size: 8px !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .ledger-range-filter {
-    justify-items: stretch !important;
-    margin-left: 0 !important;
-    max-width: 100% !important;
-  }
-
-  .signal-filters {
-    display: grid !important;
-    grid-template-columns: 1.3fr 1fr !important;
-    gap: 6px !important;
-    max-width: 100% !important;
-  }
-
-  .signal-filters > div {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 4px !important;
-    padding: 6px !important;
-    overflow: hidden !important;
-  }
-
-  .signal-filters span {
-    margin: 0 !important;
-    font-size: 8px !important;
-  }
-
-  .ledger-wallet-panels,
-  .page-auto-trade .admin-personal-body,
-  .page-auto-trade .admin-control-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  .ledger-simulation-grid,
-  .ledger-simulation-grid.wallet-grid,
-  .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
-    gap: 5px !important;
-  }
-
-  .ledger-simulation-grid {
-    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
-  }
-
-  .ledger-simulation-grid.wallet-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  }
-
-  .ledger-wallet-futures .ledger-simulation-grid.wallet-grid {
-    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
-  }
-
-  .ledger-shared-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .page-auto-trade .public-ops-bottomline {
-    grid-template-columns: minmax(0, 1fr) minmax(120px, .42fr) !important;
-  }
-
-  .ledger-wallet-panel,
-  .experiment-details-panel,
-  .live-rules-shell,
-  .public-strategies-card,
-  .admin-personal-panel,
-  .admin-binance-panel,
-  .binance-connect-panel {
-    max-width: 100% !important;
-    overflow: hidden !important;
-  }
-
-  .ledger-wallet-panel,
-  .live-rules-panel-card,
-  .public-strategies-card,
-  .admin-personal-card {
-    padding: 7px !important;
-    border-radius: 10px !important;
-  }
-
-  .ledger-simulation-grid input,
-  .ledger-option-button,
-  .selection-inline-input input {
-    min-height: 28px !important;
-    font-size: 10px !important;
-  }
-
-  .live-rules-panel-grid,
-  .live-rules-shell.open .live-rules-panel-grid,
-  .shadow-rule-pill-groups,
-  .shadow-rule-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-
-  .live-futures-rule-card,
-  .live-protection-rule-card {
-    grid-column: 1 / -1 !important;
-  }
-
-  .live-futures-settings,
-  .live-rules-shell.open .live-futures-settings-advanced,
-  .live-protection-grid {
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, .9fr) !important;
-    gap: 6px !important;
-  }
-
-  .selection-pill-row,
-  .access-filter-pills {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 5px !important;
-  }
-
-  .page-auto-trade .public-strategy-tools {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, max-content)) !important;
-    gap: 6px !important;
-  }
-
-  .page-auto-trade .public-strategy-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 6px !important;
-  }
-
-  .page-auto-trade .public-strategy-card {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    grid-template-areas:
-      "name state"
-      "metrics metrics" !important;
-    min-height: 78px !important;
-    padding: 7px !important;
-  }
-
-  .page-auto-trade .public-strategy-card strong {
-    min-height: 0 !important;
-    overflow: hidden !important;
-    font-size: 8px !important;
-    line-height: 1.15 !important;
-    -webkit-line-clamp: 2 !important;
-  }
-
-  .page-auto-trade .public-strategy-card small {
-    font-size: 8px !important;
-    white-space: normal !important;
-  }
-
-  .page-auto-trade .admin-credential-grid,
-  .page-auto-trade .admin-personal-summary,
-  .binance-admin-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-
-  .simulation-compare-card > span,
-  .trade-extreme-card span,
-  .dashboard-profile-card span,
-  .command-summary span,
-  .ledger-wallet-head span,
-  .public-strategies-head span,
-  .admin-personal-card-head span,
-  .binance-admin-grid span {
-    font-size: 8px !important;
-    line-height: 1.12 !important;
-    letter-spacing: 0 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .simulation-compare-card > span,
-  .page-auto-trade .public-strategy-card strong,
-  .admin-personal-card-head strong,
-  .binance-admin-grid strong {
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 2 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
-  .simulation-compare-card > small,
-  .simulation-compare-card div,
-  .trade-extreme-card small,
-  .dashboard-profile-card small,
-  .command-summary small,
-  .ledger-wallet-head small,
-  .public-strategy-card small,
-  .admin-personal-summary span,
-  .admin-personal-summary strong,
-  .binance-admin-grid article,
-  .binance-admin-grid strong {
-    font-size: 7px !important;
-    line-height: 1.15 !important;
-    letter-spacing: 0 !important;
-  }
-
-  .simulation-compare-card .simulation-net-pnl {
-    font-size: 16px !important;
-    line-height: 1 !important;
-    white-space: nowrap !important;
-  }
-
-  .trade-extreme-card strong,
-  .dashboard-profile-card > b,
-  .command-summary strong,
-  .ledger-pnl-split strong {
-    font-size: 13px !important;
-    line-height: 1.04 !important;
-  }
-
-  .trade-extreme-card,
-  .simulation-compare-card,
-  .dashboard-profile-card,
-  .command-summary article,
-  .binance-wallet-hero article,
-  .admin-personal-summary article,
-  .binance-admin-grid article {
-    gap: 4px !important;
-    padding: 6px !important;
-  }
-
-  .ledger-wrap .signal-filters {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, .95fr) minmax(0, .95fr) minmax(0, 2.35fr) !important;
-    align-items: stretch !important;
-    gap: 4px !important;
-  }
-
-  .ledger-wrap .signal-filters > div {
-    display: grid !important;
-    grid-template-columns: auto repeat(3, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(2, 22px) !important;
-    align-content: center !important;
-    align-items: center !important;
-    gap: 4px !important;
-    min-width: 0 !important;
-    min-height: 56px !important;
-    padding: 5px !important;
-    overflow: hidden !important;
-  }
-
-  .ledger-wrap .signal-filters > div > span {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    margin: 0 1px 0 0 !important;
-    font-size: 6px !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-  }
-
-  .ledger-wrap .signal-filters button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    height: 22px !important;
-    padding: 0 2px !important;
-    border-radius: 7px !important;
-    font-size: 6px !important;
-    line-height: 1.05 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: clip !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(1) button:nth-of-type(1),
-  .ledger-wrap .signal-filters > div:nth-child(2) button:nth-of-type(1),
-  .ledger-wrap .signal-filters > div:nth-child(3) button:nth-of-type(1) {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(1) button:nth-of-type(2) {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(1) button:nth-of-type(3) {
-    grid-column: 4 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(1) button:nth-of-type(4),
-  .ledger-wrap .signal-filters > div:nth-child(2) button:nth-of-type(2),
-  .ledger-wrap .signal-filters > div:nth-child(3) button:nth-of-type(2) {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(1) button:nth-of-type(5),
-  .ledger-wrap .signal-filters > div:nth-child(2) button:nth-of-type(3),
-  .ledger-wrap .signal-filters > div:nth-child(3) button:nth-of-type(3) {
-    grid-column: 3 !important;
-    grid-row: 2 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) {
-    grid-template-columns: auto repeat(4, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(3, 18px) !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button {
-    height: 18px !important;
-    font-size: 5px !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(1) {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(2) {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(3) {
-    grid-column: 4 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(4) {
-    grid-column: 5 !important;
-    grid-row: 1 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(5) {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(6) {
-    grid-column: 3 !important;
-    grid-row: 2 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(7) {
-    grid-column: 4 !important;
-    grid-row: 2 !important;
-  }
-
-  .ledger-wrap .signal-filters > div:nth-child(4) button:nth-of-type(8) {
-    grid-column: 3 !important;
-    grid-row: 3 !important;
-  }
-
-  .range-pills button {
-    flex: 1 1 0;
-    min-height: 24px !important;
-    border-radius: 7px !important;
-    font-size: 8px !important;
-  }
-
-  .ledger-simulation-grid label,
-  .ledger-option-field,
-  .selection-control-card,
-  .venue-switch-panel {
-    gap: 4px !important;
-  }
-
-  .ledger-simulation-grid span,
-  .ledger-simulation-grid label > span,
-  .field-label-inline,
-  .field-label-inline span,
-  .venue-switch-head strong,
-  .venue-switch-head span,
-  .selection-footnote,
-  .ledger-option-label {
-    font-size: 7px !important;
-    line-height: 1.12 !important;
-    letter-spacing: 0 !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .ledger-simulation-grid input,
-  .ledger-option-button,
-  .selection-inline-input input {
-    min-height: 24px !important;
-    padding: 0 3px !important;
-    border-radius: 7px !important;
-    font-size: 9px !important;
-  }
-
-  .selection-pill-row button,
-  .access-filter-pills button,
-  .live-rules-shell.open .selection-pill-row button {
-    min-width: 0 !important;
-    min-height: 24px !important;
-    padding: 0 4px !important;
-    border-radius: 7px !important;
-    font-size: 7px !important;
-    line-height: 1.05 !important;
-  }
-
-  .live-rules-toggle,
-  .public-ops-toggle,
-  .admin-control-toggle,
-  .admin-personal-toggle {
-    min-height: 44px !important;
-    padding: 9px 10px !important;
-  }
-
-  .live-rules-toggle-main strong,
-  .public-card-copy strong,
-  .public-strategies-head strong,
-  .admin-control-toggle h2,
-  .admin-personal-toggle h2,
-  .binance-admin-head strong {
-    font-size: 13px !important;
-    line-height: 1.1 !important;
-  }
-
-  .live-rules-toggle-main span,
-  .public-ops-toggle span,
-  .admin-control-toggle span,
-  .admin-personal-toggle span,
-  .binance-admin-head span {
-    font-size: 8px !important;
-    line-height: 1.15 !important;
-  }
-
-  .live-rules-panel-card,
-  .live-rules-shell.open .live-rules-panel-card {
-    min-height: 0 !important;
-    gap: 4px !important;
-    padding: 6px !important;
-  }
-
-  .live-futures-settings,
-  .live-rules-shell.open .live-futures-settings-advanced,
-  .live-protection-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-
-  .live-futures-rule-card,
-  .live-protection-rule-card {
-    grid-column: 1 / -1 !important;
-  }
-
-  .page-auto-trade .public-strategy-card b,
-  .strategy-switch,
-  .nav-badge,
-  .admin-personal-card-head b {
-    min-width: 0 !important;
-    padding: 3px 5px !important;
-    font-size: 7px !important;
-    line-height: 1 !important;
-  }
-
-  .admin-personal-actions {
-    gap: 5px !important;
-  }
-
-  .admin-personal-actions button,
-  .admin-personal-card-head button,
-  .binance-admin-actions button {
-    min-height: 24px !important;
-    padding: 0 7px !important;
-    font-size: 8px !important;
-    border-radius: 8px !important;
-  }
-
-  .trade-ledger-shell,
-  .trade-ledger-scroll,
-  .portfolio-ledger-shell,
-  .portfolio-ledger-scroll,
-  .ledger-wrap {
-    max-width: 100% !important;
-    overflow-x: clip !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .trade-ledger-scroll {
-    height: 260px !important;
-    max-height: 260px !important;
-    overflow-y: auto !important;
-  }
-
-  .portfolio-ledger-scroll {
-    height: 320px !important;
-    max-height: 320px !important;
-  }
-
-  .trade-ledger {
-    display: table !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    table-layout: fixed !important;
-  }
-
-  .portfolio-accepted-table {
-    min-width: 0 !important;
-  }
-
-  .trade-ledger thead {
-    display: table-header-group !important;
-  }
-
-  .trade-ledger tbody {
-    display: table-row-group !important;
-  }
-
-  .trade-ledger tr,
-  .trade-ledger-body tbody tr {
-    display: table-row !important;
-    height: 54px !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-  }
-
-  .trade-ledger th,
-  .trade-ledger td {
-    display: table-cell !important;
-    padding: 7px 4px !important;
-    border-bottom: 1px solid var(--border) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    font-size: 9px !important;
-    line-height: 1.2 !important;
-  }
-
-  .trade-ledger td::before {
-    content: none !important;
-  }
 }

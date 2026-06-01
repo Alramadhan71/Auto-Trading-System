@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, FlaskConical, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, LogOut, Menu, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet, X } from 'lucide-react';
+import { Activity, AlertCircle, ArrowDownRight, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ExternalLink, Eye, EyeOff, Flame, FlaskConical, Gauge, Globe2, Home, KeyRound, Landmark, LogIn, LogOut, Moon, Newspaper, Search, Send, ShieldAlert, Sparkles, Sun, Target, TrendingUp, UserCog, Users, Wallet } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CandlestickSeries, createChart, LineStyle, type CandlestickData, type IChartApi, type ISeriesApi, type UTCTimestamp } from 'lightweight-charts';
 import './styles.css';
@@ -893,7 +893,6 @@ function App() {
   const [activeMarketFamily, setActiveMarketFamily] = useState<MarketFamily | null>(null);
   const [appSessionUser, setAppSessionUser] = useState<AuthSessionUser | null>(null);
   const [autoTradePortalView, setAutoTradePortalView] = useState<'login' | 'user' | 'admin'>('login');
-  const [workspaceMenuOpen, setWorkspaceMenuOpen] = useState(false);
   const [logoutSignal, setLogoutSignal] = useState(0);
   const [logoutBusy, setLogoutBusy] = useState(false);
   const [theme, setTheme] = useState<Theme>(() => {
@@ -1356,10 +1355,9 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
-  const showWorkspaceMenu = isAuthenticated && (page === 'dashboard' || (page === 'auto-trade' && !authEntryPage));
   const showSessionLogout = false;
   const shell = (
-    <div className={`app-shell${chartOpen ? ' chart-open' : ''}${workspaceMenuOpen ? ' workspace-menu-open' : ''}`}>
+    <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <button type="button" className="shell-brand" aria-label="Back to market workspaces" onClick={returnToMarketPicker}>
           <span className="shell-brand-mark brand-logo-mark">
@@ -1376,10 +1374,7 @@ function App() {
           <button className="premium" onClick={openAutoTradeLogin}><span>Execution</span></button>
         </nav>}
         <div className="shell-tools">
-          {showWorkspaceMenu && <button type="button" className="mobile-menu-trigger" onClick={() => setWorkspaceMenuOpen(true)} aria-label="Open navigation menu">
-            <Menu size={18} />
-          </button>}
-          {!isMarketPicker && <button type="button" className="mobile-home-action" onClick={returnToMarketPicker} aria-label="Back to Home">
+          {!isMarketPicker && <button type="button" className="home-action" onClick={returnToMarketPicker} aria-label="Back to Home">
             <Home size={16} />
             <span>Back to Home</span>
           </button>}
@@ -1436,11 +1431,9 @@ function App() {
           onExecution={openAutoTradeLogin}
           onLogout={handleAppLogout}
           logoutBusy={logoutBusy}
-          onMobileMenuClose={() => setWorkspaceMenuOpen(false)}
         />}
-        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} onMobileMenuClose={() => setWorkspaceMenuOpen(false)} />}
+        {page === 'auto-trade' && <AutoTradePage signals={deferredExecutionSignals} strategies={strategies} strategyMarketScope={strategyMarketScope} tickers={tickers} futuresTickers={futuresTickers} selected={selected} timeframes={timeframes} saveSelection={saveSelection} logoutSignal={logoutSignal} logoutBusy={logoutBusy} marketLabel={marketLabel} initialPortalView={autoTradePortalView} onMarketHome={() => navigateToPage('home')} onDashboard={() => navigateToPage('dashboard')} onLogout={handleAppLogout} onAuthChange={setAppSessionUser} onLoginSuccess={enterDashboardAfterLogin} onPortalViewChange={setAutoTradePortalView} />}
       </main>
-      {showWorkspaceMenu && <button type="button" className="mobile-menu-backdrop" onClick={() => setWorkspaceMenuOpen(false)} aria-label="Close navigation menu" />}
       <ToastStack notifications={toasts} onDismiss={(id) => setToasts(prev => prev.filter(item => item.id !== id))} signals={deferredSignals} />
       {chartOpen && <SymbolChartPanel
         symbol={chartSymbol}
@@ -3586,7 +3579,6 @@ function AutoTradePage({
   onAuthChange,
   onLoginSuccess,
   onPortalViewChange,
-  onMobileMenuClose,
   initialPortalView = 'login'
 }: {
   signals: Signal[];
@@ -3606,7 +3598,6 @@ function AutoTradePage({
   onAuthChange?: (user: AuthSessionUser | null) => void;
   onLoginSuccess?: (user: AuthSessionUser) => void;
   onPortalViewChange?: (view: 'login' | 'user' | 'admin') => void;
-  onMobileMenuClose?: () => void;
   initialPortalView?: 'login' | 'user' | 'admin';
 }) {
   const [portalView, setPortalView] = useState<'login' | 'user' | 'admin'>(initialPortalView);
@@ -3620,7 +3611,6 @@ function AutoTradePage({
   const [portfolioWorkspaceTab, setPortfolioWorkspaceTab] = useState<'summary' | 'rules' | 'ledger'>('summary');
   const [strategyWorkspaceTab, setStrategyWorkspaceTab] = useState<'strategies' | 'broadcast'>('strategies');
   const [settingsWorkspaceTab, setSettingsWorkspaceTab] = useState<'binance' | 'access'>('binance');
-  const closeMobileMenu = () => onMobileMenuClose?.();
   useEffect(() => {
     onPortalViewChange?.(portalView);
   }, [onPortalViewChange, portalView]);
@@ -5746,9 +5736,6 @@ function AutoTradePage({
   return <section className="auto-trade-page">
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Execution workspace navigation">
-        <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
-          <X size={18} />
-        </button>
         <div className="execution-sidebar-brand">
           <div>
             <strong>Execution</strong>
@@ -5757,13 +5744,13 @@ function AutoTradePage({
         </div>
         <div className="execution-sidebar-section">
           <span>Markets</span>
-          <button type="button" className="execution-sidebar-main market-context" onClick={() => { closeMobileMenu(); onMarketHome?.(); }}>
+          <button type="button" className="execution-sidebar-main market-context" onClick={() => onMarketHome?.()}>
             <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
           </button>
         </div>
         <div className="execution-sidebar-section">
           <span>Workspace</span>
-          <button type="button" className="execution-sidebar-main" onClick={() => { closeMobileMenu(); onDashboard?.(); }}>
+          <button type="button" className="execution-sidebar-main" onClick={() => onDashboard?.()}>
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
@@ -5782,7 +5769,6 @@ function AutoTradePage({
             onClick={() => {
               selectExecutionTab(tab.id);
               setSidebarSectionOpen(prev => ({ ...prev, [tab.id]: !prev[tab.id] }));
-              if (tab.id === 'users') closeMobileMenu();
             }}
             aria-expanded={sidebarSectionOpen[tab.id]}
           >
@@ -5801,7 +5787,7 @@ function AutoTradePage({
               ['summary', 'Summary'],
               ['rules', 'Rules'],
               ['ledger', 'Ledger']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'portfolio' && portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('portfolio'); setPortfolioWorkspaceTab(id); closeMobileMenu(); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'portfolio' && portfolioWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('portfolio'); setPortfolioWorkspaceTab(id); }}>
               {label}
             </button>)}
           </div>}
@@ -5811,7 +5797,7 @@ function AutoTradePage({
               ['broadcast', 'Broadcast']
             ] as const : [
               ['strategies', 'Strategies']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'strategies' && strategyWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('strategies'); setStrategyWorkspaceTab(id); closeMobileMenu(); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'strategies' && strategyWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('strategies'); setStrategyWorkspaceTab(id); }}>
               {label}
             </button>)}
           </div>}
@@ -5821,7 +5807,7 @@ function AutoTradePage({
               ['access', 'Access']
             ] as const : [
               ['access', 'Access']
-            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'settings' && settingsWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('settings'); setSettingsWorkspaceTab(id); closeMobileMenu(); }}>
+            ] as const).map(([id, label]) => <button key={id} type="button" className={adminWorkspaceTab === 'settings' && settingsWorkspaceTab === id ? 'active' : ''} onClick={() => { setAdminWorkspaceTab('settings'); setSettingsWorkspaceTab(id); }}>
               {label}
             </button>)}
           </div>}
@@ -5837,7 +5823,7 @@ function AutoTradePage({
             </span>
           </button>
           <input ref={avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => updateSidebarAvatar(event.target.files?.[0])} />
-          {onLogout && <button type="button" className="execution-sidebar-logout" onClick={() => { closeMobileMenu(); onLogout(); }} disabled={logoutBusy}>
+          {onLogout && <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
           </button>}
@@ -5876,7 +5862,7 @@ function AutoTradePage({
           <div className="admin-split-section recovery">
             <span>Contact Info</span>
             <div><small>Telegram</small><b>{activeUserRecord?.telegram || '-'}</b></div>
-            <div><small>Mobile</small><b>{activeUserRecord?.phone || '-'}</b></div>
+            <div><small>Phone</small><b>{activeUserRecord?.phone || '-'}</b></div>
           </div>
         </div>
         {userAccessOpen && <form className="admin-credentials-editor" onSubmit={event => { event.preventDefault(); saveUserAccess(); }}>
@@ -5889,8 +5875,8 @@ function AutoTradePage({
             <input value={userDraftTelegram} onChange={event => setUserDraftTelegram(event.target.value)} placeholder="Telegram account" />
           </label>
           <label>
-            <span>Mobile</span>
-            <input value={userDraftPhone} onChange={event => setUserDraftPhone(event.target.value)} placeholder="Mobile number" />
+            <span>Phone</span>
+            <input value={userDraftPhone} onChange={event => setUserDraftPhone(event.target.value)} placeholder="Phone number" />
           </label>
           <div className="admin-password-editor">
             <span>Change Password</span>
@@ -6994,7 +6980,7 @@ function AutoTradePage({
               <div className="admin-split-section recovery">
                 <span>Contact Info</span>
                 <div><small>Telegram</small><b>{adminTelegram || '-'}</b></div>
-                <div><small>Mobile</small><b>{adminPhone || '-'}</b></div>
+                <div><small>Phone</small><b>{adminPhone || '-'}</b></div>
               </div>
             </div>
             {adminCredentialsOpen && <form className="admin-credentials-editor" onSubmit={event => { event.preventDefault(); saveAdminCredentials(); }}>
@@ -7007,8 +6993,8 @@ function AutoTradePage({
                 <input value={adminDraftTelegram} onChange={event => setAdminDraftTelegram(event.target.value)} placeholder="Telegram account" />
               </label>
               <label>
-                <span>Mobile</span>
-                <input value={adminDraftPhone} onChange={event => setAdminDraftPhone(event.target.value)} placeholder="Mobile number" />
+                <span>Phone</span>
+                <input value={adminDraftPhone} onChange={event => setAdminDraftPhone(event.target.value)} placeholder="Phone number" />
               </label>
               <div className="admin-password-editor">
                 <span>Change Password</span>
@@ -7087,7 +7073,7 @@ function AutoTradePage({
               <div className="admin-personal-summary">
                 <article><span>Password</span><strong className={adminPasswordProtected ? 'protected-status' : 'unset-status'}>{adminPasswordProtected ? 'Protected' : 'Not set'}</strong></article>
                 <article><span>Telegram</span><strong>{adminTelegram || '-'}</strong></article>
-                <article><span>Mobile</span><strong>{adminPhone || '-'}</strong></article>
+                <article><span>Phone</span><strong>{adminPhone || '-'}</strong></article>
               </div>
               {adminCredentialMessage && <small className={adminCredentialMessage === 'Saved.' ? 'admin-credential-message good' : 'admin-credential-message'}>{adminCredentialMessage}</small>}
               {adminCredentialsOpen && <form className="admin-credentials-editor personal" onSubmit={event => { event.preventDefault(); saveAdminCredentials(); }}>
@@ -7100,8 +7086,8 @@ function AutoTradePage({
                   <input value={adminDraftTelegram} onChange={event => setAdminDraftTelegram(event.target.value)} placeholder="Telegram account" />
                 </label>
                 <label>
-                  <span>Mobile</span>
-                  <input value={adminDraftPhone} onChange={event => setAdminDraftPhone(event.target.value)} placeholder="Mobile number" />
+                  <span>Phone</span>
+                  <input value={adminDraftPhone} onChange={event => setAdminDraftPhone(event.target.value)} placeholder="Phone number" />
                 </label>
                 <div className="admin-password-editor">
                   <span>Change Password</span>
@@ -7181,8 +7167,7 @@ function DashboardPage({
   onMarketHome,
   onExecution,
   onLogout,
-  logoutBusy,
-  onMobileMenuClose
+  logoutBusy
 }: {
   stats: Stat[];
   signals: Signal[];
@@ -7198,7 +7183,6 @@ function DashboardPage({
   onExecution: () => void;
   onLogout: () => void;
   logoutBusy: boolean;
-  onMobileMenuClose?: () => void;
 }) {
   const [commandRange, setCommandRange] = useState<PerformanceRange>('24h');
   const [commandCustomFrom, setCommandCustomFrom] = useState(() => toDateInput(Date.now() - 7 * 24 * 60 * 60 * 1000));
@@ -7207,7 +7191,6 @@ function DashboardPage({
   const [activeSimulationLedgerId, setActiveSimulationLedgerId] = useState<SimulationLedgerId>('all-strategies');
   const [dashboardSidebarOpen, setDashboardSidebarOpen] = useState({ profiles: true, analysis: true });
   const avatarEditor = useSidebarAvatarEditor();
-  const closeMobileMenu = () => onMobileMenuClose?.();
   const selectDashboardTab = (tab: typeof dashboardWorkspaceTab) => {
     setDashboardWorkspaceTab(tab);
     if (tab === 'ledger' || tab === 'compare' || tab === 'options' || tab === 'routing') setDashboardSidebarOpen(prev => ({ ...prev, profiles: true }));
@@ -7216,9 +7199,6 @@ function DashboardPage({
   return <section className="auto-trade-page dashboard-execution-page">
     <div className="premium-workspace-grid">
       <aside className="execution-sidebar" aria-label="Dashboard workspace navigation">
-        <button type="button" className="mobile-menu-close" onClick={closeMobileMenu} aria-label="Close navigation menu">
-          <X size={18} />
-        </button>
         <div className="execution-sidebar-brand">
           <div>
             <strong>Research Lab</strong>
@@ -7227,7 +7207,7 @@ function DashboardPage({
         </div>
         <div className="execution-sidebar-section">
           <span>Markets</span>
-          <button type="button" className="execution-sidebar-main market-context" onClick={() => { closeMobileMenu(); onMarketHome(); }}>
+          <button type="button" className="execution-sidebar-main market-context" onClick={onMarketHome}>
             <span className="execution-sidebar-copy"><strong>{marketLabel}</strong></span>
           </button>
         </div>
@@ -7237,7 +7217,7 @@ function DashboardPage({
             <span className="execution-sidebar-icon" aria-hidden="true"><BarChart3 size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Research Lab</strong></span>
           </button>
-          <button type="button" className="execution-sidebar-main" onClick={() => { closeMobileMenu(); onExecution(); }}>
+          <button type="button" className="execution-sidebar-main" onClick={onExecution}>
             <span className="execution-sidebar-icon" aria-hidden="true"><Gauge size={16} /></span>
             <span className="execution-sidebar-copy"><strong>Execution</strong></span>
           </button>
@@ -7264,12 +7244,10 @@ function DashboardPage({
               onClick={() => {
                 if (item.id === 'compare') {
                   selectDashboardTab('compare');
-                  closeMobileMenu();
                   return;
                 }
                 setActiveSimulationLedgerId(item.id);
                 selectDashboardTab('ledger');
-                closeMobileMenu();
               }}
             >
               {item.name}
@@ -7288,8 +7266,8 @@ function DashboardPage({
             <span className="execution-sidebar-chevron" aria-hidden="true">{dashboardSidebarOpen.analysis ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
           </button>
           {dashboardSidebarOpen.analysis && <div className="execution-sidebar-subnav">
-            <button type="button" className={dashboardWorkspaceTab === 'performance' ? 'active' : ''} onClick={() => { selectDashboardTab('performance'); closeMobileMenu(); }}>Performance</button>
-            <button type="button" className={dashboardWorkspaceTab === 'notifications' ? 'active' : ''} onClick={() => { selectDashboardTab('notifications'); closeMobileMenu(); }}>Notifications</button>
+            <button type="button" className={dashboardWorkspaceTab === 'performance' ? 'active' : ''} onClick={() => selectDashboardTab('performance')}>Performance</button>
+            <button type="button" className={dashboardWorkspaceTab === 'notifications' ? 'active' : ''} onClick={() => selectDashboardTab('notifications')}>Notifications</button>
           </div>
           }
         </div>
@@ -7304,7 +7282,7 @@ function DashboardPage({
             </span>
           </button>
           <input ref={avatarEditor.avatarInputRef} type="file" accept="image/*" className="execution-avatar-input" onChange={event => avatarEditor.updateSidebarAvatar(event.target.files?.[0])} />
-          <button type="button" className="execution-sidebar-logout" onClick={() => { closeMobileMenu(); onLogout(); }} disabled={logoutBusy}>
+          <button type="button" className="execution-sidebar-logout" onClick={onLogout} disabled={logoutBusy}>
             <LogOut size={16} />
             <span>{logoutBusy ? 'Logging out' : 'Logout'}</span>
           </button>
