@@ -23732,17 +23732,8 @@ body,
   html:has(.market-select-page),
   body:has(.market-select-page),
   #root:has(.market-select-page),
-  .app-shell:has(.market-select-page),
-  html:has(.dashboard-execution-page),
-  body:has(.dashboard-execution-page),
-  #root:has(.dashboard-execution-page),
-  .app-shell:has(.dashboard-execution-page),
-  html:has(.page-auto-trade .premium-workspace-grid),
-  body:has(.page-auto-trade .premium-workspace-grid),
-  #root:has(.page-auto-trade .premium-workspace-grid),
-  .app-shell:has(.page-auto-trade .premium-workspace-grid) {
+  .app-shell:has(.market-select-page) {
     height: auto !important;
-    min-height: 0 !important;
     max-height: none !important;
     overflow: auto !important;
   }
