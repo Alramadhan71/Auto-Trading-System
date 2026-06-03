@@ -24016,9 +24016,6 @@ body,
     width: 1440px !important;
     max-width: none !important;
     min-width: 1440px !important;
-    position: relative !important;
-    left: 50vw !important;
-    transform: translateX(-50%) !important;
     padding-top: 20px !important;
     padding-bottom: 16px !important;
   }
