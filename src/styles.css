@@ -23801,18 +23801,18 @@ body,
   font-weight: 900;
 }
 
-/* Mobile: icon-only header for the market picker and login entry only. */
+/* Mobile state isolation: every rule below is tied to an explicit shell state. */
 @media (max-width: 768px), (max-device-width: 768px) {
-  .app-shell:has(.market-select-page) .shell-header,
-  .app-shell:has(.auto-auth-shell) .shell-header {
+  .shell-market-picker .shell-header,
+  .shell-auth-entry .shell-header {
     min-height: 62px !important;
     grid-template-columns: auto 1fr !important;
     gap: 8px !important;
     padding: 8px 10px !important;
   }
 
-  .app-shell:has(.market-select-page) .shell-brand,
-  .app-shell:has(.auto-auth-shell) .shell-brand {
+  .shell-market-picker .shell-brand,
+  .shell-auth-entry .shell-brand {
     width: 44px !important;
     min-width: 44px !important;
     height: 44px !important;
@@ -23820,39 +23820,39 @@ body,
     justify-content: center !important;
   }
 
-  .app-shell:has(.market-select-page) .shell-brand-mark,
-  .app-shell:has(.auto-auth-shell) .shell-brand-mark,
-  .app-shell:has(.market-select-page) .shell-brand-mark img,
-  .app-shell:has(.auto-auth-shell) .shell-brand-mark img {
+  .shell-market-picker .shell-brand-mark,
+  .shell-auth-entry .shell-brand-mark,
+  .shell-market-picker .shell-brand-mark img,
+  .shell-auth-entry .shell-brand-mark img {
     width: 40px !important;
     height: 40px !important;
   }
 
-  .app-shell:has(.market-select-page) .shell-brand-copy,
-  .app-shell:has(.auto-auth-shell) .shell-brand-copy,
-  .app-shell:has(.market-select-page) .theme-toggle > span:not(.theme-toggle-icon),
-  .app-shell:has(.auto-auth-shell) .theme-toggle > span:not(.theme-toggle-icon),
-  .app-shell:has(.market-select-page) .home-action span,
-  .app-shell:has(.auto-auth-shell) .home-action span,
-  .app-shell:has(.market-select-page) .notification-settings-title span,
-  .app-shell:has(.auto-auth-shell) .notification-settings-title span,
-  .app-shell:has(.market-select-page) .notification-settings-trigger strong,
-  .app-shell:has(.auto-auth-shell) .notification-settings-trigger strong {
+  .shell-market-picker .shell-brand-copy,
+  .shell-auth-entry .shell-brand-copy,
+  .shell-market-picker .theme-toggle > span:not(.theme-toggle-icon),
+  .shell-auth-entry .theme-toggle > span:not(.theme-toggle-icon),
+  .shell-market-picker .home-action span,
+  .shell-auth-entry .home-action span,
+  .shell-market-picker .notification-settings-title span,
+  .shell-auth-entry .notification-settings-title span,
+  .shell-market-picker .notification-settings-trigger strong,
+  .shell-auth-entry .notification-settings-trigger strong {
     display: none !important;
   }
 
-  .app-shell:has(.market-select-page) .shell-tools,
-  .app-shell:has(.auto-auth-shell) .shell-tools {
+  .shell-market-picker .shell-tools,
+  .shell-auth-entry .shell-tools {
     justify-content: flex-end !important;
     gap: 7px !important;
   }
 
-  .app-shell:has(.market-select-page) .theme-toggle,
-  .app-shell:has(.auto-auth-shell) .theme-toggle,
-  .app-shell:has(.market-select-page) .home-action,
-  .app-shell:has(.auto-auth-shell) .home-action,
-  .app-shell:has(.market-select-page) .notification-settings-trigger,
-  .app-shell:has(.auto-auth-shell) .notification-settings-trigger {
+  .shell-market-picker .theme-toggle,
+  .shell-auth-entry .theme-toggle,
+  .shell-market-picker .home-action,
+  .shell-auth-entry .home-action,
+  .shell-market-picker .notification-settings-trigger,
+  .shell-auth-entry .notification-settings-trigger {
     width: 40px !important;
     min-width: 40px !important;
     height: 40px !important;
@@ -23861,102 +23861,112 @@ body,
     border-radius: 11px !important;
   }
 
-  .app-shell:has(.market-select-page) .notification-settings-title,
-  .app-shell:has(.auto-auth-shell) .notification-settings-title {
+  .shell-market-picker .notification-settings-title,
+  .shell-auth-entry .notification-settings-title {
     display: grid !important;
     place-items: center !important;
   }
 
-  .app-shell:has(.market-select-page) .notification-settings-popover {
+  .shell-market-picker .notification-settings-popover {
     right: 0 !important;
   }
-}
 
-/* Mobile: market picker only. Keeps the existing visual identity and changes layout only. */
-@media (max-width: 768px), (max-device-width: 768px) {
-  .page-frame:has(.market-select-page) {
-    padding: 10px !important;
-  }
-
-  .market-select-page {
-    min-height: calc(100dvh - 62px) !important;
+  .shell-market-picker,
+  .shell-market-picker .page-frame,
+  .shell-market-picker .page-home {
+    background: var(--app-bg, var(--bg)) !important;
+    min-height: 100dvh !important;
     height: auto !important;
-    align-content: start !important;
+    overflow-x: hidden !important;
+  }
+
+  .shell-market-picker .page-frame {
+    display: grid !important;
+    place-items: center !important;
+    padding: 0 14px 20px !important;
+  }
+
+  .shell-market-picker .market-select-page {
+    width: min(430px, 100%) !important;
+    min-height: calc(100dvh - 82px) !important;
+    height: auto !important;
+    display: grid !important;
+    align-content: center !important;
     justify-items: center !important;
-    gap: 16px !important;
-    padding: 18px 8px 20px !important;
+    gap: 18px !important;
+    padding: 16px 0 !important;
     overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 
-  .market-select-lockup {
-    gap: 8px !important;
+  .shell-market-picker .market-select-lockup {
+    gap: 10px !important;
   }
 
-  .market-select-kicker,
-  .market-select-copy small {
+  .shell-market-picker .market-select-kicker,
+  .shell-market-picker .market-select-copy small {
     font-size: 10px !important;
   }
 
-  .market-select-lockup h1 {
+  .shell-market-picker .market-select-lockup h1 {
     max-width: 12ch !important;
-    font-size: clamp(34px, 12vw, 48px) !important;
+    font-size: clamp(38px, 13vw, 56px) !important;
     line-height: .93 !important;
   }
 
-  .market-select-company {
+  .shell-market-picker .market-select-company {
     min-height: 28px !important;
     padding: 0 10px !important;
     font-size: 13px !important;
   }
 
-  .market-select-grid {
-    width: min(430px, 100%) !important;
+  .shell-market-picker .market-select-grid {
+    width: 100% !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
   }
 
-  .market-select-card {
-    min-height: 118px !important;
+  .shell-market-picker .market-select-card {
+    min-height: 122px !important;
     grid-template-columns: minmax(0, 1fr) 30px !important;
     gap: 8px !important;
     padding: 14px !important;
     border-radius: 8px !important;
   }
 
-  .market-select-card.saudi {
+  .shell-market-picker .market-select-card.saudi {
     grid-column: 1 / -1 !important;
-    min-height: 104px !important;
+    min-height: 106px !important;
   }
 
-  .market-select-copy {
+  .shell-market-picker .market-select-copy {
     gap: 7px !important;
   }
 
-  .market-select-card strong {
+  .shell-market-picker .market-select-card strong {
     max-width: 8.8ch !important;
     font-size: clamp(23px, 7vw, 30px) !important;
     line-height: .95 !important;
   }
 
-  .market-select-card.saudi strong {
+  .shell-market-picker .market-select-card.saudi strong {
     max-width: 100% !important;
   }
 
-  .market-select-action {
+  .shell-market-picker .market-select-action {
     width: 30px !important;
     height: 30px !important;
     align-self: end !important;
     justify-self: end !important;
   }
-}
 
-/* Mobile: login entry only. Shows the login card and hides the marketing panel. */
-@media (max-width: 768px), (max-device-width: 768px) {
-  .page-frame.page-auto-trade:has(.auto-auth-shell),
-  .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
-  .page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
-  .page-auto-trade .auto-auth-shell,
-  .page-frame.page-auto-trade .auto-auth-shell {
+  .shell-auth-entry .page-frame.page-auto-trade,
+  .shell-auth-entry .page-auto-trade,
+  .shell-auth-entry .auto-trade-page,
+  .shell-auth-entry .auto-auth-shell {
     width: 100% !important;
     max-width: none !important;
     min-height: calc(100dvh - 62px) !important;
@@ -23967,21 +23977,18 @@ body,
     overflow: visible !important;
   }
 
-  .page-auto-trade .auto-auth-shell,
-  .page-frame.page-auto-trade .auto-auth-shell {
+  .shell-auth-entry .auto-auth-shell {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     place-items: center !important;
     padding: 18px 12px 24px !important;
   }
 
-  .page-auto-trade .auto-auth-marketing,
-  .page-frame.page-auto-trade .auto-auth-marketing {
+  .shell-auth-entry .auto-auth-marketing {
     display: none !important;
   }
 
-  .page-auto-trade .auto-auth-card,
-  .page-frame.page-auto-trade .auto-auth-card {
+  .shell-auth-entry .auto-auth-card {
     width: min(430px, 100%) !important;
     max-width: 430px !important;
     height: auto !important;
@@ -23991,30 +23998,64 @@ body,
     align-self: center !important;
   }
 
-  .page-frame.page-auto-trade .auto-auth-card form {
+  .shell-auth-entry .auto-auth-card form {
     padding: 18px !important;
   }
 
-  .page-frame.page-auto-trade .auto-auth-head h1 {
+  .shell-auth-entry .auto-auth-head h1 {
     font-size: clamp(24px, 8vw, 34px) !important;
   }
-}
 
-/* Mobile: preserve desktop workspace layout while trimming bottom whitespace. */
-@media (max-width: 768px), (max-device-width: 768px) {
-  .page-frame.page-dashboard,
-  .page-frame.page-auto-trade:not(:has(.auto-auth-shell)) {
-    width: max-content !important;
-    min-width: 1180px !important;
+  .shell-market-home,
+  .shell-dashboard,
+  .shell-execution {
+    overflow-x: hidden !important;
+  }
+
+  .shell-market-home .shell-header,
+  .shell-dashboard .shell-header,
+  .shell-execution .shell-header {
+    width: 1440px !important;
+    zoom: calc(100vw / 1440) !important;
+  }
+
+  .shell-market-home .page-frame,
+  .shell-dashboard .page-frame,
+  .shell-execution .page-frame {
+    width: 1440px !important;
     max-width: none !important;
+    min-width: 1440px !important;
+    zoom: calc(100vw / 1440) !important;
+    padding-bottom: 16px !important;
+  }
+
+  .shell-market-home .page-frame {
     min-height: 0 !important;
     height: auto !important;
-    padding: 0 16px 8px 0 !important;
     overflow: visible !important;
   }
 
-  .page-dashboard .premium-workspace-grid,
-  .page-auto-trade:not(:has(.auto-auth-shell)) .premium-workspace-grid {
+  .shell-market-home .page-home .home-launchpad,
+  .shell-market-home .home-search-bridge,
+  .shell-market-home .home-intel-grid,
+  .shell-market-home .home-signal-shell,
+  .shell-market-home .home-leader-shell,
+  .shell-market-home .home-marketcap-shell,
+  .shell-market-home .home-news-shell,
+  .shell-market-home .home-live-board {
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .shell-dashboard .page-frame.page-dashboard,
+  .shell-execution .page-frame.page-auto-trade {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .shell-dashboard .premium-workspace-grid,
+  .shell-execution .premium-workspace-grid {
     display: grid !important;
     grid-template-columns: 248px minmax(0, 1fr) !important;
     grid-auto-rows: auto !important;
@@ -24023,26 +24064,26 @@ body,
     height: auto !important;
   }
 
-  .page-dashboard .dashboard-execution-page,
-  .page-auto-trade:not(:has(.auto-auth-shell)) .auto-trade-page,
-  .page-dashboard .execution-workspace-main,
-  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-workspace-main {
+  .shell-dashboard .dashboard-execution-page,
+  .shell-execution .auto-trade-page,
+  .shell-dashboard .execution-workspace-main,
+  .shell-execution .execution-workspace-main {
     min-height: 0 !important;
     height: auto !important;
   }
 
-  .page-dashboard .execution-sidebar,
-  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-sidebar {
+  .shell-dashboard .execution-sidebar,
+  .shell-execution .execution-sidebar {
     position: sticky !important;
-    top: 62px !important;
-    height: calc(100dvh - 62px) !important;
+    top: 76px !important;
+    height: calc(100dvh / (100vw / 1440) - 76px) !important;
     min-height: 0 !important;
     max-height: none !important;
     overflow-y: auto !important;
   }
 
-  .page-dashboard .execution-sidebar-footer,
-  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-sidebar-footer {
+  .shell-dashboard .execution-sidebar-footer,
+  .shell-execution .execution-sidebar-footer {
     margin-top: auto !important;
   }
 }

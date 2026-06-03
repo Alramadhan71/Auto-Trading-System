@@ -1355,9 +1355,17 @@ function App() {
 
   const authEntryPage = page === 'auto-trade' && autoTradePortalView === 'login';
   const isMarketPicker = page === 'home' && !activeMarketFamily;
+  const shellStateClass = [
+    chartOpen ? 'chart-open' : '',
+    isMarketPicker ? 'shell-market-picker' : '',
+    page === 'home' && activeMarketFamily ? 'shell-market-home' : '',
+    authEntryPage ? 'shell-auth-entry' : '',
+    page === 'dashboard' ? 'shell-dashboard' : '',
+    page === 'auto-trade' && !authEntryPage ? 'shell-execution' : ''
+  ].filter(Boolean).join(' ');
   const showSessionLogout = false;
   const shell = (
-    <div className={`app-shell${chartOpen ? ' chart-open' : ''}`}>
+    <div className={`app-shell ${shellStateClass}`}>
       <header className={`shell-header ${page === 'home' ? 'home-header' : authEntryPage ? 'auth-header' : 'app-header'}`}>
         <button type="button" className="shell-brand" aria-label="Back to market workspaces" onClick={returnToMarketPicker}>
           <span className="shell-brand-mark brand-logo-mark">
