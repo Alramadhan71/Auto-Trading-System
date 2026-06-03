@@ -24016,7 +24016,6 @@ body,
   .shell-dashboard .shell-header,
   .shell-execution .shell-header {
     width: 1440px !important;
-    zoom: calc(100vw / 1440) !important;
   }
 
   .shell-market-home .page-frame,
@@ -24025,7 +24024,6 @@ body,
     width: 1440px !important;
     max-width: none !important;
     min-width: 1440px !important;
-    zoom: calc(100vw / 1440) !important;
     padding-bottom: 16px !important;
   }
 
@@ -24076,7 +24074,7 @@ body,
   .shell-execution .execution-sidebar {
     position: sticky !important;
     top: 76px !important;
-    height: calc(100dvh / (100vw / 1440) - 76px) !important;
+    height: calc(100dvh - 76px) !important;
     min-height: 0 !important;
     max-height: none !important;
     overflow-y: auto !important;
