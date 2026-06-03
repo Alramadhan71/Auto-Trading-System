@@ -24006,45 +24006,6 @@ body,
     font-size: clamp(24px, 8vw, 34px) !important;
   }
 
-  .shell-market-home,
-  .shell-dashboard,
-  .shell-execution {
-    overflow-x: hidden !important;
-  }
-
-  .shell-market-home .shell-header,
-  .shell-dashboard .shell-header,
-  .shell-execution .shell-header {
-    width: 1440px !important;
-  }
-
-  .shell-market-home .page-frame,
-  .shell-dashboard .page-frame,
-  .shell-execution .page-frame {
-    width: 1440px !important;
-    max-width: none !important;
-    min-width: 1440px !important;
-    padding-bottom: 16px !important;
-  }
-
-  .shell-market-home .page-frame {
-    min-height: 0 !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  .shell-market-home .page-home .home-launchpad,
-  .shell-market-home .home-search-bridge,
-  .shell-market-home .home-intel-grid,
-  .shell-market-home .home-signal-shell,
-  .shell-market-home .home-leader-shell,
-  .shell-market-home .home-marketcap-shell,
-  .shell-market-home .home-news-shell,
-  .shell-market-home .home-live-board {
-    width: auto !important;
-    max-width: none !important;
-  }
-
   .shell-dashboard .page-frame.page-dashboard,
   .shell-execution .page-frame.page-auto-trade {
     min-height: 0 !important;
