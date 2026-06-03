@@ -23800,3 +23800,249 @@ body,
   font-size: 13px;
   font-weight: 900;
 }
+
+/* Mobile: icon-only header for the market picker and login entry only. */
+@media (max-width: 768px), (max-device-width: 768px) {
+  .app-shell:has(.market-select-page) .shell-header,
+  .app-shell:has(.auto-auth-shell) .shell-header {
+    min-height: 62px !important;
+    grid-template-columns: auto 1fr !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand,
+  .app-shell:has(.auto-auth-shell) .shell-brand {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand-mark,
+  .app-shell:has(.auto-auth-shell) .shell-brand-mark,
+  .app-shell:has(.market-select-page) .shell-brand-mark img,
+  .app-shell:has(.auto-auth-shell) .shell-brand-mark img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-brand-copy,
+  .app-shell:has(.auto-auth-shell) .shell-brand-copy,
+  .app-shell:has(.market-select-page) .theme-toggle > span:not(.theme-toggle-icon),
+  .app-shell:has(.auto-auth-shell) .theme-toggle > span:not(.theme-toggle-icon),
+  .app-shell:has(.market-select-page) .home-action span,
+  .app-shell:has(.auto-auth-shell) .home-action span,
+  .app-shell:has(.market-select-page) .notification-settings-title span,
+  .app-shell:has(.auto-auth-shell) .notification-settings-title span,
+  .app-shell:has(.market-select-page) .notification-settings-trigger strong,
+  .app-shell:has(.auto-auth-shell) .notification-settings-trigger strong {
+    display: none !important;
+  }
+
+  .app-shell:has(.market-select-page) .shell-tools,
+  .app-shell:has(.auto-auth-shell) .shell-tools {
+    justify-content: flex-end !important;
+    gap: 7px !important;
+  }
+
+  .app-shell:has(.market-select-page) .theme-toggle,
+  .app-shell:has(.auto-auth-shell) .theme-toggle,
+  .app-shell:has(.market-select-page) .home-action,
+  .app-shell:has(.auto-auth-shell) .home-action,
+  .app-shell:has(.market-select-page) .notification-settings-trigger,
+  .app-shell:has(.auto-auth-shell) .notification-settings-trigger {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    border-radius: 11px !important;
+  }
+
+  .app-shell:has(.market-select-page) .notification-settings-title,
+  .app-shell:has(.auto-auth-shell) .notification-settings-title {
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .app-shell:has(.market-select-page) .notification-settings-popover {
+    right: 0 !important;
+  }
+}
+
+/* Mobile: market picker only. Keeps the existing visual identity and changes layout only. */
+@media (max-width: 768px), (max-device-width: 768px) {
+  .page-frame:has(.market-select-page) {
+    padding: 10px !important;
+  }
+
+  .market-select-page {
+    min-height: calc(100dvh - 62px) !important;
+    height: auto !important;
+    align-content: start !important;
+    justify-items: center !important;
+    gap: 16px !important;
+    padding: 18px 8px 20px !important;
+    overflow: visible !important;
+  }
+
+  .market-select-lockup {
+    gap: 8px !important;
+  }
+
+  .market-select-kicker,
+  .market-select-copy small {
+    font-size: 10px !important;
+  }
+
+  .market-select-lockup h1 {
+    max-width: 12ch !important;
+    font-size: clamp(34px, 12vw, 48px) !important;
+    line-height: .93 !important;
+  }
+
+  .market-select-company {
+    min-height: 28px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+
+  .market-select-grid {
+    width: min(430px, 100%) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .market-select-card {
+    min-height: 118px !important;
+    grid-template-columns: minmax(0, 1fr) 30px !important;
+    gap: 8px !important;
+    padding: 14px !important;
+    border-radius: 8px !important;
+  }
+
+  .market-select-card.saudi {
+    grid-column: 1 / -1 !important;
+    min-height: 104px !important;
+  }
+
+  .market-select-copy {
+    gap: 7px !important;
+  }
+
+  .market-select-card strong {
+    max-width: 8.8ch !important;
+    font-size: clamp(23px, 7vw, 30px) !important;
+    line-height: .95 !important;
+  }
+
+  .market-select-card.saudi strong {
+    max-width: 100% !important;
+  }
+
+  .market-select-action {
+    width: 30px !important;
+    height: 30px !important;
+    align-self: end !important;
+    justify-self: end !important;
+  }
+}
+
+/* Mobile: login entry only. Shows the login card and hides the marketing panel. */
+@media (max-width: 768px), (max-device-width: 768px) {
+  .page-frame.page-auto-trade:has(.auto-auth-shell),
+  .page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+  .page-frame.page-auto-trade:has(.auto-auth-shell) .auto-trade-page,
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: calc(100dvh - 62px) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .page-auto-trade .auto-auth-shell,
+  .page-frame.page-auto-trade .auto-auth-shell {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    place-items: center !important;
+    padding: 18px 12px 24px !important;
+  }
+
+  .page-auto-trade .auto-auth-marketing,
+  .page-frame.page-auto-trade .auto-auth-marketing {
+    display: none !important;
+  }
+
+  .page-auto-trade .auto-auth-card,
+  .page-frame.page-auto-trade .auto-auth-card {
+    width: min(430px, 100%) !important;
+    max-width: 430px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    justify-self: center !important;
+    align-self: center !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-card form {
+    padding: 18px !important;
+  }
+
+  .page-frame.page-auto-trade .auto-auth-head h1 {
+    font-size: clamp(24px, 8vw, 34px) !important;
+  }
+}
+
+/* Mobile: preserve desktop workspace layout while trimming bottom whitespace. */
+@media (max-width: 768px), (max-device-width: 768px) {
+  .page-frame.page-dashboard,
+  .page-frame.page-auto-trade:not(:has(.auto-auth-shell)) {
+    width: max-content !important;
+    min-width: 1180px !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 16px 8px 0 !important;
+    overflow: visible !important;
+  }
+
+  .page-dashboard .premium-workspace-grid,
+  .page-auto-trade:not(:has(.auto-auth-shell)) .premium-workspace-grid {
+    display: grid !important;
+    grid-template-columns: 248px minmax(0, 1fr) !important;
+    grid-auto-rows: auto !important;
+    align-items: start !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .page-dashboard .dashboard-execution-page,
+  .page-auto-trade:not(:has(.auto-auth-shell)) .auto-trade-page,
+  .page-dashboard .execution-workspace-main,
+  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-workspace-main {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .page-dashboard .execution-sidebar,
+  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-sidebar {
+    position: sticky !important;
+    top: 62px !important;
+    height: calc(100dvh - 62px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+  }
+
+  .page-dashboard .execution-sidebar-footer,
+  .page-auto-trade:not(:has(.auto-auth-shell)) .execution-sidebar-footer {
+    margin-top: auto !important;
+  }
+}
