@@ -24009,30 +24009,35 @@ body,
   .shell-market-home,
   .shell-dashboard,
   .shell-execution {
-    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: clip !important;
   }
 
   .shell-market-home .shell-header,
   .shell-dashboard .shell-header,
   .shell-execution .shell-header {
-    width: 1440px !important;
-    zoom: calc(100vw / 1440) !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    grid-template-columns: minmax(132px, .9fr) minmax(0, 1.4fr) minmax(96px, auto) !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
   }
 
   .shell-market-home .page-frame,
   .shell-dashboard .page-frame,
   .shell-execution .page-frame {
-    width: 1440px !important;
-    max-width: none !important;
-    min-width: 1440px !important;
-    zoom: calc(100vw / 1440) !important;
-    padding-bottom: 16px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    padding: 10px 8px 16px !important;
+    overflow-x: clip !important;
   }
 
   .shell-market-home .page-frame {
     min-height: 0 !important;
     height: auto !important;
-    overflow: visible !important;
+    overflow-y: visible !important;
   }
 
   .shell-market-home .page-home .home-launchpad,
@@ -24043,21 +24048,22 @@ body,
   .shell-market-home .home-marketcap-shell,
   .shell-market-home .home-news-shell,
   .shell-market-home .home-live-board {
-    width: auto !important;
-    max-width: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
   }
 
   .shell-dashboard .page-frame.page-dashboard,
   .shell-execution .page-frame.page-auto-trade {
     min-height: 0 !important;
     height: auto !important;
-    overflow: visible !important;
+    overflow-y: visible !important;
   }
 
   .shell-dashboard .premium-workspace-grid,
   .shell-execution .premium-workspace-grid {
     display: grid !important;
-    grid-template-columns: 248px minmax(0, 1fr) !important;
+    grid-template-columns: minmax(76px, 17vw) minmax(0, 1fr) !important;
     grid-auto-rows: auto !important;
     align-items: start !important;
     min-height: 0 !important;
@@ -24075,11 +24081,122 @@ body,
   .shell-dashboard .execution-sidebar,
   .shell-execution .execution-sidebar {
     position: sticky !important;
-    top: 76px !important;
-    height: calc(100dvh / (100vw / 1440) - 76px) !important;
+    top: 64px !important;
+    height: calc(100dvh - 64px) !important;
     min-height: 0 !important;
     max-height: none !important;
     overflow-y: auto !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) :is(.shell-brand, .shell-tools, .shell-nav) {
+    min-width: 0 !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) :is(.shell-brand-mark, .shell-brand-mark img) {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) .shell-brand-copy strong {
+    font-size: clamp(10px, 2.6vw, 13px) !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) .shell-brand-copy small {
+    font-size: clamp(8px, 2.1vw, 10px) !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) .shell-nav {
+    gap: 4px !important;
+    overflow: hidden !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) .shell-nav button {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 6px !important;
+    gap: 4px !important;
+    font-size: clamp(8px, 1.9vw, 11px) !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) :is(.shell-nav button, .theme-toggle, .home-action, .notification-settings-trigger) svg {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) .shell-tools {
+    gap: 5px !important;
+  }
+
+  :is(.shell-market-home, .shell-dashboard, .shell-execution) :is(.theme-toggle, .home-action, .notification-settings-trigger) {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 6px !important;
+    font-size: clamp(8px, 1.9vw, 11px) !important;
+  }
+
+  :is(.shell-market-home .page-home, .shell-dashboard .page-dashboard, .shell-execution .page-auto-trade),
+  :is(.shell-market-home .page-home, .shell-dashboard .page-dashboard, .shell-execution .page-auto-trade) * {
+    min-width: 0 !important;
+  }
+
+  .shell-market-home :is(.home-live-grid, .home-strategy-preview-grid),
+  :is(.shell-dashboard, .shell-execution) :is(.price-strip, .metrics) {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .shell-market-home :is(.home-intel-grid, .home-leader-columns, .home-market-grid),
+  :is(.shell-dashboard, .shell-execution) .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .shell-market-home .home-news-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .shell-market-home :is(.home-launchpad, .home-live-board, .home-intel-card, .home-leader-card, .home-marketcap-shell, .home-news-shell, .home-news-card),
+  :is(.shell-dashboard, .shell-execution) :is(.panel, .chart-block) {
+    border-radius: 8px !important;
+  }
+
+  .shell-market-home :is(.home-launchpad, .home-live-board, .home-intel-card, .home-leader-card, .home-marketcap-shell, .home-news-shell) {
+    padding: clamp(8px, 2.4vw, 14px) !important;
+  }
+
+  .shell-market-home :is(.home-live-board-head, .home-news-top, .home-marketcap-row, .home-leader-row) {
+    gap: clamp(4px, 1.8vw, 8px) !important;
+  }
+
+  .shell-market-home :is(.home-live-board-head, .home-news-shell, .home-leader-shell, .home-marketcap-shell, .home-intel-card) h2 {
+    font-size: clamp(12px, 3.3vw, 18px) !important;
+  }
+
+  .shell-market-home :is(.home-top-market-card, .market-card, .home-fear-copy) strong {
+    font-size: clamp(14px, 4.6vw, 24px) !important;
+    letter-spacing: 0 !important;
+  }
+
+  .shell-market-home :is(.home-news-card strong, .home-leader-row strong, .home-marketcap-copy strong, .home-marketcap-values b) {
+    font-size: clamp(8px, 2.35vw, 13px) !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .shell-market-home :is(.home-news-top span, .home-news-top small, .home-news-tags b, .home-leader-row small, .home-marketcap-copy small, .home-marketcap-values small) {
+    font-size: clamp(6px, 1.8vw, 10px) !important;
+  }
+
+  .shell-market-home .home-fear-hero {
+    grid-template-columns: minmax(0, .55fr) minmax(0, 1fr) !important;
+  }
+
+  .shell-market-home .home-fear-gauge-arc {
+    width: min(100%, 180px) !important;
+    aspect-ratio: 2 / 1 !important;
+  }
+
+  .shell-market-home .home-marketcap-row {
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, auto) !important;
   }
 
   .shell-dashboard .execution-sidebar-footer,
