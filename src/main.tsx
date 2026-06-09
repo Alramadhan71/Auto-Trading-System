@@ -516,7 +516,7 @@ const livePortfolioRefreshEvent = 'live-portfolio-refresh';
 const companyName = 'Muslim Solutions';
 const companyUrl = 'https://www.muslimalramadan71.com/';
 const productName = 'Auto Trading System';
-const brandLogoSrc = '/brand-bull.png';
+const brandLogoSrc = '/auto-trading-logo.png';
 
 
 type TelegramConfig = {
@@ -5642,11 +5642,8 @@ function AutoTradePage({
     return <section className="auto-trade-page">
       <div className="auto-auth-shell">
         <div className="auto-auth-marketing">
-          <img className="auth-logo-watermark" src={brandLogoSrc} alt="" aria-hidden="true" />
-          <div className="auth-market-graph" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
           <div className="product-identity-lockup auth-product-lockup">
+            <img src={brandLogoSrc} alt="" aria-hidden="true" />
             <div>
               <h1>One Platform. All Markets.</h1>
             </div>
