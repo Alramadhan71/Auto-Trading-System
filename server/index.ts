@@ -966,7 +966,11 @@ app.post('/api/auth/login', rateLimit('auth-login', { windowMs: 15 * 60 * 1000, 
   const role = req.body?.role === 'admin' ? 'admin' : 'user';
   const user = authUsers.find(item =>
     item.role === role
-    && (item.username.toLowerCase() === login || item.email.toLowerCase() === login)
+    && (
+      item.username.toLowerCase() === login
+      || item.email.toLowerCase() === login
+      || item.name.toLowerCase() === login
+    )
   );
   if (!user || !user.enabled || user.status !== 'approved' || !verifyPassword(password, user.passwordHash)) {
     res.status(401).json({ ok: false, message: 'Invalid credentials or account is not approved.' });
