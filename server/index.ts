@@ -866,9 +866,17 @@ function loadAuthUsers() {
   if (configuredAdminPassword) {
     const adminUsername = (process.env.ADMIN_USERNAME ?? 'admin').trim() || 'admin';
     const existingAdmin = authUsers.find(user => user.role === 'admin');
+    const adminEmail = process.env.ADMIN_EMAIL ?? existingAdmin?.email ?? 'admin@local.test';
+    const adminTelegram = process.env.ADMIN_TELEGRAM ?? existingAdmin?.telegram ?? '';
+    const adminPhone = process.env.ADMIN_PHONE ?? existingAdmin?.phone ?? '';
     const passwordFingerprint = crypto.createHash('sha256').update(configuredAdminPassword).digest('hex');
     const appliedFingerprint = readSecureSetting<string>('admin_password_env_fingerprint');
-    if (existingAdmin && appliedFingerprint === passwordFingerprint) {
+    const adminProfileMatches = existingAdmin
+      && existingAdmin.username === adminUsername
+      && existingAdmin.email === adminEmail
+      && existingAdmin.telegram === adminTelegram
+      && existingAdmin.phone === adminPhone;
+    if (existingAdmin && appliedFingerprint === passwordFingerprint && adminProfileMatches) {
       if (!existingAdmin.enabled || existingAdmin.status !== 'approved') {
         existingAdmin.status = 'approved';
         existingAdmin.enabled = true;
@@ -883,10 +891,10 @@ function loadAuthUsers() {
       role: 'admin',
       username: adminUsername,
       name: adminUsername,
-      email: process.env.ADMIN_EMAIL ?? existingAdmin?.email ?? 'admin@local.test',
-      telegram: process.env.ADMIN_TELEGRAM ?? existingAdmin?.telegram ?? '',
-      phone: process.env.ADMIN_PHONE ?? existingAdmin?.phone ?? '',
-      passwordHash: hashPassword(configuredAdminPassword),
+      email: adminEmail,
+      telegram: adminTelegram,
+      phone: adminPhone,
+      passwordHash: appliedFingerprint === passwordFingerprint && existingAdmin ? existingAdmin.passwordHash : hashPassword(configuredAdminPassword),
       status: 'approved',
       enabled: true,
       telegramNotificationsEnabled: existingAdmin?.telegramNotificationsEnabled ?? true,
@@ -953,10 +961,13 @@ app.get('/api/auth/session', (req, res) => {
 });
 
 app.post('/api/auth/login', rateLimit('auth-login', { windowMs: 15 * 60 * 1000, max: 10 }), (req, res) => {
-  const username = String(req.body?.username ?? '').trim().toLowerCase();
+  const login = String(req.body?.username ?? '').trim().toLowerCase();
   const password = String(req.body?.password ?? '');
   const role = req.body?.role === 'admin' ? 'admin' : 'user';
-  const user = authUsers.find(item => item.role === role && item.username.toLowerCase() === username);
+  const user = authUsers.find(item =>
+    item.role === role
+    && (item.username.toLowerCase() === login || item.email.toLowerCase() === login)
+  );
   if (!user || !user.enabled || user.status !== 'approved' || !verifyPassword(password, user.passwordHash)) {
     res.status(401).json({ ok: false, message: 'Invalid credentials or account is not approved.' });
     return;
