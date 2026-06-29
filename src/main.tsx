@@ -2172,6 +2172,21 @@ const usBriefingCards = [
   { source: 'Earnings Radar', tag: 'Events', title: 'AI infrastructure, cloud margins, and consumer demand are the key earnings themes.' }
 ];
 
+const usOpportunityPreview = {
+  title: 'Senior Frontend Engineer',
+  company: 'Northstar Cloud',
+  location: 'Remote - US',
+  type: 'Full-time',
+  match: '92%',
+  recipient: 'talent@northstarcloud.example',
+  sender: 'careers@muslimsolutions.example',
+  description: [
+    'Northstar Cloud is hiring a product-minded frontend engineer to build a polished analytics workspace for enterprise operators.',
+    'The role focuses on React, TypeScript, workflow design, data-heavy screens, and close collaboration with product and backend teams.',
+    'Ideal candidates can simplify dense information, ship reliable UI systems, and turn complex operational flows into calm, fast SaaS experiences.'
+  ]
+};
+
 const saudiMarketIndexes = [
   { symbol: 'TASI', name: 'Tadawul All Share', value: '12,184.42', change: 0.31, meta: 'Main market benchmark' },
   { symbol: 'NOMU', name: 'Parallel Market', value: '26,908.15', change: 0.74, meta: 'Growth companies board' },
@@ -2364,35 +2379,102 @@ function USStockHomePage({
       </div>
     </section>
 
-    <section className="us-scanner-shell">
-      <div className="home-live-board-head">
+    <section className="us-scanner-shell opportunity-workspace">
+      <div className="opportunity-workspace-head">
         <div>
           <span className="eyebrow">Opportunity scanner</span>
-          <h2>Advanced Stock Signals</h2>
+          <h2>View Opportunities</h2>
         </div>
+        <span className="opportunity-counter">Opportunity 1</span>
       </div>
-      <div className="us-scanner-grid">
-        {usScannerGroups.map(group => <article key={group.title} className="home-leader-card us-scanner-card">
-          <div className="home-intel-head">
+      <div className="opportunity-saas-grid">
+        <article className="opportunity-detail-panel">
+          <header className="opportunity-detail-head">
             <div>
-              <span className="eyebrow">{group.title}</span>
-              <h3>{group.title}</h3>
+              <span>{usOpportunityPreview.company}</span>
+              <h3>{usOpportunityPreview.title}</h3>
             </div>
-            {group.icon}
+            <div className="opportunity-actions">
+              <button type="button">Save</button>
+              <button type="button">Skip</button>
+              <button type="button" className="primary">Apply</button>
+            </div>
+          </header>
+          <div className="opportunity-meta-grid">
+            <span><b>Location</b>{usOpportunityPreview.location}</span>
+            <span><b>Type</b>{usOpportunityPreview.type}</span>
+            <span><b>Match</b>{usOpportunityPreview.match}</span>
           </div>
-          <div className="home-leader-list">
-            {group.rows.map(row => <div key={`${group.title}-${row.symbol}`} className="home-leader-row us-scanner-row">
-              <div>
-                <strong>{row.symbol}</strong>
-                <small>{row.name}</small>
-              </div>
-              <div className="home-leader-values">
-                <b>{row.metric}</b>
-                <small>{row.note}</small>
-              </div>
-            </div>)}
+          <section className="job-description-panel">
+            <div>
+              <span className="eyebrow">Job description</span>
+              <h4>Role overview</h4>
+            </div>
+            {usOpportunityPreview.description.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          </section>
+          <div className="opportunity-bottom-actions">
+            <button type="button" className="ghost">Previous</button>
+            <button type="button" className="primary">Next Opportunity</button>
           </div>
-        </article>)}
+        </article>
+
+        <aside className="quick-apply-panel">
+          <div className="quick-apply-head">
+            <div>
+              <span className="eyebrow">Quick Apply</span>
+              <h3>Fast application setup</h3>
+            </div>
+            <Send size={18} />
+          </div>
+          <div className="quick-apply-section">
+            <strong>Sender setup</strong>
+            <label>
+              <span>From account</span>
+              <select defaultValue={usOpportunityPreview.sender}>
+                <option>{usOpportunityPreview.sender}</option>
+                <option>personal@muslimsolutions.example</option>
+              </select>
+            </label>
+            <label>
+              <span>Signature</span>
+              <select defaultValue="Professional SaaS profile">
+                <option>Professional SaaS profile</option>
+                <option>Short intro</option>
+              </select>
+            </label>
+          </div>
+          <div className="quick-apply-section">
+            <strong>Recipients</strong>
+            <label>
+              <span>To</span>
+              <input defaultValue={usOpportunityPreview.recipient} />
+            </label>
+            <div className="quick-apply-inline">
+              <label><span>CC</span><input placeholder="Optional" /></label>
+              <label><span>BCC</span><input placeholder="Optional" /></label>
+            </div>
+          </div>
+          <div className="quick-apply-section">
+            <strong>Message</strong>
+            <label>
+              <span>Subject</span>
+              <input defaultValue={`Application - ${usOpportunityPreview.title}`} />
+            </label>
+            <label>
+              <span>Email body</span>
+              <textarea defaultValue={`Hi ${usOpportunityPreview.company} team,\n\nI am interested in the ${usOpportunityPreview.title} role and would love to share my background for your review.\n\nBest regards,`} />
+            </label>
+          </div>
+          <div className="quick-apply-section">
+            <strong>Attachments</strong>
+            <div className="attachment-row"><span>CV.pdf</span><b>Ready</b></div>
+            <div className="attachment-row"><span>Cover letter</span><b>Optional</b></div>
+          </div>
+          <div className="quick-apply-actions">
+            <button type="button" className="ghost">Save draft</button>
+            <button type="button" className="primary">Send now</button>
+          </div>
+        </aside>
       </div>
     </section>
 
