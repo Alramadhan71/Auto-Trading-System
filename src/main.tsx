@@ -4368,7 +4368,7 @@ function AutoTradePage({
 
   const handleAutoLogin = async () => {
     const username = loginUsername.trim();
-    const password = loginPassword.trim();
+    const password = loginPassword;
     if (!username || !password) {
       setAuthMessage('');
       return;

@@ -8,6 +8,7 @@
     "client": "vite --host 0.0.0.0",
     "server": "tsx server/index.ts",
     "server:watch": "tsx watch server/index.ts",
+    "auth:reset-admin": "node scripts/reset-admin.mjs",
     "start": "node .server-build/index.js",
     "build": "tsc && vite build && tsc -p tsconfig.server.json",
     "check:health": "node scripts/code-health.mjs",
