@@ -430,7 +430,8 @@ type SaudiMarketPayload = {
   sectors: SaudiSectorRow[];
 };
 
-const BINANCE_REST = 'https://api.binance.com';
+const BINANCE_REST = process.env.BINANCE_REST ?? 'https://api.binance.com';
+const BINANCE_PUBLIC_REST = process.env.BINANCE_PUBLIC_REST ?? 'https://data-api.binance.vision';
 const BINANCE_FUTURES_REST = 'https://fapi.binance.com';
 const BINANCE_WS = 'wss://stream.binance.com:9443/ws/!ticker@arr';
 const BINANCE_FUTURES_WS = 'wss://fstream.binance.com/ws/!ticker@arr';
@@ -1790,7 +1791,7 @@ async function readBinanceWalletSummary(): Promise<BinanceWalletSummary> {
   const account = await signedBinanceRequest<{
     balances?: { asset: string; free: string; locked: string }[];
   }>(BINANCE_REST, '/api/v3/account', credentials.apiKey, credentials.secretKey);
-  const tickers = await fetch(`${BINANCE_REST}/api/v3/ticker/24hr`)
+  const tickers = await fetch(`${BINANCE_PUBLIC_REST}/api/v3/ticker/24hr`)
     .then(response => response.ok ? response.json() : [])
     .catch(() => []) as { symbol?: string; lastPrice?: string; priceChangePercent?: string }[];
   const tickerMap = new Map(tickers
@@ -1998,7 +1999,7 @@ async function getHomeExecutionIntel() {
       fetchJsonDirect<{ lastFundingRate?: string; nextFundingTime?: number; markPrice?: string }>('https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT'),
       fetchJsonDirect<{ openInterest?: string }>('https://fapi.binance.com/fapi/v1/openInterest?symbol=BTCUSDT'),
       fetchJsonDirect<[number, string, string, string, string, string, string, string, string, string, string, string][]>(
-        'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=25'
+        `${BINANCE_PUBLIC_REST}/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=25`
       ),
       glassnodeKey
         ? fetchJsonDirect<{ t?: number; v?: number }[]>(
@@ -6725,7 +6726,7 @@ function formatTelegramMessage(title: string, message: string, level: 'info' | '
 }
 
 async function loadSymbols() {
-  const response = await fetch(`${BINANCE_REST}/api/v3/exchangeInfo`);
+  const response = await fetch(`${BINANCE_PUBLIC_REST}/api/v3/exchangeInfo`);
   const data = await response.json() as {
     symbols: (SymbolInfo & {
       isSpotTradingAllowed?: boolean;
@@ -6840,7 +6841,7 @@ async function fetchCandles(symbol: string, interval: Timeframe, market: Trading
   const cached = candleCache.get(key);
   if (cached && Date.now() - cached.fetchedAt < CANDLE_CACHE_TTL_MS[interval]) return cached.candles;
   const realInterval = interval === '10m' ? '5m' : interval;
-  const baseUrl = market === 'futures' ? BINANCE_FUTURES_REST : BINANCE_REST;
+  const baseUrl = market === 'futures' ? BINANCE_FUTURES_REST : BINANCE_PUBLIC_REST;
   const path = market === 'futures' ? '/fapi/v1/klines' : '/api/v3/klines';
   const rawLimit = interval === '10m' ? Math.min(CANDLE_LIMIT_CHART, safeLimit * 2) : safeLimit;
   const response = await fetch(`${baseUrl}${path}?symbol=${symbol}&interval=${realInterval}&limit=${rawLimit}`);
@@ -7860,7 +7861,7 @@ function connectBinanceFutures() {
 }
 
 async function pollTickersFallback() {
-  const response = await fetch(`${BINANCE_REST}/api/v3/ticker/24hr`).catch(() => null);
+  const response = await fetch(`${BINANCE_PUBLIC_REST}/api/v3/ticker/24hr`).catch(() => null);
   if (!response?.ok) return;
   const rows = await response.json() as { symbol: string; lastPrice: string; priceChangePercent: string; quoteVolume: string; closeTime: number }[];
   const updates: PriceTicker[] = [];
